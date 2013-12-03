@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!74 &7400000
+AnimationClip:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: accelerate_mid
+  serializedVersion: 4
+  m_AnimationType: 2
+  m_Compressed: 0
+  m_UseHighQualityCurve: 1
+  m_RotationCurves: []
+  m_CompressedRotationCurves: []
+  m_PositionCurves: []
+  m_ScaleCurves: []
+  m_FloatCurves: []
+  m_PPtrCurves:
+  - curve:
+    - time: 0
+      value: {fileID: 21300000, guid: 8a61325c1a6fd4b7bb1760ac04b5e6e3, type: 3}
+    - time: .0416666679
+      value: {fileID: 21300000, guid: 01b5e4dc73456489e83119f4cf5a791b, type: 3}
+    - time: .0833333358
+      value: {fileID: 21300000, guid: 9a344ca5fec1946d9b1064eb073c61ac, type: 3}
+    - time: .125
+      value: {fileID: 21300000, guid: 8b23d221d5ec14e47a10321e2ac7c249, type: 3}
+    - time: .166666672
+      value: {fileID: 21300000, guid: b7daab1d15f06431ab1229793f933494, type: 3}
+    - time: .208333343
+      value: {fileID: 21300000, guid: 63c99ba9fb7294f27902bf521e3beb5e, type: 3}
+    - time: .25
+      value: {fileID: 21300000, guid: 763583007640c480ab673bbe82aa09ea, type: 3}
+    - time: .291666657
+      value: {fileID: 21300000, guid: 2f818c1fa8a7a47ddbc5ff4b6dba7e9f, type: 3}
+    - time: .333333313
+      value: {fileID: 21300000, guid: a01feabf1db944a689e9797cc27217d8, type: 3}
+    attribute: m_Sprite
+    path: 
+    classID: 212
+    script: {fileID: 0}
+  m_SampleRate: 24
+  m_WrapMode: 0
+  m_Bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_AnimationClipSettings:
+    serializedVersion: 2
+    m_StartTime: 0
+    m_StopTime: .37499997
+    m_OrientationOffsetY: 0
+    m_Level: 0
+    m_CycleOffset: 0
+    m_LoopTime: 0
+    m_LoopBlend: 0
+    m_LoopBlendOrientation: 0
+    m_LoopBlendPositionY: 0
+    m_LoopBlendPositionXZ: 0
+    m_KeepOriginalOrientation: 0
+    m_KeepOriginalPositionY: 1
+    m_KeepOriginalPositionXZ: 0
+    m_HeightFromFeet: 0
+    m_Mirror: 0
+  m_EditorCurves: []
+  m_EulerEditorCurves: []
+  m_Events: []
