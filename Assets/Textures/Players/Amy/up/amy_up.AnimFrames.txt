@@ -1,0 +1,33 @@
+amy_up (24 frames per second)	| Frames	| Duration (number of frames)
+
+stop				| 1-9		| 8
+
+idle				| 10-29		| 20
+
+move				| 47-55		| 9
+
+accelerate_start		| 70-75		| 6
+
+accelerate_mid			| 84-92		| 9
+
+decelerate_start		| 102-108	| 7
+
+decelerate_mid			| 115-122	| 8
+
+take_photo_start		| 137-143	| 7
+
+take_photo_mid			| 155-162	| 7
+
+take_photo_end			| 171-178	| 8
+
+use_tractor_beam_start		| 195-201	| 
+
+use_tractor_beam_mid		| 213-220	| 
+
+use_tractor_beam_end		| 229-237	| 
+
+hurt				| 255-267	| 13
+
+shoot_soap			| 280-298	| 19
+
+throw_white_blood_cell		| 316-330	| 15
