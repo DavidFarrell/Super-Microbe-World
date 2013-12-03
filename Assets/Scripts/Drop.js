@@ -15,7 +15,7 @@ function Update () {
 function OnCollisionEnter2D (coll: Collision2D) {
 	if(!hasCollidedAlready){
 		hasCollidedAlready = true;
-		Debug.Log("Soap drop: Collision against: " + coll.gameObject.name);
+		//Debug.Log("Soap drop: Collision against: " + coll.gameObject.name);
 		
 		//transform.collider2D.enabled = false;				//
 		

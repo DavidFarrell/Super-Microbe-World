@@ -7,11 +7,13 @@ TagManager:
   - NonEnemy
   - Enemy
   - Yoghurt
+  - Level_end
+  - Level_start
   - 
   - 
   - 
   - 
-  - 
+  - ground
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX
@@ -57,7 +59,7 @@ TagManager:
   - name: Background
     userID: 2
     uniqueID: 1535931219
-    locked: 0
+    locked: 1
   - name: Character
     userID: 4
     uniqueID: 2511236001

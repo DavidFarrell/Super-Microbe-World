@@ -26,20 +26,20 @@ public class MicrobeLucy extends WalkingMicrobe {
 				yoghurtPosition = 1; 
 			else
 				yoghurtPosition = -1; 
-			Debug.Log("Lucy: Trigger entered. Yoghurt detected!");
+			//Debug.Log("Lucy: Trigger entered. Yoghurt detected!");
 			canJump = true;
 			//if (!jumped) jumpToYoghurt();
 		}
 		
 		else{
-			Debug.Log("Lucy: Trigger entered, but not Yoghurt");
+			//Debug.Log("Lucy: Trigger entered, but not Yoghurt");
 			super.OnTriggerEnter2D(collisionInfo);								//To call the OnTriggerEnter2D of WalkingMicrobe's script.
 		}
 		
 	}
 	
 	function OnTriggerExit2D(other: Collider2D) {
-		Debug.Log("Lucy: Trigger exited.");
+		//Debug.Log("Lucy: Trigger exited.");
 		canJump = false;
 	}
 	
