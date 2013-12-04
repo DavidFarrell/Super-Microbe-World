@@ -6,7 +6,6 @@ public class MicrobeLucy extends WalkingMicrobe {
 	
 	private var jumped: boolean = false;
 	private var canJump: boolean = false;
-	private var colliders: Collider2D[];
 	private var yoghurtPosition: int; 				//+1 if the yoghurt is on the right, and -1 if it is on the left. Used to decide the direction of the jump.
 	
 	function Awake () {
@@ -43,9 +42,12 @@ public class MicrobeLucy extends WalkingMicrobe {
 		canJump = false;
 	}
 	
-	//If Lucy is hit while standing in the area near the yoghurt where it can jump, it jumps
+	//If Lucy is hit while standing in the area near the yoghurt where it can jump, and the yoghurt and collision are on the right(approppriate) it jumps
 	function OnCollisionEnter2D (coll: Collision2D) {
-		if(canJump && coll.collider.gameObject.layer == utils.layers.player){
+		var objectCollided: GameObject = coll.collider.gameObject;
+		if(canJump && objectCollided.layer == utils.layers.player 
+			&& ((objectCollided.transform.position.x > myTransform.position.x && yoghurtPosition == -1) 		//Lucy is pushed from her right side and the yoghurt is on the left
+				|| (objectCollided.transform.position.x < myTransform.position.x && yoghurtPosition == 1))){	//Lucy is pushed from her left side and the yoghurt is on the right
 			if (!jumped) jumpToYoghurt();
 		}
 		else
@@ -60,12 +62,7 @@ public class MicrobeLucy extends WalkingMicrobe {
 		jumped = true;
 		anim.SetTrigger("dive");
 		
-		colliders = FindObjectsOfType(Collider2D);
-		
-		var colliders = GetComponents(Collider2D);// as Collider2D[];		//Cast from Object to Collider2D
-		for (var myCollider : Collider2D in colliders) {
-			myCollider.enabled = false;
-		}
+		disableColliders();
 		
 		Destroy(gameObject, 3);
 	}

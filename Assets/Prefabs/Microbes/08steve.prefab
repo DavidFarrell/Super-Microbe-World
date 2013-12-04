@@ -125,6 +125,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1c0c193be5c41fba3b4776b83c8d1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  life: 5
+  affectedByWhiteBC: 0
+  whiteBCDamage: 0
+  affectedBySoap: 0
+  soapDamage: 0
+  affectedByAntibiotics: 0
+  antibioticsDamage: 0
   Speed: 1
   facingRight: 1
   moveDistance: 50

@@ -94,6 +94,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df3788725a6e14ce786c665f13516f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  life: 10
+  affectedByWhiteBC: 0
+  whiteBCDamage: 0
+  affectedBySoap: 0
+  soapDamage: 0
+  affectedByAntibiotics: 0
+  antibioticsDamage: 0
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -44,7 +44,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 28.5602722, y: -.59580636, z: -3}
+  m_LocalPosition: {x: 28.5745029, y: -.453501225, z: -3}
   m_LocalScale: {x: 1.96411955, y: 1.96411955, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -135,13 +135,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efd7ddb7a57e84f18bcbb14ee344d892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  life: 10
+  affectedByWhiteBC: 0
+  whiteBCDamage: 0
+  affectedBySoap: 0
+  soapDamage: 0
+  affectedByAntibiotics: 0
+  antibioticsDamage: 0
   Speed: 1
   facingRight: 1
   moveDistance: 50
   timeWaiting: 3
   platformCheck: {fileID: 100002}
   turningOffset: .5
-  jumpForce: {x: 5, y: 50}
+  jumpForce: {x: 3600, y: 27000}
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

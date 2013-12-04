@@ -4,9 +4,10 @@ public var xMargin: float = 2;		// Distance in the x axis the player can move be
 public var yMargin: float = 2;		// Distance in the y axis the player can move before the camera follows.
 public var xSmooth: float = 2;		// How smoothly the camera catches up with it's target movement in the x axis.
 public var ySmooth: float = 2;		// How smoothly the camera catches up with it's target movement in the y axis.
-public var maxXAndY: Vector2;		// The maximum x and y coordinates the camera can have.
-public var minXAndY: Vector2;		// The minimum x and y coordinates the camera can have.
-public var player: GameObject;
+
+private var maxXAndY: Vector2;		// The maximum x and y coordinates the camera can have.
+private var minXAndY: Vector2;		// The minimum x and y coordinates the camera can have.
+private var player: GameObject;
 
 private var playerTransform: Transform;
 private var myTransform: Transform;
@@ -19,7 +20,7 @@ function Awake () {
 
 function Start () {
 
-	playerTransform = player.transform;
+	//playerTransform = player.transform;
 	myTransform = transform;
 
 }
@@ -38,6 +39,25 @@ function Update () {
 	targetY = Mathf.Clamp(transform.position.y, minXAndY.y, maxXAndY.y);
 	myCamera.transform.position = new Vector3(targetX, targetY, myCamera.position.z);*/
 
+}
+
+function SetPlayer(plTr: Transform) {
+	
+	playerTransform = plTr;
+	//Debug.Log("Player set up succesfully!");
+	
+}
+
+function SetBounds(bounds: CameraBounds) {
+	
+	maxXAndY.x = bounds.maxXandY.x;
+	maxXAndY.y = bounds.maxXandY.y;
+	
+	minXAndY.x = bounds.minXandY.x;
+	minXAndY.y = bounds.minXandY.y;
+	
+	//Debug.Log("Bounds set up succesfully! \nMax: " + maxXAndY + "\nMin: " + minXAndY);
+	
 }
 
 function TrackPlayer () {

@@ -46,7 +46,8 @@ private var photoReceivers: RaycastHit2D[]; //To store the colliders which the r
 	//Variables used to shoot soap
 private var shootPoint: Transform;
 public var dropSoapPrefab: Rigidbody2D;			//Will reference the prefab of the soap. The prefab will have to be dropped here in the inspector.
-public var soapForce: float;					//Force with which the soap will be thrown
+public var throwForce: float;					//Force with which the soap or the white blood cell will be thrown
+public var whiteBCellPrefab: Rigidbody2D;		
 
 	//Other vars
 private var myTransform: Transform;			//It's more efficient to keep in variables the components of the gameObject
@@ -131,9 +132,12 @@ function Update () {
 	}
 	
 	if (Input.GetButtonDown("Fire2")){
-		shoot();
+		shootSoap();
 	}
 	
+	if (Input.GetButtonDown("Fire3")){
+		shootWBC();
+	}
 }
 
 function FixedUpdate () {
@@ -184,7 +188,7 @@ function FixedUpdate () {
 	
 }
 
-function shoot() {
+function shootSoap() {
 	
 	up_anim.SetTrigger("shoot_soap");
 	yield new WaitForSeconds(0.2);
@@ -194,7 +198,21 @@ function shoot() {
 		dropScale.x *= -1;
 		dropSoap.localScale = dropScale;
 	}*/
-	dropSoap.AddForce(facingDirection * soapForce);
+	dropSoap.AddForce(facingDirection * throwForce);
+}
+
+function shootWBC () {
+	
+	up_anim.SetTrigger("throw_whiteb_cell");
+	yield new WaitForSeconds(0.2);
+	var whiteBCell: Rigidbody2D = Instantiate(whiteBCellPrefab, shootPoint.position, myTransform.rotation);
+	/*if(!facingRight){
+		var dropScale: Vector3 = dropSoap.localScale;				//Multiply the player's x local scale by -1.
+		dropScale.x *= -1;
+		dropSoap.localScale = dropScale;
+	}*/
+	whiteBCell.AddForce(facingDirection * throwForce);
+	
 }
 
 /*
@@ -247,11 +265,11 @@ private function Flip () {
 
 //This function triggers the debugMode to true during 1 frame each second. It is intended to show one frame per second the Debug messages. Use this way:
 //if (debugMode) Debug.log("Your message");
-private function showMessages(){
+/*private function showMessages(){
 	timer += Time.deltaTime;
 	debugMode = false;
 	if (timer > 1){
 		debugMode = true;
 		timer = 0;
 	}	
-}
+}*/

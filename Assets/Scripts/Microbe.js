@@ -2,6 +2,14 @@
 
 public class Microbe extends MonoBehaviour{
 	
+	public var life: int; 							//Life of the microbe. 
+	public var affectedByWhiteBC: boolean;			//If true it will be harmed by the white blood cells 
+	public var whiteBCDamage: int;					//Amount of damage caused by the white blood cells
+	public var affectedBySoap: boolean;				//Same purpose than the 'affectedByWhiteBC' var, but with the soap.
+	public var soapDamage: int;
+	public var affectedByAntibiotics: boolean;
+	public var antibioticsDamage: int;
+	
 	/*Debug vars*/
 	protected var debugMode: boolean = false;				//When true, this script displays all the Debug messages.
 	protected var timer: float = 0;
@@ -62,6 +70,40 @@ public class Microbe extends MonoBehaviour{
 
 	}
 	
+	function receiveDrop (dropName: String) {
+		//Debug.Log(myTransform.name + ": Hit received. Name of drop: " + dropName);
+		if (affectedBySoap && dropName == "soapDrop(Clone)"){
+			life = life - soapDamage;
+			Debug.Log(myTransform.name + ": Soap hit. Life: " + life);
+			if (life <= 0){
+				beWashedAway();
+				return;
+			}
+		}
+		if (affectedByWhiteBC && dropName == "whitebcell(Clone)"){
+			life = life - whiteBCDamage;
+			Debug.Log(myTransform.name + ": whiteBC hit. Life: " + life);
+			if (life <= 0){
+				beKilled();
+				return;
+			}
+		}
+		beHit();
+	}
+	
+	function receiveAntibiotics(){
+		
+		if (affectedByAntibiotics) {
+			life = life - antibioticsDamage;
+			Debug.Log(myTransform.name + ": Antibiotics hit. Life: " + life);
+			if (life <= 0){
+				beKilled();
+				return;
+			}
+		}
+		
+	}
+	
 	function bePhotographed () {
 	
 		anim.SetTrigger("be_photographed");
@@ -85,8 +127,27 @@ public class Microbe extends MonoBehaviour{
 			killedAlready = true;
 			anim.SetTrigger("be_killed");
 			rigidbody2D.AddForce(Vector2(0, 20));
+			rigidbody2D.gravityScale = 0;
+			disableColliders();
 			Destroy(gameObject, 1); //TODO Check this time
 		}
+	}
+	
+	function beWashedAway () {
+		
+		if (!killedAlready){
+			killedAlready = true;
+			anim.SetTrigger("be_washed_away");
+			rigidbody2D.gravityScale = 0.01;
+			rigidbody2D.AddForce(Vector2(0, 20));
+			disableColliders();
+			
+			myTransform.localScale.x = Mathf.Lerp(myTransform.localScale.x, myTransform.localScale.x * 0.99, Time.deltaTime);
+			myTransform.localScale.y = Mathf.Lerp(myTransform.localScale.y, myTransform.localScale.y * 0.99, Time.deltaTime);
+			
+			Destroy(gameObject, 1); //TODO Check this time
+		}
+		
 	}
 	
 	//This function triggers the debugMode to true during 1 frame each second. It is intended to show one frame per second the Debug messages. Use this way:
@@ -98,6 +159,15 @@ public class Microbe extends MonoBehaviour{
 			debugMode = true;
 			timer = 0;
 		}	
+	}
+	
+	//To disable all the colliders of the microbe
+	protected function disableColliders(){
+		var colliders = GetComponents(Collider2D);// as Collider2D[];		//Cast from Object to Collider2D
+		for (var myCollider : Collider2D in colliders) {
+			myCollider.enabled = false;
+		}
+	
 	}
 	
 }

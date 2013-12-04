@@ -15,7 +15,7 @@ GameObject:
   - 61: {fileID: 6100000}
   - 68: {fileID: 6800000}
   - 114: {fileID: 11400000}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: 06super_colin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400002}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: platformChecker
   m_TagString: Untagged
   m_Icon: {fileID: -1016138426, guid: 0000000000000000d000000000000000, type: 0}
@@ -136,6 +136,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1c0c193be5c41fba3b4776b83c8d1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  life: 20
+  affectedByWhiteBC: 0
+  whiteBCDamage: 0
+  affectedBySoap: 1
+  soapDamage: 5
+  affectedByAntibiotics: 0
+  antibioticsDamage: 0
   Speed: 2
   facingRight: 1
   moveDistance: 50

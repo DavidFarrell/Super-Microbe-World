@@ -36,7 +36,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &100004
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +235,8 @@ MonoBehaviour:
   jumpForce: 700
   moveForce: 70
   dropSoapPrefab: {fileID: 5000000, guid: 781fd03618e9643fcbde37831ae47506, type: 2}
-  soapForce: 600
+  throwForce: 10
+  whiteBCellPrefab: {fileID: 5000000, guid: f11b7032c8c6c445f810018ed6b867aa, type: 2}
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
