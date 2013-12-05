@@ -8,7 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: platformChecker
   m_TagString: Untagged
   m_Icon: {fileID: -1016138426, guid: 0000000000000000d000000000000000, type: 0}
@@ -30,9 +30,9 @@ GameObject:
   - 61: {fileID: 6100000}
   - 68: {fileID: 6800000}
   - 114: {fileID: 11400000}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: 05colin
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55,7 +55,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.7698402, y: -.0895895958, z: 0}
+  m_LocalPosition: {x: 40.4602852, y: -3.03027177, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 400000}
@@ -136,6 +136,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1c0c193be5c41fba3b4776b83c8d1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  life: 15
+  affectedByWhiteBC: 0
+  whiteBCDamage: 0
+  affectedBySoap: 1
+  soapDamage: 5
+  affectedByAntibiotics: 0
+  antibioticsDamage: 0
   Speed: 2
   facingRight: 1
   moveDistance: 50

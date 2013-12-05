@@ -17,7 +17,7 @@ GameObject:
   - 68: {fileID: 6800000}
   m_Layer: 8
   m_Name: 09iggy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -44,7 +44,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.920332, y: -2.10599446, z: 0}
+  m_LocalPosition: {x: 24.4076481, y: -2.13241363, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -108,6 +108,10 @@ EdgeCollider2D:
   m_IsTrigger: 1
   m_Points:
   - {x: .210777283, y: .294297934}
+  - {x: .22160086, y: -.218163967}
+  - {x: -.0421498641, y: -.21800296}
+  - {x: -.0288683586, y: -.884119868}
+  - {x: .225725815, y: -.923217773}
   - {x: .238100693, y: -.979561806}
 --- !u!95 &9500000
 Animator:

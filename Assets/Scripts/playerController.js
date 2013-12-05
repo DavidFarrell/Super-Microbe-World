@@ -19,6 +19,11 @@ private var debugMode: boolean = false;				//When true, this script displays all
 //DELETEprivate var groundLayerMask: int = 1 << utils.layers.ground;	//The number of layer for the ground is 12: so the mask will be 0000 0000 0000 0000 0001 0000 0000 0000
 //private var bugsLayerMask: int = (1 << utils.layers.enemies) | (1 << utils.layers.nonEnemies);	//Layer mask with two layers activated
 
+public var life: int = 3;
+public var soapDrops: int = 5;
+public var Antibiotics: int = 5;
+public var whiteBloodCells: int = 5;
+
 	//Vars to check if grounded
 private var groundHitsNumber: int;
 private var groundHits: RaycastHit2D[];
@@ -54,6 +59,7 @@ private var myTransform: Transform;			//It's more efficient to keep in variables
 private var myRigidbody2D: Rigidbody2D;
 private var low_anim: Animator;
 private var up_anim: Animator;
+private var canBeHit: boolean = true;
 
 
 /*--v--v--v--v--v--v--*--v--v--v--v--v--v--Functions--v--v--v--v--v--v--*--v--v--v--v--v--v--*/
@@ -76,6 +82,10 @@ function Awake () {
 	photoReceivers = new RaycastHit2D[3];
 	
 	shootPoint = myTransform.Find("shoot_point").transform;
+	
+	canBeHit = true;
+	
+	GUITextPlayerInfo.SetInfo(life, soapDrops, Antibiotics, whiteBloodCells);
 	
 }
 
@@ -138,6 +148,11 @@ function Update () {
 	if (Input.GetButtonDown("Fire3")){
 		shootWBC();
 	}
+	
+	if (Input.GetKeyDown(KeyCode.Z)){
+		//Debug.Log("'Z' button pressed. Using Antibiotics (if any).");
+		useAntibiotics();
+	}
 }
 
 function FixedUpdate () {
@@ -188,31 +203,94 @@ function FixedUpdate () {
 	
 }
 
-function shootSoap() {
+
+//To control the collisions with the enemies and substract life when this happens
+function OnCollisionEnter2D (coll: Collision2D) {
+		if (canBeHit && coll.collider.gameObject.layer == utils.layers.enemies){
+			//Debug.Log("Layer collided: " + coll.collider.gameObject.layer + ". Enemies layer: " + utils.layers.enemies);
+			beHit();
+		}
+}
+
+private function beHit(){
 	
-	up_anim.SetTrigger("shoot_soap");
-	yield new WaitForSeconds(0.2);
-	var dropSoap: Rigidbody2D = Instantiate(dropSoapPrefab, shootPoint.position, myTransform.rotation);
-	/*if(!facingRight){
-		var dropScale: Vector3 = dropSoap.localScale;				//Multiply the player's x local scale by -1.
-		dropScale.x *= -1;
-		dropSoap.localScale = dropScale;
-	}*/
-	dropSoap.AddForce(facingDirection * throwForce);
+	canBeHit = false;
+	
+	low_anim.SetTrigger("hurt");
+	up_anim.SetTrigger("hurt");
+	
+	life --;
+	UpdateGUI();
+	Debug.Log("Player was hurt. Lifes remaining: " + life);
+	
+	if (life <= 0){
+		/*Do something when dead!!*/
+		Debug.Log("Player has dead!!");
+	}
+	
+	yield new WaitForSeconds(2);				
+	canBeHit = true;
+	
+}	
+
+function shootSoap() {
+	if(soapDrops > 0){
+		soapDrops--;
+		UpdateGUI();
+		
+		up_anim.SetTrigger("shoot_soap");
+		yield new WaitForSeconds(0.2);
+		var dropSoap: Rigidbody2D = Instantiate(dropSoapPrefab, shootPoint.position, myTransform.rotation);
+		/*if(!facingRight){
+			var dropScale: Vector3 = dropSoap.localScale;				//Multiply the player's x local scale by -1.
+			dropScale.x *= -1;
+			dropSoap.localScale = dropScale;
+		}*/
+		dropSoap.AddForce(facingDirection * throwForce);
+	}
 }
 
 function shootWBC () {
-	
-	up_anim.SetTrigger("throw_whiteb_cell");
-	yield new WaitForSeconds(0.2);
-	var whiteBCell: Rigidbody2D = Instantiate(whiteBCellPrefab, shootPoint.position, myTransform.rotation);
-	/*if(!facingRight){
-		var dropScale: Vector3 = dropSoap.localScale;				//Multiply the player's x local scale by -1.
-		dropScale.x *= -1;
-		dropSoap.localScale = dropScale;
-	}*/
-	whiteBCell.AddForce(facingDirection * throwForce);
-	
+	if(whiteBloodCells > 0){
+		whiteBloodCells--;
+		UpdateGUI();
+		
+		up_anim.SetTrigger("throw_whiteb_cell");
+		yield new WaitForSeconds(0.2);
+		var whiteBCell: Rigidbody2D = Instantiate(whiteBCellPrefab, shootPoint.position, myTransform.rotation);
+		/*if(!facingRight){
+			var dropScale: Vector3 = dropSoap.localScale;				//Multiply the player's x local scale by -1.
+			dropScale.x *= -1;
+			dropSoap.localScale = dropScale;
+		}*/
+		whiteBCell.AddForce(facingDirection * throwForce);
+	}
+}
+
+function useAntibiotics () {
+	if(Antibiotics > 0){
+		Antibiotics--;
+		UpdateGUI();
+		
+		var enemiesArray: GameObject[] = GameObject.FindGameObjectsWithTag("Enemy");
+		var nonEnemiesArray: GameObject[] = GameObject.FindGameObjectsWithTag("NonEnemy");
+		//Debug.Log("useAntibiotics(): Enemies detected: " + enemiesArray.length + ". Non enemies detected: " + nonEnemiesArray.length);
+		for(var enemy: GameObject in enemiesArray){
+			enemy.SendMessage("receiveAntibiotics");
+			//Debug.Log("useAntibiotics(): Message sent to: " + enemy.name);
+		}
+		
+		for(var nonEnemy: GameObject in nonEnemiesArray){
+			nonEnemy.SendMessage("receiveAntibiotics");
+			//Debug.Log("useAntibiotics(): Message sent to: " + nonEnemy.name);
+		}
+	}
+}
+
+public function UpdateGUI () {
+
+	GUITextPlayerInfo.SetInfo(life, soapDrops, whiteBloodCells, Antibiotics);
+
 }
 
 /*

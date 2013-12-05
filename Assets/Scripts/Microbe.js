@@ -31,7 +31,7 @@ public class Microbe extends MonoBehaviour{
 //	protected var groundAndChars: int = (1 << groundLayer) | (1 << playerLayer) | (1 << nonEnemiesLayer) | (1 << enemiesLayer);
 	
 	private var canBeHit: boolean = true;
-	private var killedAlready: boolean = false;
+	protected var killedAlready: boolean = false;
 	
 	
 	
@@ -43,6 +43,8 @@ public class Microbe extends MonoBehaviour{
 		myRigidbody2D = myTransform.rigidbody2D;
 		canBeHit = true;
 		killedAlready = false;
+		
+		iTween.Init(gameObject);					//Initializing iTween in order to avoid hiccups when first playing the movements
 	
 	}
 	
@@ -75,7 +77,7 @@ public class Microbe extends MonoBehaviour{
 		if (affectedBySoap && dropName == "soapDrop(Clone)"){
 			life = life - soapDamage;
 			Debug.Log(myTransform.name + ": Soap hit. Life: " + life);
-			if (life <= 0){
+			if (!killedAlready && life <= 0){
 				beWashedAway();
 				return;
 			}
@@ -83,7 +85,7 @@ public class Microbe extends MonoBehaviour{
 		if (affectedByWhiteBC && dropName == "whitebcell(Clone)"){
 			life = life - whiteBCDamage;
 			Debug.Log(myTransform.name + ": whiteBC hit. Life: " + life);
-			if (life <= 0){
+			if (!killedAlready && life <= 0){
 				beKilled();
 				return;
 			}
@@ -94,9 +96,10 @@ public class Microbe extends MonoBehaviour{
 	function receiveAntibiotics(){
 		
 		if (affectedByAntibiotics) {
+			beHit();
 			life = life - antibioticsDamage;
 			Debug.Log(myTransform.name + ": Antibiotics hit. Life: " + life);
-			if (life <= 0){
+			if (!killedAlready && life <= 0){
 				beKilled();
 				return;
 			}
@@ -109,7 +112,7 @@ public class Microbe extends MonoBehaviour{
 		anim.SetTrigger("be_photographed");
 	
 	}
-
+	
 	function beHit () {
 	
 		anim.SetTrigger("be_hit");
@@ -126,26 +129,31 @@ public class Microbe extends MonoBehaviour{
 		if (!killedAlready){
 			killedAlready = true;
 			anim.SetTrigger("be_killed");
-			rigidbody2D.AddForce(Vector2(0, 20));
+			//rigidbody2D.AddForce(Vector2(0, 20));
 			rigidbody2D.gravityScale = 0;
 			disableColliders();
 			Destroy(gameObject, 1); //TODO Check this time
 		}
 	}
 	
-	function beWashedAway () {
+	public function beWashedAway (): IEnumerator {
 		
 		if (!killedAlready){
 			killedAlready = true;
 			anim.SetTrigger("be_washed_away");
-			rigidbody2D.gravityScale = 0.01;
-			rigidbody2D.AddForce(Vector2(0, 20));
+//			rigidbody2D.gravityScale = 0.01;
+//			rigidbody2D.AddForce(Vector2(0, 20));
+
+			//rigidbody2D.gravityScale = 0;
+			rigidbody2D.isKinematic = true;
 			disableColliders();
 			
-			myTransform.localScale.x = Mathf.Lerp(myTransform.localScale.x, myTransform.localScale.x * 0.99, Time.deltaTime);
-			myTransform.localScale.y = Mathf.Lerp(myTransform.localScale.y, myTransform.localScale.y * 0.99, Time.deltaTime);
+			iTween.MoveAdd(gameObject, {"y": 70, "time": 3, "easetype": EaseType.easeInQuart});	//, "oncomplete": "DestroyMicrobe"});
 			
-			Destroy(gameObject, 1); //TODO Check this time
+			//myTransform.localScale.x = Mathf.Lerp(myTransform.localScale.x, myTransform.localScale.x * 0.99, Time.deltaTime);
+			//myTransform.localScale.y = Mathf.Lerp(myTransform.localScale.y, myTransform.localScale.y * 0.99, Time.deltaTime);
+			
+			Destroy(gameObject, 3); //TODO Check this time
 		}
 		
 	}

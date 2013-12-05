@@ -31,7 +31,7 @@ GameObject:
   - 68: {fileID: 6800000}
   m_Layer: 13
   m_Name: 08steve
-  m_TagString: Untagged
+  m_TagString: NonEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -54,7 +54,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.14143372, y: -5.12435436, z: 0}
+  m_LocalPosition: {x: -2.85197592, y: 7.80480194, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 400000}

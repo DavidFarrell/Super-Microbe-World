@@ -32,7 +32,7 @@ public class WalkingMicrobe extends Microbe {
 			Flip();
 		}
 		
-		iTween.Init(gameObject);					//Initializing iTween in order to avoid hiccups when first playing the movements
+		//iTween.Init(gameObject);					//Initializing iTween in order to avoid hiccups when first playing the movements	//It's already done in the Microbe's class
 		
 		groundHits = new Collider2D[3];
 		
@@ -50,11 +50,11 @@ public class WalkingMicrobe extends Microbe {
 	
 	function FixedUpdate(){
 	
-		if(!isWaiting){
+		if(!isWaiting && !killedAlready){
 			if (!isWalking){
 				Walk();
 			}
-			else{			//if it's walking
+			else{			//if it's walking and not waiting
 				
 				// Calculate the number of objects in the layer Ground that overlap with the given point ( local point (+-0.16, -1.2) placed under the ground, in front of the player) to turn around if it's 0
 				//because this means that there is no ground where to continue walking.
@@ -109,7 +109,7 @@ public class WalkingMicrobe extends Microbe {
 		iTween.Stop(gameObject);						//Stops all the iTweens of this gameObject
 		anim.SetFloat("speed", 0.0); 					//To play the "idle" animation
 		yield new WaitForSeconds(timeWaiting);
-		Flip();
+		if (!killedAlready) Flip();
 		
 		isWaiting = false;
 		
@@ -133,6 +133,25 @@ public class WalkingMicrobe extends Microbe {
 		bugScale.x *= -1;
 		transform.localScale = bugScale;
 
+	}
+	
+	public function beWashedAway (): IEnumerator {
+		if (!killedAlready){
+		
+			isWaiting = true;
+			isWalking = false;
+			
+			//rigidbody2D.gravityScale = 0;
+			rigidbody2D.isKinematic = true;
+			disableColliders();
+			
+			iTween.Stop(gameObject);															//Stops all the iTweens of this gameObject
+			
+			killedAlready = true;										//'killedAlready' will be true while waiting to avoid this method to execute again
+			yield new WaitForSeconds(0.1);								//It's not advisable to stop the tweens and start another tween in the same method
+			killedAlready = false;										//Then, to execute the 'beWashedAway' method of the parent class 'killedAlready' is set to false again
+			super.beWashedAway();
+		}
 	}
 
 

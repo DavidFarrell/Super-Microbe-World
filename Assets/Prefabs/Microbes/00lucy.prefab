@@ -17,7 +17,7 @@ GameObject:
   - 68: {fileID: 6800000}
   m_Layer: 13
   m_Name: 00lucy
-  m_TagString: Untagged
+  m_TagString: NonEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
