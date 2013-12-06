@@ -73,8 +73,8 @@ public class Microbe extends MonoBehaviour{
 	}
 	
 	function receiveDrop (dropName: String) {
-		//Debug.Log(myTransform.name + ": Hit received. Name of drop: " + dropName);
-		if (affectedBySoap && dropName == "soapDrop(Clone)"){
+		Debug.Log(myTransform.name + ": Hit received. Name of drop: " + dropName);
+		if (affectedBySoap && dropName == "soapDropThrow(Clone)"){
 			life = life - soapDamage;
 			Debug.Log(myTransform.name + ": Soap hit. Life: " + life);
 			if (!killedAlready && life <= 0){
@@ -82,7 +82,7 @@ public class Microbe extends MonoBehaviour{
 				return;
 			}
 		}
-		if (affectedByWhiteBC && dropName == "whitebcell(Clone)"){
+		if (affectedByWhiteBC && dropName == "whitebcellThrow(Clone)"){
 			life = life - whiteBCDamage;
 			Debug.Log(myTransform.name + ": whiteBC hit. Life: " + life);
 			if (!killedAlready && life <= 0){

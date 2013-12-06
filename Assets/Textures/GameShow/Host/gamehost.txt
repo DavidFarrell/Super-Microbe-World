@@ -1,0 +1,6 @@
+Host animation frames
+
+stop		1
+excited		2-125
+serious		128-250
+disappointed	253-378

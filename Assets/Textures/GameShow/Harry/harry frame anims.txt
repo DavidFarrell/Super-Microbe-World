@@ -1,0 +1,11 @@
+Amy
+animation			|frames
+
+stop				|10
+idle				|2-42
+neutral				|3-167
+cautious			|168-292
+confident			|293-417
+happy				|418-453
+disappointed			|544-668
+curious				|671-796

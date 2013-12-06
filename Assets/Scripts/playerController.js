@@ -21,8 +21,8 @@ private var debugMode: boolean = false;				//When true, this script displays all
 
 public var life: int = 3;
 public var soapDrops: int = 5;
-public var Antibiotics: int = 5;
 public var whiteBloodCells: int = 5;
+public var Antibiotics: int = 5;
 
 	//Vars to check if grounded
 private var groundHitsNumber: int;
@@ -153,13 +153,15 @@ function Update () {
 		//Debug.Log("'Z' button pressed. Using Antibiotics (if any).");
 		useAntibiotics();
 	}
+	
+	horizAxis = Input.GetAxis("Horizontal");				//Cache the horizontal input. All the Input Calls must be done in the Update function. 
 }
 
 function FixedUpdate () {
 	
 	
 	/*--v--v--v--v--v--v--Code to move--v--v--v--v--v--v--*/
-	horizAxis = Input.GetAxis("Horizontal");				//Cache the horizontal input
+	
 	
 	/*
 	hitDirectionResetTimer += Time.deltaTime;
@@ -233,6 +235,31 @@ private function beHit(){
 	
 }	
 
+public function AddPickups(soap: int, whitebc: int, antibiotics: int){
+	
+	soapDrops += soap;
+	whiteBloodCells += whitebc;
+	Antibiotics += antibiotics;
+	UpdateGUI();
+	
+}
+
+public function AddSoap(soap: int){
+	soapDrops += soap;
+	UpdateGUI();
+}
+
+public function AddWhiteBloodCells(whitebc: int){
+	whiteBloodCells += whitebc;
+	UpdateGUI();
+}
+
+public function AddAntibiotics(antibiotics: int){
+	Antibiotics += antibiotics;
+	UpdateGUI();
+}
+
+//To shoot soap
 function shootSoap() {
 	if(soapDrops > 0){
 		soapDrops--;
@@ -250,6 +277,7 @@ function shootSoap() {
 	}
 }
 
+//To shoot white blood cells
 function shootWBC () {
 	if(whiteBloodCells > 0){
 		whiteBloodCells--;
@@ -267,6 +295,7 @@ function shootWBC () {
 	}
 }
 
+//To shoot antibiotics
 function useAntibiotics () {
 	if(Antibiotics > 0){
 		Antibiotics--;
