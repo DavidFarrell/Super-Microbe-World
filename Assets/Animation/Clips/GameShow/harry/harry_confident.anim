@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: amy_disappointed
+  m_Name: harry_confident
   serializedVersion: 4
   m_AnimationType: 2
   m_Compressed: 0
@@ -18,17 +18,17 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: b10d6badc55834a8dbea51969778b23a, type: 3}
-    - time: .875000119
-      value: {fileID: 21300000, guid: 8f42d535b4de84d7c9c6794a43f55ffd, type: 3}
-    - time: 1.7499994
-      value: {fileID: 21300000, guid: 4ef110e40ef334af3b12b57974c8ab2c, type: 3}
-    - time: 2.95833421
-      value: {fileID: 21300000, guid: 31b257cf3718b4ddbb7adfce4f554f8f, type: 3}
-    - time: 3.95833611
-      value: {fileID: 21300000, guid: 5fffd4fd6254c4f05b70a160f54dd3b1, type: 3}
+      value: {fileID: 21300000, guid: 5bb313bc217f849aba5513e154a08bb4, type: 3}
+    - time: .291666657
+      value: {fileID: 21300000, guid: 30c875a64da1c4cc7afd6a5df9b0d48e, type: 3}
+    - time: 1.54166627
+      value: {fileID: 21300000, guid: 2d1862c1fdd9849a58fd3da1d60817e2, type: 3}
+    - time: 2.58333349
+      value: {fileID: 21300000, guid: a239afd39d7424b40925353eb681cf84, type: 3}
+    - time: 3.75000238
+      value: {fileID: 21300000, guid: 99526d93987334879b2da4f80a346c1c, type: 3}
     - time: 5.16666508
-      value: {fileID: 21300000, guid: e0c45c34859b6458086b44fef93c7ece, type: 3}
+      value: {fileID: 21300000, guid: faa8f4b6d0a674795935eff5b40f0f93, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
