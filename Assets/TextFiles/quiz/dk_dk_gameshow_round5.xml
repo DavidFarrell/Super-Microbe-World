@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Treatment of infection</name>
+	<round_id>4</round_id>
+	<next_round>exit</next_round>
+	<intro_text>
+		<blind>
+			<statement>Velkommen til sidste runde</statement>
+			<statement>Denne gang skal vi se, hvad du ved om, hvordan man slipper af med infektioner</statement>
+			<statment>Lad os komme i gang</statment>
+		</blind>
+		<normal>
+			<statement>Lad os så se hvad du har lært.</statement>
+			<statement>Husk, 10 point for hvert rigtige svar, men har du svaret forkert, får din modstander point</statement>
+			<statement>så hvis du IKKE ved svaret, er det en god idé at indrømme det!</statement>
+			<statement>Klar?</statement>
+			<statement>Lad os komme i gang</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotika dræber bakterier</text>
+			<answers>
+				<answer>
+					<label>Enig</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ved ikke</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotika dræber virus</text>
+			<answers>
+				<answer>
+					<label>Enig</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Ved ikke</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Uenig</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotika kan kurere alle sygdomme</text>
+			<answers>
+				<answer>
+					<label>Enig</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Ved ikke</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Uenig</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotika kan skade både gavnlige og skadelige bakterier</text>
+			<answers>
+				<answer>
+					<label>Enig</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ved ikke</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Uenig</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotika hjælper, hvis du har hoste</text>
+			<answers>
+				<answer>
+					<label>Enig</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Ved ikke</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Uenig</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="5">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Oftest kurerer man hoste og forkølelse bedst uden antibiotika</text>
+			<answers>
+				<answer>
+					<label>Enig</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ved ikke</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Uenig</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

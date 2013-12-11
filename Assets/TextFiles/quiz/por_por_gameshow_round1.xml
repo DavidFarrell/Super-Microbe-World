@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>All About Microbes</name>
+	<round_id>0</round_id>
+	<next_round>por_por_gameshow_round2.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Bem-vindo ao PRIMEIRO LOTE DE PERGUNTAS</statement>
+			<statement>Vou fazer-te algumas perguntas, mas NÃO te vou dizer se acertaste! </statement>
+			<statement>Se as respostas estiverem certas, terás um bónus no final. Tenta fazer o melhor.</statement>
+			<statment>Aqui vão.</statment>
+		</blind>
+		<normal>
+			<statement>Muito bem, és um surfista nato!</statement>
+			<statement>Agora, vamos ver o que aprendeste.</statement>
+			<statement>Za prawidłową odpowiedź otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik.</statement>
+			<statement>Por isso, se NÃO SOUBERES a resposta, é melhor responderes que não sabes!</statement>
+			<statement>Estás pronto?</statement>
+			<statement>Aqui vão.</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Se não conseguires ver um micróbio é porque ele não está lá.</text>
+			<answers>
+				<answer>
+					<label>Concordas</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<lable>Não sabes</lable>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Não concordas</lable>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>As Bactérias e os Vírus são iguais.</text>
+			<answers>
+				<answer>
+					<label>Concordas</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Não sabes</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Não concordas</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Os Fungos são micróbios</text>
+			<answers>
+				<answer>
+					<label>Concordas</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Não sabes</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Não concordas</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Os micróbios podem encontrar-se nas nossas mãos</text>
+			<answers>
+				<answer>
+					<label>Concordas</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Não sabes</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Não concordas</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

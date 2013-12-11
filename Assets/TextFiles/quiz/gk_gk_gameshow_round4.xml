@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Food Hygiene</name>
+	<round_id>3</round_id>
+	<next_round>gk_gk_gameshow_round5.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Καλωσόρισες στον ΤΕΤΑΡΤΟ γύρο!</statement>
+		</blind>
+		<normal>
+			<statement>Για να δούμε τώρα, τι έχετε μάθει.</statement>
+			<statement>Θυμήσου, κερδίζεις 10 πόντους για μια σωστή απάντηση, αλλά αν είναι λάθος, ο άλλος παίκτης κερδίζει τους πόντους </statement>
+			<statement>Οπότε αν ΔΕΝ ΞΕΡΕΙΣ την σωστή απάντηση, καλύτερα να μην το διακινδυνεύσεις </statement>
+			<statement>Έτοιμος/η;</statement>
+			<statement>Ας ξεκινήσουμε!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Το ωμό κρέας χρειάζεται δικό του, ξεχωριστό ράφι, για να μην μεταφερθούν βλαβερά μικρόβια σ' άλλα τρόφιμα.   </text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Τα υγρά όπως το γάλα, το γιαούρτι και ο χυμός μπαίνουν στην πόρτα του ψυγείου. </text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Είναι ασφαλές να βάζεις ανοιχτές κονσέρβες στο ψυγείο</text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Τα φρούτα πρέπει να βρίσκονται σε καλάθια φρούτων. </text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Αν φτερνιστείς, πρέπει να πλύνεις τα χέρια σου πριν αγγίξεις τρόφιμα</text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

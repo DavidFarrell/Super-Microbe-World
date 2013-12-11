@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Food Hygiene</name>
+	<round_id>3</round_id>
+	<next_round>fr_fr_gameshow_round5.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Bienvenue au QUATRIEME tour</statement>
+			<statement>N'oubliez pas, c'est un aveugle quesiton ronde, de sorte que vous obtiendrez un bonus plus tard si vous obtenez ces droite.</statement>
+			<statment>Allons-y !</statment>
+		</blind>
+		<normal>
+			<statement>Voyons comment tu te débrouilles avec ces questions cette fois-ci</statement>
+			<statement>Rappelle-toi, 10 points par réponse juste, mais si tu te trompes, c'est l'autre joueur qui gagne les points</statement>
+			<statement>Alors si tu NE SAIS PAS la réponse, mieux vaut le dire</statement>
+			<statement>Prêt ?</statement>
+			<statement>On y va !</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>La viande crue doit aller sur l'étagère du haut du réfrigérateur</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<lable>Je ne sais pas</lable>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Pas d'accord</lable>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Lait et autres liquides devraient aller dans la porte du frigo.</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Il est prudent de mettre des boîtes ouvertes dans le réfrigérateur.</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Vous devez vous laver les mains après avoir manipulé la viande crue.</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Si vous éternuez, vous devez vous laver les mains avant de manipuler des aliments.</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

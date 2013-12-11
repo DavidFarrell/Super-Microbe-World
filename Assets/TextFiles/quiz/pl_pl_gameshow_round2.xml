@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Good and Bad Bugs</name>
+	<round_id>1</round_id>
+	<next_round>pl_pl_gameshow_round3.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Witamy w rundzie DRUGIEJ!</statement>
+			<statement>Jeśli odpowiesz na pytania prawidłowo, na końcu otrzymasz specjalny bonus, więc skup się!</statement>
+			<statment>Zaczynamy!</statment>
+		</blind>
+		<normal>
+			<statement>A teraz sprawdźmy, co zapamiętałaś/eś</statement>
+			<statement>Za prawidłową odpowiedź otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik.</statement>
+			<statement>Jeśli nie znasz odpowiedzi - lepiej zagrać bezpiecznie i przyznać się, że nie wiesz!</statement>
+			<statement>Gotowi?</statement>
+			<statement>Zaczynamy!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+	
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Wszystkie bakterie są chorobotwórcze</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nie zgadzam się</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Za pomocą mydła można pozbyć się złych mikrobów z dłoni</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nie zgadzam się</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Przeziębienia i katar najczęściej przechodzą same, bez podania leków</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nie zgadzam się</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Nasze organizmy posiadają naturalne siły obronne, które chronią nas przed zakażeniami.</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nie zgadzam się</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

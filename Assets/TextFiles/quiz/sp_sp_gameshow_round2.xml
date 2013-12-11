@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Good and Bad Bugs</name>
+	<round_id>1</round_id>
+	<next_round>sp_sp_gameshow_round3.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Bienvenido a la SEGUNDA ronda</statement>
+			<statement>Sin embargo, si las aciertas, obtendrás más tarde una bonificación importante, así que hazlo lo mejor que puedas.</statement>
+			<statment>¡Vamos allá!</statment>
+		</blind>
+		<normal>
+			<statement>Veamos ahora lo que has aprendido.</statement>
+			<statement>Recibirás 10 puntos por una respuesta correcta, pero si te equivocas, se darán puntos al otro jugador.</statement>
+			<statement>Así que, si NO SABES la respuesta, más vale asegurarte y decirlo.</statement>
+			<statement>¿Listo?</statement>
+			<statement>¡Vamos allá!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+	
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Todas las bacterias son perjudiciales.</text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Falso</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>El jabón puede utilizarse para eliminar bacterias perjudiciales.</text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Falso</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>La tos y los resfriados suelen curarse sin medicamentos.</text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Falso</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Nuestro cuerpo tiene defensas naturales que nos protegen contra las infecciones</text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Falso</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

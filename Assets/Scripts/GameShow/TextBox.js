@@ -2,16 +2,24 @@
 
 /*
 
-This class +-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-COMMENT THIS CLASS WHEN FINISHED*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*+-*
+This class shows a dialogue in a box showing how is talking. 
+
+It recieves an array of Strings that will be the sucesion of sentences that will be said by one person, and they will be played sentence by sentence being each sentence written letter by letter.
+Here is a wee explanation of the most relevant function and the use of the class. More information about each function can be found over its implementation.
+
+	First of all we have to use SetSpeaker("Speaker") to say who is talking.
+	Then we use AddTextToShow(argument) to add all the lines to the buffer, being "argument" an array of sentences to be played.
+	Finally we call ShowAllLines () for all the lines to be written in order in the screen. This function will enable the text box, write all the sentences, and disable the text box after.
+
+TODO There is a failure. The sentences to write are broken in lines each "maxLettersPerLine" characters no matter if words are broken in half. Check this later.
 
 */
 public class TextBox extends MonoBehaviour{
 	
-	var speaker : String = "Game host";			//Field to write who is talking
+	
 	var upperLeftCornerSpeaker : Vector2;		//Position of the upper left corner of the text to say who is talking
 	var textSizeSpeaker : Vector2;				//Size
 	
-	var textToWrite : String = "This is the dialogue";	//Here will be written the sentences of the dialogue to show
 	var upperLeftCorner : Vector2;				//Position of the upper left corner of the text label to write the dialogs
 	var textSize : Vector2;						//Size of this label
 	
@@ -23,17 +31,26 @@ public class TextBox extends MonoBehaviour{
 	private var period : float = 1 / lettersPerSecond;	//Inverse of the frequency. The period between the writing of each letter.
 	
 	
-	private var maxLettersPerLine = 75;
-	private var maxLinesPerDialog = 4;
+	private var maxLettersPerLine = 75;						//Max letters that will be in one written line
+	private var maxLinesPerDialog = 4;						//Max lines per sentence that will be written
 	
-	private var textBuffer : TextBuffer;
+	private var textBuffer : TextBuffer;					//See the class TextBuffer below, at the end of this js file. It's a round buffer to manage all the sentences to show.
+	
+	private var textRectangleSprite : SpriteRenderer;		//Points to the sprite renderer so as we can enable or disable it
 
+	private var enableLabels : boolean = false;
 	
+	private var speaker : String = "Game host";					//Field to write who is talking
+	private var textToWrite : String = "This is the dialogue";	//Here will be written the sentences of the dialogue to show
 
 	function Start () {
 		//Debug.Log("Rectangle: " + upperLeftCorner.x + ", " + upperLeftCorner.y + ", " + textSize.x + ", " + textSize.y);
 		
+		textRectangleSprite = GetComponent(SpriteRenderer);
+		
 		textBuffer= new TextBuffer(50);
+		
+		DisableTextBox();
 		
 		mytest();
 		
@@ -44,10 +61,11 @@ public class TextBox extends MonoBehaviour{
 	}
 
 	function OnGUI () {
-
-		GUI.Label(Rect(upperLeftCornerSpeaker.x, upperLeftCornerSpeaker.y, textSizeSpeaker.x, textSizeSpeaker.y), speaker, style);
-		GUI.Label(Rect(upperLeftCorner.x, upperLeftCorner.y, textSize.x, textSize.y), textToWrite, style);
-
+		
+		if (enableLabels){
+			GUI.Label(Rect(upperLeftCornerSpeaker.x, upperLeftCornerSpeaker.y, textSizeSpeaker.x, textSizeSpeaker.y), speaker, style);
+			GUI.Label(Rect(upperLeftCorner.x, upperLeftCorner.y, textSize.x, textSize.y), textToWrite, style);
+		}
 	}
 	
 	public function mytest(){
@@ -63,10 +81,30 @@ public class TextBox extends MonoBehaviour{
 		 
 		AddTextToShow(lines);
 		
+		EnableTextBox();
+		
 		yield ShowAllLines();
 		
-		Debug.Log("The end!");
+		DisableTextBox();
+		
+		Debug.Log("End of Test!");
 	
+	}
+	
+	public function SetSpeaker(speakerToSet : String) {
+		speaker = speakerToSet;
+	}
+	
+	public function EnableTextBox(){
+		
+		textRectangleSprite.enabled = true;
+		enableLabels = true;
+	}
+	
+	public function DisableTextBox(){
+		
+		textRectangleSprite.enabled = false;
+		enableLabels = false;
 	}
 
 	//Receives a String which is added to the textBuffer to be shown
@@ -78,21 +116,23 @@ public class TextBox extends MonoBehaviour{
 		return correctlyDone;
 	}
 	
+	//Show all the dialog line by line, waiting the player to click between lines, and writing each line letter by letter like "pokemon style".
 	public function ShowAllLines () {
 		var actualLine : String = "";
+		EnableTextBox();
 		while (!textBuffer.isEmpty()) {
 		
 			actualLine = textBuffer.pull();
 			yield ShowActualLine(actualLine);
 		
 		}
-		
+		DisableTextBox();
 		
 		
 		//End of the coroutine
 	}
 	
-	//Changes the 
+	//Used by ShowAllLines() to show the actual line
 	private function ShowActualLine(actualLine : String) {
 		var line : int = 0;
 		var skipLimit : int = actualLine.Length / 2;
@@ -108,7 +148,7 @@ public class TextBox extends MonoBehaviour{
 				}
 			}
 			
-			if (Input.anyKeyDown && count > skipLimit){					//To write all the letters at once when more than half of the text has been written and any key is pressed
+			if (Input.anyKeyDown && count > skipLimit && !(count == actualLine.Length - 1)){	//To write all the letters at once when more than half of the text has been written and any key is pressed
 				continue;
 			}
 			else{
@@ -119,15 +159,27 @@ public class TextBox extends MonoBehaviour{
 		//The coroutine finishes and the control is returned to the coroutine that called this function.
 	}
 	
+	//Coroutine that will finished when the player presses any button of any controller (mouse, keyboard, game controller...)
 	public function WaitForClick(){
 	
 		while (!Input.anyKeyDown){
 			yield;
 		}
-		Debug.Log("Key pressed");
+		//Debug.Log("Key pressed");
 	
 	}
 	
+	/*
+	
+	This class is a circular buffer. A FIFO structure which main operations are:
+	-TextBuffer() to instantiate a new buffer.
+	-push() to add an element to de queue
+	-pull() to get the first element added and delete it from the queue.
+	-isEmpty() to chech if it's empty
+	-isFull() to chech if it's full
+	
+	There is more information in the comments of each function below.
+	*/
 	public class TextBuffer /*extends ScriptableObject*/{
 		
 		private var maxElems : int;					//The max num of elements of the array

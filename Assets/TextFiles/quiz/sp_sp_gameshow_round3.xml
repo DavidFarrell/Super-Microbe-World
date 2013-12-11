@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Good Microbes</name>
+	<round_id>2</round_id>
+	<next_round>sp_sp_gameshow_round4.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Bienvenido a la TERCERA ronda</statement>
+			<statement>¿Qué sabes sobre los microbios BENEFICIOSOS?</statement>
+			<statment>¡Vamos allá!</statment>
+		</blind>
+		<normal>
+			<statement>Veamos ahora lo que has aprendido.</statement>
+			<statement>Recuerda que ganarás 10 puntos por cada respuesta acertada; pero, si te equivocas, será tu contrincante quien se los lleve.</statement>
+			<statement>Así que, si NO SABES la respuesta, más vale asegurarte y decirlo.</statement>
+			<statement>¿Listo?</statement>
+			<statement>¡Vamos allá!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Utilizamos los microbios beneficiosos para hacer alimentos como el pan y el yogur.</text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Todos los microbios nos son perjudiciales.</text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Falso</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+	
+	</questions>
+</round>

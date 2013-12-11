@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>All About Microbes</name>
+	<round_id>0</round_id>
+	<next_round>bg_fr_gameshow_round2.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Bienvenue pour la PREMIERE SERIE DE QUESTIONS !</statement>
+			<statement>Je vais te poser des questions mais je NE te dirai PAS si ta réponse est juste</statement>
+			<statement>Si tes réponses sont justes, tu auras un gros bonus plus tard, alors fais de ton mieux</statement>
+			<statment>Allons-y !</statment>
+		</blind>
+		<normal>
+			<statement>Bravo! Tu es un pro!</statement>
+			<statement>Voyons maintenant ce que tu as appris.</statement>
+			<statement>Tu gagnes 10 points si ta réponse est juste, mais si tu as faux, c'est l'autre joueur qui gagne les points.  </statement>
+			<statement>Alors si tu NE SAIS PAS la réponse, mieux vaut le dire</statement>
+			<statement>Prêt ? </statement>
+			<statement>Allons-y !</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Si on ne peut pas voir de microbe, c'est qu'il n'y en a pas</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<lable>Je ne sais pas</lable>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Pas d'accord</lable>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Les bactéries et les virus, c'est pareil</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Les champignons sont des microbes</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>On trouve des microbes sur nos mains</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

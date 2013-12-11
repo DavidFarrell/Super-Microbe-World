@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Treatment of infection</name>
+	<round_id>4</round_id>
+	<next_round>exit</next_round>
+	<intro_text>
+		<blind>
+			<statement>Bienvenido a la ÚLTIMA ronda.</statement>
+			<statement>Ahora vamos a ver qué sabes sobre cómo nos recuperamos de las infecciones.</statement>
+			<statment>¡Vamos allá!</statment>
+		</blind>
+		<normal>
+			<statement>Veamos ahora lo que has aprendido.</statement>
+			<statement>Recuerda que ganarás 10 puntos por cada respuesta acertada; pero, si te equivocas, será tu contrincante quien se los lleve.</statement>
+			<statement>Así que si NO SABES la respuesta, más vale asegurarte y decirlo.</statement>
+			<statement>¿Listo?</statement>
+			<statement>¡Vamos allá!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Los antibióticos matan bacterias.</text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Los antibióticos matan virus.</text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Falso</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Los antibióticos curan cualquier enfermedad.</text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Falso</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Los antibióticos pueden dañar a nuestros microbios beneficiosos además de a los perjudiciales.</text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Falso</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Los antibióticos te ayudan cuando tienes tos. </text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Falso</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="5">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>La tos y los resfriados suelen curarse sin antibióticos.</text>
+			<answers>
+				<answer>
+					<label>Verdadero</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>No lo sé</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Falso</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

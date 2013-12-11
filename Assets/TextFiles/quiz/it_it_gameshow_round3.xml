@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Good Microbes</name>
+	<round_id>2</round_id>
+	<next_round>it_it_gameshow_round4.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Benvenuto nel TERZO round</statement>
+			<statement>Cosa sai a proposito dei microbi UTILI? </statement>
+			<statment>Cominciamo!</statment>
+		</blind>
+		<normal>
+			<statement>Ed ora vediamo che cosa hai imparato.</statement>
+			<statement>Ricordate: riceverete 10 punti per ogni risposta corretta, ma se sbagliate i punti verranno assegnati all'altro concorrente</statement>
+			<statement>Quindi se NON CONOSCETE la risposta, sarà meglio giocare senza rischi e scegliere NON SO! </statement>
+			<statement>Pronti?</statement>
+			<statement>Cominciamo!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Noi usiamo i microbi utili per fare cose come il pane e lo yogurt</text>
+			<answers>
+				<answer>
+					<label>D'accordo</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Non lo so</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Tutti i microbi sono dannosi per l'uomo</text>
+			<answers>
+				<answer>
+					<label>D'accordo</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Non lo so</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Non d'accordo</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+	
+	</questions>
+</round>

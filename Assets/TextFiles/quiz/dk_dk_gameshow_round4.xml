@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Food Hygiene</name>
+	<round_id>3</round_id>
+	<next_round>dk_dk_gameshow_round5.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Velkommen til fjerde runde</statement>
+		</blind>
+		<normal>
+			<statement>Lad os så se hvad du har lært.</statement>
+			<statement>Husk, 10 point for hvert rigtige svar, men har du svaret forkert, får din modstander point</statement>
+			<statement>så hvis du IKKE ved svaret, er det en god idé at indrømme det!</statement>
+			<statement>Klar?</statement>
+			<statement>Lad os komme i gang</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Råt kød skal have en hylde for sig selv for at forhindre, at skadelige mikroorganismer spreder sig til andre fødevarer.</text>
+			<answers>
+				<answer>
+					<label>Enig</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ved ikke</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Flydende madvarer, som mælk, yoghurt og juice skal stå i køleskabsdøren.</text>
+			<answers>
+				<answer>
+					<label>Enig</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ved ikke</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Uenig</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Man må gerne sætte åbne dåser med rester af mad i ind i køleskabet.</text>
+			<answers>
+				<answer>
+					<label>Enig</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Ved ikke</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Uenig</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Frugt skal lægges i en frugtskål.</text>
+			<answers>
+				<answer>
+					<label>Enig</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ved ikke</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Uenig</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Hvis du nyser, skal du vaske hænder, før du rører ved madvarer.</text>
+			<answers>
+				<answer>
+					<label>Enig</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ved ikke</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Uenig</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

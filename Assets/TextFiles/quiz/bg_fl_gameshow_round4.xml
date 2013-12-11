@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Food Hygiene</name>
+	<round_id>3</round_id>
+	<next_round>bg_fl_gameshow_round5.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Welkom in de VIERDE ronde</statement>
+		</blind>
+		<normal>
+			<statement>En wat hebben we vandaag geleerd?</statement>
+			<statement>Je krijgt nog steeds 10 punten voor een juist antwoord. Bij een fout antwoord krijgt je tegenspeler de punten.</statement>
+			<statement>Dus als je het antwoord NIET WEET, speel je beter zeker en zeg je dat je het niet weet!</statement>
+			<statement>Klaar?</statement>
+			<statement>Hier gaan we!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Rauw vlees leg je best apart in de koelkast om te voorkomen dat de schadelijke microben overgaan op ander voedsel.</text>
+			<answers>
+				<answer>
+					<label>Akkoord!</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ik weet het niet!</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Dranken zoals melk, yoghurt en fruitsap horen in de koelkastdeur.</text>
+			<answers>
+				<answer>
+					<label>Akkoord!</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ik weet het niet!</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Niet akkoord!</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Geopende blikjes kan je zonder risico in de koelkast bewaren. </text>
+			<answers>
+				<answer>
+					<label>Akkoord!</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Ik weet het niet!</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Niet akkoord!</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Fruit hoort thuis in een fruitmand.</text>
+			<answers>
+				<answer>
+					<label>Akkoord!</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ik weet het niet!</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Niet akkoord!</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Als je in je handen niest, moet je je handen eerst wassen vooraleer je voedsel aanraakt.</text>
+			<answers>
+				<answer>
+					<label>Akkoord!</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ik weet het niet!</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Niet akkoord!</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>All About Microbes</name>
+	<round_id>0</round_id>
+	<next_round>gk_gk_gameshow_round2.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Καλωσόρισες στον πρώτο γύρο των ερωτήσεων!</statement>
+			<statement>Θα σου κάνω κάποιες ερωτήσεις, αλλά ΔΕΝ θα σου αποκαλύψω αν απάντησες σωστά!</statement>
+			<statement>Αν είναι σωστές, όμως, θα λάβεις ένα «δώρο» αργότερα, οπότε βάλε τα δυνατά σου! </statement>
+			<statment>Ας ξεκινήσουμε!</statment>
+		</blind>
+		<normal>
+			<statement>Πολύ ωραία! Έχεις ταλέντο στα παιχνίδια! </statement>
+			<statement>Για να δούμε τώρα, τι έχετε μάθει.</statement>
+			<statement>Παίρνετε 10 πόντους, για κάθε σωστή απάντηση, αλλά αν κάνετε λάθος, οι άλλοι παίκτες παίρνουν τους πόντους.</statement>
+			<statement>Οπότε, αν ΔΕΝ ΞΕΡΕΙΣ την σωστή απάντηση, καλύτερα να μην το διακινδυνεύσεις </statement>
+			<statement>Έτοιμος/η;</statement>
+			<statement>Ας ξεκινήσουμε!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Αν δεν μπορείς να δεις ένα μικρόβιο, σημαίνει ότι δεν υπάρχει</text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<lable>Δεν ξέρω </lable>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Δεν συμφωνώ</lable>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Βακτήρια και ιοί δεν διαφέρουν </text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Οι μύκητες είναι μικρόβια </text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Μικρόβια βρίσκονται στα χέρια μας </text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

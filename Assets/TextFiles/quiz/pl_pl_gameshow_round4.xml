@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Food Hygiene</name>
+	<round_id>3</round_id>
+	<next_round>pl_pl_gameshow_round5.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Witamy w rundzie CZWARTEJ!</statement>
+		</blind>
+		<normal>
+			<statement>A teraz sprawdźmy, co zapamiętałaś/eś</statement>
+			<statement>Pamiętaj: 10 punktów za dobrą odpowiedź, ale jeśli się pomylisz, punkty trafiają do przeciwnika!</statement>
+			<statement>Jeśli więc nie znasz odpowiedzi, zagraj bezpiecznie i wybierz odpowiedź NIE WIEM!</statement>
+			<statement>Gotowi?</statement>
+			<statement>Zaczynamy!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Surowe mięso powinno leżeć na solidnej półce, najlepiej na dolnej półce nad szufladami.</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Produkty płynne takie jak mleko, jogurty, czy soki postaw na półkach w drzwiach lodówki.</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nie zgadzam się</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Bezpiecznie jest trzymać otwarte puszki w lodówce.</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nie zgadzam się</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Owoce wkładamy do szuflady na owoce.</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nie zgadzam się</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Po kichnięciu, powinniśmy umyć ręce zanim zaczniemy dotykać jedzenie.</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nie zgadzam się</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

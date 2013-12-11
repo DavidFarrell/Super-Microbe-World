@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>All About Microbes</name>
+	<round_id>0</round_id>
+	<next_round>cz_cz_gameshow_round2.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Vítej v prvním kolem otázek!</statement>
+			<statement>Zeptám se tě na pár otázek, ale neprozradím ti, zda jsi na ně odpověděl/a správně.</statement>
+			<statement>Jestliže na ně odpovíš správně, získáš později skvělý bonus, proto se snaž co nejvíc!</statement>
+			<statment>Pojďme na to!</statment>
+		</blind>
+		<normal>
+			<statement>Výborně!</statement>
+			<statement>A nyní se podíváme, kolik jsi se toho naučil/a.</statement>
+			<statement>Za každou správnou odpověď dostaneš 10 bodů. Když odpovíš špatně, dostane tyto body tvůj soupeř.</statement>
+			<statement>takže jestli NEZNÁŠ správnou odpověď, raději to přiznej </statement>
+			<statement>Připraven/a?</statement>
+			<statement>Pojďme na to!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Když mikroba nevidíme, není tam.</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<lable>Nevím</lable>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Nesouhlasím</lable>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Mezi bakteriemi a viry není žádný rozdíl, jsou úplně stejní.</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Plísně patří mezi mikroby.</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Mikroby můžeme najít na svých rukách.</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

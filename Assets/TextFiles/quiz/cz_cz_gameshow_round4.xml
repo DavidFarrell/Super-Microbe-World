@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Food Hygiene</name>
+	<round_id>3</round_id>
+	<next_round>cz_cz_gameshow_round5.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Vítej ve ČTVRTÉM kole</statement>
+		</blind>
+		<normal>
+			<statement>A nyní se podíváme, kolik jsi se toho naučil/a.</statement>
+			<statement>Pamatuj, za každou správnou odpověď získáš 10 bodů, ale když odpovíš špatně, dostane body tvůj soupeř,</statement>
+			<statement>takže jestli NEZNÁŠ správnou odpověď, raději to přiznej! </statement>
+			<statement>Připraven/a?</statement>
+			<statement>Pojďme na to!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Syrové maso musí být uchováváno odděleně od všech ostatních potravin v nepropustném obalu. Pouze tak zabráníte šíření nebezpečných mikrobů.</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Nápoje jako mléko a džus, ale i jogurty dejte do dveří lednice.</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Otevřené plechovky můžeme skladovat v ledničce bez obav.</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Ovoce by mělo být uchováváno v ledničce v boxu pro ovoce.</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Po každém kýchnutí si musíš umýt ruce, zvlášť, když se chystáš sahat na potraviny.</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

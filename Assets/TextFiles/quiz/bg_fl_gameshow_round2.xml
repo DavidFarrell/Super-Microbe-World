@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Good and Bad Bugs</name>
+	<round_id>1</round_id>
+	<next_round>bg_fl_gameshow_round3.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Welkom in de TWEEDE ronde</statement>
+			<statement>Als je de vragen juist beantwoord hebt, krijg je later een bonus...doe dus je best!</statement>
+			<statment>Hier gaan we!</statment>
+		</blind>
+		<normal>
+			<statement>En wat hebben we vandaag geleerd?</statement>
+			<statement>Je krijgt 10 punten voor een juist antwoord, maar bij een fout antwoord krijgt je tegenspeler de punten.</statement>
+			<statement>Dus als je het antwoord NIET WEET, speel je beter zeker en zeg je dat je het niet weet!</statement>
+			<statement>Klaar?</statement>
+			<statement>Hier gaan we!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+	
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Alle bacteriën zijn schadelijk.</text>
+			<answers>
+				<answer>
+					<label>Akkoord!</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Ik weet het niet!</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Niet akkoord!</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>We kunnen zeep gebruiken om schadelijke microben weg te wassen.</text>
+			<answers>
+				<answer>
+					<label>Akkoord!</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ik weet het niet!</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Niet akkoord!</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Hoestjes en verkoudheden genezen vaak zonder medicijnen.</text>
+			<answers>
+				<answer>
+					<label>Akkoord!</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ik weet het niet!</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Niet akkoord!</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Ons lichaam heeft een natuurlijk afweersysteem dat ons beschermt tegen een infectie.</text>
+			<answers>
+				<answer>
+					<label>Akkoord!</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Ik weet het niet!</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Niet akkoord!</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

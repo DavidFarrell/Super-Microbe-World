@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Treatment of infection</name>
+	<round_id>4</round_id>
+	<next_round>exit</next_round>
+	<intro_text>
+		<blind>
+			<statement>Vítej ve FINÁLOVÉM kole</statement>
+			<statement>Teď uvidíme jestli víš něco o tom, jak se poprat s infekcí.</statement>
+			<statment>Pojďme na to!</statment>
+		</blind>
+		<normal>
+			<statement>A nyní se podíváme, kolik jsi se toho naučil/a.</statement>
+			<statement>Pamatuj, za každou správnou odpověď získáš 10 bodů, ale když odpovíš špatně, dostane body tvůj soupeř,</statement>
+			<statement>takže jestli NEZNÁŠ správnou odpověď, raději to přiznej! </statement>
+			<statement>Připraven/a?</statement>
+			<statement>Pojďme na to!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotika ničí bakterie</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotika ničí viry</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotiky je možno vyléčit všechny nemoci</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotika mohou poškodit naše hodné bakterie stejně, jako ty zlé</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotika ti pomohou, když máš kašel a rýmu</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="5">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Kašel, rýma a nachlazení se většinou snadno vyléčí i bez antibiotik. Stačí zůstat v posteli, dostatečně pít a jíst dostatek vitamínů.</text>
+			<answers>
+				<answer>
+					<label>Souhlasím</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nevím</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nesouhlasím</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

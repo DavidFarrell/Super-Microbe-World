@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Treatment of infection</name>
+	<round_id>4</round_id>
+	<next_round>exit</next_round>
+	<intro_text>
+		<blind>
+			<statement>Bienvenue au tour FINAL</statement>
+			<statement>Cette fois, nous allons voir ce que tu sais sur la façon dont on guérit d'une infection</statement>
+			<statment>On y va !</statment>
+		</blind>
+		<normal>
+			<statement>Voyons maintenant ce que tu as appris.</statement>
+			<statement>Rappelle-toi, 10 points par réponse juste, mais si tu te trompes, c'est l'autre joueur qui gagne les points</statement>
+			<statement>Alors si tu NE SAIS PAS la réponse, mieux vaut le dire</statement>
+			<statement>Prêt ?</statement>
+			<statement>On y va !</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Les antibiotiques tuent les bactéries</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Les antibiotiques tuent les virus</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Les antiibotiques guérissent toutes les maladies</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Les antibiotiques peuvent détruire les bactéries utiles aussi bien que les bactéries dangereuses</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Les antibiotiques sont utiles quand on tousse</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="5">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>La plupart des toux et des rhumes guérissent sans antibiotiques</text>
+			<answers>
+				<answer>
+					<label>D'accord</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Je ne sais pas</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Pas d'accord</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

@@ -28,6 +28,7 @@ function OnGUI () {
 
 }
 
+//Adds (substracts if negative) the amount of points to the score.
 function ChangePoints (amount : int) {
 
 	score += amount;

@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Good and Bad Bugs</name>
+	<round_id>1</round_id>
+	<next_round>gk_gk_gameshow_round3.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Καλωσόρισες στο ΔΕΥΤΕΡΟ γύρο!   </statement>
+			<statement>Αν είναι σωστές, όμως, θα λάβεις ένα «δώρο» αργότερα, οπότε βάλε τα δυνατά σου! </statement>
+			<statment>Ας ξεκινήσουμε!</statment>
+		</blind>
+		<normal>
+			<statement>Για να δούμε τώρα, τι έχετε μάθει.</statement>
+			<statement>Παίρνετε 10 πόντους, για κάθε σωστή απάντηση, αλλά αν κάνετε λάθος, οι άλλοι παίκτες παίρνουν τους πόντους.</statement>
+			<statement>Οπότε, αν ΔΕΝ ΞΕΡΕΙΣ την σωστή απάντηση, καλύτερα να μην το διακινδυνεύσεις </statement>
+			<statement>Έτοιμος/η;</statement>
+			<statement>Ας ξεκινήσουμε!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+	
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Όλα τα βακτήρια είναι βλαβερά</text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Το σαπούνι μπορεί να απομακρύνει τα βλαβερά μικρόβια</text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Ο βήχας και το κρυολόγημα, στις περισσότερες περιπτώσεις, βελτιώνονται χωρίς φάρμακα </text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Το σώμα μας έχει φυσικές άμυνες, που μας προστατεύουν από λοιμώξεις </text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

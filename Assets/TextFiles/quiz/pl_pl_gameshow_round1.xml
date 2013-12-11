@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>All About Microbes</name>
+	<round_id>0</round_id>
+	<next_round>pl_pl_gameshow_round2.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Zapraszamy do pierwszej rundy ŚLEPYCH PYTAŃ!</statement>
+			<statement>Odpowiesz na kilka pytań. Na razie nie poznasz prawidłowych odpowiedzi.</statement>
+			<statement>Jeśli odpowiesz na pytania prawidłowo, na końcu otrzymasz specjalny bonus, więc skup się!</statement>
+			<statment>Zaczynamy!</statment>
+		</blind>
+		<normal>
+			<statement>Dobra robota!</statement>
+			<statement>A teraz sprawdźmy, co zapamiętałaś/eś</statement>
+			<statement>Za prawidłową odpowiedź otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik.</statement>
+			<statement>Jeśli nie znasz odpowiedzi - lepiej zagrać bezpiecznie i przyznać się, że nie wiesz!</statement>
+			<statement>Gotowi?</statement>
+			<statement>Zaczynamy!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Jeśli nie widać drobnoustrojów, to znaczy, że ich nie ma</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<lable>Nie wiem</lable>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Nie zgadzam się</lable>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Bakterie i wirusy są takie same</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nie zgadzam się</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Grzyby są drobnoustrojami</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nie zgadzam się</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Drobnoustroje można znaleźć na naszych dłoniach.</text>
+			<answers>
+				<answer>
+					<label>Zgadzam się</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Nie wiem</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Nie zgadzam się</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

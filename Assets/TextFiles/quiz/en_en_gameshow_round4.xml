@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Food Hygiene</name>
+	<round_id>3</round_id>
+	<next_round>en_en_gameshow_round5.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Welcome to the FOURTH round</statement>
+		</blind>
+		<normal>
+			<statement>Now let's see what you have learned.</statement>
+			<statement>Remember, 10 points for a correct answer, but if you get it wrong, the other player gets the points.</statement>
+			<statement>So if you DON'T KNOW the answer, it's best to play it safe and say so!</statement>
+			<statement>Ready?</statement>
+			<statement>Let's go!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Raw meat should have a solid shelf all to itself to prevent harmful microbes getting on to other food.</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Liquids like milk, yogurt and juice go in the fridge door.</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>It is safe to put opened tins in the fridge.</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Fruit should be put in the fruit bowl.</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>If you sneeze, you should wash your hands before handling food.</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

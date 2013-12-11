@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<conversation>
+	<statement>Buongiorno e benvenuti alla rassegna dei giochi di e-Bug!</statement>
+	<statement>Tra poco entrerete nel misterioso mondo dei microbi.</statement>
+	<statement>Ma prima, quale sarà il personaggio che giocherà per voi?</statement>
+	<statement></statement>
+	<statement>Raccontami qualcosa di te:</statement>
+	<statement>Soprannome</statement>
+	<statement>Età</statement>
+	<statement>Indirizzo email</statement>
+	<statement>Non è necessario che tu ci dia questa informazione, ma se lo farai potrai partecipare alle competizioni e sapere le novità riguardo alle nuove versioni dei giochi.</statement>
+	<statement>Vediamo cosa sai a proposito dei microbi</statement>
+</conversation>

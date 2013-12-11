@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Treatment of infection</name>
+	<round_id>4</round_id>
+	<next_round>exit</next_round>
+	<intro_text>
+		<blind>
+			<statement>Καλωσόρισες στον ΤΕΛΕΥΤΑΙΟ γύρο!</statement>
+			<statement>Τώρα θα δούμε πόσα γνωρίζεις, σχετικά με την θεραπεία των λοιμώξεων</statement>
+			<statment>Ας ξεκινήσουμε!</statment>
+		</blind>
+		<normal>
+			<statement>Για να δούμε τώρα, τι έχετε μάθει.</statement>
+			<statement>Θυμήσου, κερδίζεις 10 πόντους για μια σωστή απάντηση, αλλά αν είναι λάθος, ο άλλος παίκτης κερδίζει τους πόντους </statement>
+			<statement>Οπότε αν ΔΕΝ ΞΕΡΕΙΣ την σωστή απάντηση, καλύτερα να μην το διακινδυνεύσεις </statement>
+			<statement>Έτοιμος/η;</statement>
+			<statement>Ας ξεκινήσουμε!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Τα αντιβιοτικά σκοτώνουν τα βακτήρια.</text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Τα αντιβιοτικά σκοτώνουν τους ιούς.</text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Τα αντιβιοτικά θεραπεύουν οποιαδήποτε ασθένεια.</text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Τα αντιβιοτικά μπορούν να βλάψουν τα «χρήσιμα» και τα «βλαβερά» βακτήρια. </text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Τα αντιβιοτικά βοηθούν όταν έχεις βήχα. </text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="5">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Ο βήχας και το κρυολόγημα, στις περισσότερες περιπτώσεις, βελτιώνονται χωρίς αντιβιοτικά.  </text>
+			<answers>
+				<answer>
+					<label>Συμφωνώ</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Δεν ξέρω </label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Δεν συμφωνώ</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>
