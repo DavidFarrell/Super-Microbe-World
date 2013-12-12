@@ -14,12 +14,16 @@ public class GameLogic extends MonoBehaviour{
 	
 	private var level : GameLevel;
 	
+	private var player : String; 			//To keep the name of the player chosen to play.
+	
 	//private var changeStateTrigger : boolean = false;
 	
 	function Awake () {
 	
 		// Make this game object and all its transform children survive when loading a new scene.
 		DontDestroyOnLoad (transform.gameObject);
+		
+		player = "";
 		
 		level = GameLevel.gameShow;
 	
@@ -62,7 +66,13 @@ public class GameLogic extends MonoBehaviour{
 		level = newLevel;
 		Application.LoadLevel(level.ToString());
 	}
-
+	
+	public function PlayerChosen(playerName : String){
+	
+		player = playerName;
+		PlayerPrefs.SetString("player", playerName);
+	
+	}
 }
 /*
 

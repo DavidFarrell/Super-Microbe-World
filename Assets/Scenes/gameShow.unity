@@ -151,6 +151,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da428309f20c2431b9e525438c182d0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameHost: {fileID: 195057792}
+  playerAmy: {fileID: 878088618}
+  playerHarry: {fileID: 1269533651}
+  textBoxGameObject: {fileID: 993507213}
 --- !u!4 &143244695
 Transform:
   m_ObjectHideFlags: 0
@@ -407,6 +411,8 @@ GameObject:
   - 212: {fileID: 878088620}
   - 95: {fileID: 878088619}
   - 114: {fileID: 878088622}
+  - 114: {fileID: 878088623}
+  - 61: {fileID: 878088624}
   m_Layer: 0
   m_Name: amy
   m_TagString: Untagged
@@ -535,6 +541,30 @@ MonoBehaviour:
     m_StretchWidth: 1
     m_StretchHeight: 0
   score: 0
+--- !u!114 &878088623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 878088618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 420460d13ffa049fc9862c55a7d1d292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherCharacter: {fileID: 1269533651}
+  levelLogic: {fileID: 143244693}
+--- !u!61 &878088624
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 878088618}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Size: {x: 1.52048385, y: 3.18131757}
+  m_Center: {x: .0847194418, y: -.727176726}
 --- !u!1 &993507213
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,7 +657,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
-  bufferSize: 0
+  bufferSize: 50
   lettersPerSecond: 20
 --- !u!4 &993507215
 Transform:
@@ -647,7 +677,7 @@ SpriteRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 1581437000}
   m_GameObject: {fileID: 993507213}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_LightmapIndex: 255
@@ -715,6 +745,8 @@ GameObject:
   - 212: {fileID: 1269533653}
   - 95: {fileID: 1269533652}
   - 114: {fileID: 1269533655}
+  - 114: {fileID: 1269533656}
+  - 61: {fileID: 1269533657}
   m_Layer: 0
   m_Name: harry
   m_TagString: Untagged
@@ -843,6 +875,30 @@ MonoBehaviour:
     m_StretchWidth: 1
     m_StretchHeight: 0
   score: 0
+--- !u!114 &1269533656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1269533651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 420460d13ffa049fc9862c55a7d1d292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherCharacter: {fileID: 878088618}
+  levelLogic: {fileID: 143244693}
+--- !u!61 &1269533657
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1269533651}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Size: {x: 1.6328826, y: 3.40963507}
+  m_Center: {x: .183560073, y: -.755417228}
 --- !u!1001 &1581437000
 Prefab:
   m_ObjectHideFlags: 0
@@ -877,6 +933,14 @@ Prefab:
     - target: {fileID: 400000, guid: 8b30fd2d8f5fb4e3084d9fde245a8b78, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 21200000, guid: 8b30fd2d8f5fb4e3084d9fde245a8b78, type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 8b30fd2d8f5fb4e3084d9fde245a8b78, type: 2}
+      propertyPath: bufferSize
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8b30fd2d8f5fb4e3084d9fde245a8b78, type: 2}

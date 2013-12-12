@@ -9,7 +9,11 @@ Here is a wee explanation of the most relevant function and the use of the class
 
 	First of all we have to use SetSpeaker("Speaker") to say who is talking.
 	Then we use AddTextToShow(argument) to add all the lines to the buffer, being "argument" an array of sentences to be played.
-	Finally we call ShowAllLines () for all the lines to be written in order in the screen. This function will enable the text box, write all the sentences, and disable the text box after.
+	Enable the text Box with EnableTextBox();
+	Call ShowAllLines () for all the lines to be written in order in the screen. This function will enable the text box, write all the sentences, and disable the text box after.
+	Disable the text Box with DisableTextBox();
+	
+For a better understanding of its usage see the commented method mytest below.
 
 TODO There is a failure. The sentences to write are broken in lines each "maxLettersPerLine" characters no matter if words are broken in half. Check this later.
 
@@ -42,17 +46,25 @@ public class TextBox extends MonoBehaviour{
 	
 	private var speaker : String = "Game host";					//Field to write who is talking
 	private var textToWrite : String = "This is the dialogue";	//Here will be written the sentences of the dialogue to show
-
-	function Start () {
+	
+	function Awake () {
+	
 		//Debug.Log("Rectangle: " + upperLeftCorner.x + ", " + upperLeftCorner.y + ", " + textSize.x + ", " + textSize.y);
 		
-		textRectangleSprite = GetComponent(SpriteRenderer);
+		textRectangleSprite = gameObject.GetComponent(SpriteRenderer);
 		
-		textBuffer= new TextBuffer(50);
+		if(textRectangleSprite == null) Debug.Log("textRectangleSprite not found!");
+		
+		textBuffer= new TextBuffer(bufferSize);
 		
 		DisableTextBox();
 		
-		mytest();
+		//mytest();
+	
+	}
+	
+	function Start () {
+		
 		
 	}
 
@@ -68,7 +80,7 @@ public class TextBox extends MonoBehaviour{
 		}
 	}
 	
-	public function mytest(){
+	/*public function mytest(){
 	
 		Debug.Log("Test Started");
 		
@@ -89,8 +101,9 @@ public class TextBox extends MonoBehaviour{
 		
 		Debug.Log("End of Test!");
 	
-	}
+	}*/
 	
+	//To write who is talking on top of the text box
 	public function SetSpeaker(speakerToSet : String) {
 		speaker = speakerToSet;
 	}
