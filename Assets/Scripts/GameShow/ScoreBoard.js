@@ -8,6 +8,8 @@ public var score: int = 0;
 //private var up: int;
 //private var left: int;
 
+private var isEnabled = true;
+
 function Start () {
 	score = 0;
 //	up = transform.position.y;
@@ -23,9 +25,9 @@ function Update () {
 }
 
 function OnGUI () {
-	GUI.Label (Rect (upperLeftCorner.x, upperLeftCorner.y, textSize.x, textSize.y), score.ToString(), style);
-	//GUI.Label (Rect (25, 25, 100, 30), "Label");
-
+	if (isEnabled) {
+		GUI.Label (Rect (upperLeftCorner.x, upperLeftCorner.y, textSize.x, textSize.y), score.ToString(), style);
+	}
 }
 
 //Adds (substracts if negative) the amount of points to the score.
@@ -33,4 +35,12 @@ function ChangePoints (amount : int) {
 
 	score += amount;
 
+}
+
+public function Enable () {
+	isEnabled = true;
+}
+
+public function Disable () {
+	isEnabled = false;
 }

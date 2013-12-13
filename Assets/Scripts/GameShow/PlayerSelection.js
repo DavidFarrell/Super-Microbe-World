@@ -12,14 +12,16 @@ private var levelLogicGameShow : LevelLogicGameShow;
 
 This class controls the animations of the character when the player has to select one of the characters to play with.
 
+Will be attached to both characters (Amy and Harry) in the Gameshow level.
+
 */
 
 function Awake () {
 	
-	thisCharacterAnimator = gameObject.GetComponent(Animator);
-	otherCharacterAnim = otherCharacter.GetComponent(Animator);
+	thisCharacterAnimator = gameObject.GetComponent(Animator);		//Reference to the animator of this character
+	otherCharacterAnim = otherCharacter.GetComponent(Animator);		//Reference to the animator of the other character
 	
-	selMode = false;
+	selMode = false;	//Will be true when the player had to select who player wants to play with
 	
 }
 

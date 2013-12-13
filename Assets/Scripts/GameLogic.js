@@ -71,6 +71,7 @@ public class GameLogic extends MonoBehaviour{
 	
 		player = playerName;
 		PlayerPrefs.SetString("player", playerName);
+		
 	
 	}
 }

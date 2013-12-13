@@ -5,15 +5,12 @@
 This class shows a dialogue in a box showing how is talking. 
 
 It recieves an array of Strings that will be the sucesion of sentences that will be said by one person, and they will be played sentence by sentence being each sentence written letter by letter.
-Here is a wee explanation of the most relevant function and the use of the class. More information about each function can be found over its implementation.
+More information about each function can be found over its implementation.
+But here is the usage instruction of the only public function:
 
-	First of all we have to use SetSpeaker("Speaker") to say who is talking.
-	Then we use AddTextToShow(argument) to add all the lines to the buffer, being "argument" an array of sentences to be played.
-	Enable the text Box with EnableTextBox();
-	Call ShowAllLines () for all the lines to be written in order in the screen. This function will enable the text box, write all the sentences, and disable the text box after.
-	Disable the text Box with DisableTextBox();
-	
-For a better understanding of its usage see the commented method mytest below.
+SayThis(WhoTalks, WhatToSay); ---> 	To show this text box this is the function that has to be used. The first argument is an String with the name of who is talking and the 
+									second is an array with all the sentences that must be written.
+NOTE that this function should be yielded if we want to wait until all the messages have been displayed
 
 TODO There is a failure. The sentences to write are broken in lines each "maxLettersPerLine" characters no matter if words are broken in half. Check this later.
 
@@ -103,25 +100,39 @@ public class TextBox extends MonoBehaviour{
 	
 	}*/
 	
+	public function SayThis (whoSay : String, WhatSay : String[]) {
+	
+		SetSpeaker(whoSay);				//First of all we have to use SetSpeaker("Speaker") to say who is talking.
+		
+		EnableTextBox();				//Enable the text Box with EnableTextBox();
+		
+		AddTextToShow(WhatSay);			//Then we use AddTextToShow(argument) to add all the lines to the buffer, being "argument" an array of sentences to be played.
+		
+		yield ShowAllLines();			//Call ShowAllLines () for all the lines to be written in order in the screen. This function will enable the text box, write all the sentences, and disable the text box after.
+		
+		DisableTextBox();				//Disable the text Box with DisableTextBox();
+	
+	}
+	
 	//To write who is talking on top of the text box
-	public function SetSpeaker(speakerToSet : String) {
+	private function SetSpeaker(speakerToSet : String) {
 		speaker = speakerToSet;
 	}
 	
-	public function EnableTextBox(){
+	private function EnableTextBox(){
 		
 		textRectangleSprite.enabled = true;
 		enableLabels = true;
 	}
 	
-	public function DisableTextBox(){
+	private function DisableTextBox(){
 		
 		textRectangleSprite.enabled = false;
 		enableLabels = false;
 	}
 
 	//Receives a String which is added to the textBuffer to be shown
-	public function AddTextToShow (lines : String[]) : boolean {
+	private function AddTextToShow (lines : String[]) : boolean {
 		var correctlyDone : boolean = true;
 		for (var line : String in lines){
 			correctlyDone = textBuffer.push(line);
@@ -130,7 +141,7 @@ public class TextBox extends MonoBehaviour{
 	}
 	
 	//Show all the dialog line by line, waiting the player to click between lines, and writing each line letter by letter like "pokemon style".
-	public function ShowAllLines () {
+	private function ShowAllLines () {
 		var actualLine : String = "";
 		EnableTextBox();
 		while (!textBuffer.isEmpty()) {
@@ -148,24 +159,26 @@ public class TextBox extends MonoBehaviour{
 	//Used by ShowAllLines() to show the actual line
 	private function ShowActualLine(actualLine : String) {
 		var line : int = 0;
-		var skipLimit : int = actualLine.Length / 2;
-		textToWrite = "";
-		for (var count : int = 0; count < actualLine.Length; count++){
-			textToWrite = textToWrite + actualLine[count];
-			
-			if((count % maxLettersPerLine == 0) && (count != 0)){ 		//To add a line break every "maxLettersPerLine" letters
-				textToWrite = textToWrite + "\n";
-				line++;
-				if (line == maxLinesPerDialog){							//If there is too many lines (more than "maxLinesPerDialog") it stops writing
-					break;
+		if (actualLine != null){
+			var skipLimit : int = actualLine.Length / 2;
+			textToWrite = "";
+			for (var count : int = 0; count < actualLine.Length; count++){
+				textToWrite = textToWrite + actualLine[count];
+				
+				if((count % maxLettersPerLine == 0) && (count != 0)){ 		//To add a line break every "maxLettersPerLine" letters
+					textToWrite = textToWrite + "\n";
+					line++;
+					if (line == maxLinesPerDialog){							//If there is too many lines (more than "maxLinesPerDialog") it stops writing
+						break;
+					}
 				}
-			}
-			
-			if (Input.anyKeyDown && count > skipLimit && !(count == actualLine.Length - 1)){	//To write all the letters at once when more than half of the text has been written and any key is pressed
-				continue;
-			}
-			else{
-				yield new WaitForSeconds(period);
+				
+				if (Input.anyKeyDown && count > skipLimit && !(count == actualLine.Length - 1)){	//To write all the letters at once when more than half of the text has been written and any key is pressed
+					continue;
+				}
+				else{
+					yield new WaitForSeconds(period);
+				}
 			}
 		}
 		yield WaitForClick();
