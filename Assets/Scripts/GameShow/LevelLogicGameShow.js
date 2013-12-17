@@ -27,21 +27,31 @@ public class LevelLogicGameShow extends MonoBehaviour{
 	
 	private var gameLogic : GameLogic;
 	
-	enum stateMachine {	init,
-						introTalk,
-						playerSelection ,
-						talk2,
-						getDataForm ,
-						talk3,
-						shrinkingZone,
-						round1,
-						round2,
-						round3,
-						round4,
-						round5};
+//	enum stateMachine {	init,
+//						introTalk,
+//						playerSelection ,
+//						talk2,
+//						getDataForm ,
+//						talk3,
+//						shrinkingZone,
+//						round1,
+//						round2,
+//						round3,
+//						round4,
+//						round5};
 	
-	private var nextState : stateMachine;		//Keeps the state of the level
+//	private var nextState : stateMachine;		//Keeps the state of the level. 
 	private var busy : boolean;				//If false, the next state will be played
+	
+	//Part with the variables for the form
+	public var textStyle : GUIStyle;		//Style of the GUI of the form
+	public var textBoxStyle : GUIStyle;		//Style of the GUI of the form
+	public var buttonStyle : GUIStyle;		//Style of the GUI of the form
+	private var formMode : boolean = false;		//To activate/ deactivate the GUI of the form
+	private var nickNameString : String = "?";	//To keep the nickname of the player
+	private var ageString : String = "?";			//The age of the player
+	private var emailString : String = "?";			//The email of the player
+	
 	
 	function Awake () {
 	
@@ -76,16 +86,16 @@ public class LevelLogicGameShow extends MonoBehaviour{
 		harryScoreBoard = playerHarry.transform.GetComponent("ScoreBoard");
 		
 		
-		formBackground.SetActive(false);
+		formBackground.SetActive(false);							//Disable the form background, which will be enabled when needed
 		
 		amyShrinkGO.SetActive(false);								//Disable it (just in case it was enabled). It will be enabled later when it's needed.
 		harryShrinkGO.SetActive(false);
 		
-		shrinkingZone.SetActive(false);
+		shrinkingZone.SetActive(false);								//Disable the background of the shrinking zone, which will be enabled when needed
 		
 		textBox = textBoxGO.GetComponent(TextBox);			//To have a reference to the TextBox class in order to use it
 		
-		nextState = stateMachine.init;
+//		nextState = stateMachine.init;
 		
 		levelActions();
 		busy = false;
@@ -98,6 +108,33 @@ public class LevelLogicGameShow extends MonoBehaviour{
 //		}
 	}
 	
+	function OnGUI () {
+		
+		if (formMode){		//This part of the gui will only execute when the game is in the part that the player need to fulfill the form with its info.
+		
+			//GUI.Box(Rect (Screen.width*0.1, Screen.height*0.1, Screen.width*0.9, Screen.height*0.9), "Tell me a little about yourself:", style);
+			
+			GUI.Label (Rect (Screen.width*0.1, Screen.height*0.1, Screen.width*0.3, Screen.height*0.1), "Nickname: ", textStyle);
+			nickNameString = GUI.TextField (Rect (Screen.width*0.4, Screen.height*0.1, Screen.width*0.3, Screen.height*0.1), nickNameString, 25, textBoxStyle);		//Single line field where the player has to write its nickname. Limited to 25 characters
+			
+			GUI.Label (Rect (Screen.width*0.1, Screen.height*0.3, Screen.width*0.3, Screen.height*0.1), "Age: ", textStyle);
+			ageString = GUI.TextField (Rect (Screen.width*0.4, Screen.height*0.3, Screen.width*0.3, Screen.height*0.1), ageString, 3, textBoxStyle);		//Single line field where the player has to write its nickname. Limited to 25 characters
+			
+			GUI.Label (Rect (Screen.width*0.1, Screen.height*0.5, Screen.width*0.3, Screen.height*0.1), "E-mail: ", textStyle);
+			emailString = GUI.TextField (Rect (Screen.width*0.4, Screen.height*0.5, Screen.width*0.3, Screen.height*0.1), emailString, 25, textBoxStyle);		//Single line field where the player has to write its nickname. Limited to 25 characters
+			
+			if (GUI.Button (Rect (Screen.width*0.6, Screen.height*0.7, Screen.width*0.3, Screen.height*0.1), GUIContent ("Submit form", "If you don't want to submit any info just leave the question marks."), buttonStyle)){
+				Debug.Log("NickName: " + nickNameString + "\nAge: " + ageString + "\nMail: " + emailString);
+				gameLogic.StartDataBaseConnection(nickNameString, ageString, emailString);			//To continue and end this coroutine
+				formMode = false;
+			}
+			
+			GUI.Label (Rect (Screen.width*0.05, Screen.height*0.85, Screen.width*0.7, Screen.height*0.1), "You don't need to give us this information, but if you do you'll be able\nto take part in competitions and hear about new versions of the game.", textStyle);
+			
+		}
+		
+	}
+	
 //	function nextStep () {
 //		
 //		switch (nextState) {
@@ -105,32 +142,32 @@ public class LevelLogicGameShow extends MonoBehaviour{
 //		case stateMachine.init:						//Actual State
 //			busy = true;
 //			nextState = stateMachine.introTalk;			//Set the state to be played after the actual
-//			introTalk();							//Plays the actions of the actual state
+//			yield introTalk();							//Plays the actions of the actual state
 //			break;
 //		case stateMachine.introTalk:
 //			busy = true;
 //			nextState = stateMachine.playerSelection;			
-//			PlayerSelect();						
+//			yield PlayerSelect();						
 //			break;
 //		case stateMachine.playerSelection:
 //			busy = true;
 //			nextState = stateMachine.talk2;			
-//			Talk2();						
+//			yield Talk2();						
 //			break;
 //		case stateMachine.talk2:
 //			busy = true;
 //			nextState = stateMachine.getDataForm;			
-//			ShowDataForm();						
+//			yield ShowDataForm();						
 //			break;
 //		case stateMachine.getDataForm:
 //			busy = true;
 //			nextState = stateMachine.talk3;			
-//			Talk3();						
+//			yield Talk3();						
 //			break;
 //		case stateMachine.talk3:
 //			busy = true;
 //			nextState = stateMachine.shrinkingZone;			
-//			ShrinkingZone();						
+//			yield ShrinkingZone();						
 //			break;
 //		case stateMachine.shrinkingZone:
 //			busy = true;
@@ -235,22 +272,29 @@ public class LevelLogicGameShow extends MonoBehaviour{
 		var toSay : String[] = new String[1];
 		toSay[0] = "Tell me a little about yourself:";
 		
+//		Debug.Log("Before textbox");
+		
 		yield textBox.SayThis("Game host", toSay);
 		
 		hostAnim.SetTrigger("stop");
 		
+//		Debug.Log("After textbox. Setting busy to false");
 		busy = false;
 	}
 	
 	private function ShowDataForm () {
 		
+//		Debug.Log("Beginning showDataForm");
+		
 		amyScoreBoard.Disable();
 		harryScoreBoard.Disable();
 		formBackground.SetActive(true);
 		
+		formMode = true;
 		
-		
-		yield new WaitForSeconds(3);
+		while (formMode) 			//Waits while the form is being filled in (see onGUI)
+			yield;
+			
 		amyScoreBoard.Enable();
 		harryScoreBoard.Enable();
 		formBackground.SetActive(false);
@@ -275,7 +319,7 @@ public class LevelLogicGameShow extends MonoBehaviour{
 	}
 	
 	public function ShrinkingZone (){
-		Debug.Log("Beggining SrinkingZone()...");
+//		Debug.Log("Beggining SrinkingZone()...");
 		
 		amyScoreBoard.Disable();
 		harryScoreBoard.Disable();
@@ -292,9 +336,11 @@ public class LevelLogicGameShow extends MonoBehaviour{
 				Debug.Log("There was some problem with the player. Don't know which one to use.");
 			}
 		yield new WaitForSeconds(4);									//Waits to play the shrinking animation
-		Debug.Log("Finished ShrinkingZone");
+//		Debug.Log("Finished ShrinkingZone");
 		
 		busy = false;
 	}
+	
+	
 	
 }

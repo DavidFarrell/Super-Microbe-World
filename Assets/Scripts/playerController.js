@@ -47,6 +47,7 @@ private var hasBeenRunning: boolean;			//True if the player's speed has been
 private var photoPoint: Transform;			//To store the point where the photos will be taken from
 private var photoLength: int = 3;				//The scope of the photos
 private var photoReceivers: RaycastHit2D[]; //To store the colliders which the ray went through
+private var flashRenderer: SpriteRenderer;			//Will contain a reference to the flash sprite renderer, to enable or disable it when needed
 
 	//Variables used to shoot soap
 private var shootPoint: Transform;
@@ -80,6 +81,8 @@ function Awake () {
 	
 	photoPoint = myTransform.Find("photo_point").transform;
 	photoReceivers = new RaycastHit2D[3];
+	flashRenderer = myTransform.Find("flash").GetComponent(SpriteRenderer);
+	flashRenderer.enabled = false;
 	
 	shootPoint = myTransform.Find("shoot_point").transform;
 	
@@ -356,6 +359,11 @@ private function takePhoto () {
 	for (var i: int = 0; i < receivers; i++) {
 		photoReceivers[i].transform.SendMessage("bePhotographed");
 	}
+	
+	yield new WaitForSeconds(0.3);
+	flashRenderer.enabled = true;
+	yield new WaitForSeconds(0.2);
+	flashRenderer.enabled = false;
 	
 }
 

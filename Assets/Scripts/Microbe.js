@@ -66,12 +66,14 @@ public class Microbe extends MonoBehaviour{
 	
 	}
 	
+	//To detect the collisions with the player
 	function OnCollisionEnter2D (coll: Collision2D) {
 		if (canBeHit && coll.collider.gameObject.layer == utils.layers.player)
 			beHit();
 
 	}
 	
+	//This function will be called when a soap drop or a white blood cell hit is recieved
 	function receiveDrop (dropName: String) {
 		Debug.Log(myTransform.name + ": Hit received. Name of drop: " + dropName);
 		if (affectedBySoap && dropName == "soapDropThrow(Clone)"){
@@ -82,7 +84,7 @@ public class Microbe extends MonoBehaviour{
 				return;
 			}
 		}
-		if (affectedByWhiteBC && dropName == "whitebcellThrow(Clone)"){
+		if (affectedByWhiteBC && dropName == "whiteBCellThrow(Clone)"){
 			life = life - whiteBCDamage;
 			Debug.Log(myTransform.name + ": whiteBC hit. Life: " + life);
 			if (!killedAlready && life <= 0){
@@ -93,6 +95,7 @@ public class Microbe extends MonoBehaviour{
 		beHit();
 	}
 	
+	//this function apply the effects of the antibiotics to this bug only if it's vulnerable to it
 	function receiveAntibiotics(){
 		
 		if (affectedByAntibiotics) {
@@ -107,12 +110,14 @@ public class Microbe extends MonoBehaviour{
 		
 	}
 	
+	//Called when a bug is photographed
 	function bePhotographed () {
 	
 		anim.SetTrigger("be_photographed");
 	
 	}
 	
+	//Called when a bug is hit
 	function beHit () {
 	
 		anim.SetTrigger("be_hit");
@@ -125,6 +130,7 @@ public class Microbe extends MonoBehaviour{
 	
 	}
 	
+	//Called when a bug has been killed
 	function beKilled () {
 		if (!killedAlready){
 			killedAlready = true;
@@ -136,6 +142,7 @@ public class Microbe extends MonoBehaviour{
 		}
 	}
 	
+	//Called when a bug is washed away
 	public function beWashedAway (): IEnumerator {
 		
 		if (!killedAlready){
@@ -160,6 +167,7 @@ public class Microbe extends MonoBehaviour{
 	
 	//This function triggers the debugMode to true during 1 frame each second. It is intended to show one frame per second the Debug messages. Use this way:
 	//if (debugMode) Debug.log("Your message");
+	//Very useful to display error messages in function that are executed many times per second.
 	protected function showMessages(){
 		timer += Time.deltaTime;
 		debugMode = false;

@@ -56,7 +56,7 @@ public class GameLogic extends MonoBehaviour{
 			 	ChangeLevel(GameLevel.kitchen1);
 				break;
 			default:
-				;
+				Application.Quit();
 				//Code that will be executed if level didn't match any case condition.
 		}
 	
@@ -74,7 +74,55 @@ public class GameLogic extends MonoBehaviour{
 		
 	
 	}
+	
+	//Here we'll connect for the first time with the database. 
+	//Here must be treated the data that the player wrote in the form (nickname, age and mail)
+	public function StartDataBaseConnection (nickname : String, age : String, email : String) {
+		
+		var userid : String = nickname;
+		var session : String = "testdecembersmb";				//This session has to be created in the database.
+		
+		if(!DBconnector.connected){
+			if (PlayerPrefs.HasKey("sessionKey")) PlayerPrefs.DeleteKey("sessionKey");
+			
+			yield DBconnector.ConnectToGleaner(userid, session); //in the server we can check this keyword to allow only people who are using our game to connect to the database
+			
+			if (PlayerPrefs.HasKey("sessionKey")) {
+				Debug.Log('DBConnector.ConnectGleaner()-> sessionKey received: \n' + PlayerPrefs.GetString("sessionKey"));	
+			}
+			else{
+				Debug.Log('DBConnector.ConnectGleaner()-> sessionKey not received yet.');
+				Debug.Log('DBConnector.ConnectGleaner()-> Waiting 1 second...');
+				
+				yield new WaitForSeconds(1);
+				
+				if (PlayerPrefs.HasKey("sessionKey")) {
+					Debug.Log('DBConnector.ConnectGleaner()-> sessionKey received at second attempt: \n' + PlayerPrefs.GetString("sessionKey"));
+				}
+				else{
+					Debug.Log('DBConnector.ConnectGleaner()-> sessionKey not received at second attempt.\n Check the internet connection or the server.');
+				}
+			}
+		}
+		else{
+			Debug.Log('DBConnector.ConnectGleaner() -> Connected already. SessionKey = ' + PlayerPrefs.GetString("sessionKey"));
+		}
+//		if (PlayerPrefs.HasKey("sessionKey")) {
+//				Debug.Log('DBConnector.ConnectGleaner()-> sessionKey received: \n' + PlayerPrefs.GetString("sessionKey"));
+//		}
+		
+	}
+	
+	//returns true if the connection was established (i.e. the sessionkey was received) and we can post tracks on the database
+	public function checkConnection() : boolean {
+	
+		return (PlayerPrefs.HasKey("sessionKey"));
+	
+	}
+		
 }
+
+
 /*
 
 -State machine									|	

@@ -30,11 +30,12 @@ function Update () {
 }
 
 function OnTriggerEnter2D (coll: Collider2D) {
-	if(!hasCollidedAlready){
+	var objectCollided: GameObject = coll.gameObject;
+	if(!hasCollidedAlready && objectCollided.layer == utils.layers.player){
 		Destroy(gameObject, 0.2);								//Destroys the drop 0.1 seconds after playing the "collision" animation
 		hasCollidedAlready = true;
 		
-		var objectCollided: GameObject = coll.gameObject;
+		
 //		Debug.Log("Collision with: " + objectCollided.name);
 		
 		if(objectCollided.layer == utils.layers.player){

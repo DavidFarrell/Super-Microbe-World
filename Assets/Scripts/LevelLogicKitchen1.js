@@ -12,12 +12,24 @@ private var maxXYTransform: Transform;
 
 private var myTransform: Transform;
 
+private var gameLogic : GameLogic;			//To keep a reference to the GameLogic.js script
+
+//Script to keep the logik of the Kitchen 1 level
 //Here will be done all the instructions to load the level and initialize the variables
 function Awake () {
 	
+	var gameLogicGO : GameObject;
+	gameLogicGO = GameObject.Find("GameLogic");
+	if (gameLogicGO){
+		gameLogic = gameLogicGO.GetComponent("GameLogic");					//BE CAREFUL!! GameLogic is a GameObject that is created in the first scene and is never destroyed when changing between scenes!
+	}																				//That means that if this scene is played directly there will be here a null reference!!!!!!!
+	else{
+		Debug.LogError("GameLogic Object not found. This will be because GameLogic is created in the first level of the game, the GameShow level, and is intended to pass (be kept alive) throughout all the scenes in the game. So, if the Kitchen level is played, this object won't exist, and there must be many Null reference errors. But none of this errors will avoid playing the game. ");
+	}
+	
 	myTransform = transform;
 	
-	if(!amy || !harry) Debug.LogError("Missing player's prefab. Please add the prefabs of the players to the 'loadPlayer.js' script.");
+	if(!amy || !harry) Debug.LogError("Missing player's prefab. Please add the prefabs of the players to the 'LevelLogicKirchen1.js' script.");
 	
 	var start: Transform = myTransform.Find("level_start");			//Looks for the start_point GameObject, that is (or should be) a son of the GameObject this script is attached to.
 	
@@ -52,9 +64,20 @@ function Start () {
 	var minXY: Vector2 = minXYTransform.position;									//The bounds of the camera are fixed
 	var maxXY: Vector2 = maxXYTransform.position;
 	myCamera.SendMessage("SetBounds", new CameraBounds(maxXY, minXY)); 	//To set the boundaries of the camera
+	
+	if (gameLogic.checkConnection()){			//If we are authenticated in the web service
+		var firstTrack: JSONObject = new JSONObject();	//Sending the track to the database..
+		firstTrack.Add("type", "logic");
+		firstTrack.Add("event", "Level 1 loaded");
+		var tracks : JSONObject[] = new JSONObject[1];
+		tracks[0] = firstTrack;
+		DBconnector.Track(tracks);
+	}
+	else{
+		Debug.Log("Connection not established (sessionKey not found) when trying to post the first trace.");
+	}
 }
 
-//Here will be done all the 
 function Update () {
 
 }
@@ -69,6 +92,11 @@ public class CameraBounds{
 		maxXandY = maxXY;
 		minXandY = minXY;
 	
+	}
+
+private function LevelFinished () {
+		//if all the goals are achieved goes to the next level.
+	//	gameLogic.NextLevel();
 	}
 
 }

@@ -143,8 +143,8 @@ MonoBehaviour:
   whiteBCDamage: 5
   affectedBySoap: 0
   soapDamage: 0
-  affectedByAntibiotics: 0
-  antibioticsDamage: 0
+  affectedByAntibiotics: 1
+  antibioticsDamage: 5
   Speed: 1
   facingRight: 1
   moveDistance: 50
