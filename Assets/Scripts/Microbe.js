@@ -10,6 +10,8 @@ public class Microbe extends MonoBehaviour{
 	public var affectedByAntibiotics: boolean;
 	public var antibioticsDamage: int;
 	
+	protected var microbeName: String;				//will contain the name of the microbe that this script is attached to
+	
 	/*Debug vars*/
 	protected var debugMode: boolean = false;				//When true, this script displays all the Debug messages.
 	protected var timer: float = 0;
@@ -19,6 +21,7 @@ public class Microbe extends MonoBehaviour{
 	protected var myTransform: Transform;			//To keep the transform of the microbe
 	protected var myGameObject: GameObject;
 	protected var myRigidbody2D: Rigidbody2D;
+	private var goals: Goals;						//Will keep a reference to the Goals.js script, used to update the goals of the levels when the microbe has been photographed, washed away, shooted a white blood cell or affected by an antibiotic pill.
 	
 	//To keep the number of the layers
 //	protected var groundLayer: int = 12;
@@ -32,6 +35,7 @@ public class Microbe extends MonoBehaviour{
 	
 	private var canBeHit: boolean = true;
 	protected var killedAlready: boolean = false;
+	protected var beenPhotographed : boolean = false;	//To keep track whether the microbe has been photographed or not 
 	
 	
 	
@@ -41,8 +45,24 @@ public class Microbe extends MonoBehaviour{
 		myTransform = transform;
 		myGameObject = gameObject;
 		myRigidbody2D = myTransform.rigidbody2D;
+		
+		var gameLogicGO : GameObject;
+		gameLogicGO = GameObject.Find("GameLogic");
+		if (gameLogicGO){
+			//BE CAREFUL!! GameLogic is a GameObject that is created in the first scene and is never destroyed when changing between scenes!
+			//That means that if this scene is played directly there will be here a null reference!!!!!!!
+			goals = gameLogicGO.GetComponent("Goals");					//The Goals.js script is attached to the GameLogic gameobject. will be used to keep track of the goals of the level
+		}																				
+		else{
+			Debug.LogError("GameLogic Object not found. This will be because GameLogic is created in the first level of the game, the GameShow level, and is intended to pass (be kept alive) throughout all the scenes in the game. So, if the Kitchen level is played, this object won't exist, and there must be many Null reference errors. But none of this errors will avoid playing the game. ");
+		}
+		
+		microbeName = myTransform.gameObject.name;		//Here the name will be the name of the gameobject that this script is attached to. E.g. 00lucy
+		microbeName = microbeName.Substring(2);					//to keep lucy instead of 00lucy
+		
 		canBeHit = true;
 		killedAlready = false;
+		beenPhotographed = false;
 		
 		iTween.Init(gameObject);					//Initializing iTween in order to avoid hiccups when first playing the movements
 	
@@ -80,6 +100,7 @@ public class Microbe extends MonoBehaviour{
 			life = life - soapDamage;
 			Debug.Log(myTransform.name + ": Soap hit. Life: " + life);
 			if (!killedAlready && life <= 0){
+				goals.UpdateGoals(microbeName, "washed up");				//To inform the Goals.js script about the change
 				beWashedAway();
 				return;
 			}
@@ -88,6 +109,7 @@ public class Microbe extends MonoBehaviour{
 			life = life - whiteBCDamage;
 			Debug.Log(myTransform.name + ": whiteBC hit. Life: " + life);
 			if (!killedAlready && life <= 0){
+				goals.UpdateGoals(microbeName, "white blood cell");				//To inform the Goals.js script about the change
 				beKilled();
 				return;
 			}
@@ -103,6 +125,7 @@ public class Microbe extends MonoBehaviour{
 			life = life - antibioticsDamage;
 			Debug.Log(myTransform.name + ": Antibiotics hit. Life: " + life);
 			if (!killedAlready && life <= 0){
+				goals.UpdateGoals(microbeName, "antibiotics");				//To inform the Goals.js script about the change
 				beKilled();
 				return;
 			}
@@ -114,7 +137,11 @@ public class Microbe extends MonoBehaviour{
 	function bePhotographed () {
 	
 		anim.SetTrigger("be_photographed");
-	
+		if (!beenPhotographed){						//The goals will be update just with the first photo, not with the following
+			beenPhotographed = true;
+			goals.UpdateGoals(microbeName, "photo");				//To inform the Goals.js script about the change
+		} 
+		
 	}
 	
 	//Called when a bug is hit
