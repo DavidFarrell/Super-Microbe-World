@@ -40,6 +40,7 @@ public class Goals extends MonoBehaviour{
 	
 	function Awake () {		//Initialize the matrix to zero
 		counterChanged = true;
+		noGoals = true;
 		for (var i : int = 0; i < 11; i++){		//To iterate over the microbes
 			for (var j : int = 0; i < 4; i++){	//To iterate over the actions
 				counter[i,j] = 0;

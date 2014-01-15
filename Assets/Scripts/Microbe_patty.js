@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+/*This script is not used anymore*/
+
 private var anim: Animator;
 
 function Start () {

@@ -44,11 +44,11 @@ function Update () {
 function SetPlayer(plTr: Transform) {
 	
 	playerTransform = plTr;
-	//Debug.Log("Player set up succesfully!");
+	Debug.Log("Player set up succesfully!");
 	
 }
 
-function SetBounds(bounds: CameraBounds) {
+function SetBounds(bounds: LevelLogic.CameraBounds) {
 	
 	maxXAndY.x = bounds.maxXandY.x;
 	maxXAndY.y = bounds.maxXandY.y;

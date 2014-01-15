@@ -3,7 +3,28 @@
 
 //This static class is intended to store constants, like layermasks, layer numbers and so on.
 public static class utils{
-
+	
+	/*enum microbes {
+		lucy,
+		patty,
+		donna,
+		slarg,
+		slurm,
+		colin,
+		super_colin,
+		sandy,
+		steve,
+		iggy,
+		super_slurm
+	};
+		
+	enum actions {
+		photo, 
+		washed up, 
+		white blood cell,
+		antibiotics
+	}*/
+	
 	public static class layers{
 	
 		public var ground: int = 12;

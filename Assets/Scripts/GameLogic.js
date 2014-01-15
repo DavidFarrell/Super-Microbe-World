@@ -16,6 +16,8 @@ public class GameLogic extends MonoBehaviour{
 	
 	private var player : String; 			//To keep the name of the player chosen to play.
 	
+	private var goals : Goals;					//To have a reference to the Goals.js script
+	
 	//private var changeStateTrigger : boolean = false;
 	
 	function Awake () {
@@ -26,6 +28,8 @@ public class GameLogic extends MonoBehaviour{
 		player = "";
 		
 		level = GameLevel.gameShow;
+		
+		goals = transform.gameObject.GetComponent("Goals");					//The Goals.js script is attached to the GameLogic gameobject. will be used to keep track of the goals of the level
 	
 	}
 	
@@ -49,22 +53,29 @@ public class GameLogic extends MonoBehaviour{
 	//This is the function to be called from every LevelController when finished the level to load the following.
 	//TODO probably some modification has to be made in the future to add an argument to pass the punctuation of the level and if it was succesfully completed or not
 	public function NextLevel() {
-	
-		switch (level){
-			
-			case GameLevel.gameShow:
-			 	ChangeLevel(GameLevel.kitchen1);
-				break;
-			default:
-				Application.Quit();
-				//Code that will be executed if level didn't match any case condition.
+		
+		if (goals.GoalsAchieved()) {		//If all the goals for the level are completed, goes to the next level
+			Debug.Log("All goals achieved. Going to the next Level.");
+			switch (level){
+				
+				case GameLevel.gameShow:
+				 	ChangeLevel(GameLevel.kitchen1);
+					break;
+				default:
+					Application.Quit();
+					//Code that will be executed if level didn't match any case condition.
+			}
 		}
-	
+		else{
+			//TODO Show a message to tell the player to complete remaining goals.
+			Debug.Log("There is still some goal to complete...");
+		}
 	}
 	
 	private function ChangeLevel(newLevel : GameLevel){
 		level = newLevel;
 		Application.LoadLevel(level.ToString());
+		
 	}
 	
 	public function PlayerChosen(playerName : String){
@@ -125,19 +136,19 @@ public class GameLogic extends MonoBehaviour{
 
 /*
 
--State machine									|	
+-State machine									|	done
 
--Read from xml									|	
+-Read from xml									|	discarded
 
 -Write the text on screen						|	Done
 
--Update scoreboards								|	
+-Update scoreboards								|	done
 
--Update Animations								|	
+-Update Animations								|	done
 
--Login the player								|	
+-Login the player								|	done
 
--Track the traces to the tracking system		|	
+-Track the traces to the tracking system		|	done
 
 -Show a window to choose the answers			|	
 
