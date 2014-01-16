@@ -48,7 +48,10 @@ public class MicrobeLucy extends WalkingMicrobe {
 		if(canJump && objectCollided.layer == utils.layers.player 
 			&& ((objectCollided.transform.position.x > myTransform.position.x && yoghurtPosition == -1) 		//Lucy is pushed from her right side and the yoghurt is on the left
 				|| (objectCollided.transform.position.x < myTransform.position.x && yoghurtPosition == 1))){	//Lucy is pushed from her left side and the yoghurt is on the right
-			if (!jumped) jumpToYoghurt();
+			if (!jumped){
+				jumpToYoghurt();
+				goals.UpdateGoals(microbeName, "thrown to yoghurt");				//To inform the Goals.js script about the change
+			}
 		}
 		else
 			super.OnCollisionEnter2D(coll);

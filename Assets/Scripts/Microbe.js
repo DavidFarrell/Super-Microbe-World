@@ -21,7 +21,7 @@ public class Microbe extends MonoBehaviour{
 	protected var myTransform: Transform;			//To keep the transform of the microbe
 	protected var myGameObject: GameObject;
 	protected var myRigidbody2D: Rigidbody2D;
-	private var goals: Goals;						//Will keep a reference to the Goals.js script, used to update the goals of the levels when the microbe has been photographed, washed away, shooted a white blood cell or affected by an antibiotic pill.
+	protected var goals: Goals;						//Will keep a reference to the Goals.js script, used to update the goals of the levels when the microbe has been photographed, washed away, shooted a white blood cell or affected by an antibiotic pill.
 	
 	//To keep the number of the layers
 //	protected var groundLayer: int = 12;
@@ -95,7 +95,7 @@ public class Microbe extends MonoBehaviour{
 	
 	//This function will be called when a soap drop or a white blood cell hit is recieved
 	function receiveDrop (dropName: String) {
-		Debug.Log(myTransform.name + ": Hit received. Name of drop: " + dropName);
+		//Debug.Log(myTransform.name + ": Hit received. Name of drop: " + dropName);
 		if (affectedBySoap && dropName == "soapDropThrow(Clone)"){
 			life = life - soapDamage;
 			Debug.Log(myTransform.name + ": Soap hit. Life: " + life);

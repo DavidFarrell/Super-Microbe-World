@@ -62,7 +62,8 @@ public class GameLogic extends MonoBehaviour{
 				 	ChangeLevel(GameLevel.kitchen1);
 					break;
 				default:
-					Application.Quit();
+					Debug.Log("Game finished");
+					Application.Quit();				//As this game is going to be built as a web application there is no sense on exiting the application. So We'll have to show some kind of ending screen.
 					//Code that will be executed if level didn't match any case condition.
 			}
 		}

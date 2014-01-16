@@ -2,7 +2,7 @@
 
 /*
 
-This class contains the main structure for the logic of the platform levels.
+This class contains the main structure for the logic of the _platform_ levels.
 
 It's used to keep all the scripts controlling the actions and behaviours on the levels (called level logic scripts) homogeneous.
 
@@ -115,17 +115,5 @@ public class LevelLogic extends MonoBehaviour{
 		// e.g. goals.SetGoals("lucy", "photo", 3);			//The goal will be to take pictures to 3 lucy bacteria
 
 	}
-	
-//	public function LevelFinished () {		//This function will be called from the OnTriggerEnter() function of the portal (the game object that the player has to reach to complete the level if all the requirements are accomplished)
-//			//if all the goals are achieved goes to the next level.
-//			if (goals.GoalsAchieved()){
-//				//gameLogic.NextLevel();
-//				Debug.Log("All the goals are completed. Changing of level...");
-//			}
-//			else{
-//				Debug.Log("There is still at least one goal to complete. Complete it and try again.");
-//			}
-//		
-//	}
 
 }

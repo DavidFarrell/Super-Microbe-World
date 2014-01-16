@@ -26,8 +26,8 @@ function OnTriggerEnter2D(){
 	if (canCheck){
 		canCheck = false;
 		Debug.Log("Trying to change of level...");
-		gameLogic.NextLevel();	//Communicates with the game logic to try to finish this level checking that all the goals have been completed.
-		WaitOneSecond();
+		gameLogic.NextLevel();						//Communicates with the game logic to try to finish this level checking that all the goals have been completed.
+		WaitOneSecond();							//To wait one second between checks
 	}
 }
 

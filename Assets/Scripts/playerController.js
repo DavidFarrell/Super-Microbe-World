@@ -88,7 +88,7 @@ function Awake () {
 	
 	canBeHit = true;
 	
-	GUITextPlayerInfo.SetInfo(life, soapDrops, Antibiotics, whiteBloodCells);
+	GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, Antibiotics, whiteBloodCells);
 	
 }
 
@@ -321,7 +321,7 @@ function useAntibiotics () {
 
 public function UpdateGUI () {
 
-	GUITextPlayerInfo.SetInfo(life, soapDrops, whiteBloodCells, Antibiotics);
+	GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, whiteBloodCells, Antibiotics);
 
 }
 

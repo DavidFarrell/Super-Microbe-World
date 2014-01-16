@@ -18,11 +18,12 @@ public class Goals extends MonoBehaviour{
 	
 	private var counterChanged : boolean;	//This boolean will be used to know when we have or when we have not to check the counter array to look if it has zero on all its positions. Will 
 											//have true value if there are changes in the counter matrix or false if there isn't any change since last time it was checked with the GoalsAchieved() function.
-	private var noGoals: boolean = true;
-	public var counter : int[,]= new int [11, 4];	
+	private var goalsRemaining: boolean = false;
+	public var counter : int[,]= new int [11, 5];	
 	/*This matrix will contain one row per microbe. Each row refers to the information of a microbe. 
-	For each row, the position 0 is for the number of photographs of this microbe needed, the position 1 for the number of deaths caused by being washed away, 
-	the position 2 for the deaths by white blood cells, and the last one, the position 3 for the number of deaths caused by antibiotics.
+	In each row, the position 0 is for the number of photographs of this microbe needed, the position 1 for the number of deaths caused by being washed away, 
+	the position 2 for the deaths by white blood cells, the position 3 for the number of deaths caused by antibiotics, and the last one, the 4th position, the number of lucy bacteria that need to be 
+	pushed to the yoghourt. 
 	Here is the correspondence with numbers and microbes: 
 		00 lucy
 		01 patty
@@ -35,14 +36,14 @@ public class Goals extends MonoBehaviour{
 		08 steve
 		09 iggy
 		10 super_slurm
-	For example, if the 5th row is [0, 3, 0, 0] that means that to complete this level, we need to wash away 3 colin microbes.
+	For example, if the 5th row is [0, 3, 0, 0, 0] that means that to complete this level, we need to wash away 3 colin microbes.
 	*/
 	
 	function Awake () {		//Initialize the matrix to zero
 		counterChanged = true;
-		noGoals = true;
+		goalsRemaining = false;
 		for (var i : int = 0; i < 11; i++){		//To iterate over the microbes
-			for (var j : int = 0; i < 4; i++){	//To iterate over the actions
+			for (var j : int = 0; i < 5; i++){	//To iterate over the actions
 				counter[i,j] = 0;
 			}
 		}
@@ -58,117 +59,146 @@ public class Goals extends MonoBehaviour{
 	
 	public function SetGoals(microbe: String, action: String, times: int){		//Sets the times that the action needs to be performed to the microbe to progress on the level.
 //		counter[0, 0] = 3;				//We'll need to photograph 3 different lucy bacteria to complete the level
-		var mic: int;
-		var act: int;
 		
-		NameToNumber(microbe, action, mic, act);	//To convert the names of microbe and action to its coordinates in the matrix
+		var numbers: Pair = NameToNumber(microbe, action);	//To convert the names of microbe and action to its coordinates in the matrix
 		
-		Debug.Log("Setting goal: Microbe: " + microbe + ". Action: " + action + ". Times:" + times);
+		goalsRemaining = true;	//From now on there will be at least one goal
 		
-		noGoals = false;	//From now on there will be at least one goal
+		counter[numbers.micNumber, numbers.actNumber] = times;					//Sets the times that the action needs to be performed to the microbe to progress on the level.
 		
-		counter[mic, act] = times;					//Sets the times that the action needs to be performed to the microbe to progress on the level.
+		Debug.Log("Setting goal: Microbe: " + microbe + ". Action: " + action + ". Times:" + times + ". Converted numbers: Microbe: " + numbers.micNumber +" Action: "+ numbers.actNumber);
+		
+		Debug.Log("Number of yoghurts lucy: " + counter[0, 4]);
+		GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI
 		
 		counterChanged = true;
 	}
 	
 	public function GoalsAchieved() : boolean {
-		if(!noGoals && counterChanged){							//If there is no changes on the matrix is useless to check if there is all the goals have been achieved
+		Debug.Log("goalsRemaining: " + goalsRemaining + "counterChanged" + counterChanged);
+		if(goalsRemaining && counterChanged){							//If there is no changes on the matrix is useless to check if there is all the goals have been achieved
 			for (var i : int = 0; i < 10; i++){
-				for (var j : int = 0; i < 4; i++){
+				for (var j : int = 0; j < 5; j++){
+					Debug.Log("Checking position "+ i +", " + j);
+					if(i == 0 && j == 4) Debug.Log("*****Number of yoghurts lucy: " + counter[i, j]);
 					if (counter[i,j] != 0) {
 						counterChanged = false;		//This "if" won't be executed again unless counterChanged is set to true again. counterChanged will be changed to true when the counter matrix suffers any change.
 						Debug.Log("There is still some goal that need to be completed. This is the first (maybe not only) one -> Bug: " + i + ". Action: " + j);
+						GUITextGoalsInfo.SetInfoGoals(i.ToString(), counter[i, 0], counter[i, 1], counter[i, 2], counter[i, 3], counter[i, 4]);	//To update the GUI. Note that this will display a number instead of the name of the bug. when changing the strings to enums to keep the name of the microbes this will change
 						return false;	//If there is any position different from 0, there is at least one goal without accomplish					
 					}
 				}
 			}
 			counterChanged = false;
-			Debug.Log("All goals completed!");
-			noGoals = true;					//Once there is no goals this variable will be true to avoid checking again the matrix
+			Debug.Log("*************All goals completed!");
+			goalsRemaining = false;					//Once there is no goals this variable will be false to avoid checking again the matrix
 			return true;
 		}
 		else{
-			if (noGoals) return true;
+			if (!goalsRemaining) {
+				Debug.Log("GoalsAchieved(): There is't goals.");
+				return true;
+			}
 			else return false;
 		}
 	}
 	
 	public function UpdateGoals(microbe: String, action: String){
-		//Will be called from the microbes' scripts when the microbe is photographed, washed away, killed by a white blood cell or by antibiotic. 
+		//Will be called from the microbes' scripts when the microbe is photographed, washed away, killed by a white blood cell or by antibiotic, or pushed to the yoghourt. 
 		//The first parameter is to say the name of the microbe that suffered the action, and the second is for the action itself. 
 		//The parameters must take the values contained in the switch statements
-		var mic: int;
-		var act: int;
 		
-		NameToNumber(microbe, action, mic, act);
+		var numbers: Pair = NameToNumber(microbe, action);	//To convert the names of microbe and action to its coordinates in the matrix
 		
 		Debug.Log("Goal achieved: Microbe: " + microbe + ". Action: " + action);
 		
-		if (counter[mic, act] > 0) { 
-			counter[mic, act]--;	//One goal achieved, one goal less to accomplish.
+		if (counter[numbers.micNumber, numbers.actNumber] > 0) { 
+			counter[numbers.micNumber, numbers.actNumber]--;	//One goal achieved, one goal less to accomplish.
+			GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI.
 			counterChanged = true;	//The next time that we call GoalsAchieved function, the matrix will be checked
 		}
 	}
 	
-	private function NameToNumber(microbe: String, action: String, mic: int, act: int){
+	private class Pair{
+		//Class to encapsule the two numbers for the microbe and action
+		public var micNumber: int;		//To keep the number of microbe
+		public var actNumber: int;		//To keep the action to perform/ performed
+		public function Pair(num1: int, num2: int){
+			micNumber = num1;
+			actNumber = num2;
+		}
+	}
+	
+	private function NameToNumber(microbe: String, action: String): Pair{
+		
+		//TODO Change strings to Enum types to avoid errors. Doing so will make this function useless.
+		
 		//Takes the name of a microbe and an action and returns its positions in the "counter" matrix.
 		//For instance: "lucy", "photo" in the microbe, action parameters will return 0, 0 in the mic and act parameters, that are the coordinates of the number of photos that left to be shooted to lucy. 
 		//If mic or act values are -1 that means that there has been an error when converting the numbers to its references in the array.
+		
+		var result : Pair = new Pair(-1, -1);
+		
 		switch(microbe){
 			case "lucy":
-				mic = 0;
+				result.micNumber = 0;
 				break;
 			case "patty": 
-				mic = 1;
+				result.micNumber = 1;
 				break;
 			case "donna": 
-				mic = 2;
+				result.micNumber = 2;
 				break;
 			case "slarg": 
-				mic = 3;
+				result.micNumber = 3;
 				break;
 			case "slurm": 
-				mic = 4;
+				result.micNumber = 4;
 				break;
 			case "colin": 
-				mic = 5;
+				result.micNumber = 5;
 				break;
 			case "super_colin": 
-				mic = 6;
+				result.micNumber = 6;
 				break;
 			case "sandy": 
-				mic = 7;
+				result.micNumber = 7;
 				break;
 			case "steve": 
-				mic = 8;
+				result.micNumber = 8;
 				break;
 			case "iggy": 
-				mic = 9;
+				result.micNumber = 9;
 				break;
 			case "super_slurm": 
-				mic = 10;
+				result.micNumber = 10;
 				break;
-			default: mic = -1;
+			default: result.micNumber = -1;
 		}
 		switch(action){
 			case "photo":
-				act = 0;
+				result.actNumber = 0;
 				break;
 			case "washed up":
-				act = 1;
+				result.actNumber = 1;
 				break;
 			case "white blood cell":
-				act = 2;
+				result.actNumber = 2;
 				break;
 			case "antibiotics":
-				act = 3;
+				result.actNumber = 3;
+				break;
+			case "thrown to yoghurt":		//This is only for lucy
+				result.actNumber = 4;
 				break;
 			default:
-				act = -1;
+				result.actNumber = -1;
 		}
-		if (mic == -1 || act == -1) Debug.LogError("Error when reading action or microbe parameters!");
+		if (result.actNumber == -1 || result.actNumber == -1) Debug.LogError("Error when reading action or microbe parameters!");
+		Debug.Log("Names converted to this numbers: Microbe:" + result.micNumber + " Action: " + result.actNumber);
+		return result;
 	}
+	
 	/*
 	private class ActionsLeft{
 		public var photos: int;
