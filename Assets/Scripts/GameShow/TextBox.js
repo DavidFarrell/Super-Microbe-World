@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+import System.Collections.Generic; //To allow the use of generic lists
+
 /*
 
 This class shows a dialogue in a box showing how is talking. 
@@ -114,6 +116,38 @@ public class TextBox extends MonoBehaviour{
 	
 	}
 	
+	//Overload of the function above to support the use of generic lists. Explained here http://forum.unity3d.com/threads/79760-How-to-use-generics-in-unity-javascript
+	public function SayThis(whoSay : String, WhatSay : List.<String>){
+		
+		SetSpeaker(whoSay);
+		
+		EnableTextBox();
+		
+		AddTextToShow(WhatSay);
+		
+		yield ShowAllLines();
+		
+		DisableTextBox();
+		
+	}
+	
+	//Overload of the function above to support the use of a simple string
+	public function SayThis(whoSay : String, WhatSay : String){
+		
+		var sentence : String[] = new String[1];
+		sentence[0] = WhatSay;
+		
+		SetSpeaker(whoSay);
+		
+		EnableTextBox();
+		
+		AddTextToShow(sentence);
+		
+		yield ShowAllLines();
+		
+		DisableTextBox();
+	}
+	
 	//To write who is talking on top of the text box
 	private function SetSpeaker(speakerToSet : String) {
 		speaker = speakerToSet;
@@ -135,6 +169,17 @@ public class TextBox extends MonoBehaviour{
 	private function AddTextToShow (lines : String[]) : boolean {
 		var correctlyDone : boolean = true;
 		for (var line : String in lines){
+			correctlyDone = textBuffer.push(line);
+		}
+		return correctlyDone;
+	}
+	
+	//Overload of the function above
+	private function AddTextToShow (lines : List.<String>) : boolean {
+		//Debug.Log("TextBox.AddTextToShow with a list as a parameter.");
+		var correctlyDone : boolean = true;
+		for (var line : String in lines){
+			//Debug.Log("Line: " + line);
 			correctlyDone = textBuffer.push(line);
 		}
 		return correctlyDone;

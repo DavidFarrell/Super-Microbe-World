@@ -25,8 +25,15 @@ public class Round{
 	public var round_id: int;
 	public var next_round: String;
 	public var intro_text: IntroText;
-	public var questions: QuestionsContainer;
 	
+	@XmlArray("questions")
+	@XmlArrayItem("question")
+	public var questions:  List.<Question> = new List.<Question>();
+	
+	public function Round(){
+		
+	}
+		
 	//To load from an XML file giving its path
 	public static function Load(path : String):Round {
  		var serializer : XmlSerializer = new XmlSerializer(Round);
@@ -40,7 +47,8 @@ public class Round{
 	//The webplayer can't access files on any computer directly so using the methods described before to read/write data won't work here. To load any data you need to use the WWW class.
 	public static function LoadFromText(text : String):Round{
 		var serializer : XmlSerializer = new XmlSerializer(Round);
-		return serializer.Deserialize(new StringReader(text)) as Round;
+		var reader: StringReader = new StringReader(text);
+		return serializer.Deserialize(reader) as Round;
 	}
 	
 }
@@ -48,7 +56,7 @@ public class Round{
 public class IntroText{
 	
 	@XmlArray("blind")				//The list is called blind in the xml
-	@XmlArrayItem("statement")		//Each element is called Statement in the xml
+	@XmlArrayItem("statement")		//Each element is called Statement in the xml		WARNING! in some xml files (like alpha_gameshow_round1.xml) some <statement> tags are wrongly written, and this doesn't cause any error, but the message between the incorrect tags will nor be displayed!
 	public var blind: List.<String> = new List.<String>();
 	
 	@XmlArray("normal")
@@ -57,15 +65,15 @@ public class IntroText{
 
 }
 
-public class QuestionsContainer{
-	
-	@XmlArray("questions")
-	@XmlArrayItem("question")
-	public var questions:  List.<question> = new List.<question>();
-	
-}
+//public class QuestionsContainer{
+//	
+//	@XmlArray("questions")
+//	@XmlArrayItem("question")
+//	public var questions:  List.<Question> = new List.<Question>();
+//	
+//}
 
-public class question{
+public class Question{
 	
 	@XmlAttribute("name")
 	public var id : int;
