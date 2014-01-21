@@ -34,6 +34,7 @@ function OnGUI () {
 function ChangePoints (amount : int) {
 
 	score += amount;
+	if (score < 0) score = 0;	//There won't be a score lower than 0
 
 }
 

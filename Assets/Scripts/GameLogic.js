@@ -9,10 +9,10 @@ TODO Check the comments of this class
 */
 public class GameLogic extends MonoBehaviour{
 	
-	//This enum type will contain the EXACT name of all the scenes of the game.
-	enum GameLevel {gameShow, kitchen1};
+	//This enum type will contain the EXACT name of all the scenes of the game.				IMPORTANT
+	enum GameLevel {gameShow, kitchen1, gameShow_round1};
 	
-	private var level : GameLevel;
+	private var level : GameLevel;			//The current level being played
 	
 	private var player : String; 			//To keep the name of the player chosen to play.
 	
@@ -61,6 +61,11 @@ public class GameLogic extends MonoBehaviour{
 				case GameLevel.gameShow:
 				 	ChangeLevel(GameLevel.kitchen1);
 					break;
+				
+				case GameLevel.kitchen1:
+					ChangeLevel(GameLevel.gameShow_round1);
+					break;
+				
 				default:
 					Debug.Log("Game finished");
 					Application.Quit();				//As this game is going to be built as a web application there is no sense on exiting the application. So We'll have to show some kind of ending screen.
@@ -74,13 +79,14 @@ public class GameLogic extends MonoBehaviour{
 	}
 	
 	private function ChangeLevel(newLevel : GameLevel){
+		//Here's why is so important that the name of the level var is the same than the scene
 		level = newLevel;
 		Application.LoadLevel(level.ToString());
 		
 	}
 	
 	public function PlayerChosen(playerName : String){
-	
+		//Sets the player for the rest of the game
 		player = playerName;
 		PlayerPrefs.SetString("player", playerName);
 		
@@ -131,15 +137,26 @@ public class GameLogic extends MonoBehaviour{
 		return (PlayerPrefs.HasKey("sessionKey"));
 	
 	}
+	
+	public function GetRoundNumber(): int{
+		//This function is to be called from the LevelLogicQuizGame to know which one is the current round
+		//The first level is the level 0 and will return -1 if there was a problem
 		
-}
+		if(level == GameLevel.gameShow_round1)
+			return 0;
+		else
+			return -1;
+		
+	}
+		
+}	//End of class brace
 
 
 /*
 
 -State machine									|	done
 
--Read from xml									|	discarded
+-Read from xml									|	Done / look the Rounds.js file
 
 -Write the text on screen						|	Done
 
