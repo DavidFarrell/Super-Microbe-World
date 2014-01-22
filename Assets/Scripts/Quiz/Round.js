@@ -47,6 +47,7 @@ public class Round{
 	//The webplayer can't access files on any computer directly so using the methods described before to read/write data won't work here. To load any data you need to use the WWW class.
 	public static function LoadFromText(text : String):Round{
 		var serializer : XmlSerializer = new XmlSerializer(Round);
+		if (text == "") Debug.LogError("Text to parse is empty");
 		var reader: StringReader = new StringReader(text);
 		return serializer.Deserialize(reader) as Round;
 	}
@@ -80,17 +81,17 @@ public class Question{
 	
 	public var type: int;
 	public var score: int;
-	public var value_: int;		//value is a reserved word
+	public var value: int;		//value is a reserved word
 	public var text: String;
 	
 	@XmlArray("answers")
 	@XmlArrayItem("answer")
-	public var answers:  List.<Answers> = new List.<Answers>();
+	public var answers:  List.<Answer> = new List.<Answer>();
 }
 
-public class Answers{
+public class Answer{
 	
 	public var label: String;
-	public var value_: int;
+	public var value: int;
 	
 }

@@ -1,14 +1,16 @@
 ﻿#pragma strict
 
+import System.Collections.Generic;
+
 public class LevelLogicQuiz extends MonoBehaviour{
 	
 	/*This script is almost identical to the LevelLogicGameShow.js script. It's used to control the logic of the quiz scenes.*/
 	
 	//TODO this script always loads the xml format string of the var below this comment. We'll have to change it to ask for the xml text using an http petition to the server with the WWW class of unity script and getting this information from the WWW.text field
 	
-	private var TextFromXML: String = '<?xml version="1.0" encoding="utf-8" ?><round id="0">	<name>All About Microbes</name>	<round_id>0</round_id>	<next_round>alpha_gameshow_round2.xml</next_round>	<intro_text>		<blind>			<statement>Welcome to the first BLIND QUESTION ROUND!</statement>			<statement>I"m going to ask you some questions but I"m NOT going to tell you if you got them right!</statement>			<statement>If you got them right, you"ll get a great bonus later though so try your best.</statement>			<statment>Lets go!</statment>		</blind>		<normal>			<statement>Well done, you"re a hoverboard natural!</statement>			<statement>Now it"s time to ask you those questions again</statement>			<statement>This time, you get 10 points for a correct answer, but if you get it wrong, the other player gets points.</statement>			<statement>so if you DON"T KNOW the answer, it"s best to play it safe and say so!</statement>			<statement>Ready?</statement>			<statement>Let"s go!</statement>		</normal>	</intro_text>	<questions>		<question id="0">			<type>0</type>			<score>10</score>			<value>1</value>			<text>If you cannot see a microbe it is not there</text>			<answers>				<answer>					<label>Agree</label>					<value>-1</value>				</answer>				<answer>					<lable>Don"t Know</lable>					<value>0</value>				</answer>				<answer>					<lable>Disagree</lable>					<value>1</value>				</answer>			</answers>		</question>		<question id="1">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Bacteria and Viruses are the same</text>			<answers>				<answer>					<label>Agree</label>					<value>-1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>1</value>				</answer>			</answers>		</question>		<question id="2">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Fungi are microbes</text>			<answers>				<answer>					<label>Agree</label>					<value>1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>-1</value>				</answer>			</answers>		</question>		<question id="3">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Microbes are found on our hands</text>			<answers>				<answer>					<label>Agree</label>					<value>1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>-1</value>				</answer>			</answers>		</question>	</questions></round>';
+	//private var TextFromXML: String = '<?xml version="1.0" encoding="utf-8" ?><round id="0">	<name>All About Microbes</name>	<round_id>0</round_id>	<next_round>alpha_gameshow_round2.xml</next_round>	<intro_text>		<blind>			<statement>Welcome to the first BLIND QUESTION ROUND!</statement>			<statement>I"m going to ask you some questions but I"m NOT going to tell you if you got them right!</statement>			<statement>If you got them right, you"ll get a great bonus later though so try your best.</statement>			<statment>Lets go!</statment>		</blind>		<normal>			<statement>Well done, you"re a hoverboard natural!</statement>			<statement>Now it"s time to ask you those questions again</statement>			<statement>This time, you get 10 points for a correct answer, but if you get it wrong, the other player gets points.</statement>			<statement>so if you DON"T KNOW the answer, it"s best to play it safe and say so!</statement>			<statement>Ready?</statement>			<statement>Let"s go!</statement>		</normal>	</intro_text>	<questions>		<question id="0">			<type>0</type>			<score>10</score>			<value>1</value>			<text>If you cannot see a microbe it is not there</text>			<answers>				<answer>					<label>Agree</label>					<value>-1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>1</value>				</answer>			</answers>		</question>		<question id="1">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Bacteria and Viruses are the same</text>			<answers>				<answer>					<label>Agree</label>					<value>-1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>1</value>				</answer>			</answers>		</question>		<question id="2">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Fungi are microbes</text>			<answers>				<answer>					<label>Agree</label>					<value>1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>-1</value>				</answer>			</answers>		</question>		<question id="3">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Microbes are found on our hands</text>			<answers>				<answer>					<label>Agree</label>					<value>1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>-1</value>				</answer>			</answers>		</question>	</questions></round>';
 	
-	private var CurrentRound : Round;		//For development purposes. Will contain the parsed data from the xml string above
+	private var CurrentRound : Round;		//Will point to a Round object containing the parsed data from the xml string above
 	
 	private var gameHost : GameObject;
 	private var playerAmy : GameObject;
@@ -20,11 +22,14 @@ public class LevelLogicQuiz extends MonoBehaviour{
 	private var harryAnim : Animator;
 	private var hostAnim : Animator;
 	
+	private var playerAnim : Animator;
+	private var opponentAnim : Animator;
+	
 	private var amyScoreBoard : ScoreBoard;
 	private var harryScoreBoard : ScoreBoard;
 	
-	private var playerScoreBoard : ScoreBoard;
-	private var opponentScoreBoard : ScoreBoard;
+	private var playerScoreBoard : ScoreBoard;			//To update the animations of the chosen player
+	private var opponentScoreBoard : ScoreBoard;		//and the opponent
 	
 	private var formBackground : GameObject;
 	
@@ -55,6 +60,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		gameLogic = GameObject.Find("GameLogic").GetComponent("GameLogic");
 		
 		CurrentRoundNum = gameLogic.GetRoundNumber();							//Will get from the GameLogic script the number of quiz level that the player have to play now. 
+		CurrentRound = gameLogic.GetQuestions();
 		
 		//Save the references to the game objects of amy, hrry and the host
 		playerAmy = GameObject.Find("amy");
@@ -91,9 +97,13 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		if(playerName == "harry"){					//this will be neccesary to update the scoreboards
 			playerScoreBoard = harryScoreBoard;
 			opponentScoreBoard = amyScoreBoard;
+			playerAnim = harryAnim;
+			opponentAnim = amyAnim;
 		}else{
 			playerScoreBoard = amyScoreBoard;
 			opponentScoreBoard = harryScoreBoard;
+			playerAnim = amyAnim;
+			opponentAnim = harryAnim;
 		}
 		
 		formBackground.SetActive(false);							//Disable the form background, which will be enabled when needed
@@ -135,42 +145,41 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		
 	}
 	
-	function TestXmlSerializer(){
-	//This function is to TEST if the xml serializer works.
-		
-		Debug.Log("Starting to parse the xml...");
-		
-		//CurrentRound = new Round();
-		CurrentRound = Round.LoadFromText(TextFromXML);
-		
-		Debug.Log("Parsed.");
-		
-		Debug.Log("Round id: " + CurrentRound.id);
-		Debug.Log("Name: " + CurrentRound.name);
-		Debug.Log("Round Id: " + CurrentRound.round_id);
-		Debug.Log("Next Round: " + CurrentRound.next_round);
-		
-		var blindStatements: String = "";
-		for(var blindStatement: String in CurrentRound.intro_text.blind){
-			blindStatements = blindStatements + "\n" + blindStatement;
-		}
-		Debug.Log("Intro text (blind statements): " + blindStatements);
-		
-		var normalStatements: String = "";
-		for(var normalStatement: String in CurrentRound.intro_text.normal){
-			normalStatements = normalStatements + "\n" + normalStatement;
-		}
-		Debug.Log("Intro text: (normal statements)" + normalStatements);
-		//Debug.Log("Questions: " + CurrentRound.name);
-	}
+//	function TestXmlSerializer(){
+//	//This function is to TEST if the xml serializer works.
+//		
+//		Debug.Log("Starting to parse the xml...");
+//		
+//		//CurrentRound = new Round();
+//		CurrentRound = Round.LoadFromText(TextFromXML);
+//		
+//		Debug.Log("Parsed.");
+//		
+//		Debug.Log("Round id: " + CurrentRound.id);
+//		Debug.Log("Name: " + CurrentRound.name);
+//		Debug.Log("Round Id: " + CurrentRound.round_id);
+//		Debug.Log("Next Round: " + CurrentRound.next_round);
+//		
+//		var blindStatements: String = "";
+//		for(var blindStatement: String in CurrentRound.intro_text.blind){
+//			blindStatements = blindStatements + "\n" + blindStatement;
+//		}
+//		Debug.Log("Intro text (blind statements): " + blindStatements);
+//		
+//		var normalStatements: String = "";
+//		for(var normalStatement: String in CurrentRound.intro_text.normal){
+//			normalStatements = normalStatements + "\n" + normalStatement;
+//		}
+//		Debug.Log("Intro text: (normal statements)" + normalStatements);
+//		//Debug.Log("Questions: " + CurrentRound.name);
+//	}
 	
 	private function StartLevel(){
 		//This function will execute all the sequence of actions that have to be done during the level
 		
-		//First we load all the text of the introduction and the questions
-		CurrentRound = Round.LoadFromText(TextFromXML);
-		TotalQuestions = CurrentRound.questions.Count;	//To keep the number of questions in this round
+		TotalQuestions = CurrentRound.questions.Count;	//To keep the number of questions in this round. NOTE that the CurrentRound object must exist when trying to acccess its question field. Otherwise there will be a null pointer exception
 		//Debug.Log("The number of questions is: " + TotalQuestions);
+		
 		/* These are the actions to perform:
 		-Show the textBox with the welcome text
 		-Repeat this:
@@ -224,7 +233,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 	
 	private function Answer(CurrentAnswer: String){
 		//This function is called when some button in the form is pressed. The argument CurrentAnswer contains which button was pressed.
-		//It checks if the answer was correct 
+		//It checks if the answer was correct, update the scores, save the answers to be submitted to the database and plays the animations of the characters
 		
 		Debug.Log("The user answered " + CurrentAnswer + " to the question number " + CurrentQuestionNum);
 		
@@ -232,56 +241,95 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		harryScoreBoard.Enable();
 		formBackground.SetActive(false);
 		formMode = false;
-		
-		//TODO play animations and write texts in the textbox
-		
-		/*Actions:
-		-Check if the answer was wrong, right, or Don't know
-		-Generate a random answer for the other player and check it
-		-Make the gamehost communicate the results
-		-update the scoreboards
-		-Animate the characters to make them feel happy or dissappointed
-		-Store the results
-			-if it was the last answer of the round, send the results to the database
-			-else, update CurrentQuestionNum and call ShowQuestion to ask the following question
-		*/
-		//Getting the punctuation of the player for this question
-		var punctuation: int = CurrentQuestion.score * CurrentQuestion.Answers.Find(x => (x.Label == CurrentAnswer)).value_;	//The punctuation will be 0 if answered Don't know, +10 if clicked on the correct answer, and -10 if answered the wrong answer
-		
-		//Storing punctuation and updating the scoreboards
-		playerScoreBoard.ChangePoints(punctuation);			//To update the scoreboard of the player (punctuation will be added to the old punctuation)
-		if(punctuation>0){
-			answers[CurrentQuestionNum] = 1;				//To store the answer
-		}else{
-			if(punctuation<0){
-				answers[CurrentQuestionNum] = -1;
-				opponentScoreBoard.ChangePoints(5);			//If the player fails its answer, the opponent will get an extra 5 points!
-			}else{	//punctuation == 0
-				answers[CurrentQuestionNum] = 0;			
+	
+		//Getting the score of the player for this question
+		//The score after the for loop will be 0 if answered Don't know, +10 if clicked on the correct answer, and -10 if answered the wrong answer
+		var score: int = CurrentQuestion.score;
+		var CurrentAnswerValue : int = 0;
+		Debug.Log("The score of the current question is " + score);
+		for(var an: Answer in CurrentQuestion.answers){
+//			Debug.Log("**** Q"+ CurrentQuestionNum +"; an.label: " + an.label + " CurrentAnswer: " + CurrentAnswer + " ****");
+			if(an.label == CurrentAnswer){				
+				CurrentAnswerValue = an.value;
+				Debug.Log("The answer submitted was correctly found amongst the answers of the xml: " + an.label + ". And the value is: " + an.value + " Parsed value: " + CurrentAnswerValue);
 			}
 		}
 		
-		//Generating the answer of the other player
-		var rndNum: int = Random.Range(0, 3);	//Will generate numbers between 0 and 2 (0 means that the opponent fail the question, 1, that he doesn't know and 2 that he answered the question correctly)
-		switch(rndNum){
-			case 0:		//opponent fails
-				playerScoreBoard.ChangePoints(5);
-				break;
-			case 1:		//opponent doesn't know
-				
-				break;
-			case 2:		//opponent answers correctly
-				opponentScoreBoard.ChangePoints(CurrentQuestion.score);
-				break;
+		//Storing score and updating the scoreboards
+		if(CurrentAnswerValue>0){
+			answers.Add(1);				//To store the answer
+			//Do the gamehost tell the result if not in the blindmode.
+			if(!blindMode){	
+				playerAnim.SetTrigger("happy");
+				yield textBox.SayThis("Game host", "Your answer was: " + CurrentAnswer + "\nThis is the CORRECT answer");
+			}
+		}else{
+			if(CurrentAnswerValue<0){
+				answers.Add(-1);	
+				if(!blindMode){	
+					playerAnim.SetTrigger("disappointed");
+					yield textBox.SayThis("Game host", "Your answer was: " + CurrentAnswer + "\nThis is the WRONG answer");
+					opponentScoreBoard.ChangePoints(5);			//If the player fails its answer, the opponent will get an extra 5 points!
+				}
+			}else{	//score == 0
+				answers.Add(0);		
+				if(!blindMode){	
+					yield textBox.SayThis("Game host", "You chose the safe answer");	
+				}
+			}
 		}
 		
+		score = CurrentQuestion.score * CurrentAnswerValue;
+		Debug.Log("score obtained: " + score + " Score for this question if answered correctly: " + CurrentQuestion.score + " Value of current answer: " + CurrentAnswerValue);
+		
+		if (score < 0){						//score<0 means that the player chose the wrong answer, so we add 0 points to the player and add 5 points to the opponent.
+			score = 0;
+		}
+		if(!blindMode){	
+			playerScoreBoard.ChangePoints(score);			//To update the scoreboard of the player (score will be added to the old score)
+		}
+		
+		if(!blindMode){	
+			//Generating the answer of the other player
+			var rndNum: int = Random.Range(0, 3);	//Will generate numbers between 0 and 2 (0 means that the opponent fail the question, 1, that he doesn't know and 2 that he answered the question correctly)
+			switch(rndNum){
+				case 0:		//opponent fails
+					playerScoreBoard.ChangePoints(5);
+					opponentAnim.SetTrigger("disappointed");
+					yield textBox.SayThis("Game host", "Your opponent's answer was WRONG");
+					break;
+				case 1:		//opponent doesn't know
+					yield textBox.SayThis("Game host", "Your opponent chose the safe answer");
+					break;
+				case 2:		//opponent answers correctly
+					opponentScoreBoard.ChangePoints(CurrentQuestion.score);
+					opponentAnim.SetTrigger("happy");
+					yield textBox.SayThis("Game host", "Your opponent's answer was CORRECT");
+					break;
+			}
+		}
 		CurrentQuestionNum++;
+		playerAnim.SetTrigger("idle");
+		opponentAnim.SetTrigger("idle");
 		if (CurrentQuestionNum == TotalQuestions){		//There's not any more questions in this round
+			SubmitResults();								//To submit the score to the database
+			Debug.Log("This was the last question. Now we'll change the level.");
 			gameLogic.NextLevel();
 		}
 		else{									//Shows the next question
+			Debug.Log("Going for the next question, question number " + CurrentQuestionNum);
 			ShowQuestion();
 		}
+	}
+	
+	private function SubmitResults(){
+		//This class will submit the results to the database
+		/*
+		Should be done calling a method of the GameLogic class
+		*/
+		
+		gameLogic.SubmitQuizResults(answers);
+		
 	}
 	
 }//End of class brace
