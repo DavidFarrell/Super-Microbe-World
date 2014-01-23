@@ -169,6 +169,8 @@ public class GameLogic extends MonoBehaviour{
 			
 			/*TODO here the request to the server getting the questions on the text field*/
 			
+			
+			
 		}
 		else{			//Offline mode. Just for development purposes
 			switch(RoundNumber){
@@ -200,7 +202,7 @@ public class GameLogic extends MonoBehaviour{
 
 -State machine									|	done
 
--Read from xml									|	Done / look the Rounds.js file
+-Read from xml									|	Done / look the Rounds.js file. It reads the xmls containing the rounds of questions
 
 -Write the text on screen						|	Done
 
@@ -212,6 +214,6 @@ public class GameLogic extends MonoBehaviour{
 
 -Track the traces to the tracking system		|	done
 
--Show a window to choose the answers			|	
+-Show a window to choose the answers			|	done
 
 */
