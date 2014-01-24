@@ -35,7 +35,7 @@ public class Round{
 	}
 		
 	//To load from an XML file giving its path
-	public static function Load(path : String):Round {
+	public static function Load(path : String) : Round {
  		var serializer : XmlSerializer = new XmlSerializer(Round);
  		var stream : Stream = new FileStream(path, FileMode.Open);
  		var result : Round = serializer.Deserialize(stream) as Round;
@@ -45,12 +45,18 @@ public class Round{
  
 	//Loads the xml directly from the given string. Useful in combination with www.text.
 	//The webplayer can't access files on any computer directly so using the methods described before to read/write data won't work here. To load any data you need to use the WWW class.
-	public static function LoadFromText(text : String):Round{
+	public static function LoadFromText(text : String) : Round{
 		var serializer : XmlSerializer = new XmlSerializer(Round);
-		if (text == "") Debug.LogError("Text to parse is empty");
+		if (! text || text == "") Debug.LogError("Text to parse is empty");
 		var reader: StringReader = new StringReader(text);
 		return serializer.Deserialize(reader) as Round;
 	}
+	
+	public static function LoadFromStringReader(sr: StringReader): Round{
+		var serializer : XmlSerializer = new XmlSerializer(Round);
+		if(!sr) Debug.Log("LoadFromStringReader(sr)-> The given StringSerializer was null.");
+		return serializer.Deserialize(sr) as Round;
+	}	
 	
 }
 

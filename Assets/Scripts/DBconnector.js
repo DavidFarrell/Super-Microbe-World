@@ -136,9 +136,9 @@ static function Track (myTracks: JSONObject[]){
 	The purpose of this function is to get from the server the text for the round of questions (quiz game) number NumRound
 	Parameters: 
 		NumRound: int; 
-	Returns: A string with an xml formatted text containing the questions of the specified level
+	Returns: A Round object containing the questions of the specified level
 */
-static function GetRound(NumRound: int): String{
+static function GetRound(NumRound: int): Round{
 	
 	if(PlayerPrefs.HasKey("sessionKey")){
 		
@@ -163,8 +163,9 @@ static function GetRound(NumRound: int): String{
 		var firstTrack: JSONObject = new JSONObject();	//Sending the track to the database..
 		firstTrack.Add("type", "logic");
 		firstTrack.Add("event", "Loading quiz level number " + NumRound);
+		firstTrack.Add("round", NumRound.ToString());									//To tell the server which track we are asking for
 		firstTrack.Add("timestamp", mydate);
-		var stringToSend: String = '[' + track.ToString() + ']';	
+		var stringToSend: String = '[' + firstTrack.ToString() + ']';	
 		
 	/*   to convert the string to byte[], that is what WWW() function needs as data (second argument).   */
 		var encoding = new System.Text.UTF8Encoding();
@@ -174,7 +175,7 @@ static function GetRound(NumRound: int): String{
 		
 	/*   Sending the http post   */
 		var www = new WWW(url + "/getround", dataToSend, headers);
-		yield www;
+		while (!www.isDone);		//Blocking waiting until the request is completed
 		
 	/*   Dealing with the response   */
 		if (!String.IsNullOrEmpty(www.error))
@@ -188,8 +189,17 @@ static function GetRound(NumRound: int): String{
 	        		
 	        		var xmltext: String = resJSON.GetValue('round').ToString();
 	        		
-	        		Debug.Log("DBConnector.GetRound() -> Text received. Here's the beginning: " + xmltext.Substring(1, 30));
+	        		/*There was an error when parsing the xml text because of the BOM (byte order mark) that is at the beginning of the text. To skip it I found this solution in the following forum:
+	        		http://answers.unity3d.com/questions/10904/xmlexception-text-node-canot-appear-in-this-state.html*/
+	        		var stringReader : System.IO.StringReader = new System.IO.StringReader(xmltext);
+					stringReader.Read(); // skip BOM
+					//System.Xml.XmlReader reader = System.Xml.XmlReader.Create(stringReader);
+					
+					var roundLoaded : Round = Round.LoadFromStringReader(stringReader);
+					
+					Debug.Log("DBConnector.GetRound() -> Text received. Here's the full text: " + xmltext/*.Substring(1, 30)*/);
 	        		
+	        		return roundLoaded;
 //	        		var lastin = sessionkey.LastIndexOf('"');        		
 //	        		sessionkey = sessionkey.Substring(1, lastin-1);
 //	               		

@@ -169,7 +169,7 @@ public class GameLogic extends MonoBehaviour{
 			
 			/*TODO here the request to the server getting the questions on the text field*/
 			
-			
+			return DBconnector.GetRound(RoundNumber);		//GetRound() returns a 'Round' object directly
 			
 		}
 		else{			//Offline mode. Just for development purposes
