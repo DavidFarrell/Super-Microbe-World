@@ -66,7 +66,7 @@ public class Goals extends MonoBehaviour{
 		
 		counter[numbers.micNumber, numbers.actNumber] = times;					//Sets the times that the action needs to be performed to the microbe to progress on the level.
 		
-		Debug.Log("Setting goal: Microbe: " + microbe + ". Action: " + action + ". Times:" + times + ". Converted numbers: Microbe: " + numbers.micNumber +" Action: "+ numbers.actNumber);
+//		Debug.Log("Setting goal: Microbe: " + microbe + ". Action: " + action + ". Times:" + times + ". Converted numbers: Microbe: " + numbers.micNumber +" Action: "+ numbers.actNumber);
 		
 		//Debug.Log("Number of yoghurts lucy: " + counter[0, 4]);
 		GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI
@@ -75,7 +75,7 @@ public class Goals extends MonoBehaviour{
 	}
 	
 	public function GoalsAchieved() : boolean {
-		Debug.Log("goalsRemaining: " + goalsRemaining + "counterChanged" + counterChanged);
+//		Debug.Log("goalsRemaining: " + goalsRemaining + "counterChanged" + counterChanged);
 		if(goalsRemaining && counterChanged){							//If there is no changes on the matrix is useless to check if there is all the goals have been achieved
 			for (var i : int = 0; i < 10; i++){
 				for (var j : int = 0; j < 5; j++){
@@ -83,20 +83,20 @@ public class Goals extends MonoBehaviour{
 					//if(i == 0 && j == 4) Debug.Log("*****Number of yoghurts lucy: " + counter[i, j]);
 					if (counter[i,j] != 0) {
 						counterChanged = false;		//This "if" won't be executed again unless counterChanged is set to true again. counterChanged will be changed to true when the counter matrix suffers any change.
-						Debug.Log("***Checking loop...*** There is still some goal that need to be completed. This is the first (maybe not only) one -> Bug: " + i + ". Action: " + j);
+//						Debug.Log("***Checking loop...*** There is still some goal that need to be completed. This is the first (maybe not only) one -> Bug: " + i + ". Action: " + j);
 						GUITextGoalsInfo.SetInfoGoals(i.ToString(), counter[i, 0], counter[i, 1], counter[i, 2], counter[i, 3], counter[i, 4]);	//To update the GUI. Note that this will display a number instead of the name of the bug. when changing the strings to enums to keep the name of the microbes this will change
 						return false;	//If there is any position different from 0, there is at least one goal without accomplish					
 					}
 				}
 			}
 			counterChanged = false;
-			Debug.Log("****All goals completed!**** All the matrix was checked.");
+//			Debug.Log("****All goals completed!**** All the matrix was checked.");
 			goalsRemaining = false;					//Once there is no goals this variable will be false to avoid checking again the matrix
 			return true;
 		}
 		else{
 			if (!goalsRemaining) {
-				Debug.Log("GoalsAchieved(): There is't goals. Matrix was't checked but goalsRemaining was false.");
+//				Debug.Log("GoalsAchieved(): There is't goals. Matrix was't checked but goalsRemaining was false.");
 				return true;
 			}
 			else return false;
@@ -110,7 +110,7 @@ public class Goals extends MonoBehaviour{
 		
 		var numbers: Pair = NameToNumber(microbe, action);	//To convert the names of microbe and action to its coordinates in the matrix
 		
-		Debug.Log("Goal achieved: Microbe: " + microbe + ". Action: " + action);
+//		Debug.Log("Goal achieved: Microbe: " + microbe + ". Action: " + action);
 		
 		if (counter[numbers.micNumber, numbers.actNumber] > 0) { 
 			counter[numbers.micNumber, numbers.actNumber]--;	//One goal achieved, one goal less to accomplish.

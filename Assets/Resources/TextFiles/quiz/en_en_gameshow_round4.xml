@@ -1,22 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <round id="0">
-	<name>All About Microbes</name>
-	<round_id>0</round_id>
-	<next_round>en_en_gameshow_round2.xml</next_round>
+	<name>Food Hygiene</name>
+	<round_id>3</round_id>
+	<next_round>en_en_gameshow_round5.xml</next_round>
 	<intro_text>
 		<blind>
-			<statement>Welcome to the first BLIND QUESTION ROUND!</statement>
-			<statement>I'm going to ask you some questions but I'm NOT going to tell you if you get them right!</statement>
-			<statement>If you get them right, you'll get a great bonus later though, so try your best.</statement>
-			<statment>Let's Go!</statment>
+			<statement>Welcome to the FOURTH round</statement>
 		</blind>
 		<normal>
-			<statement>Well done, you're a hoverboard natural!</statement>
 			<statement>Now let's see what you have learned.</statement>
-			<statement>You get 10 points for a correct answer, but if you get it wrong, the other player gets points.</statement>
-			<statement>so if you DON'T KNOW the answer, it's best to play it safe and say so!</statement>
-			<statement>Ready ?</statement>
-			<statement>Let's Go!</statement>
+			<statement>Remember, 10 points for a correct answer, but if you get it wrong, the other player gets the points.</statement>
+			<statement>So if you DON'T KNOW the answer, it's best to play it safe and say so!</statement>
+			<statement>Ready?</statement>
+			<statement>Let's go!</statement>
 		</normal>
 	</intro_text>
 	<questions>
@@ -24,19 +20,19 @@
 			<type>0</type>
 			<score>10</score>
 			<value>1</value>
-			<text>If you cannot see a microbe it is not there</text>
+			<text>Raw meat should have a solid shelf all to itself to prevent harmful microbes getting on to other food.</text>
 			<answers>
 				<answer>
 					<label>Agree</label>
-					<value>-1</value>
+					<value>1</value>
 				</answer>
 				<answer>
-					<lable>Don't Know</lable>
+					<label>Don't Know</label>
 					<value>0</value>
 				</answer>
 				<answer>
 					<lable>Disagree</lable>
-					<value>1</value>
+					<value>-1</value>
 				</answer>
 			</answers>
 		</question>
@@ -44,11 +40,11 @@
 			<type>0</type>
 			<score>10</score>
 			<value>1</value>
-			<text>Bacteria and Viruses are the same</text>
+			<text>Liquids like milk, yogurt and juice go in the fridge door.</text>
 			<answers>
 				<answer>
 					<label>Agree</label>
-					<value>-1</value>
+					<value>1</value>
 				</answer>
 				<answer>
 					<label>Don't Know</label>
@@ -56,7 +52,7 @@
 				</answer>
 				<answer>
 					<label>Disagree</label>
-					<value>1</value>
+					<value>-1</value>
 				</answer>
 			</answers>
 		</question>
@@ -64,7 +60,27 @@
 			<type>0</type>
 			<score>10</score>
 			<value>1</value>
-			<text>Fungi are microbes</text>
+			<text>It is safe to put opened tins in the fridge.</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Fruit should be put in the fruit bowl.</text>
 			<answers>
 				<answer>
 					<label>Agree</label>
@@ -80,11 +96,11 @@
 				</answer>
 			</answers>
 		</question>
-		<question id="3">
+		<question id="4">
 			<type>0</type>
 			<score>10</score>
 			<value>1</value>
-			<text>Microbes are found on our hands</text>
+			<text>If you sneeze, you should wash your hands before handling food.</text>
 			<answers>
 				<answer>
 					<label>Agree</label>

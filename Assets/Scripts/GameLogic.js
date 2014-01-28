@@ -10,7 +10,7 @@ TODO Check the comments of this class
 public class GameLogic extends MonoBehaviour{
 	
 	//This enum type will contain the EXACT name of all the scenes of the game.				IMPORTANT
-	enum GameLevel {gameShow, kitchen1, gameShow_round1};
+	enum GameLevel {gameShow, kitchen1, gameShow_quiz1, gameShow_quiz2};
 	
 	private var level : GameLevel;			//The current level being played
 	
@@ -19,6 +19,8 @@ public class GameLogic extends MonoBehaviour{
 	private var goals : Goals;					//To have a reference to the Goals.js script
 	
 	private var isConnected : boolean;			//True if connected to the Database
+	
+	private var currentRoundNum : int;			//Contains the current quiz round number 
 	
 	//private var changeStateTrigger : boolean = false;
 	
@@ -34,7 +36,8 @@ public class GameLogic extends MonoBehaviour{
 		goals = transform.gameObject.GetComponent("Goals");					//The Goals.js script is attached to the GameLogic gameobject. will be used to keep track of the goals of the level
 		
 		isConnected = false;
-	
+		
+		currentRoundNum = 1;
 	}
 	
 	function Start () {
@@ -67,8 +70,18 @@ public class GameLogic extends MonoBehaviour{
 					break;
 				
 				case GameLevel.kitchen1:
-					ChangeLevel(GameLevel.gameShow_round1);
+					ChangeLevel(GameLevel.gameShow_quiz1);
 					break;
+				case GameLevel.gameShow_quiz1:
+					ChangeLevel(GameLevel.kitchen1);
+					break;
+				case GameLevel.kitchen1:
+					ChangeLevel(GameLevel.gameShow_quiz2);
+					break;
+				/*the next time we want to load a quiz level will be like this, but with : */
+			/*	case GameLevel.gameShow.gameShow_quiz2:
+					ChangeLevel(GameLevel.gameShow_quiz);
+					break;*/
 				
 				default:
 					Debug.Log("Game finished");
@@ -85,7 +98,19 @@ public class GameLogic extends MonoBehaviour{
 	private function ChangeLevel(newLevel : GameLevel){
 		//Here's why is so important that the name of the level var is the same than the scene
 		level = newLevel;
-		Application.LoadLevel(level.ToString());
+		Debug.Log("Changing level to : " + level.ToString());
+		
+		if (level.ToString().Length>13 && level.ToString().Substring(0, 13) == "gameShow_quiz"){			//If the new level is a quiz level
+			Debug.Log("The substring is : " + level.ToString().Substring(0, 13));
+			currentRoundNum = parseInt(level.ToString()[13]);
+			for (var i: int = 0; level.ToString().Length; i++){
+				Debug.Log(i.ToString + ": " + level.ToString()[i]);
+			}
+			Debug.Log("==================currentRoundNum = " + currentRoundNum);
+			Application.LoadLevel(level.ToString().Substring(0, 13));
+		}else{
+			Application.LoadLevel(level.ToString());
+		}
 		
 	}
 	
@@ -146,48 +171,17 @@ public class GameLogic extends MonoBehaviour{
 	
 	public function GetRoundNumber(): int{
 		//This function is to be called from the LevelLogicQuizGame to know which one is the current round
-		//The first level is the level 0 and will return -1 if there was a problem
-		
-		if(level == GameLevel.gameShow_round1)
-			return 0;
-		if(level == GameLevel.gameShow)		//This two lines are just for development purposes only
-			return 0;						//because when the quizlevel is started directly without being started from here, level's value will be GameLevel.gameShow.
-		else
-			return -1;
+		//The first level is the level 1 and will return -1 if there was a problem
+		if(currentRoundNum<1 || currentRoundNum > 5) Debug.LogError("Round number is out of bounds!"); 
+		Debug.Log("********* Round number: "+currentRoundNum+" ********");
+		return currentRoundNum;
 		
 	}
 	
 	public function GetQuestions(): Round{
 		//This class returns the text in xml format containing the questions and answers for the current round
-		//The text will be received in an http response from the server
-		//For development purposes the text will be provided locally
-		var RoundNumber: int = GetRoundNumber();
-		//Debug.Log("The round number is " + RoundNumber);
-		var text : String = "";
-		if (checkConnection()){
-			Debug.Log("Connected. Requesting questions to the server...");
-			
-			/*TODO here the request to the server getting the questions on the text field*/
-			
-			return DBconnector.GetRound(RoundNumber);		//GetRound() returns a 'Round' object directly
-			
-		}
-		else{			//Offline mode. Just for development purposes
-			switch(RoundNumber){
-				
-				case 0:		//Text for the first round of questions
-					 text = '<?xml version="1.0" encoding="utf-8" ?><round id="0">	<name>All About Microbes</name>	<round_id>0</round_id>	<next_round>alpha_gameshow_round2.xml</next_round>	<intro_text>		<blind>			<statement>Welcome to the first BLIND QUESTION ROUND!</statement>			<statement>I"m going to ask you some questions but I"m NOT going to tell you if you got them right!</statement>			<statement>If you got them right, you"ll get a great bonus later though so try your best.</statement>			<statment>Lets go!</statment>		</blind>		<normal>			<statement>Well done, you"re a hoverboard natural!</statement>			<statement>Now it"s time to ask you those questions again</statement>			<statement>This time, you get 10 points for a correct answer, but if you get it wrong, the other player gets points.</statement>			<statement>so if you DON"T KNOW the answer, it"s best to play it safe and say so!</statement>			<statement>Ready?</statement>			<statement>Let"s go!</statement>		</normal>	</intro_text>	<questions>		<question id="0">			<type>0</type>			<score>10</score>			<value>1</value>			<text>If you cannot see a microbe it is not there</text>			<answers>				<answer>					<label>Agree</label>					<value>-1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>1</value>				</answer>			</answers>		</question>		<question id="1">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Bacteria and Viruses are the same</text>			<answers>				<answer>					<label>Agree</label>					<value>-1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>1</value>				</answer>			</answers>		</question>		<question id="2">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Fungi are microbes</text>			<answers>				<answer>					<label>Agree</label>					<value>1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>-1</value>				</answer>			</answers>		</question>		<question id="3">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Microbes are found on our hands</text>			<answers>				<answer>					<label>Agree</label>					<value>1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>-1</value>				</answer>			</answers>		</question>	</questions></round>';
-				break;
-				
-			}
-		}
-		if (text == ""){
-			Debug.LogError("There has been an error when trying to reach the text.");
-			return null;
-		}else{
-			
-			return Round.LoadFromText(text);
-		}
+		return Round.LoadRoundFromXMLResources(currentRoundNum);
+		
 	}
 	
 	public function SubmitQuizResults(results : List.<int>){

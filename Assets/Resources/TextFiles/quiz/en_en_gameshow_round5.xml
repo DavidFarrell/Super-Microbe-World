@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Treatment of infection</name>
+	<round_id>4</round_id>
+	<next_round>exit</next_round>
+	<intro_text>
+		<blind>
+			<statement>Welcome to the FINAL round</statement>
+			<statement>This time we're going to see what you know about how you get better from infections</statement>
+			<statment>Let's go!</statment>
+		</blind>
+		<normal>
+			<statement>Now let's see what you have learned.</statement>
+			<statement>Remember, 10 points for a correct answer, but if you get it wrong, the other player gets the points.</statement>
+			<statement>So if you DON'T KNOW the answer, it's best to play it safe and say so!</statement>
+			<statement>Ready?</statement>
+			<statement>Let's go!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotics kill bacteria</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotics kill viruses</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotics will cure any illness</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotics can harm our useful bacteria as well as harmful bacteria</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotics help when you have a cough</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="5">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Most coughs and colds get better without antibiotics</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

@@ -52,11 +52,24 @@ public class Round{
 		return serializer.Deserialize(reader) as Round;
 	}
 	
+	//same function than the ones above but taking a StringReader as a parameter
 	public static function LoadFromStringReader(sr: StringReader): Round{
 		var serializer : XmlSerializer = new XmlSerializer(Round);
 		if(!sr) Debug.Log("LoadFromStringReader(sr)-> The given StringSerializer was null.");
 		return serializer.Deserialize(sr) as Round;
 	}	
+	
+	//This function will return a Round object given the number of round that we want to load from 1 to 5
+	public static function LoadRoundFromXMLResources(num: int): Round{
+		var mypath: String = "Resources" + Path.DirectorySeparatorChar + "TextFiles" + Path.DirectorySeparatorChar + "quiz" + Path.DirectorySeparatorChar + "en_en_gameshow_round";
+		//var mypath : String = "en_en_gameshow_round";
+		if(num > 0 && num < 6){
+			mypath = mypath + num.ToString() + ".xml";
+		}else{
+			Debug.LogError("Wrong round requested. Requested number: " + num);
+		}
+		return Load(Path.Combine(Application.dataPath, mypath));
+	}
 	
 }
 
