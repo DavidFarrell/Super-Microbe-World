@@ -38,6 +38,20 @@ function ChangePoints (amount : int) {
 
 }
 
+//Sets the score to this amount if its greater than 0
+function SetPoints(amount: int){
+	if (amount >= 0) {
+		score = amount;
+	}else{
+		Debug.LogError("ScoreBoard.SetPoints --> Trying to set a negative amount of points!");
+	}
+}
+
+//Returns the amount of points on the scoreboard
+function GetPoints(): int{
+	return score;
+}
+
 public function Enable () {
 	isEnabled = true;
 }

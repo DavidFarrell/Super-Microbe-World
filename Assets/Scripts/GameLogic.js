@@ -10,7 +10,7 @@ TODO Check the comments of this class
 public class GameLogic extends MonoBehaviour{
 	
 	//This enum type will contain the EXACT name of all the scenes of the game.				IMPORTANT
-	enum GameLevel {gameShow, kitchen1, gameShow_quiz1, gameShow_quiz2};
+	enum GameLevel {gameShow, kitchen1, gameShow_quiz1, kitchen2, gameShow_quiz2};
 	
 	private var level : GameLevel;			//The current level being played
 	
@@ -22,12 +22,16 @@ public class GameLogic extends MonoBehaviour{
 	
 	private var currentRoundNum : int;			//Contains the current quiz round number 
 	
+	public var db : DBconnector;		//References to the database management instance
+	
 	//private var changeStateTrigger : boolean = false;
 	
 	function Awake () {
 	
 		// Make this game object and all its transform children survive when loading a new scene.
 		DontDestroyOnLoad (transform.gameObject);
+		
+		db = transform.gameObject.GetComponent("DBconnector");
 		
 		player = "";
 		
@@ -38,6 +42,10 @@ public class GameLogic extends MonoBehaviour{
 		isConnected = false;
 		
 		currentRoundNum = 1;
+		
+		PlayerPrefs.SetInt("PlayerScore", 0);
+		PlayerPrefs.SetInt("OpponentScore", 0);
+		
 	}
 	
 	function Start () {
@@ -62,7 +70,7 @@ public class GameLogic extends MonoBehaviour{
 	public function NextLevel() {
 		
 		if (goals.GoalsAchieved()) {		//If all the goals for the level are completed, goes to the next level
-			Debug.Log("All goals achieved. Going to the next Level.");
+			//Debug.Log("GameLogic.NextLevel: All goals achieved. Going to the next Level.");
 			switch (level){
 				
 				case GameLevel.gameShow:
@@ -70,19 +78,17 @@ public class GameLogic extends MonoBehaviour{
 					break;
 				
 				case GameLevel.kitchen1:
+					currentRoundNum = 1;
 					ChangeLevel(GameLevel.gameShow_quiz1);
 					break;
 				case GameLevel.gameShow_quiz1:
-					ChangeLevel(GameLevel.kitchen1);
+					ChangeLevel(GameLevel.kitchen2);
 					break;
-				case GameLevel.kitchen1:
+					
+				case GameLevel.kitchen2:
+					currentRoundNum = 2;
 					ChangeLevel(GameLevel.gameShow_quiz2);
 					break;
-				/*the next time we want to load a quiz level will be like this, but with : */
-			/*	case GameLevel.gameShow.gameShow_quiz2:
-					ChangeLevel(GameLevel.gameShow_quiz);
-					break;*/
-				
 				default:
 					Debug.Log("Game finished");
 					Application.Quit();				//As this game is going to be built as a web application there is no sense on exiting the application. So We'll have to show some kind of ending screen.
@@ -91,27 +97,23 @@ public class GameLogic extends MonoBehaviour{
 		}
 		else{
 			//TODO Show a message to tell the player to complete remaining goals.
-			Debug.Log("There is still some goal to complete...");
+			Debug.Log("GameLogic.NextLevel: There is still some goal to complete...");
 		}
 	}
 	
 	private function ChangeLevel(newLevel : GameLevel){
 		//Here's why is so important that the name of the level var is the same than the scene
 		level = newLevel;
-		Debug.Log("Changing level to : " + level.ToString());
-		
-		if (level.ToString().Length>13 && level.ToString().Substring(0, 13) == "gameShow_quiz"){			//If the new level is a quiz level
-			Debug.Log("The substring is : " + level.ToString().Substring(0, 13));
-			currentRoundNum = parseInt(level.ToString()[13]);
-			for (var i: int = 0; level.ToString().Length; i++){
-				Debug.Log(i.ToString + ": " + level.ToString()[i]);
-			}
-			Debug.Log("==================currentRoundNum = " + currentRoundNum);
-			Application.LoadLevel(level.ToString().Substring(0, 13));
-		}else{
+		var levelString: String = level.ToString();
+		if (levelString.Length == 14 && levelString.Substring(0, 13) == "gameShow_quiz"){	//In the case of the quiz level, we load the same stage
+		Debug.Log("GameLogic.ChangeLevel: Loading a quiz level! number " + currentRoundNum);
+			Application.LoadLevel("gameShow_quiz");		//Which round of questions to load will be asked later inside the quiz level scripts.
+		}
+		else{
+			Debug.Log("GameLogic.ChangeLevel: Loading a non quiz level");
 			Application.LoadLevel(level.ToString());
 		}
-		
+				
 	}
 	
 	public function PlayerChosen(playerName : String){
@@ -129,10 +131,10 @@ public class GameLogic extends MonoBehaviour{
 		var userid : String = nickname;
 		var session : String = "testdecembersmb";				//This session has to be created in the database.
 		
-		if(!DBconnector.connected){
+		if(!db.connected){
 			if (PlayerPrefs.HasKey("sessionKey")) PlayerPrefs.DeleteKey("sessionKey");
 			
-			yield DBconnector.ConnectToGleaner(userid, session); //in the server we can check this keyword to allow only people who are using our game to connect to the database
+			yield db.ConnectToGleaner(userid, session); //in the server we can check this keyword to allow only people who are using our game to connect to the database
 			
 			if (PlayerPrefs.HasKey("sessionKey")) {
 				Debug.Log('DBConnector.ConnectGleaner()-> sessionKey received: \n' + PlayerPrefs.GetString("sessionKey"));	
@@ -146,10 +148,22 @@ public class GameLogic extends MonoBehaviour{
 				
 				if (PlayerPrefs.HasKey("sessionKey")) {
 					Debug.Log('DBConnector.ConnectGleaner()-> sessionKey received at second attempt: \n' + PlayerPrefs.GetString("sessionKey"));
+					isConnected = true;
 				}
 				else{
 					Debug.Log('DBConnector.ConnectGleaner()-> sessionKey not received at second attempt.\n Check the internet connection or the server.');
 				}
+			}
+			if (PlayerPrefs.HasKey("sessionKey")) {		//If finally we're connected, we'll send a track with the data of the player
+				var firstTrack: JSONObject = new JSONObject();	//Sending the track to the database..
+				firstTrack.Add("type", "logic");
+				firstTrack.Add("event", "Player started the game.");
+				firstTrack.Add("nickname", nickname);
+				firstTrack.Add("email", email);
+				firstTrack.Add("age", age);
+				var tracks : JSONObject[] = new JSONObject[1];
+				tracks[0] = firstTrack;
+				db.Track(tracks);
 			}
 		}
 		else{
@@ -184,9 +198,13 @@ public class GameLogic extends MonoBehaviour{
 		
 	}
 	
-	public function SubmitQuizResults(results : List.<int>){
-		//results will have on each component 1 if it was answered correctly by the player and -1 if it was failed. 0 will be stored if the player didn't know.
-		Debug.Log("*** SubmitQuizResults(): Feature not implemented yet!");
+//	public function SubmitQuizResults(results : List.<int>){
+//		//results will have on each component 1 if it was answered correctly by the player and -1 if it was failed. 0 will be stored if the player didn't know.
+//		Debug.Log("*** SubmitQuizResults(): Feature not implemented yet!");
+//	}
+	
+	public function GetLevelName(): String{
+		return level.ToString();
 	}
 		
 }	//End of class brace

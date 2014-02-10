@@ -44,7 +44,7 @@ function Update () {
 function SetPlayer(plTr: Transform) {
 	
 	playerTransform = plTr;
-	Debug.Log("Player set up succesfully!");
+	//Debug.Log("Player set up succesfully!");
 	
 }
 

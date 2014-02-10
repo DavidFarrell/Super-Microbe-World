@@ -20,10 +20,10 @@ function Update () {
 
 }
 
-function OnTriggerEnter2D(){
+function OnTriggerEnter2D(other: Collider2D){
 
 	//Tell the LevelLogic script to check if the goals were achieved and if so go to the next level. This operations are done by the "LevelFinished()" function.
-	if (canCheck){
+	if (canCheck && other.tag == "Player"){
 		canCheck = false;
 		Debug.Log("Trying to change of level...");
 		gameLogic.NextLevel();						//Communicates with the game logic to try to finish this level checking that all the goals have been completed.

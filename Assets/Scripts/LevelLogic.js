@@ -80,17 +80,7 @@ public class LevelLogic extends MonoBehaviour{
 		var maxXY: Vector2 = maxXYTransform.position;
 		myCamera.SendMessage("SetBounds", new CameraBounds(maxXY, minXY)); 	//To set the boundaries of the camera
 		
-		if (gameLogic.checkConnection()){			//If we are authenticated in the web service
-			var firstTrack: JSONObject = new JSONObject();	//Sending the track to the database..
-			firstTrack.Add("type", "logic");
-			firstTrack.Add("event", "Level 1 loaded");
-			var tracks : JSONObject[] = new JSONObject[1];
-			tracks[0] = firstTrack;
-			DBconnector.Track(tracks);
-		}
-		else{
-			Debug.Log("Connection not established (sessionKey not found) when trying to post the first trace.");
-		}
+		SendInfo();
 		
 		AddLevelGoals();		//Function to add the goals of this level
 	}
@@ -114,6 +104,21 @@ public class LevelLogic extends MonoBehaviour{
 		//Function to add the goals of this level. Override this function in the scripts that inherit from this one.
 		// e.g. goals.SetGoals("lucy", "photo", 3);			//The goal will be to take pictures to 3 lucy bacteria
 
+	}
+	
+	private function SendInfo(){
+		//yield new WaitForSeconds(2);
+		if (gameLogic.checkConnection()){			//If we are authenticated in the web service
+			var firstTrack: JSONObject = new JSONObject();	//Sending the track to the database..
+			firstTrack.Add("type", "logic");
+			firstTrack.Add("event", "Level " + gameLogic.GetLevelName() + " loaded");
+			var tracks : JSONObject[] = new JSONObject[1];
+			tracks[0] = firstTrack;
+			gameLogic.db.Track(tracks);
+		}
+		else{
+			Debug.Log("Connection not established (sessionKey not found) when trying to post the first trace.");
+		}
 	}
 
 }

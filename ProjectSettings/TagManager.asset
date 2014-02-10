@@ -59,7 +59,7 @@ TagManager:
   - name: Background
     userID: 2
     uniqueID: 1535931219
-    locked: 1
+    locked: 0
   - name: Character
     userID: 4
     uniqueID: 2511236001

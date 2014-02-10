@@ -60,6 +60,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		gameLogic = GameObject.Find("GameLogic").GetComponent("GameLogic");
 		
 		CurrentRoundNum = gameLogic.GetRoundNumber();							//Will get from the GameLogic script the number of quiz level that the player have to play now. 
+		Debug.Log("Awake function of the LevelLogicQuiz.js. Round number is: " + CurrentRoundNum);
 		CurrentRound = gameLogic.GetQuestions();
 		
 		//Save the references to the game objects of amy, hrry and the host
@@ -106,6 +107,8 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			opponentAnim = harryAnim;
 		}
 		
+		SendInitInfoToDB();		//To say the DB that the level has been loaded
+		
 		formBackground.SetActive(false);							//Disable the form background, which will be enabled when needed
 		
 		textBox = textBoxGO.GetComponent(TextBox);			//To have a reference to the TextBox class in order to use it
@@ -114,8 +117,13 @@ public class LevelLogicQuiz extends MonoBehaviour{
 
 	function Update () {
 		
-		if (!levelStarted){
+		if (!levelStarted){					//Operations to perform the first time that this function is used, on the first frame
 			levelStarted = true;
+			
+			playerScoreBoard.SetPoints(PlayerPrefs.GetInt("PlayerScore"));
+			opponentScoreBoard.SetPoints(PlayerPrefs.GetInt("OpponentScore"));
+			Debug.Log("Player and opponent scores were: " + PlayerPrefs.GetInt("PlayerScore") + " and " + PlayerPrefs.GetInt("OpponentScore") + " respectively in the last quiz level.");
+			
 			StartLevel();
 		}
 		
@@ -143,6 +151,22 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			
 		}
 		
+	}
+	
+	private function SendInitInfoToDB(){
+		yield new WaitForSeconds(2);		//To wait just in case that the previous level is sending information.
+		if (gameLogic.checkConnection()){			//If we are authenticated in the web service
+			var firstTrack: JSONObject = new JSONObject();	//Sending the track to the database..
+			firstTrack.Add("type", "logic");
+			firstTrack.Add("event", "Loading quiz level number " + CurrentRoundNum);
+			firstTrack.Add("round", CurrentRoundNum.ToString());
+			var tracks : JSONObject[] = new JSONObject[1];
+			tracks[0] = firstTrack;
+			if (gameLogic.db) gameLogic.db.Track(tracks);
+		}
+		else{
+			Debug.Log("Connection not established (sessionKey not found) when trying to post the first trace.");
+		}
 	}
 	
 //	function TestXmlSerializer(){
@@ -220,7 +244,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		
 		CurrentQuestion = CurrentRound.questions[CurrentQuestionNum];	//To keep the present question
 		
-		Debug.Log("Question : " + CurrentQuestion.text);
+		//Debug.Log("Question : " + CurrentQuestion.text);
 		
 		yield textBox.SayThis("Game host", CurrentQuestion.text);	
 		
@@ -235,7 +259,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		//This function is called when some button in the form is pressed. The argument CurrentAnswer contains which button was pressed.
 		//It checks if the answer was correct, update the scores, save the answers to be submitted to the database and plays the animations of the characters
 		
-		Debug.Log("The user answered " + CurrentAnswer + " to the question number " + CurrentQuestionNum);
+		//Debug.Log("The user answered " + CurrentAnswer + " to the question number " + CurrentQuestionNum);
 		
 		amyScoreBoard.Enable();
 		harryScoreBoard.Enable();
@@ -246,12 +270,12 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		//The score after the for loop will be 0 if answered Don't know, +10 if clicked on the correct answer, and -10 if answered the wrong answer
 		var score: int = CurrentQuestion.score;
 		var CurrentAnswerValue : int = 0;
-		Debug.Log("The score of the current question is " + score);
+		//Debug.Log("The score of the current question is " + score);
 		for(var an: Answer in CurrentQuestion.answers){
 //			Debug.Log("**** Q"+ CurrentQuestionNum +"; an.label: " + an.label + " CurrentAnswer: " + CurrentAnswer + " ****");
 			if(an.label == CurrentAnswer){				
 				CurrentAnswerValue = an.value;
-				Debug.Log("The answer submitted was correctly found amongst the answers of the xml: " + an.label + ". And the value is: " + an.value + " Parsed value: " + CurrentAnswerValue);
+				//Debug.Log("The answer submitted was correctly found amongst the answers of the xml: " + an.label + ". And the value is: " + an.value + " Parsed value: " + CurrentAnswerValue);
 			}
 		}
 		
@@ -280,7 +304,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		}
 		
 		score = CurrentQuestion.score * CurrentAnswerValue;
-		Debug.Log("score obtained: " + score + " Score for this question if answered correctly: " + CurrentQuestion.score + " Value of current answer: " + CurrentAnswerValue);
+		//Debug.Log("score obtained: " + score + " Score for this question if answered correctly: " + CurrentQuestion.score + " Value of current answer: " + CurrentAnswerValue);
 		
 		if (score < 0){						//score<0 means that the player chose the wrong answer, so we add 0 points to the player and add 5 points to the opponent.
 			score = 0;
@@ -317,7 +341,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			gameLogic.NextLevel();
 		}
 		else{									//Shows the next question
-			Debug.Log("Going for the next question, question number " + CurrentQuestionNum);
+			//Debug.Log("Going for the next question, question number " + CurrentQuestionNum);
 			ShowQuestion();
 		}
 	}
@@ -328,7 +352,30 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		Should be done calling a method of the GameLogic class
 		*/
 		
-		gameLogic.SubmitQuizResults(answers);
+		PlayerPrefs.SetInt("PlayerScore", playerScoreBoard.GetPoints());
+		PlayerPrefs.SetInt("OpponentScore", opponentScoreBoard.GetPoints());
+		
+		//gameLogic.SubmitQuizResults(answers);
+		var stringanswers : String;
+		for(var an: int in answers){
+			stringanswers = stringanswers + an.ToString() + ", ";
+		}
+		Debug.Log("The answers were: " + stringanswers);
+		
+		if (gameLogic.checkConnection()){			//If we are authenticated in the web service
+			var firstTrack: JSONObject = new JSONObject();	//Sending the track to the database..
+			firstTrack.Add("type", "logic");
+			firstTrack.Add("event", "Quiz level number " + CurrentRoundNum + " score");
+			firstTrack.Add("round", CurrentRoundNum.ToString());
+			firstTrack.Add("score", stringanswers);
+			var tracks : JSONObject[] = new JSONObject[1];
+			tracks[0] = firstTrack;
+			Debug.Log("Submitting quiz results to the database");
+			gameLogic.db.Track(tracks);
+		}
+		else{
+			Debug.LogError("Connection not established (sessionKey not found) when trying to post the first trace.");
+		}
 		
 	}
 	

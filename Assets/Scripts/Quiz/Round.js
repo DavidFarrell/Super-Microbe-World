@@ -64,6 +64,7 @@ public class Round{
 		var mypath: String = "Resources" + Path.DirectorySeparatorChar + "TextFiles" + Path.DirectorySeparatorChar + "quiz" + Path.DirectorySeparatorChar + "en_en_gameshow_round";
 		//var mypath : String = "en_en_gameshow_round";
 		if(num > 0 && num < 6){
+			Debug.Log("Loading xml: " + mypath + num.ToString() + ".xml");
 			mypath = mypath + num.ToString() + ".xml";
 		}else{
 			Debug.LogError("Wrong round requested. Requested number: " + num);
