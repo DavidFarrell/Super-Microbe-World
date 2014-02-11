@@ -7,6 +7,7 @@ public class MicrobeLucy extends WalkingMicrobe {
 	private var jumped: boolean = false;
 	private var canJump: boolean = false;
 	private var yoghurtPosition: int; 				//+1 if the yoghurt is on the right, and -1 if it is on the left. Used to decide the direction of the jump.
+	private var yoghurtGO: GameObject;				//To have a reference to the gameobject of the yoghurt
 	
 	function Awake () {
 	
@@ -27,7 +28,9 @@ public class MicrobeLucy extends WalkingMicrobe {
 				yoghurtPosition = -1; 
 			//Debug.Log("Lucy: Trigger entered. Yoghurt detected!");
 			canJump = true;
+			yoghurtGO = objectHit;
 			//if (!jumped) jumpToYoghurt();
+			
 		}
 		
 		else{
@@ -40,6 +43,7 @@ public class MicrobeLucy extends WalkingMicrobe {
 	function OnTriggerExit2D(other: Collider2D) {
 		//Debug.Log("Lucy: Trigger exited.");
 		canJump = false;
+		yoghurtGO = null;
 	}
 	
 	//If Lucy is hit while standing in the area near the yoghurt where it can jump, and the yoghurt and collision are on the right(approppriate) it jumps
@@ -50,7 +54,6 @@ public class MicrobeLucy extends WalkingMicrobe {
 				|| (objectCollided.transform.position.x < myTransform.position.x && yoghurtPosition == 1))){	//Lucy is pushed from her left side and the yoghurt is on the right
 			if (!jumped){
 				jumpToYoghurt();
-				goals.UpdateGoals(microbeName, "thrown to yoghurt");				//To inform the Goals.js script about the change
 			}
 		}
 		else
@@ -64,6 +67,10 @@ public class MicrobeLucy extends WalkingMicrobe {
 		myTransform.rigidbody2D.AddForce(jumpForce);
 		jumped = true;
 		anim.SetTrigger("dive");
+		
+		goals.UpdateGoals(microbeName, "thrown to yoghurt");				//To inform the Goals.js script about the change
+		
+		if (yoghurtGO) yoghurtGO.SendMessageUpwards("DrawYoghurt", 2);					//Tells the yoghurt's script to draw yoghurt overflowing the yoghurt can, to show that yoghurt was created. The number is the delay. 
 		
 		disableColliders();
 		

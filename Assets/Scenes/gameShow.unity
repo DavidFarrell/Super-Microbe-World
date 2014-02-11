@@ -584,6 +584,7 @@ GameObject:
   - 4: {fileID: 643582679}
   - 114: {fileID: 643582678}
   - 114: {fileID: 643582680}
+  - 114: {fileID: 643582681}
   m_Layer: 0
   m_Name: GameLogic
   m_TagString: Untagged
@@ -603,6 +604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccfb5daf995754ca78e31e2acaf426e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  db: {fileID: 0}
 --- !u!4 &643582679
 Transform:
   m_ObjectHideFlags: 0
@@ -626,6 +628,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7b4fc5c3e8b647499dd2df5ca9a2909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &643582681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 643582677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f4463bfc81c42358a578aaa9848c18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  url: http://localhost:3030
+  connected: 0
 --- !u!1 &808880445
 GameObject:
   m_ObjectHideFlags: 0
