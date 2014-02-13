@@ -14,7 +14,7 @@ The reason why this is a class and not an interface is that this way we're able 
 
 public class LevelLogic extends MonoBehaviour{
 	
-	public var amy: GameObject;
+	public var amy: GameObject;				//Drag and drop the prefabs of the players into this variables in the editor
 	public var harry: GameObject;
 
 	private var player: GameObject;

@@ -10,7 +10,7 @@ TODO Check the comments of this class
 public class GameLogic extends MonoBehaviour{
 	
 	//This enum type will contain the EXACT name of all the scenes of the game.				IMPORTANT
-	enum GameLevel {gameShow, kitchen1, gameShow_quiz1, kitchen2, gameShow_quiz2};
+	enum GameLevel {gameShow, kitchen1, skin1, skin2, kitchen2, gameShow_quiz1, body11, gameShow_quiz2};
 	
 	private var level : GameLevel;			//The current level being played
 	
@@ -78,17 +78,26 @@ public class GameLogic extends MonoBehaviour{
 					break;
 				
 				case GameLevel.kitchen1:
+					ChangeLevel(GameLevel.skin1);
+					break;
+				case GameLevel.skin1:
+					ChangeLevel(GameLevel.skin2);
+					break;
+				case GameLevel.skin2:
+					ChangeLevel(GameLevel.kitchen2);
+					break;
+				case GameLevel.kitchen2:
 					currentRoundNum = 1;
 					ChangeLevel(GameLevel.gameShow_quiz1);
 					break;
 				case GameLevel.gameShow_quiz1:
-					ChangeLevel(GameLevel.kitchen2);
-					break;
-					
-				case GameLevel.kitchen2:
 					currentRoundNum = 2;
-					ChangeLevel(GameLevel.gameShow_quiz2);
+					ChangeLevel(GameLevel.body11);
 					break;
+//				case GameLevel.gameShow_quiz2:
+//					currentRoundNum = 3;
+//					ChangeLevel(GameLevel.gameShow_quiz2);
+//					break;
 				default:
 					Debug.Log("Game finished");
 					Application.Quit();				//As this game is going to be built as a web application there is no sense on exiting the application. So We'll have to show some kind of ending screen.
