@@ -9,6 +9,8 @@ public class WalkingMicrobe extends Microbe {
 	public var timeWaiting: float = 3;			//Time in seconds that the bug will be waiting once stopped before turning around
 	public var platformCheck: GameObject;		//An empty GameObject placed in front (on the right) of the microbe under the ground. It will be used to see if there is more platform in front of it to continue walking. When there is not platform in this point, the microbe will turn.
 	public var turningOffset: float = 0.5;		//The sprites of some Microbes are not centered, so when turning, the movement doesn't look natural. It may be neccesary to move a little the sprite when turning to solve this priblem. That's what this variable is for. (Look the Flip() method to see how it's used)
+	public var DestroysOnEnemyContact: boolean = true;	//The microbe with this boolean set to true will be killed in contact with an enemy. Eg if this bug has the "enemy" tag, and bumps with a microbe with the "nonEnemy" tag, both will die. The opposite also happens.
+	
 	
 	protected var isWalking: boolean = false;
 	protected var isWaiting: boolean = false;
@@ -86,6 +88,31 @@ public class WalkingMicrobe extends Microbe {
 							|| collisionLayer == utils.layers.enemies)){		//If not waiting and the collision occurred against something in the ground (12th) or player(9th) layer or NonEnemies or Enemies layers...
 			//Debug.Log("Trigger enter. Turning around...");
 			StopThenFlip();																						//Turn around
+		}
+		
+		checkCollision(collisionInfo.gameObject);
+	}
+	
+	function OnCollisionEnter2D(collisionInfo: Collision2D){
+		super.OnCollisionEnter2D(collisionInfo);
+		
+		checkCollision(collisionInfo.gameObject);
+		
+	}
+	
+	private function checkCollision(collisionObject: GameObject){
+		
+		var collisionLayer: int = collisionObject.layer;
+		
+		if( DestroysOnEnemyContact	//If this boolean is true, and an enemie bumps with a non enemie, or the opposite...
+			&& renderer.isVisible		//if is visible on the camera...
+			&& ( ( gameObject.layer == utils.layers.enemies && collisionLayer == utils.layers.nonEnemies ) || (gameObject.layer == utils.layers.nonEnemies && collisionLayer == utils.layers.enemies) ) ){
+			
+			if(gameObject.layer == utils.layers.enemies){
+				this.beWashedAway();	//The bug will be destroyed
+			}else{
+				this.beKilled();	//The bug will be destroyed
+			}
 		}
 	}
 	

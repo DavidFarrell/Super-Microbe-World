@@ -19,6 +19,7 @@ public class LevelLogic extends MonoBehaviour{
 
 	private var player: GameObject;
 	private var playerName: String;
+	private var playerScript: playerController;
 
 	private var myCamera: Transform;
 	private var minXYTransform: Transform;
@@ -71,6 +72,8 @@ public class LevelLogic extends MonoBehaviour{
 				player = Instantiate(amy, start.transform.position,  Quaternion.identity);
 			}
 			
+			playerScript = player.GetComponent(playerController);
+			if(!playerScript) Debug.LogError("Couldn't reach the player's script");
 		}
 	}
 	
@@ -80,7 +83,7 @@ public class LevelLogic extends MonoBehaviour{
 		var maxXY: Vector2 = maxXYTransform.position;
 		myCamera.SendMessage("SetBounds", new CameraBounds(maxXY, minXY)); 	//To set the boundaries of the camera
 		
-		SendInfo();
+		SendInfo();			//Sends info to the database to notifies that this level was started
 		
 		AddLevelGoals();		//Function to add the goals of this level
 	}
@@ -104,6 +107,11 @@ public class LevelLogic extends MonoBehaviour{
 		//Function to add the goals of this level. Override this function in the scripts that inherit from this one.
 		// e.g. goals.SetGoals("lucy", "photo", 3);			//The goal will be to take pictures to 3 lucy bacteria
 
+	}
+	
+	//Modifies the number of pickups of the player
+	protected function SetPickups(soap: int, whitebc: int, antibiotics: int){
+		playerScript.SetPickups(soap, whitebc, antibiotics);
 	}
 	
 	private function SendInfo(){

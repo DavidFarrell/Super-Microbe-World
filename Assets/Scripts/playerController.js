@@ -247,6 +247,16 @@ public function AddPickups(soap: int, whitebc: int, antibiotics: int){
 	
 }
 
+//Sets the amount of pickups to the numbers passed by parameter
+public function SetPickups(soap: int, whitebc: int, antibiotics: int){
+	
+	soapDrops = soap;
+	whiteBloodCells = whitebc;
+	Antibiotics = antibiotics;
+	UpdateGUI();
+	
+}
+
 public function AddSoap(soap: int){
 	soapDrops += soap;
 	UpdateGUI();
@@ -278,6 +288,9 @@ function shootSoap() {
 		}*/
 		dropSoap.AddForce(facingDirection * throwForce);
 	}
+	else{
+		Debug.Log("Not enough soap");
+	}
 }
 
 //To shoot white blood cells
@@ -296,6 +309,9 @@ function shootWBC () {
 		}*/
 		whiteBCell.AddForce(facingDirection * throwForce);
 	}
+	else{
+		Debug.Log("Not enough white blood cells");
+	}
 }
 
 //To shoot antibiotics
@@ -307,15 +323,18 @@ function useAntibiotics () {
 		var enemiesArray: GameObject[] = GameObject.FindGameObjectsWithTag("Enemy");
 		var nonEnemiesArray: GameObject[] = GameObject.FindGameObjectsWithTag("NonEnemy");
 		//Debug.Log("useAntibiotics(): Enemies detected: " + enemiesArray.length + ". Non enemies detected: " + nonEnemiesArray.length);
+		
 		for(var enemy: GameObject in enemiesArray){
 			enemy.SendMessage("receiveAntibiotics");
 			//Debug.Log("useAntibiotics(): Message sent to: " + enemy.name);
 		}
-		
 		for(var nonEnemy: GameObject in nonEnemiesArray){
 			nonEnemy.SendMessage("receiveAntibiotics");
 			//Debug.Log("useAntibiotics(): Message sent to: " + nonEnemy.name);
 		}
+	}
+	else{
+		Debug.Log("Not enough antibiotics");
 	}
 }
 
