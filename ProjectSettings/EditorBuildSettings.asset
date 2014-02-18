@@ -18,6 +18,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/gameShow_quiz.unity
   - enabled: 1
+    path: Assets/Scenes/skin11.unity
+  - enabled: 1
+    path: Assets/Scenes/skin12.unity
+  - enabled: 1
     path: Assets/Scenes/body11.unity
   - enabled: 1
-    path: Assets/Scenes/skin11.unity
+    path: Assets/Scenes/kitchen32.unity

@@ -5,12 +5,23 @@ This MonoBehaviour will be attached to a GameObject which will be created in the
 Its function is to serve as the controller of all the game logic.
 It will be used to control the levels that are loaded, and to keep the information that must pass from level to level.
 
+***********************
+-How to add new levels?
+***********************
+	1/ Create the scene.
+		The easiest way of doing it is duplicating one existing scene (click on the scene and press CMD+D or Ctrl+c on windows) and modifying it.
+		Note that there are some changes to be done to the duplicated class, like changing the script attached to the LevelLogic object contained in the scene to a newly created script (inheriting to LevelLogic class)
+	2/Copy the exact name of the scene on the GameLevel enum variable
+		It's important that the new field added to the enum has the same name than the scene created as it'll be used to load it and if it's different, the scene won't be loaded.
+	3/Modify the NextLevel() function placed a few lines below to link from one state to the newly introduced level, and from the new level to the following.
+		
+		
 TODO Check the comments of this class
 */
 public class GameLogic extends MonoBehaviour{
 	
 	//This enum type will contain the EXACT name of all the scenes of the game.				IMPORTANT
-	enum GameLevel {gameShow, kitchen1, skin1, skin2, kitchen2, gameShow_quiz1, body11, gameShow_quiz2};
+	enum GameLevel {gameShow, kitchen1, skin1, skin2, kitchen2, gameShow_quiz1, skin11, skin12, body11, gameShow_quiz2, kitchen31, kitchen32, gameShow_quiz3};
 	
 	private var level : GameLevel;			//The current level being played
 	
@@ -74,9 +85,9 @@ public class GameLogic extends MonoBehaviour{
 			switch (level){
 				
 				case GameLevel.gameShow:
+					currentRoundNum = 1;
 				 	ChangeLevel(GameLevel.kitchen1);
 					break;
-				
 				case GameLevel.kitchen1:
 					ChangeLevel(GameLevel.skin1);
 					break;
@@ -87,12 +98,30 @@ public class GameLogic extends MonoBehaviour{
 					ChangeLevel(GameLevel.kitchen2);
 					break;
 				case GameLevel.kitchen2:
-					currentRoundNum = 1;
 					ChangeLevel(GameLevel.gameShow_quiz1);
 					break;
 				case GameLevel.gameShow_quiz1:
 					currentRoundNum = 2;
+					ChangeLevel(GameLevel.skin11);
+					break;
+				case GameLevel.skin11:
+					ChangeLevel(GameLevel.skin12);
+					break;
+				case GameLevel.skin12:
 					ChangeLevel(GameLevel.body11);
+					break;
+				case GameLevel.body11:
+					ChangeLevel(GameLevel.gameShow_quiz2);
+					break;
+				case GameLevel.gameShow_quiz2:
+					currentRoundNum = 3;
+					ChangeLevel(GameLevel.kitchen31);
+					break;
+				case GameLevel.kitchen31:
+					ChangeLevel(GameLevel.kitchen32);
+					break;
+				case GameLevel.kitchen32:
+					ChangeLevel(GameLevel.gameShow_quiz3);
 					break;
 //				case GameLevel.gameShow_quiz2:
 //					currentRoundNum = 3;

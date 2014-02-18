@@ -3,6 +3,9 @@
 public var isSoap: boolean = false;
 public var isWhiteBloodCell: boolean = false;
 public var isAntibiotic: boolean = false;
+public var AutoRespawn: boolean = true;
+public var TimeToRespawn: int = 5;
+public var UnitsAdded: int = 3;
 
 private var hasCollidedAlready: boolean = false;
 private var anim: Animator;
@@ -29,29 +32,41 @@ function Update () {
 	
 }
 
+function RespawnPickup(){
+	yield new WaitForSeconds(TimeToRespawn);
+	hasCollidedAlready = false;
+	transform.collider2D.enabled= true;
+	transform.renderer.enabled = true;
+}
+
+function makeInvisible(){
+	//transform.renderer.active = false;
+}
+
 function OnTriggerEnter2D (coll: Collider2D) {
 	var objectCollided: GameObject = coll.gameObject;
 	if(!hasCollidedAlready && objectCollided.layer == utils.layers.player){
-		Destroy(gameObject, 0.2);								//Destroys the drop 0.1 seconds after playing the "collision" animation
-		hasCollidedAlready = true;
+		if(AutoRespawn) RespawnPickup();		//To create again the pickup
 		
+		makeInvisible();		//The drop won't be seen for a while, until is enabled again
 		
 //		Debug.Log("Collision with: " + objectCollided.name);
 		
 		if(objectCollided.layer == utils.layers.player){
 			hasCollidedAlready = true;
 			anim.SetTrigger("collide");			//Plays the collision animation
+			Debug.Log("Trying to make the drop play the collide animation...");
 			if(isSoap){
 //				Debug.Log("soap");
-				objectCollided.SendMessage("AddSoap", 1, SendMessageOptions.RequireReceiver);
+				objectCollided.SendMessage("AddSoap", UnitsAdded, SendMessageOptions.RequireReceiver);
 			}
 			if(isWhiteBloodCell){
 //				Debug.Log("wbc");
-				objectCollided.SendMessage("AddWhiteBloodCells", 1, SendMessageOptions.RequireReceiver);
+				objectCollided.SendMessage("AddWhiteBloodCells", UnitsAdded, SendMessageOptions.RequireReceiver);
 			}
 			if(isAntibiotic){
 //				Debug.Log("antibiotics");
-				objectCollided.SendMessage("AddAntibiotics", 1, SendMessageOptions.RequireReceiver);
+				objectCollided.SendMessage("AddAntibiotics", UnitsAdded, SendMessageOptions.RequireReceiver);
 			}
 		}
 	}

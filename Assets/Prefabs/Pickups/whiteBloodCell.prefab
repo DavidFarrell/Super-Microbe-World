@@ -51,7 +51,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: d6fa9de76459842119dc07ff9cb7ddc0, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
@@ -69,6 +69,9 @@ MonoBehaviour:
   isSoap: 0
   isWhiteBloodCell: 1
   isAntibiotic: 0
+  AutoRespawn: 1
+  TimeToRespawn: 5
+  UnitsAdded: 3
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
