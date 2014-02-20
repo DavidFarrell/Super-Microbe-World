@@ -352,8 +352,11 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		Should be done calling a method of the GameLogic class
 		*/
 		
-		PlayerPrefs.SetInt("PlayerScore", playerScoreBoard.GetPoints());
-		PlayerPrefs.SetInt("OpponentScore", opponentScoreBoard.GetPoints());
+		var newplayerscore: int = PlayerPrefs.GetInt("PlayerScore") + playerScoreBoard.GetPoints();
+		var newopponentscore: int = PlayerPrefs.GetInt("OpponentScore") + opponentScoreBoard.GetPoints();
+		
+		PlayerPrefs.SetInt("PlayerScore", newplayerscore);
+		PlayerPrefs.SetInt("OpponentScore", newopponentscore);
 		
 		//gameLogic.SubmitQuizResults(answers);
 		var stringanswers : String;

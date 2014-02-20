@@ -281,11 +281,11 @@ function shootSoap() {
 		up_anim.SetTrigger("shoot_soap");
 		yield new WaitForSeconds(0.2);
 		var dropSoap: Rigidbody2D = Instantiate(dropSoapPrefab, shootPoint.position, myTransform.rotation);
-		/*if(!facingRight){
-			var dropScale: Vector3 = dropSoap.localScale;				//Multiply the player's x local scale by -1.
+		if(!facingRight){
+			var dropScale: Vector3 = dropSoap.transform.localScale;				//Multiply the player's x local scale by -1.
 			dropScale.x *= -1;
-			dropSoap.localScale = dropScale;
-		}*/
+			dropSoap.transform.localScale = dropScale;
+		}
 		dropSoap.AddForce(facingDirection * throwForce);
 	}
 	else{

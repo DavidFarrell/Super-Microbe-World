@@ -55,7 +55,7 @@ function OnTriggerEnter2D (coll: Collider2D) {
 		if(objectCollided.layer == utils.layers.player){
 			hasCollidedAlready = true;
 			anim.SetTrigger("collide");			//Plays the collision animation
-			Debug.Log("Trying to make the drop play the collide animation...");
+			//Debug.Log("Trying to make the drop play the collide animation...");
 			if(isSoap){
 //				Debug.Log("soap");
 				objectCollided.SendMessage("AddSoap", UnitsAdded, SendMessageOptions.RequireReceiver);

@@ -19,7 +19,7 @@ public class Goals extends MonoBehaviour{
 	private var counterChanged : boolean;	//This boolean will be used to know when we have or when we have not to check the counter array to look if it has zero on all its positions. Will 
 											//have true value if there are changes in the counter matrix or false if there isn't any change since last time it was checked with the GoalsAchieved() function.
 	private var goalsRemaining: boolean = false;	//When there's at least one goal to be completed this will be true. False in other case.
-	public var counter : int[,]= new int [11, 5];	
+	public var counter : int[,]= new int [12, 5];	
 	/*This matrix will contain one row per microbe. Each row refers to the information of a microbe. 
 	In each row, the position 0 is for the number of photographs of this microbe needed, the position 1 for the number of deaths caused by being washed away, 
 	the position 2 for the deaths by white blood cells, the position 3 for the number of deaths caused by antibiotics, and the last one, the 4th position, the number of lucy bacteria that need to be 
@@ -36,13 +36,14 @@ public class Goals extends MonoBehaviour{
 		08 steve
 		09 iggy
 		10 super_slurm
+		11 superinfection
 	For example, if the 5th row is [0, 3, 0, 0, 0] that means that to complete this level, we need to wash away 3 colin microbes.
 	*/
 	
 	function Awake () {		//Initialize the matrix to zero
 		counterChanged = true;
 		goalsRemaining = false;
-		for (var i : int = 0; i < 11; i++){		//To iterate over the microbes
+		for (var i : int = 0; i < 12; i++){		//To iterate over the microbes
 			for (var j : int = 0; i < 5; i++){	//To iterate over the actions
 				counter[i,j] = 0;
 			}
@@ -172,6 +173,9 @@ public class Goals extends MonoBehaviour{
 				break;
 			case "super_slurm": 
 				result.micNumber = 10;
+				break;
+			case 'superinfection':
+				result.micNumber = 11;
 				break;
 			default: result.micNumber = -1;
 		}

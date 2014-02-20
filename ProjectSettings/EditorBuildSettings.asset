@@ -24,4 +24,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/body11.unity
   - enabled: 1
+    path: Assets/Scenes/kitchen31.unity
+  - enabled: 1
     path: Assets/Scenes/kitchen32.unity
+  - enabled: 1
+    path: Assets/Scenes/superinfection.unity

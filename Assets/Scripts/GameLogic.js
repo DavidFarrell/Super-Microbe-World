@@ -21,7 +21,7 @@ TODO Check the comments of this class
 public class GameLogic extends MonoBehaviour{
 	
 	//This enum type will contain the EXACT name of all the scenes of the game.				IMPORTANT
-	enum GameLevel {gameShow, kitchen1, skin1, skin2, kitchen2, gameShow_quiz1, skin11, skin12, body11, gameShow_quiz2, kitchen31, kitchen32, gameShow_quiz3};
+	enum GameLevel {gameShow, kitchen1, skin1, skin2, kitchen2, gameShow_quiz1, skin11, skin12, body11, gameShow_quiz2, kitchen31, kitchen32, gameShow_quiz3, gameShow_quiz4, superinfection, gameShow_quiz5};
 	
 	private var level : GameLevel;			//The current level being played
 	
@@ -114,14 +114,20 @@ public class GameLogic extends MonoBehaviour{
 					ChangeLevel(GameLevel.gameShow_quiz2);
 					break;
 				case GameLevel.gameShow_quiz2:
-					currentRoundNum = 3;
+					currentRoundNum = 4;						//Quiz level 3 will be skipped as the questions are about the kitchen level - this in which the player has to place the food correctly into the fridge
 					ChangeLevel(GameLevel.kitchen31);
 					break;
 				case GameLevel.kitchen31:
 					ChangeLevel(GameLevel.kitchen32);
 					break;
 				case GameLevel.kitchen32:
-					ChangeLevel(GameLevel.gameShow_quiz3);
+					ChangeLevel(GameLevel.gameShow_quiz4);
+					break;
+				case GameLevel.gameShow_quiz4:
+					ChangeLevel(GameLevel.superinfection);
+					break;
+				case GameLevel.superinfection:
+					ChangeLevel(GameLevel.gameShow_quiz5);
 					break;
 //				case GameLevel.gameShow_quiz2:
 //					currentRoundNum = 3;
