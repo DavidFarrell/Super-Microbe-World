@@ -43,7 +43,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.9896679, y: -2.90958643, z: 0}
+  m_LocalPosition: {x: 22.9366283, y: -4.88274145, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -130,14 +130,15 @@ MonoBehaviour:
   whiteBCDamage: 0
   affectedBySoap: 1
   soapDamage: 5
-  affectedByAntibiotics: 0
-  antibioticsDamage: 0
+  affectedByAntibiotics: 1
+  antibioticsDamage: 5
   Speed: 1
   facingRight: 1
   moveDistance: 50
   timeWaiting: 3
   platformCheck: {fileID: 100002}
   turningOffset: .300000012
+  DestroysOnEnemyContact: 1
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

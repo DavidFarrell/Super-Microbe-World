@@ -78,7 +78,7 @@ public class Goals extends MonoBehaviour{
 	public function GoalsAchieved() : boolean {
 //		Debug.Log("goalsRemaining: " + goalsRemaining + "counterChanged" + counterChanged);
 		if(goalsRemaining && counterChanged){							//If there is no changes on the matrix is useless to check if there is all the goals have been achieved
-			for (var i : int = 0; i < 10; i++){
+			for (var i : int = 0; i < 12; i++){
 				for (var j : int = 0; j < 5; j++){
 					//Debug.Log("Checking position "+ i +", " + j);
 					//if(i == 0 && j == 4) Debug.Log("*****Number of yoghurts lucy: " + counter[i, j]);
@@ -117,6 +117,17 @@ public class Goals extends MonoBehaviour{
 			counter[numbers.micNumber, numbers.actNumber]--;	//One goal achieved, one goal less to accomplish.
 			GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI.
 			counterChanged = true;	//The next time that we call GoalsAchieved function, the matrix will be checked
+		}
+	}
+	
+	//Just for testing purposes. To skip some level without completing the goals.
+	public function CompleteAllGoals(){
+		counterChanged = true;
+		goalsRemaining = false;
+		for (var i : int = 0; i < 12; i++){		//To iterate over the microbes
+			for (var j : int = 0; i < 5; i++){	//To iterate over the actions
+				counter[i,j] = 0;
+			}
 		}
 	}
 	

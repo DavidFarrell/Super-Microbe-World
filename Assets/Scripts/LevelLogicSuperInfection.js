@@ -16,9 +16,9 @@ public class LevelLogicSuperInfection extends LevelLogic{
 		
 	}
 
-	function Update () {
-
-	}
+//	function Update () {
+//		super.Update();
+//	}
 
 	protected function AddLevelGoals () {
 		//Function to add the goals of this level

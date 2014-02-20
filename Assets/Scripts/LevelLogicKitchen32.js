@@ -14,9 +14,9 @@ public class LevelLogicKitchen32 extends LevelLogic{
 		
 	}
 
-	function Update () {
-
-	}
+//	function Update () {
+//
+//	}
 
 	protected function AddLevelGoals () {
 		//Function to add the goals of this level

@@ -54,6 +54,7 @@ public class GameLogic extends MonoBehaviour{
 		
 		currentRoundNum = 1;
 		
+		Debug.Log("GameLogic.Awake: Setting the stored scores of the players to 0");
 		PlayerPrefs.SetInt("PlayerScore", 0);
 		PlayerPrefs.SetInt("OpponentScore", 0);
 		
@@ -124,6 +125,7 @@ public class GameLogic extends MonoBehaviour{
 					ChangeLevel(GameLevel.gameShow_quiz4);
 					break;
 				case GameLevel.gameShow_quiz4:
+					currentRoundNum = 5;
 					ChangeLevel(GameLevel.superinfection);
 					break;
 				case GameLevel.superinfection:
@@ -158,6 +160,11 @@ public class GameLogic extends MonoBehaviour{
 			Application.LoadLevel(level.ToString());
 		}
 				
+	}
+	
+	//will be called if the player dies
+	public function RestartLevel(){
+		ChangeLevel(level);
 	}
 	
 	public function PlayerChosen(playerName : String){

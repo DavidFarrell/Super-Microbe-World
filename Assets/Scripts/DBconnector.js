@@ -15,7 +15,7 @@ public class DBconnector extends MonoBehaviour{
 	@HideInInspector
 	var connected: boolean = false;			//This variable should be checked after connecting with 
 	
-	private var debugMode = true;			//if true, a lot of information will be displayed in the console about the progress of the instructions
+	private var debugMode = false;			//if true, a lot of information will be displayed in the console about the progress of the instructions
 	
 	public function Start(){
 		
@@ -154,7 +154,7 @@ public class Connection{
 	private var myTracks: JSONObject[];
 	
 	public function Connection(url: String, myTracks: JSONObject[]){	//The track function is used because we can not yield inside a constructor
-		Debug.Log("Connection.Connection() --> Connection object created");
+		if(debugMode) Debug.Log("Connection.Connection() --> Connection object created");
 		this.url = url;
 		this.myTracks = myTracks;
 			
@@ -192,7 +192,7 @@ public class Connection{
 			
 			//Debug.Log('DBConnector.Track() -> this is the header: ' + headers.ToString());
 			
-			if(debugMode) Debug.Log('Connection.Connection() --> This is the string to send: ' + stringToSend);
+			Debug.Log('Connection.Connection() --> This is the string to send: ' + stringToSend);
 			
 		/*   Sending the http post   */
 			var www = new WWW(url + "/track", dataToSend, headers);

@@ -61,6 +61,7 @@ private var myRigidbody2D: Rigidbody2D;
 private var low_anim: Animator;
 private var up_anim: Animator;
 private var canBeHit: boolean = true;
+private var gameLogic: GameLogic;
 
 
 /*--v--v--v--v--v--v--*--v--v--v--v--v--v--Functions--v--v--v--v--v--v--*--v--v--v--v--v--v--*/
@@ -83,6 +84,16 @@ function Awake () {
 	photoReceivers = new RaycastHit2D[3];
 	flashRenderer = myTransform.Find("flash").GetComponent(SpriteRenderer);
 	flashRenderer.enabled = false;
+	
+	var gameLogicGO : GameObject;
+	gameLogicGO = GameObject.Find("GameLogic");
+	if (gameLogicGO){
+		gameLogic = gameLogicGO.GetComponent("GameLogic");					//BE CAREFUL!! GameLogic is a GameObject that is created in the first scene and is never destroyed when changing between scenes!
+																			//That means that if this scene is played directly there will be here a null reference!!!!!!!
+	}																				
+	else{
+		Debug.LogError("GameLogic Object not found. This will be because GameLogic is created in the first level of the game, the GameShow level, and is intended to pass (be kept alive) throughout all the scenes in the game. So, if the Kitchen level is played, this object won't exist, and there must be many Null reference errors. But none of this errors will avoid playing the game. ");
+	}
 	
 	shootPoint = myTransform.Find("shoot_point").transform;
 	
@@ -231,6 +242,21 @@ private function beHit(){
 	if (life <= 0){
 		/*Do something when dead!!*/
 		Debug.Log("Player has dead!!");
+		
+		if (gameLogic.checkConnection()){			//If we are authenticated in the web service
+			var firstTrack: JSONObject = new JSONObject();	//Sending the track to the database..
+			firstTrack.Add("type", "logic");
+			firstTrack.Add("event", "Player has died");
+			firstTrack.Add("level", gameLogic.GetLevelName());
+			var tracks : JSONObject[] = new JSONObject[1];
+			tracks[0] = firstTrack;
+			gameLogic.db.Track(tracks);
+		}
+		else{
+			Debug.Log("Connection not established (sessionKey not found) when trying to post the first trace.");
+		}
+		
+		gameLogic.RestartLevel();
 	}
 	
 	yield new WaitForSeconds(2);				

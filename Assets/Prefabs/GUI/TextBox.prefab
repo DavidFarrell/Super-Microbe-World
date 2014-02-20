@@ -39,9 +39,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb571212461f649fd8dad5dd58bca0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upperLeftCornerSpeaker: {x: 25, y: 300}
+  upperLeftCornerSpeaker: {x: 35.2000008, y: 418.299988}
   textSizeSpeaker: {x: 100, y: 25}
-  upperLeftCorner: {x: 25, y: 325}
+  upperLeftCorner: {x: 39, y: 467.5}
   textSize: {x: 100, y: 25}
   style:
     m_Name: 
@@ -102,7 +102,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
-  bufferSize: 0
+  bufferSize: 50
   lettersPerSecond: 20
 --- !u!212 &21200000
 SpriteRenderer:
@@ -110,7 +110,7 @@ SpriteRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_LightmapIndex: 255

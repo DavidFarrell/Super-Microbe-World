@@ -5979,6 +5979,9 @@ MonoBehaviour:
   isSoap: 0
   isWhiteBloodCell: 0
   isAntibiotic: 1
+  AutoRespawn: 1
+  TimeToRespawn: 5
+  UnitsAdded: 1
 --- !u!212 &463070511
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10706,6 +10709,9 @@ MonoBehaviour:
   isSoap: 0
   isWhiteBloodCell: 1
   isAntibiotic: 0
+  AutoRespawn: 1
+  TimeToRespawn: 5
+  UnitsAdded: 3
 --- !u!1 &772027031
 GameObject:
   m_ObjectHideFlags: 0
@@ -11448,6 +11454,7 @@ MonoBehaviour:
   timeWaiting: 3
   platformCheck: {fileID: 2130806140}
   turningOffset: .5
+  DestroysOnEnemyContact: 1
   jumpForce: {x: 3600, y: 27000}
 --- !u!61 &813136692
 BoxCollider2D:
@@ -14305,7 +14312,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 17bab7d8f26d4479fa4019a6935ac68d, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 17bab7d8f26d4479fa4019a6935ac68d, type: 2}
@@ -15517,6 +15524,9 @@ MonoBehaviour:
   isSoap: 1
   isWhiteBloodCell: 0
   isAntibiotic: 0
+  AutoRespawn: 1
+  TimeToRespawn: 5
+  UnitsAdded: 3
 --- !u!95 &1098519744
 Animator:
   serializedVersion: 2
@@ -17764,6 +17774,7 @@ MonoBehaviour:
   timeWaiting: 3
   platformCheck: {fileID: 1030868505}
   turningOffset: .5
+  DestroysOnEnemyContact: 1
   jumpForce: {x: 3600, y: 27000}
 --- !u!61 &1236327565
 BoxCollider2D:
@@ -18614,6 +18625,9 @@ MonoBehaviour:
   isSoap: 0
   isWhiteBloodCell: 1
   isAntibiotic: 0
+  AutoRespawn: 1
+  TimeToRespawn: 5
+  UnitsAdded: 3
 --- !u!58 &1290659412
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -23259,6 +23273,9 @@ MonoBehaviour:
   isSoap: 0
   isWhiteBloodCell: 0
   isAntibiotic: 1
+  AutoRespawn: 1
+  TimeToRespawn: 5
+  UnitsAdded: 1
 --- !u!212 &1556126642
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -23887,7 +23904,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1615054779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26355,6 +26372,9 @@ MonoBehaviour:
   isSoap: 1
   isWhiteBloodCell: 0
   isAntibiotic: 0
+  AutoRespawn: 1
+  TimeToRespawn: 5
+  UnitsAdded: 3
 --- !u!1 &1756208520
 GameObject:
   m_ObjectHideFlags: 0
@@ -27078,6 +27098,7 @@ MonoBehaviour:
   timeWaiting: 3
   platformCheck: {fileID: 1071248931}
   turningOffset: .5
+  DestroysOnEnemyContact: 1
   jumpForce: {x: 3600, y: 27000}
 --- !u!61 &1777723414
 BoxCollider2D:

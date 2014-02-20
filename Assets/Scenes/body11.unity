@@ -12398,7 +12398,7 @@ Transform:
   m_PrefabInternal: {fileID: 1933336506}
   m_GameObject: {fileID: 194396252}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .238566086, y: -1.06372094, z: 0}
+  m_LocalPosition: {x: .238566086, y: -1.11167228, z: 0}
   m_LocalScale: {x: .666666687, y: .666666687, z: 1}
   m_Children: []
   m_Father: {fileID: 449187612}
@@ -13114,14 +13114,14 @@ MonoBehaviour:
   whiteBCDamage: 5
   affectedBySoap: 0
   soapDamage: 0
-  affectedByAntibiotics: 1
+  affectedByAntibiotics: 0
   antibioticsDamage: 5
   Speed: 1
   facingRight: 1
   moveDistance: 50
   timeWaiting: 3
   platformCheck: {fileID: 2086137666}
-  turningOffset: 0
+  turningOffset: .100000001
   DestroysOnEnemyContact: 1
 --- !u!61 &202257762
 BoxCollider2D:
@@ -22750,9 +22750,9 @@ GameObject:
   - 4: {fileID: 348394780}
   - 212: {fileID: 348394782}
   - 61: {fileID: 348394781}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: cell_side
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29187,14 +29187,14 @@ MonoBehaviour:
   whiteBCDamage: 5
   affectedBySoap: 0
   soapDamage: 0
-  affectedByAntibiotics: 1
+  affectedByAntibiotics: 0
   antibioticsDamage: 5
   Speed: 1
   facingRight: 1
   moveDistance: 50
   timeWaiting: 3
   platformCheck: {fileID: 194396252}
-  turningOffset: 0
+  turningOffset: .100000001
   DestroysOnEnemyContact: 1
 --- !u!61 &449187615
 BoxCollider2D:
@@ -44331,9 +44331,9 @@ GameObject:
   - 4: {fileID: 687882830}
   - 212: {fileID: 687882832}
   - 61: {fileID: 687882831}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: cell_side
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47251,9 +47251,9 @@ GameObject:
   - 4: {fileID: 737653747}
   - 212: {fileID: 737653749}
   - 61: {fileID: 737653748}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: cell_side
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56742,14 +56742,14 @@ MonoBehaviour:
   whiteBCDamage: 5
   affectedBySoap: 0
   soapDamage: 0
-  affectedByAntibiotics: 1
+  affectedByAntibiotics: 0
   antibioticsDamage: 5
   Speed: 1
   facingRight: 1
   moveDistance: 50
   timeWaiting: 3
   platformCheck: {fileID: 1331756559}
-  turningOffset: 0
+  turningOffset: .100000001
   DestroysOnEnemyContact: 1
 --- !u!61 &891490343
 BoxCollider2D:
@@ -61472,9 +61472,9 @@ GameObject:
   - 4: {fileID: 966947792}
   - 212: {fileID: 966947794}
   - 61: {fileID: 966947793}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: cell_side
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -64589,7 +64589,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 17bab7d8f26d4479fa4019a6935ac68d, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 17bab7d8f26d4479fa4019a6935ac68d, type: 2}
@@ -84680,7 +84680,7 @@ Transform:
   m_PrefabInternal: {fileID: 2132093411}
   m_GameObject: {fileID: 1331756559}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .238566086, y: -1.06372094, z: 0}
+  m_LocalPosition: {x: .238566086, y: -1.11167228, z: 0}
   m_LocalScale: {x: .666666687, y: .666666687, z: 1}
   m_Children: []
   m_Father: {fileID: 891490340}
@@ -88705,9 +88705,9 @@ GameObject:
   - 4: {fileID: 1398010162}
   - 212: {fileID: 1398010164}
   - 61: {fileID: 1398010163}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: cell_side
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98883,9 +98883,9 @@ GameObject:
   - 4: {fileID: 1536695611}
   - 212: {fileID: 1536695613}
   - 61: {fileID: 1536695612}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: cell_side
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100251,9 +100251,9 @@ GameObject:
   - 4: {fileID: 1551153231}
   - 212: {fileID: 1551153230}
   - 61: {fileID: 1551153229}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: cell_side
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100700,7 +100700,7 @@ MonoBehaviour:
   isAntibiotic: 1
   AutoRespawn: 1
   TimeToRespawn: 5
-  UnitsAdded: 3
+  UnitsAdded: 1
 --- !u!212 &1556126642
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -103950,7 +103950,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1615054779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124510,9 +124510,9 @@ GameObject:
   - 4: {fileID: 1931208698}
   - 212: {fileID: 1931208700}
   - 61: {fileID: 1931208699}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: cell_side
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124919,9 +124919,9 @@ GameObject:
   - 4: {fileID: 1942005180}
   - 212: {fileID: 1942005182}
   - 61: {fileID: 1942005181}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: cell_side
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -133005,7 +133005,7 @@ Transform:
   m_PrefabInternal: {fileID: 1199969810}
   m_GameObject: {fileID: 2086137666}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .238566086, y: -1.06372094, z: 0}
+  m_LocalPosition: {x: .238566086, y: -1.11167228, z: 0}
   m_LocalScale: {x: .666666687, y: .666666687, z: 1}
   m_Children: []
   m_Father: {fileID: 202257759}

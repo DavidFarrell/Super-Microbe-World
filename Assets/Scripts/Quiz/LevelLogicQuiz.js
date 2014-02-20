@@ -122,7 +122,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			
 			playerScoreBoard.SetPoints(PlayerPrefs.GetInt("PlayerScore"));
 			opponentScoreBoard.SetPoints(PlayerPrefs.GetInt("OpponentScore"));
-			Debug.Log("Player and opponent scores were: " + PlayerPrefs.GetInt("PlayerScore") + " and " + PlayerPrefs.GetInt("OpponentScore") + " respectively in the last quiz level.");
+			Debug.Log("Starting quiz. Player and opponent scores were: " + PlayerPrefs.GetInt("PlayerScore") + " and " + PlayerPrefs.GetInt("OpponentScore") + " respectively in the last quiz level.");
 			
 			StartLevel();
 		}
@@ -352,8 +352,12 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		Should be done calling a method of the GameLogic class
 		*/
 		
-		var newplayerscore: int = PlayerPrefs.GetInt("PlayerScore") + playerScoreBoard.GetPoints();
-		var newopponentscore: int = PlayerPrefs.GetInt("OpponentScore") + opponentScoreBoard.GetPoints();
+		Debug.Log("Exiting quiz. The former scores were " + PlayerPrefs.GetInt("PlayerScore") + " for the selected player and " +PlayerPrefs.GetInt("OpponentScore")+ " for the opponent.");
+		
+		var newplayerscore: int = playerScoreBoard.GetPoints();
+		var newopponentscore: int = opponentScoreBoard.GetPoints();
+		
+		Debug.Log("Exiting quiz. The current scores are " + newplayerscore + " for the selected player and " + newopponentscore + " for the opponent.");
 		
 		PlayerPrefs.SetInt("PlayerScore", newplayerscore);
 		PlayerPrefs.SetInt("OpponentScore", newopponentscore);

@@ -101,6 +101,12 @@ public class LevelLogic extends MonoBehaviour{
 
 	function Update () {
 		
+		if (Input.GetKeyDown(KeyCode.Q)){	//This is a shortcut to skip a level by pressing the letter "q"
+			Debug.Log("Letter 'q' pressed. Going to next level...");
+			goals.CompleteAllGoals();
+			gameLogic.NextLevel();
+		}
+		
 	}
 	
 	protected function AddLevelGoals () {

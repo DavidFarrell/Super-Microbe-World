@@ -20,10 +20,10 @@ TODO There is a failure. The sentences to write are broken in lines each "maxLet
 public class TextBox extends MonoBehaviour{
 	
 	
-	var upperLeftCornerSpeaker : Vector2;		//Position of the upper left corner of the text to say who is talking
+	var upperLeftCornerSpeaker : Vector2;		//Position (in percentage, from 0 to 100) of the upper left corner of the text to say who is talking
 	var textSizeSpeaker : Vector2;				//Size
 	
-	var upperLeftCorner : Vector2;				//Position of the upper left corner of the text label to write the dialogs
+	var upperLeftCorner : Vector2;				//Position (in percentage, from 0 to 100) of the upper left corner of the text label to write the dialogs
 	var textSize : Vector2;						//Size of this label
 	
 	var style : GUIStyle;						//The style of the text. Can be set up in the inspector in unity.
@@ -64,6 +64,19 @@ public class TextBox extends MonoBehaviour{
 	
 	function Start () {
 		
+		/*if (upperLeftCornerSpeaker.x < 0 ) upperLeftCornerSpeaker.x = 0;
+		if (upperLeftCornerSpeaker.y < 0 ) upperLeftCornerSpeaker.y = 0;
+		if (upperLeftCornerSpeaker.x > 100 ) upperLeftCornerSpeaker.x = 100;
+		if (upperLeftCornerSpeaker.y > 100 ) upperLeftCornerSpeaker.y = 100;
+		if (upperLeftCorner.x < 0 ) upperLeftCorner.x = 0;
+		if (upperLeftCorner.y < 0 ) upperLeftCorner.y = 0;
+		if (upperLeftCorner.x > 100 ) upperLeftCorner.x = 100;
+		if (upperLeftCorner.y > 100 ) upperLeftCorner.y = 100;
+		
+		upperLeftCornerSpeaker.y = (upperLeftCornerSpeaker.y * 0.01) * Screen.height;	// multiplied by 0.01 to have a number between 0 and 1
+		upperLeftCornerSpeaker.x = (upperLeftCornerSpeaker.x * 0.01) * Screen.width;
+		upperLeftCorner.y = (upperLeftCorner.y * 0.01) * Screen.height;
+		upperLeftCorner.x = (upperLeftCorner.x * 0.01) * Screen.width;*/
 		
 	}
 

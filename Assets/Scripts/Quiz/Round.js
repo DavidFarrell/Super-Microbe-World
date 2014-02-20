@@ -67,7 +67,8 @@ public class Round{
 			Debug.Log("Loading xml: " + mypath + num.ToString() + ".xml");
 			mypath = mypath + num.ToString() + ".xml";
 		}else{
-			Debug.LogError("Wrong round requested. Requested number: " + num);
+			Debug.LogError("Wrong round requested. Requested number: " + num + ". Loading first round by defaults");
+			mypath = mypath + "1" + ".xml";
 		}
 		return Load(Path.Combine(Application.dataPath, mypath));
 	}
