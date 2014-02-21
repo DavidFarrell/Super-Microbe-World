@@ -122,13 +122,13 @@ public class Goals extends MonoBehaviour{
 	
 	//Just for testing purposes. To skip some level without completing the goals.
 	public function CompleteAllGoals(){
-		counterChanged = true;
-		goalsRemaining = false;
 		for (var i : int = 0; i < 12; i++){		//To iterate over the microbes
 			for (var j : int = 0; i < 5; i++){	//To iterate over the actions
 				counter[i,j] = 0;
 			}
 		}
+		counterChanged = true;
+		goalsRemaining = false;
 	}
 	
 	private class Pair{

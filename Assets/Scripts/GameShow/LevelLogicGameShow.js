@@ -16,11 +16,11 @@ public class LevelLogicGameShow extends MonoBehaviour{
 	private var amyScoreBoard : ScoreBoard;
 	private var harryScoreBoard : ScoreBoard;
 	
-	private var formBackground : GameObject;
+	public var formBackground : GameObject;
 	
-	private var amyShrinkGO : GameObject;
-	private var harryShrinkGO : GameObject;
-	private var shrinkingZone : GameObject;
+	public var amyShrinkGO : GameObject;
+	public var harryShrinkGO : GameObject;
+	public var shrinkingZone : GameObject;
 	
 	private var textBoxGO : GameObject;
 	private var textBox : TextBox;			//To have a reference to the TextBox class in order to use its functions
@@ -63,11 +63,18 @@ public class LevelLogicGameShow extends MonoBehaviour{
 		playerHarry = GameObject.Find("harry");
 		gameHost = GameObject.Find("gamehost");
 		
-		amyShrinkGO = GameObject.Find("amy_shrink");				//Finds the GameObject "amy_shrink"
-		harryShrinkGO = GameObject.Find("harry_shrink");				//Finds the GameObject "harry_shrink"
-		shrinkingZone = GameObject.Find("shrinking_zone");
+//		amyShrinkGO = GameObject.Find("amy_shrink");				//Finds the GameObject "amy_shrink"
+//		harryShrinkGO = GameObject.Find("harry_shrink");				//Finds the GameObject "harry_shrink"
+//		shrinkingZone = GameObject.Find("shrinking_zone");
+//		
+//		formBackground = GameObject.Find("FormBackground");
 		
-		formBackground = GameObject.Find("FormBackground");
+		amyShrinkGO = Instantiate(amyShrinkGO);
+		harryShrinkGO = Instantiate(harryShrinkGO);
+		shrinkingZone = Instantiate(shrinkingZone);
+		
+		formBackground = Instantiate(formBackground);
+		
 		
 		textBoxGO = GameObject.Find("TextBox");						//Keep a reference to the GameObject Text Box
 	
@@ -92,6 +99,8 @@ public class LevelLogicGameShow extends MonoBehaviour{
 		harryShrinkGO.SetActive(false);
 		
 		shrinkingZone.SetActive(false);								//Disable the background of the shrinking zone, which will be enabled when needed
+		
+		
 		
 		textBox = textBoxGO.GetComponent(TextBox);			//To have a reference to the TextBox class in order to use it
 		

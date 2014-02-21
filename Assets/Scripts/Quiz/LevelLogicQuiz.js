@@ -10,6 +10,8 @@ public class LevelLogicQuiz extends MonoBehaviour{
 	
 	//private var TextFromXML: String = '<?xml version="1.0" encoding="utf-8" ?><round id="0">	<name>All About Microbes</name>	<round_id>0</round_id>	<next_round>alpha_gameshow_round2.xml</next_round>	<intro_text>		<blind>			<statement>Welcome to the first BLIND QUESTION ROUND!</statement>			<statement>I"m going to ask you some questions but I"m NOT going to tell you if you got them right!</statement>			<statement>If you got them right, you"ll get a great bonus later though so try your best.</statement>			<statment>Lets go!</statment>		</blind>		<normal>			<statement>Well done, you"re a hoverboard natural!</statement>			<statement>Now it"s time to ask you those questions again</statement>			<statement>This time, you get 10 points for a correct answer, but if you get it wrong, the other player gets points.</statement>			<statement>so if you DON"T KNOW the answer, it"s best to play it safe and say so!</statement>			<statement>Ready?</statement>			<statement>Let"s go!</statement>		</normal>	</intro_text>	<questions>		<question id="0">			<type>0</type>			<score>10</score>			<value>1</value>			<text>If you cannot see a microbe it is not there</text>			<answers>				<answer>					<label>Agree</label>					<value>-1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>1</value>				</answer>			</answers>		</question>		<question id="1">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Bacteria and Viruses are the same</text>			<answers>				<answer>					<label>Agree</label>					<value>-1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>1</value>				</answer>			</answers>		</question>		<question id="2">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Fungi are microbes</text>			<answers>				<answer>					<label>Agree</label>					<value>1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>-1</value>				</answer>			</answers>		</question>		<question id="3">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Microbes are found on our hands</text>			<answers>				<answer>					<label>Agree</label>					<value>1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>-1</value>				</answer>			</answers>		</question>	</questions></round>';
 	
+	public var errorMessage: GUIText;		//Points to a prefab placed in Assets/Prefabs/LogicManagement. Is a GUIText to show error messages in the built versions.
+	
 	private var CurrentRound : Round;		//Will point to a Round object containing the parsed data from the xml string above
 	
 	private var gameHost : GameObject;
@@ -31,7 +33,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 	private var playerScoreBoard : ScoreBoard;			//To update the animations of the chosen player
 	private var opponentScoreBoard : ScoreBoard;		//and the opponent
 	
-	private var formBackground : GameObject;
+	public var formBackground : GameObject;				//Here must be dragged the prefab of the background of the questions. The blue screen acts as background when the player is given to choose among the three options.
 	
 	private var textBoxGO : GameObject;
 	private var textBox : TextBox;			//To have a reference to the TextBox class in order to use its functions
@@ -61,30 +63,40 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		
 		CurrentRoundNum = gameLogic.GetRoundNumber();							//Will get from the GameLogic script the number of quiz level that the player have to play now. 
 		Debug.Log("Awake function of the LevelLogicQuiz.js. Round number is: " + CurrentRoundNum);
-		CurrentRound = gameLogic.GetQuestions();
+		CurrentRound = gameLogic.GetQuestions();								//Here we get the "Round" object from the GameLogic class. This object contains the questions and answers to be asked to the players. See Round class for more information
+		
+		if (!CurrentRound){
+			errorMessage.text = "ERROR! There was an error when trying to load the xml file...\nThe CurrentRound object in LevelLogicQuiz class is null.";
+			errorMessage.enabled = true;
+		}
 		
 		//Save the references to the game objects of amy, hrry and the host
 		playerAmy = GameObject.Find("amy");
 		playerHarry = GameObject.Find("harry");
 		gameHost = GameObject.Find("gamehost");
 		
-		formBackground = GameObject.Find("FormBackground");
+		//formBackground = GameObject.Find("FormBackground");
+		formBackground = Instantiate(formBackground);
 		
 		textBoxGO = GameObject.Find("TextBox");						//Keep a reference to the GameObject Text Box
 		
 		answers = new List.<int>();			//To initialize the answers array
 		
-		if (PlayerPrefs.HasKey("player"))							//We'll instantiate amy or harry depending on which one was selected in the initial scene.
+		if (PlayerPrefs.HasKey("player"))							//We'll set amy or harry as player depending on which one was selected in the initial scene.
 			playerName = PlayerPrefs.GetString("player");
 		else{
 			Debug.LogError("'player' attribute not found in the PlayerPrefs. Using Harry as default.");
 			playerName = "harry";
 		}
+		
+		errorMessage = Instantiate(errorMessage);
+		errorMessage.enabled = false;
+		
 	}
 	
 	function Start () {
 		
-		//TestXmlSerializer();
+		formBackground.SetActive(false);							//Disable the form background, which will be enabled when needed
 		
 		//Load the animators
 		amyAnim = playerAmy.GetComponent(Animator);
@@ -108,8 +120,6 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		}
 		
 		SendInitInfoToDB();		//To say the DB that the level has been loaded
-		
-		formBackground.SetActive(false);							//Disable the form background, which will be enabled when needed
 		
 		textBox = textBoxGO.GetComponent(TextBox);			//To have a reference to the TextBox class in order to use it
 		

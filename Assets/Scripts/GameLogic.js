@@ -33,7 +33,10 @@ public class GameLogic extends MonoBehaviour{
 	
 	private var currentRoundNum : int;			//Contains the current quiz round number 
 	
+	@HideInInspector
 	public var db : DBconnector;		//References to the database management instance
+	
+	public var loadingText : GUIText;	//To show the loading progress. It's a prefab located in Assets/Prefabs/Levels/GameShow
 	
 	//private var changeStateTrigger : boolean = false;
 	
@@ -54,7 +57,10 @@ public class GameLogic extends MonoBehaviour{
 		
 		currentRoundNum = 1;
 		
-		Debug.Log("GameLogic.Awake: Setting the stored scores of the players to 0");
+		loadingText = Instantiate(loadingText);
+		loadingText.enabled = false;
+		
+//		Debug.Log("GameLogic.Awake: Setting the stored scores of the players to 0");
 		PlayerPrefs.SetInt("PlayerScore", 0);
 		PlayerPrefs.SetInt("OpponentScore", 0);
 		
@@ -71,8 +77,6 @@ public class GameLogic extends MonoBehaviour{
 	}
 
 	function OnGUI() {
-		
-		
 		
 	}
 	
@@ -153,18 +157,40 @@ public class GameLogic extends MonoBehaviour{
 		var levelString: String = level.ToString();
 		if (levelString.Length == 14 && levelString.Substring(0, 13) == "gameShow_quiz"){	//In the case of the quiz level, we load the same stage
 		Debug.Log("GameLogic.ChangeLevel: Loading a quiz level! number " + currentRoundNum);
-			Application.LoadLevel("gameShow_quiz");		//Which round of questions to load will be asked later inside the quiz level scripts.
+			if (Application.CanStreamedLevelBeLoaded ("gameShow_quiz")){
+				Application.LoadLevel("gameShow_quiz");		//Which round of questions to load will be asked later inside the quiz level scripts.
+			}else{
+				//showProgress = true;	//This will activate the gui to show the progress
+				level.ToString("gameShow_quiz");
+			}	
 		}
 		else{
 			Debug.Log("GameLogic.ChangeLevel: Loading a non quiz level");
-			Application.LoadLevel(level.ToString());
+			if (Application.CanStreamedLevelBeLoaded (level.ToString())){
+				Application.LoadLevel(level.ToString());
+			}else{
+				//showProgress = true;
+				updateProgress(level.ToString());
+			}
 		}
 				
+	}
+	
+	private function updateProgress(level: String){
+		var progress : float;
+		loadingText.enabled = true;
+		while(!Application.CanStreamedLevelBeLoaded (level)){
+			progress = Application.GetStreamProgressForLevel(level) * 100;
+			loadingText.text = "Loading... " + progress;
+			yield new WaitForSeconds(0.1);
+		}
+		Application.LoadLevel(level);
 	}
 	
 	//will be called if the player dies
 	public function RestartLevel(){
 		ChangeLevel(level);
+		
 	}
 	
 	public function PlayerChosen(playerName : String){
