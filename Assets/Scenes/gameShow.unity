@@ -158,6 +158,11 @@ Prefab:
       value: 
       objectReference: {fileID: 13200000, guid: b5bb2eeab7c344722b293057b7d297e2,
         type: 2}
+    - target: {fileID: 11400000, guid: 17bab7d8f26d4479fa4019a6935ac68d, type: 2}
+      propertyPath: errorMessage
+      value: 
+      objectReference: {fileID: 13200000, guid: 482e136c5dd4946e98c6d198e5028781,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 17bab7d8f26d4479fa4019a6935ac68d, type: 2}
   m_RootGameObject: {fileID: 643582677}
@@ -607,8 +612,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccfb5daf995754ca78e31e2acaf426e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  online: 0
   db: {fileID: 0}
   loadingText: {fileID: 13200000, guid: b5bb2eeab7c344722b293057b7d297e2, type: 2}
+  errorMessage: {fileID: 13200000, guid: 482e136c5dd4946e98c6d198e5028781, type: 2}
 --- !u!4 &643582679
 Transform:
   m_ObjectHideFlags: 0

@@ -17,8 +17,13 @@ public class DBconnector extends MonoBehaviour{
 	
 	private var debugMode = false;			//if true, a lot of information will be displayed in the console about the progress of the instructions
 	
+	private var gameLogic: GameLogic;
+	
+	private var online: boolean; 		//This variable will be true if us 
+	
 	public function Start(){
-		
+		gameLogic = transform.gameObject.GetComponent("GameLogic");
+		online = gameLogic.checkOnLine();
 	}
 	
 	public function Update(){
@@ -33,6 +38,8 @@ public class DBconnector extends MonoBehaviour{
 	*/
 	public function ConnectToGleaner (userID: String, session: String){//: Object{
 		Debug.Log("Beginning the connection to the DB");
+		
+		
 		
 		if (PlayerPrefs.HasKey("sessionKey")) PlayerPrefs.DeleteKey("sessionKey");		//just to make sure
 		
@@ -90,53 +97,6 @@ public class DBconnector extends MonoBehaviour{
 			
 			if(debugMode) Debug.Log('DBConnector.Track() -> A new Connection object has been created. ');
 			
-//		/*   Setting the headers of the http post request...   */
-//			var headers = new Hashtable();
-//			headers.Add("Authorization", PlayerPrefs.GetString("sessionKey"));
-//			headers.Add("Content-type", "application/json");
-//			
-//		/*   Building the string to send ---> [track1, track2, ..., trackn]   */
-//			var stringToSend: String; // = '[' + myTrack.ToString() + ']'
-//			var first: boolean = true; 
-//			
-//			//ISO 8601 date format example: 1994-11-05T13:15:30.503Z (Z is to designate UTC Hour and T is to separate the time and the date) 
-//			var theTime = System.DateTime.UtcNow.ToString("hh:mm:ss.fff");
-//			var theDate = System.DateTime.UtcNow.ToString("yyy-MM-dd");
-//			var mydate : String = theDate + 'T' + theTime + 'Z';
-//			if(debugMode) Debug.Log('Date --> '+ mydate);
-//			
-//			for (var track: JSONObject in myTracks){
-//				//Adding timestamp to the package...
-//				track.Add("timestamp", mydate);
-//
-//				if (!first) 
-//					stringToSend = stringToSend + ',' + track.ToString();
-//				else{
-//					first = false;
-//					stringToSend = track.ToString();
-//				}	
-//			}
-//			stringToSend = '[' + stringToSend + ']';
-//			
-//		/*   to convert the string to byte[], that is what WWW() function needs as data (second argument).   */
-//			var encoding = new System.Text.UTF8Encoding();
-//			var dataToSend = encoding.GetBytes(stringToSend);		
-//			
-//			//Debug.Log('DBConnector.Track() -> this is the header: ' + headers.ToString());
-//			
-//			if(debugMode) Debug.Log('DBConnector.Track() -> This is the string to send: ' + stringToSend);
-//			
-//		/*   Sending the http post   */
-//			var www = new WWW(url + "/track", dataToSend, headers);
-//			yield www;
-//			
-//			if(debugMode) Debug.Log("DBConnector.Track() -> Finished yielding the http request.");
-//		/*   Dealing with the response   */
-//			if (!String.IsNullOrEmpty(www.error))
-//		        Debug.Log('DBConnector.Track() -> ' + www.error);
-//		    else{
-//		    	if(debugMode) Debug.Log('DBConnector.Track() -> Response processed without errors.\nHeaders: ' + www.responseHeaders.ToString());
-//		    }
 		}
 		else{
 			Debug.Log('DBConnector.Track() -> sessionKey not found on the game!\nTry connecting to the server again.');
@@ -199,10 +159,10 @@ public class Connection{
 			//yield www;
 			while(!www.isDone); //Debug.Log("Progress: " + www.progress);  //You can't yield on a constructor. This is the alternative. This way blocks the execution
 			
-			if(debugMode) Debug.Log("Connection.Connection() --> Finished waiting the http request.");
+			//if(debugMode) Debug.Log("Connection.Connection() --> Finished waiting the http request.");
 		/*   Dealing with the response   */
 			if (!String.IsNullOrEmpty(www.error))
-		        Debug.Log('DBConnector.Track() -> ' + www.error);
+		        Debug.Log('DBConnector.Track() ERROR -> ' + www.error);
 		    else{
 		    	if(debugMode) Debug.Log('Connection.Connection() --> Response processed without errors.\nHeaders: ' + www.responseHeaders.ToString());
 		    }

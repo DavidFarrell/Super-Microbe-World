@@ -113,6 +113,16 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 17bab7d8f26d4479fa4019a6935ac68d, type: 2}
+      propertyPath: loadingText
+      value: 
+      objectReference: {fileID: 13200000, guid: b5bb2eeab7c344722b293057b7d297e2,
+        type: 2}
+    - target: {fileID: 11400000, guid: 17bab7d8f26d4479fa4019a6935ac68d, type: 2}
+      propertyPath: errorMessage
+      value: 
+      objectReference: {fileID: 13200000, guid: 482e136c5dd4946e98c6d198e5028781,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 17bab7d8f26d4479fa4019a6935ac68d, type: 2}
   m_RootGameObject: {fileID: 643582677}
@@ -145,7 +155,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db9da28bd17f1406586ff29881b3348f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  errorMessage: {fileID: 13200000, guid: 482e136c5dd4946e98c6d198e5028781, type: 2}
   formBackground: {fileID: 100000, guid: 68105bd33301b4e1298b0ea41276c3d5, type: 2}
   textStyle:
     m_Name: 
@@ -541,7 +550,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   db: {fileID: 0}
-  loadingText: {fileID: 0}
+  loadingText: {fileID: 13200000, guid: b5bb2eeab7c344722b293057b7d297e2, type: 2}
+  errorMessage: {fileID: 13200000, guid: 482e136c5dd4946e98c6d198e5028781, type: 2}
 --- !u!4 &643582679
 Transform:
   m_ObjectHideFlags: 0

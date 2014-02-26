@@ -31,18 +31,27 @@ public class GameLogic extends MonoBehaviour{
 	
 	private var isConnected : boolean;			//True if connected to the Database
 	
-	private var currentRoundNum : int;			//Contains the current quiz round number 
+	private var currentRoundNum : int = 1;			//Contains the current quiz round number 
+	
+	private var online: boolean = false;		//When this var is set to true, the scripts will be told to use the online services (such as the database access and the dialogues loading)
+													//Note that this is the only var which you need to change. All other scripts points to this variable to know if they should look for the resources locally or online
+	
+	private var LevelLogicQuizGO: GameObject; //Reference to the active LevelLogicQuiz script.
 	
 	@HideInInspector
 	public var db : DBconnector;		//References to the database management instance
 	
 	public var loadingText : GUIText;	//To show the loading progress. It's a prefab located in Assets/Prefabs/Levels/GameShow
+	public var errorMessage: GUIText;		//Points to a prefab placed in Assets/Prefabs/LogicManagement. Is a GUIText to show error messages in the built versions.
 	
 	//private var changeStateTrigger : boolean = false;
 	
 	function Awake () {
 	
 		// Make this game object and all its transform children survive when loading a new scene.
+		
+		Debug.Log("***Executing the Awake() method of the GameLogic class.");
+		
 		DontDestroyOnLoad (transform.gameObject);
 		
 		db = transform.gameObject.GetComponent("DBconnector");
@@ -55,10 +64,10 @@ public class GameLogic extends MonoBehaviour{
 		
 		isConnected = false;
 		
-		currentRoundNum = 1;
-		
 		loadingText = Instantiate(loadingText);
 		loadingText.enabled = false;
+		errorMessage = Instantiate(errorMessage);
+		errorMessage.enabled = false;
 		
 //		Debug.Log("GameLogic.Awake: Setting the stored scores of the players to 0");
 		PlayerPrefs.SetInt("PlayerScore", 0);
@@ -67,8 +76,6 @@ public class GameLogic extends MonoBehaviour{
 	}
 	
 	function Start () {
-		
-		
 		
 	}
 
@@ -187,6 +194,24 @@ public class GameLogic extends MonoBehaviour{
 		Application.LoadLevel(level);
 	}
 	
+	//This function is intended to show an error printed on the screen using the GUIText errorMessage.
+	//It will be useful to show errors on the built version of the game.
+	public function PrintError(error: String){
+		errorMessage.text = error;
+		errorMessage.enabled = true;
+	}
+	
+	public function PrintError(error: String, time: int){
+		PrintError(error);
+		yield new WaitForSeconds(time);
+		DeleteError();
+	}
+	
+	public function DeleteError(){
+		errorMessage.text = "";
+		errorMessage.enabled = false;
+	}
+	
 	//will be called if the player dies
 	public function RestartLevel(){
 		ChangeLevel(level);
@@ -195,6 +220,7 @@ public class GameLogic extends MonoBehaviour{
 	
 	public function PlayerChosen(playerName : String){
 		//Sets the player for the rest of the game
+		//Each time a new platform level is loaded, its script will look into PlayerPrefs to see which player to load, and if it's empty will load Harry by default
 		player = playerName;
 		PlayerPrefs.SetString("player", playerName);
 		
@@ -204,6 +230,8 @@ public class GameLogic extends MonoBehaviour{
 	//Here we'll connect for the first time with the database. 
 	//Here must be treated the data that the player wrote in the form (nickname, age and mail)
 	public function StartDataBaseConnection (nickname : String, age : String, email : String) {
+		
+		
 		
 		var userid : String = nickname;
 		var session : String = "testdecembersmb";				//This session has to be created in the database.
@@ -260,6 +288,10 @@ public class GameLogic extends MonoBehaviour{
 	
 	}
 	
+	public function checkOnLine(){
+		return online;
+	}
+	
 	public function GetRoundNumber(): int{
 		//This function is to be called from the LevelLogicQuizGame to know which one is the current round
 		//The first level is the level 1 and will return -1 if there was a problem
@@ -269,11 +301,31 @@ public class GameLogic extends MonoBehaviour{
 		
 	}
 	
-	public function GetQuestions(): Round{
-		//This class returns the text in xml format containing the questions and answers for the current round
-		return Round.LoadRoundFromXMLResources(currentRoundNum);
-		
-	}
+//	public function GetQuestions(){
+//		//This class begins the process of getting the round object containing the questions and answers
+////		return Round.LoadRoundFromXMLResources(currentRoundNum);
+////		Round myRound = new Round();
+//		
+//		var roundH : RoundHandler = new RoundHandler();
+//		
+//		if (online && isConnected){
+//			roundH.LoadRoundFromWeb(currentRoundNum);			//requesting the dialogue from a server
+//		}else{
+//			roundH.LoadRoundFromXMLResources(currentRoundNum);	//reading the dialogues locally
+//		}
+//	}
+//	
+//	public function ReceiveRound(myRound: Round){
+//		//This function will be called from the RoundHandler function when the Round Object containing the questions of the quiz is ready
+//		//It will pass the Round object to the LevelLogicQuiz script to start printing it on the script.
+//		
+//		Debug.Log("GameLogic: round received. Giving it to the LevelLogicQuiz level.");
+//
+//		
+//		var script: LevelLogicQuiz = transform.gameObject.Find("LevelLogic").GetComponent("LevelLogicQuiz");
+//		script.ReceiveRound(myRound);
+//		
+//	}
 	
 //	public function SubmitQuizResults(results : List.<int>){
 //		//results will have on each component 1 if it was answered correctly by the player and -1 if it was failed. 0 will be stored if the player didn't know.

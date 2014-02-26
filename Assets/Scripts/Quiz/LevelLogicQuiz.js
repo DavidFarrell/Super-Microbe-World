@@ -10,9 +10,10 @@ public class LevelLogicQuiz extends MonoBehaviour{
 	
 	//private var TextFromXML: String = '<?xml version="1.0" encoding="utf-8" ?><round id="0">	<name>All About Microbes</name>	<round_id>0</round_id>	<next_round>alpha_gameshow_round2.xml</next_round>	<intro_text>		<blind>			<statement>Welcome to the first BLIND QUESTION ROUND!</statement>			<statement>I"m going to ask you some questions but I"m NOT going to tell you if you got them right!</statement>			<statement>If you got them right, you"ll get a great bonus later though so try your best.</statement>			<statment>Lets go!</statment>		</blind>		<normal>			<statement>Well done, you"re a hoverboard natural!</statement>			<statement>Now it"s time to ask you those questions again</statement>			<statement>This time, you get 10 points for a correct answer, but if you get it wrong, the other player gets points.</statement>			<statement>so if you DON"T KNOW the answer, it"s best to play it safe and say so!</statement>			<statement>Ready?</statement>			<statement>Let"s go!</statement>		</normal>	</intro_text>	<questions>		<question id="0">			<type>0</type>			<score>10</score>			<value>1</value>			<text>If you cannot see a microbe it is not there</text>			<answers>				<answer>					<label>Agree</label>					<value>-1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>1</value>				</answer>			</answers>		</question>		<question id="1">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Bacteria and Viruses are the same</text>			<answers>				<answer>					<label>Agree</label>					<value>-1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>1</value>				</answer>			</answers>		</question>		<question id="2">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Fungi are microbes</text>			<answers>				<answer>					<label>Agree</label>					<value>1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>-1</value>				</answer>			</answers>		</question>		<question id="3">			<type>0</type>			<score>10</score>			<value>1</value>			<text>Microbes are found on our hands</text>			<answers>				<answer>					<label>Agree</label>					<value>1</value>				</answer>				<answer>					<label>Don"t Know</label>					<value>0</value>				</answer>				<answer>					<label>Disagree</label>					<value>-1</value>				</answer>			</answers>		</question>	</questions></round>';
 	
-	public var errorMessage: GUIText;		//Points to a prefab placed in Assets/Prefabs/LogicManagement. Is a GUIText to show error messages in the built versions.
+	//public var errorMessage: GUIText;		//Points to a prefab placed in Assets/Prefabs/LogicManagement. Is a GUIText to show error messages in the built versions.
 	
 	private var CurrentRound : Round;		//Will point to a Round object containing the parsed data from the xml string above
+	private var roundH : RoundHandler;		//This is the object that will be used as a handler to get the round object from the web or local.
 	
 	private var gameHost : GameObject;
 	private var playerAmy : GameObject;
@@ -43,6 +44,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 	private var levelStarted: boolean = false;		//This boolean is used to launch just once the sequencial part of the level from the Update() method
 	
 	private var blindMode: boolean = false;	//This boolean is to choose whether the game is going to be played on normal mode (false) or blind mode (true)
+	private var debugMode = true;
 	
 	private var CurrentRoundNum: int;				//stores the number of the current round of questions
 	private var TotalQuestions: int;				//stores the amount of questions that the current round has
@@ -62,18 +64,19 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		gameLogic = GameObject.Find("GameLogic").GetComponent("GameLogic");
 		
 		CurrentRoundNum = gameLogic.GetRoundNumber();							//Will get from the GameLogic script the number of quiz level that the player have to play now. 
-		Debug.Log("Awake function of the LevelLogicQuiz.js. Round number is: " + CurrentRoundNum);
-		CurrentRound = gameLogic.GetQuestions();								//Here we get the "Round" object from the GameLogic class. This object contains the questions and answers to be asked to the players. See Round class for more information
+		if (debugMode) Debug.Log("Awake function of the LevelLogicQuiz.js. Round number is: " + CurrentRoundNum);
 		
-		if (!CurrentRound){
+		/*if (!CurrentRound){
 			errorMessage.text = "ERROR! There was an error when trying to load the xml file...\nThe CurrentRound object in LevelLogicQuiz class is null.";
 			errorMessage.enabled = true;
-		}
+		}*/
 		
 		//Save the references to the game objects of amy, hrry and the host
 		playerAmy = GameObject.Find("amy");
 		playerHarry = GameObject.Find("harry");
 		gameHost = GameObject.Find("gamehost");
+		
+		if (!gameHost) Debug.Log("Game host hasn't been found!");
 		
 		//formBackground = GameObject.Find("FormBackground");
 		formBackground = Instantiate(formBackground);
@@ -89,12 +92,20 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			playerName = "harry";
 		}
 		
-		errorMessage = Instantiate(errorMessage);
-		errorMessage.enabled = false;
+		//errorMessage = Instantiate(errorMessage);
+		//errorMessage.enabled = false;
 		
 	}
 	
 	function Start () {
+		
+		if (debugMode) Debug.Log("Start function of the LevelLogicQuiz.js.");
+		
+		//gameLogic.GetQuestions();								//Here we ask for the "Round" object from the GameLogic class. 
+		
+		//As it may take a while to be served when we are asking for it to the web server, we won't be waiting it. 
+		//When the round object has been created, the function ReceiveRound() will be executed. This object (Round) contains the questions and answers to be asked to the players. 
+		//See Round class for more information
 		
 		formBackground.SetActive(false);							//Disable the form background, which will be enabled when needed
 		
@@ -102,6 +113,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		amyAnim = playerAmy.GetComponent(Animator);
 		harryAnim = playerHarry.GetComponent(Animator);
 		hostAnim = gameHost.GetComponent(Animator);
+		if (!hostAnim) Debug.Log("Game host's animation hasn't been found!");
 		
 		//Save the references to the ScoreBoard.js scripts attached to Amy and Harry.
 		amyScoreBoard = playerAmy.transform.GetComponent("ScoreBoard");
@@ -132,9 +144,11 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			
 			playerScoreBoard.SetPoints(PlayerPrefs.GetInt("PlayerScore"));
 			opponentScoreBoard.SetPoints(PlayerPrefs.GetInt("OpponentScore"));
-			Debug.Log("Starting quiz. Player and opponent scores were: " + PlayerPrefs.GetInt("PlayerScore") + " and " + PlayerPrefs.GetInt("OpponentScore") + " respectively in the last quiz level.");
+			//Debug.Log("Starting quiz. Player and opponent scores were: " + PlayerPrefs.GetInt("PlayerScore") + " and " + PlayerPrefs.GetInt("OpponentScore") + " respectively in the last quiz level.");
 			
-			StartLevel();
+			//StartLevel();
+			CurrentRound = GetQuestions();
+			StartShowingQuestions(CurrentRound);
 		}
 		
 	}
@@ -164,7 +178,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 	}
 	
 	private function SendInitInfoToDB(){
-		yield new WaitForSeconds(2);		//To wait just in case that the previous level is sending information.
+		//yield new WaitForSeconds(2);		//To wait just in case that the previous level is sending information.
 		if (gameLogic.checkConnection()){			//If we are authenticated in the web service
 			var firstTrack: JSONObject = new JSONObject();	//Sending the track to the database..
 			firstTrack.Add("type", "logic");
@@ -208,8 +222,45 @@ public class LevelLogicQuiz extends MonoBehaviour{
 //		//Debug.Log("Questions: " + CurrentRound.name);
 //	}
 	
-	private function StartLevel(){
+		public function GetQuestions() : Round{
+		//This class begins the process of getting the round object containing the questions and answers
+		
+		if (debugMode) Debug.Log("*************LevelLogicQuiz: Executing GetQuestions() method.");
+		
+		roundH = new RoundHandler();
+		
+//		if (gameLogic.checkOnLine() && gameLogic.checkConnection()){
+//			roundH.LoadRoundFromWeb(gameLogic.GetRoundNumber());			//requesting the dialogue from a server
+//		}else{
+//			roundH.LoadRoundFromXMLResources(gameLogic.GetRoundNumber());	//reading the dialogues locally
+//		}
+		CurrentRoundNum = gameLogic.GetRoundNumber();
+		if (CurrentRoundNum > 0 && CurrentRoundNum < 6){
+			switch(CurrentRoundNum){
+				case 1:
+					return roundH.LoadFromText(en_en_gameshow_round1.GetRoundText());
+				case 2:
+					return roundH.LoadFromText(en_en_gameshow_round2.GetRoundText());
+				case 3:
+					return roundH.LoadFromText(en_en_gameshow_round3.GetRoundText());
+				case 4:
+					return roundH.LoadFromText(en_en_gameshow_round4.GetRoundText());
+				case 5:
+					return roundH.LoadFromText(en_en_gameshow_round5.GetRoundText());	
+			}
+		}else{
+			Debug.LogError("LevelLogicQuiz: Wrong round number!");
+			gameLogic.PrintError("LevelLogicQuiz: Wrong round number.", 3);
+			return null;
+		}
+	}
+	
+	public function StartShowingQuestions(myRound: Round){
 		//This function will execute all the sequence of actions that have to be done during the level
+		
+		if (debugMode) Debug.Log("*************LevelLogicQuiz: Executing StartShowingQuestions() method.");
+		
+		CurrentRound = myRound;
 		
 		TotalQuestions = CurrentRound.questions.Count;	//To keep the number of questions in this round. NOTE that the CurrentRound object must exist when trying to acccess its question field. Otherwise there will be a null pointer exception
 		//Debug.Log("The number of questions is: " + TotalQuestions);
@@ -222,6 +273,8 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			-Read your answer, check and inform if it was correct or not
 			-Do the same with the other player
 		*/
+		
+		if (debugMode && !hostAnim) Debug.Log("Can't reach HostAnim!!");
 		
 		hostAnim.SetTrigger("excited");
 		
