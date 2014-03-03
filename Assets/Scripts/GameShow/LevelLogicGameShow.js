@@ -42,6 +42,8 @@ public class LevelLogicGameShow extends MonoBehaviour{
 	
 //	private var nextState : stateMachine;		//Keeps the state of the level. 
 	private var busy : boolean;				//If false, the next state will be played
+	private var loadingNextLevel: boolean;	//Will be true when this level has finished and the next one is being loaded. Useful to show loading information
+	public var loadingText : GUIText;	//To show the loading progress. It's a prefab located in Assets/Prefabs/Levels/GameShow
 	
 	//Part with the variables for the form
 	public var textStyle : GUIStyle;		//Style of the GUI of the form
@@ -77,6 +79,9 @@ public class LevelLogicGameShow extends MonoBehaviour{
 		
 		
 		textBoxGO = GameObject.Find("TextBox");						//Keep a reference to the GameObject Text Box
+		
+		loadingText = Instantiate(loadingText);						//Creating the Loading text object
+		loadingText.enabled = false;
 	
 	}
 	
@@ -115,6 +120,12 @@ public class LevelLogicGameShow extends MonoBehaviour{
 //		if (!busy) {
 //			nextStep();
 //		}
+		
+		if (loadingNextLevel){
+			loadingText.text = "Loading next level...";	
+			loadingText.enabled = true;
+		}
+		
 	}
 	
 	function OnGUI () {
@@ -344,10 +355,11 @@ public class LevelLogicGameShow extends MonoBehaviour{
 			else{
 				Debug.Log("There was some problem with the player. Don't know which one to use.");
 			}
-		yield new WaitForSeconds(4);									//Waits to play the shrinking animation
+		yield new WaitForSeconds(2);//3.5);									//Waits to play the shrinking animation TODO check the time
 //		Debug.Log("Finished ShrinkingZone");
 		
 		busy = false;
+		loadingNextLevel = true;
 	}
 	
 	

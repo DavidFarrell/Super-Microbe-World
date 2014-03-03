@@ -199,6 +199,7 @@ MonoBehaviour:
   amyShrinkGO: {fileID: 100000, guid: 9f19e60ae470e411c91f41d1957bb160, type: 2}
   harryShrinkGO: {fileID: 100000, guid: b6cb221fdc7534c9b801cb75cc3d5b99, type: 2}
   shrinkingZone: {fileID: 100000, guid: 4de96ce5220c74a509fcb54f1338b829, type: 2}
+  loadingText: {fileID: 13200000, guid: b5bb2eeab7c344722b293057b7d297e2, type: 2}
   textStyle:
     m_Name: 
     m_Normal:
@@ -414,7 +415,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: d0de4000ae0b64d5a9bc8c52c312b63b, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
@@ -612,7 +613,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccfb5daf995754ca78e31e2acaf426e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  online: 0
   db: {fileID: 0}
   loadingText: {fileID: 13200000, guid: b5bb2eeab7c344722b293057b7d297e2, type: 2}
   errorMessage: {fileID: 13200000, guid: 482e136c5dd4946e98c6d198e5028781, type: 2}
@@ -682,7 +682,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 1a06a21ea17b14e189b4a04e5f4d9fc7, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
@@ -1016,7 +1016,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 16efe3758a5f341a4aa10989a8468e7d, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1

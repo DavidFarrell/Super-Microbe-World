@@ -11,6 +11,7 @@ This class must not be used directly, but inherited from the level logic classes
 The reason why this is a class and not an interface is that this way we're able to write in this class some common behaviours if neccesary and use them from the inherited classes.
 
 */
+import Boomlagoon.JSON;
 
 public class LevelLogic extends MonoBehaviour{
 	
@@ -127,6 +128,7 @@ public class LevelLogic extends MonoBehaviour{
 			firstTrack.Add("type", "logic");
 			firstTrack.Add("event", "Level " + gameLogic.GetLevelName() + " loaded");
 			var tracks : JSONObject[] = new JSONObject[1];
+			//if (!firstTrack || ! tracks) Debug.LogError("Unable to create JSONObject or array");
 			tracks[0] = firstTrack;
 			gameLogic.db.Track(tracks);
 		}

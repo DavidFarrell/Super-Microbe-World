@@ -185,6 +185,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			firstTrack.Add("event", "Loading quiz level number " + CurrentRoundNum);
 			firstTrack.Add("round", CurrentRoundNum.ToString());
 			var tracks : JSONObject[] = new JSONObject[1];
+			if (!firstTrack || ! tracks) Debug.LogError("Unable to create JSONObject or array");
 			tracks[0] = firstTrack;
 			if (gameLogic.db) gameLogic.db.Track(tracks);
 		}
@@ -225,7 +226,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		public function GetQuestions() : Round{
 		//This class begins the process of getting the round object containing the questions and answers
 		
-		if (debugMode) Debug.Log("*************LevelLogicQuiz: Executing GetQuestions() method.");
+		//if (debugMode) Debug.Log("*************LevelLogicQuiz: Executing GetQuestions() method.");
 		
 		roundH = new RoundHandler();
 		
@@ -258,7 +259,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 	public function StartShowingQuestions(myRound: Round){
 		//This function will execute all the sequence of actions that have to be done during the level
 		
-		if (debugMode) Debug.Log("*************LevelLogicQuiz: Executing StartShowingQuestions() method.");
+		//if (debugMode) Debug.Log("*************LevelLogicQuiz: Executing StartShowingQuestions() method.");
 		
 		CurrentRound = myRound;
 		
@@ -437,7 +438,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			firstTrack.Add("type", "logic");
 			firstTrack.Add("event", "Quiz level number " + CurrentRoundNum + " score");
 			firstTrack.Add("round", CurrentRoundNum.ToString());
-			firstTrack.Add("score", stringanswers);
+			//firstTrack.Add("score", stringanswers);
 			var tracks : JSONObject[] = new JSONObject[1];
 			tracks[0] = firstTrack;
 			Debug.Log("Submitting quiz results to the database");

@@ -18,6 +18,8 @@ It will be used to control the levels that are loaded, and to keep the informati
 		
 TODO Check the comments of this class
 */
+import Boomlagoon.JSON;
+
 public class GameLogic extends MonoBehaviour{
 	
 	//This enum type will contain the EXACT name of all the scenes of the game.				IMPORTANT
@@ -260,6 +262,7 @@ public class GameLogic extends MonoBehaviour{
 				}
 			}
 			if (PlayerPrefs.HasKey("sessionKey")) {		//If finally we're connected, we'll send a track with the data of the player
+				if(Debug.isDebugBuild) Debug.Log("Sending the first trace to the database...");
 				var firstTrack: JSONObject = new JSONObject();	//Sending the track to the database..
 				firstTrack.Add("type", "logic");
 				firstTrack.Add("event", "Player started the game.");
@@ -267,9 +270,11 @@ public class GameLogic extends MonoBehaviour{
 				firstTrack.Add("email", email);
 				firstTrack.Add("age", age);
 				var tracks : JSONObject[] = new JSONObject[1];
+				if (!firstTrack || ! tracks) Debug.LogError("Unable to create JSONObject or array");
 				tracks[0] = firstTrack;
 				db.Track(tracks);
 			}
+			
 		}
 		else{
 			Debug.Log('DBConnector.ConnectGleaner() -> Connected already. SessionKey = ' + PlayerPrefs.GetString("sessionKey"));
