@@ -438,7 +438,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			firstTrack.Add("type", "logic");
 			firstTrack.Add("event", "Quiz level number " + CurrentRoundNum + " score");
 			firstTrack.Add("round", CurrentRoundNum.ToString());
-			//firstTrack.Add("score", stringanswers);
+			firstTrack.Add("score", stringanswers);
 			var tracks : JSONObject[] = new JSONObject[1];
 			tracks[0] = firstTrack;
 			Debug.Log("Submitting quiz results to the database");

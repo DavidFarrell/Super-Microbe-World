@@ -8,9 +8,13 @@ import Boomlagoon.JSON;
 
 public class DBconnector extends MonoBehaviour{
 	
-	public var url: String = "http://localhost:3030";		//adress and port of the database server
+	//private var url: String = "http://localhost:3030";		//adress and port of the database server	//This is to connect to the local server
+	
+	private var url: String = "http://supermicrobeworld.herokuapp.com";						//To connect to the remote server
 
 	private var sessionkey: String = 'empty';
+	
+	public var timelimit: int = 15;				//Max time in seconds that the connection will have to be finished. 
 
 	@HideInInspector
 	var connected: boolean = false;			//This variable should be checked after connecting with 
@@ -19,11 +23,15 @@ public class DBconnector extends MonoBehaviour{
 	
 	private var gameLogic: GameLogic;
 	
-	private var online: boolean; 		//This variable will be true if us 
+	private var online: boolean; 		//This variable will be true if the GameLogic script says so.
+	
+	private var Connections: ConnectionQueue;
+	private var MaxConnections: int = 10;		//Maximum number of connections that will be held concurrently
 	
 	public function Start(){
 		gameLogic = transform.gameObject.GetComponent("GameLogic");
 		online = gameLogic.checkOnLine();
+		Connections = new ConnectionQueue(MaxConnections);
 	}
 	
 	public function Update(){
@@ -53,6 +61,7 @@ public class DBconnector extends MonoBehaviour{
 		//the second argument is the data sent with the POST request. This element is not used in the server side, but is necessary as this way the request will be a POST and not a GET
 		var encoding = new System.Text.UTF8Encoding();
 		var www = new WWW(url + "/start/"+session, encoding.GetBytes("empty"), headers);
+		Debug.Log(url + "/start/"+session);
 		yield www;
 		
 		/*Dealing with the response*/
@@ -62,7 +71,7 @@ public class DBconnector extends MonoBehaviour{
 	    else{
 	    	if (www.text){
 	        	var resJSON : JSONObject = JSONObject.Parse(www.text);					//resJSON should contain the parsed JSON if there hasn't been errors
-	        	if(debugMode) Debug.LogError('DBConnector.ConnectToGleaner() -> Connection established');
+	        	if(debugMode) Debug.Log('DBConnector.ConnectToGleaner() -> Connection established');
 	        	if (resJSON.ContainsKey('sessionKey')){
 	        		
 	        		sessionkey = resJSON.GetValue('sessionKey').ToString();
@@ -142,7 +151,8 @@ public class DBconnector extends MonoBehaviour{
 			
 			if(debugMode) Debug.Log('DBConnector.Track() -> Beginning connection with ' + url + '/track with this sessionKey: ' + PlayerPrefs.GetString("sessionKey"));
 			
-			var myConnection: Connection = new Connection(url, myTracks);		//This will create a new Connection object, which will post the track on the database.
+			Connections.Add(new Connection(url, myTracks, timelimit));		//This will create a new Connection object, which will post the track on the database. This connection object will be added to a queue.
+			//var myConnection: Connection = new Connection(url, myTracks);		
 			//myConnection.TrackTraces();
 			
 			if(debugMode) Debug.Log('DBConnector.Track() -> A new Connection object has been created. ');
@@ -156,20 +166,29 @@ public class DBconnector extends MonoBehaviour{
 	
 }	//End of class brace
 
-public class Connection extends System.Object{
+public class Connection{// extends System.Object{
 	//This class will post a trace in the database. 
+	//Creates a "Coroutiner" GameObject per connection, so if we want to make many connections this would't be the best solution... Is the only way I've found to call a coroutine from the constructor of a class not inheriting from MonoBehaviour so far. 
+	//Not suitable to make many connections per second for the reason explained in the line above.
+		
 	private var debugMode = true;			//if true, a lot of information will be displayed in the console about the progress of the instructions
 	
 	private var url: String;
 	private var myTracks: JSONObject[];
 	
-	public static var coroutineRunner : Coroutiner = null;			//We can't run coroutines in classes that doesn't inherit from MonoBehaviour. So this is the solution, explained in the answers of this forum http://answers.unity3d.com/questions/452773/how-to-use-yield-within-a-class-function.html
+	public var coroutineRunner : Coroutiner = null;			//We can't run coroutines in classes that doesn't inherit from MonoBehaviour. So this is the solution, explained in the answers of this forum http://answers.unity3d.com/questions/452773/how-to-use-yield-within-a-class-function.html 
 	
-	public function Connection(url: String, myTracks: JSONObject[]){	//The track function is used because we can not yield inside a constructor
+	public function Connection(url: String, myTracks: JSONObject[], timelimit: int){	
+		//The "TrackTraces" function is used because we can not yield inside a constructor
+		//Url: The url to make the http connection
+		//myTracks: a built in .net array containing JSONObjects with the tracks to post
+		//timelimit: the maximum time that the connection will have to be finnished
 		
-		if (coroutineRunner == null)
+		if (coroutineRunner == null )
 	    {
             var go = new GameObject("Coroutiner");
+            DontDestroyOnLoad(go);
+            Destroy (go, timelimit);			// Kills the game object "go" in "timelimit" seconds after loading the object
             coroutineRunner = go.AddComponent(Coroutiner);      
 		}
 		
@@ -200,7 +219,7 @@ public class Connection extends System.Object{
 		}
 		stringToSend = '[' + stringToSend + ']';
 		
-		coroutineRunner.StartCoroutine(TrackTraces(stringToSend));
+		coroutineRunner.StartCoroutine(TrackTraces(stringToSend));	//Starts the coroutine
 	}
 	
 	public function TrackTraces(stringToSend: String){
@@ -233,3 +252,28 @@ public class Connection extends System.Object{
 	    }
 	}
 } //End of Connection class
+
+	private class ConnectionQueue{
+		/*
+		This class is a queue of connection objects. Its purpose is to keep a pointer to every connection object created so it can wait for the connectioon to finish. 
+		There was a problem whith the connection class being called from the Track function of the DBConnector class. The problem was that when we were trying to make two connections very close in time between them, the second connection overwrote the first one, and the first connection object was destroyed by the garbage collector, not letting the http request to end properly.
+		*/
+		//Note that MaxConnections must be a number big enough, because in this queue we won't push any conection out of the queue, but the oldest connection will be overwritten if there are not free possitions in the array. 
+		private var Queue: Connection[];
+		private var position: int = 0; //Points to the 
+		private var MaxConnections: int;
+		
+		public function ConnectionQueue(MaxConnections: int){
+			Queue = new Connection[MaxConnections];
+			this.MaxConnections = MaxConnections;
+		}
+		
+		public function Add(con: Connection){
+			Queue[position] = con;
+			position++;
+			if (position == MaxConnections){
+				position = 0;
+			}
+		}
+		
+	}
