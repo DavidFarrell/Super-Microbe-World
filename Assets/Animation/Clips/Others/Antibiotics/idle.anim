@@ -36,18 +36,7 @@ AnimationClip:
       m_PostInfinity: 2
     path: 
   m_FloatCurves: []
-  m_PPtrCurves:
-  - curve:
-    - time: 0
-      value: {fileID: 21300000, guid: 8ffa71b2df93041ce843a4c82b54d3e6, type: 3}
-    - time: .625
-      value: {fileID: 21300000, guid: 8ffa71b2df93041ce843a4c82b54d3e6, type: 3}
-    - time: 1.25
-      value: {fileID: 21300000, guid: 8ffa71b2df93041ce843a4c82b54d3e6, type: 3}
-    attribute: m_Sprite
-    path: 
-    classID: 212
-    script: {fileID: 0}
+  m_PPtrCurves: []
   m_SampleRate: 24
   m_WrapMode: 0
   m_Bounds:
@@ -56,7 +45,7 @@ AnimationClip:
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: 1.29166663
+    m_StopTime: 1.25
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
