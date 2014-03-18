@@ -31,6 +31,9 @@ public class LevelLogic extends MonoBehaviour{
 	protected var gameLogic : GameLogic;			//To keep a reference to the GameLogic.js script
 	protected var goals : Goals;					//To have a reference to the Goals.js script
 	
+	public var GUIgo: GameObject;					//This var must contain a reference to the prefab of the GUI placed at Prefabs/GUI/GUI
+	protected var GUIHandler: GUIHandler;
+	
 	function Awake () {
 	
 		myTransform = transform;
@@ -87,6 +90,11 @@ public class LevelLogic extends MonoBehaviour{
 		SendInfo();			//Sends info to the database to notifies that this level was started
 		
 		AddLevelGoals();		//Function to add the goals of this level
+		
+		GUIgo = Instantiate(GUIgo);
+		if (!GUIgo)	Debug.LogError("GUI prefab not found. The GUIgo public bar of the LevelLogic script must contain a reference to the prefab of the GUI placed at Prefabs/GUI/GUI");
+		GUIgo.transform.parent = transform.Find("main_camera").transform;		//The GUI needs to be son of the main camera object to move part of the elements of the gui such as the phone.
+		GUIHandler = GUIgo.GetComponent("GUIHandler");
 	}
 	
 	public class CameraBounds{		//The purpose of this class is to keep the settings of the camera in an object, so we'll be able to send this settings to the camera game object using the SendMessage() function
