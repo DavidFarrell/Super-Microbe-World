@@ -11,7 +11,7 @@ public class LevelLogicKitchen1 extends LevelLogic{
 	function Start () {
 		
 		super.Start();
-		
+		ShowInfoLevel();
 	}
 
 //	function Update () {
@@ -24,6 +24,12 @@ public class LevelLogicKitchen1 extends LevelLogic{
 		goals.SetGoals("lucy", "photo", 3);			//The goal will be to take pictures to 3 lucy bacteria
 		//goals.SetGoals("lucy", "thrown to yoghurt", 2);			//The goal will be to push 2 lucy bacteria to the yoghurt
 
+	}
+	
+	public function ShowInfoLevel(){
+		super.ShowInfoLevel();
+		//yield new WaitForSeconds(0.2);
+		GUIHandler.showInfoLevel(1, this);		//Plays the instruction animation for this level, the level one.
 	}
 
 }	//End of class brace.

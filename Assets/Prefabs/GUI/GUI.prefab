@@ -40,7 +40,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .893922329, y: -.802391529, z: -10}
+  m_LocalPosition: {x: 2.94000006, y: -2.51999998, z: -10}
   m_LocalScale: {x: 1.70000005, y: 1.70000005, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
@@ -93,14 +93,12 @@ MonoBehaviour:
   imagesL3: []
   imagesL4: []
   imagesL5: []
-  infoImagePos: {x: 0, y: 0}
-  lives: 3
+  infoImagePos: {x: 274, y: 184}
   livesImg: {fileID: 2800000, guid: 7a8504960ecef478f97a88592ded4aa5, type: 3}
   livesPosHeight: 14
   livesPos1x: 900
   livesPos2x: 870
   livesPos3x: 840
-  antibiotic: 1
   antibioticImg: {fileID: 2800000, guid: afbfbe4a4055146f3bece37da5e4a02c, type: 3}
   antibioticPos: {x: 827, y: 50}
   InGamePhone: {fileID: 100000, guid: f5a93743a950b48fdb2cda168c9d2a63, type: 2}

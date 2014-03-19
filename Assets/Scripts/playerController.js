@@ -42,6 +42,7 @@ private var facingDirection: Vector2;		//Vector2 pointing to the direction where
 private var hitDirection: Vector2;			//Contains the direction of the player's hit with something in the world to disable the movement in that direction. Will contain (0, 0)
 private var hitDirectionResetTimer: float;	//Timer to reinitialize the hitDirection. hitDirection's x coordinate should be 0 any time the trigger is not colliding with any collider, but it doesn't because OnTriggerExit2D is not working very accurately. We set up this timer to reset to 0 the hitDirection regularly, avoiding it gets stuck in 1 or -1 values.
 private var hasBeenRunning: boolean;			//True if the player's speed has been 
+private var controlsEnabled: boolean;		//If false, the player won't be able to perform any action, such as walk, jump, shoot any projectile, use antibiotics... It's intended to be turned on while displaying the instructions of the level.
 
 	//Variables of the "take photo" feature
 private var photoPoint: Transform;			//To store the point where the photos will be taken from
@@ -62,6 +63,7 @@ private var low_anim: Animator;
 private var up_anim: Animator;
 private var canBeHit: boolean = true;
 private var gameLogic: GameLogic;
+private var GUIHandler: GUIHandler;
 
 
 /*--v--v--v--v--v--v--*--v--v--v--v--v--v--Functions--v--v--v--v--v--v--*--v--v--v--v--v--v--*/
@@ -74,6 +76,7 @@ function Awake () {
 	myRigidbody2D = myTransform.rigidbody2D;
 	facingRight = true;
 	facingDirection = Vector2.right;
+	controlsEnabled = true;
 	
 	groundHits = new RaycastHit2D[3];
 	groundDirection = Vector2(0, -1);
@@ -99,20 +102,30 @@ function Awake () {
 	
 	canBeHit = true;
 	
-	GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, Antibiotics, whiteBloodCells);
-	
 }
 
 function Start () {
 	
 	//Just for testing
 	//Physics2D.IgnoreLayerCollision(utils.layers.player, utils.layers.projectiles, true);
-
+	
+	/*vvvvvvvvv GUI part vvvvv*/
+	GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, Antibiotics, whiteBloodCells);			//Debugging GUI. Delete when the new one is working
+	
+	var GUIHandlerGO : GameObject;
+	GUIHandlerGO = GameObject.Find("GUI(Clone)").gameObject;
+	if (!GUIHandlerGO) Debug.LogError("There was a problem when trying to find the GUI GameObject, that should contain the GUIHandler script.");
+	else {
+		//Debug.Log("GUIHandler found. Comment this log if this feature is working");
+		GUIHandler = GUIHandlerGO.GetComponent("GUIHandler");
+	}
+	/*^^^^^^^^^ GUI part ^^^^^*/
+	
 }
 
 function Update () {
 
-	low_anim.ResetTrigger("jump_end");					//Usually, this trigger got stuck to true (unexplicably). This line fixes it.
+	low_anim.ResetTrigger("jump_end");					//Usually, this trigger got stuck to true (unexplicably). This line fixes it. NOTE: If you send two "jump_end" signals to the animator, this trigger will contain true after playing the animation the first time.
 	
 	//showMessages();
 	
@@ -138,37 +151,42 @@ function Update () {
 		if (debugMode) Debug.Log("Grounded");
 	}
 	
-	if (grounded && Input.GetButtonDown("Jump")){
-		myRigidbody2D.AddForce(new Vector2(0, jumpForce));		// Add a vertical force to the player.
-		low_anim.SetTrigger("jump_start");
-	}
-	
 	if (!groundedPreviousValue && grounded){
 		low_anim.SetTrigger("jump_end");
 		//Debug.Log("Landed!");
 	}
 	groundedPreviousValue = grounded;
 	
-	/*--v--v--v--v--v--v--Code to control other buttons--v--v--v--v--v--v--*/
-	
-	if (Input.GetButtonDown("Fire1")){
-		takePhoto();
+	if(controlsEnabled){
+		if (grounded && Input.GetButtonDown("Jump")){
+			myRigidbody2D.AddForce(new Vector2(0, jumpForce));		// Add a vertical force to the player.
+			low_anim.SetTrigger("jump_start");
+		}
+		
+		/*--v--v--v--v--v--v--Code to control other buttons--v--v--v--v--v--v--*/
+		
+		if (Input.GetButtonDown("Fire1")){
+			takePhoto();
+		}
+		
+		if (Input.GetButtonDown("Fire2")){
+			shootSoap();
+		}
+		
+		if (Input.GetButtonDown("Fire3")){
+			shootWBC();
+		}
+		
+		if (Input.GetKeyDown(KeyCode.Z)){
+			//Debug.Log("'Z' button pressed. Using Antibiotics (if any).");
+			useAntibiotics();
+		}
+		
+		horizAxis = Input.GetAxis("Horizontal");				//Cache the horizontal input. All the Input Calls must be done in the Update function. 
+	}//controlsEnabled's if
+	else{
+		horizAxis= 0;
 	}
-	
-	if (Input.GetButtonDown("Fire2")){
-		shootSoap();
-	}
-	
-	if (Input.GetButtonDown("Fire3")){
-		shootWBC();
-	}
-	
-	if (Input.GetKeyDown(KeyCode.Z)){
-		//Debug.Log("'Z' button pressed. Using Antibiotics (if any).");
-		useAntibiotics();
-	}
-	
-	horizAxis = Input.GetAxis("Horizontal");				//Cache the horizontal input. All the Input Calls must be done in the Update function. 
 }
 
 function FixedUpdate () {
@@ -367,7 +385,8 @@ function useAntibiotics () {
 public function UpdateGUI () {
 
 	GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, whiteBloodCells, Antibiotics);
-
+	
+	GUIHandler.UpdateGUI(life, soapDrops, whiteBloodCells, Antibiotics);
 }
 
 /*
@@ -421,6 +440,16 @@ private function Flip () {
 	bugScale.x *= -1;
 	myTransform.localScale = bugScale;
 
+}
+
+public function EnableControls(){
+	//Enable the movements of the player
+	controlsEnabled = true;
+}
+
+public function DisableControls(){
+	//Disable the movements of the player. Useful to show the information about the goals of each level
+	controlsEnabled = false;
 }
 
 //This function triggers the debugMode to true during 1 frame each second. It is intended to show one frame per second the Debug messages. Use this way:

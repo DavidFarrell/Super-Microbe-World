@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-public class GUIHandler extends MonoBehaviour{
+public class GUIHandler__SecCopy extends MonoBehaviour{
 
 	private var numImagesPhone: int;
 	//imagesLx will contain the images to be displayed on the phone for the level x. They will be displayed in order. The size of each array must be adjusted in the editor.
@@ -20,7 +20,7 @@ public class GUIHandler extends MonoBehaviour{
 	private var currentImageNum: int;
 	private var currentImage: Texture2D;
 	
-	private var lives: int;					//Amount of lives remaining		//NOTE: switch to private!    ********************************************
+	public var lives: int;					//NOTE: switch to private!
 	public var livesImg: Texture2D;
 	public var livesPosHeight: int;
 	public var livesPos1x: int;
@@ -29,14 +29,11 @@ public class GUIHandler extends MonoBehaviour{
 	private var liveswidth: int;
 	private var livesheight: int;
 	
-	private var antibiotic: int;				//Amount of antibiotics remaining		//NOTE: switch to private!    ********************************************
+	public var antibiotic: int;				//NOTE: switch to private!
 	public var antibioticImg: Texture2D;
 	public var antibioticPos: Vector2;
 	private var antibioticwidth: int;
 	private var antibioticheight: int;
-	
-	private var whiteBloodCells: int;		//Amount of wbc remaining
-	private var soapDrops: int;				//Number of remainig soap drops
 	
 	public var InGamePhone: GameObject;		//The phone
 	private var phoneAnim : Animator;	//The Animator component attached to the InGamePhone GameObject
@@ -45,12 +42,8 @@ public class GUIHandler extends MonoBehaviour{
 	private var heightScreen: int;
 	
 	private var gameLogic: GameLogic;		//Keeps a reference of the gameLogic object
-	private var currentLevelLogicScript: LevelLogic;	//Keeps a reference to the LevelLogicxxxxxx.js script that called the showInfoLevel() function to notify the script when finished displaying the information
 	
-	/**Other vars**/
-	private var firstRun = true;		//To perform some operations in the update function just the first loop 
-	
-	function Awake() {
+	function Start () {
 	
 		gameLogic = GameObject.Find("GameLogic").GetComponent("GameLogic");
 		
@@ -66,46 +59,23 @@ public class GUIHandler extends MonoBehaviour{
 		antibioticwidth = antibioticImg.width;
 		antibioticheight = antibioticImg.height;
 		
-		InGamePhone = Instantiate(InGamePhone);
-		var ingamephonetransform = transform.Find("InGamePhone");
-		if (!ingamephonetransform) Debug.Log("InGamePhone not found!!!!");
-		InGamePhone = ingamephonetransform.gameObject;
+		//InGamePhone = Instantiate(InGamePhone);
+		InGamePhone = transform.Find("InGamePhone").gameObject;
 		if(!InGamePhone) Debug.LogError("InGamePhone not found. Drag and drop the InGamePrefab to the public variable of the GUIHandler script attached to the GUI object in the editor.");
 		else phoneAnim = InGamePhone.GetComponent(Animator);
-	
+		
+		test();
 	}
 	
-	function Start () {
-		
-		
-//		test();
+	private function test(){
+		Debug.Log("Waiting 0.5 seconds...");
+		yield new WaitForSeconds(0.5);
+		Debug.Log("Showing questions...");
+		showInfoLevel(1);
 	}
-	
-//	private function test(){
-//		Debug.Log("Waiting 0.5 seconds...");
-//		yield new WaitForSeconds(0.5);
-//		Debug.Log("Showing questions...");
-//		showInfoLevel(1, null);
-//	}
 	
 	function Update () {
-		if (firstRun){
-			firstRun = false;
-			
-			
-//			infoImageWidth = imagesL1[0].width;
-//			infoImageHeigth = imagesL1[0].height; 
-//			
-//			liveswidth = livesImg.width;
-//			livesheight = livesImg.height;
-//			
-//			antibioticwidth = antibioticImg.width;
-//			antibioticheight = antibioticImg.height;
-//			
-//			InGamePhone = transform.Find("InGamePhone").gameObject;
-//		if(!InGamePhone) Debug.LogError("InGamePhone not found. Drag and drop the InGamePrefab to the public variable of the GUIHandler script attached to the GUI object in the editor.");
-//		else phoneAnim = InGamePhone.GetComponent(Animator);
-		}
+		
 	}
 	
 	//MonoBehaviour's class to manage the GUI
@@ -115,26 +85,18 @@ public class GUIHandler extends MonoBehaviour{
 		if (lives>2) GUI.Label (Rect (livesPos3x,livesPosHeight,liveswidth,livesheight), livesImg);		//First heart
 		if (antibiotic > 0) GUI.Label (Rect (antibioticPos.x,antibioticPos.y,antibioticwidth,antibioticheight), antibioticImg);
 		if (showInfoImage)
-			if (GUI.Button (Rect (infoImagePos.x, infoImagePos.y, infoImageWidth, infoImageHeigth), currentImage, "label")) {	//This will paint a button without border
+			if (GUI.Button (Rect (infoImagePos.x, infoImagePos.y, infoImageWidth, infoImageHeigth), currentImage)) {
 				print ("Next image");
 				showNextInfoImage();
 			}
 	}
 	
-	public function UpdateGUI(life : int, soapDrops : int, whiteBloodCells : int, Antibiotics : int){
-		lives = life;
-		this.soapDrops = soapDrops;
-		this.whiteBloodCells = whiteBloodCells;
-		antibiotic = Antibiotics;
-	}
-	
 	/*
 		This function will display the mobile phone with the information for the level selected.
 	*/
-	public function showInfoLevel(level: int, levelLogic: LevelLogic){
+	public function showInfoLevel(level: int){
 		
 		currentLevel = level;
-		currentLevelLogicScript = levelLogic;
 		switch (level){
 			case 1:
 				currentArrayIm = imagesL1;
@@ -157,7 +119,7 @@ public class GUIHandler extends MonoBehaviour{
 		}
 		currentImageNum = 0;
 		phoneAnim.SetTrigger("PhoneBig");	//To make it small again the trigger is "PhoneSmall"
-		yield new WaitForSeconds(0.8);		//0.8 is the time the animation takes to be played
+		yield new WaitForSeconds(0.2);		//0.2 is the time the animation takes to be played
 		showNextInfoImage();
 	}
 	
@@ -170,8 +132,7 @@ public class GUIHandler extends MonoBehaviour{
 			showInfoImage = false;
 			currentImage = null;
 			phoneAnim.SetTrigger("PhoneSmall");
-			//Inform the LevelLogic script that info has finished to be displayed and we can continue with the game
-			currentLevelLogicScript.ShowInfoLevelFinished();
+			//Inform somewhere that info has finished to be displayed.
 		}
 	}
 	

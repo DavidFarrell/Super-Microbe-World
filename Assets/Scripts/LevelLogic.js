@@ -36,6 +36,21 @@ public class LevelLogic extends MonoBehaviour{
 	
 	function Awake () {
 	
+		//Part of the GUIHandler
+		GUIgo = Instantiate(GUIgo);
+		if (!GUIgo)	Debug.LogError("GUI prefab not found. The GUIgo public bar of the LevelLogic script must contain a reference to the prefab of the GUI placed at Prefabs/GUI/GUI");
+		GUIgo.transform.parent = GameObject.Find("main_camera").transform;		//The GUI needs to be son of the main camera object to move part of the elements of the gui such as the phone.
+		GUIHandler = GUIgo.GetComponent("GUIHandler");
+		
+
+//		var GUIHandlerGO : GameObject;
+//		GUIHandlerGO = GameObject.Find("GUI").gameObject;
+//		if (!GUIHandlerGO) Debug.LogError("There was a problem when trying to find the GUI GameObject, that should contain the GUIHandler script.");
+//		else {
+//			Debug.Log("GUIHandler found. Comment this log if this feature is working");
+//			GUIHandler = GUIHandlerGO.GetComponent("GUIHandler");
+//		}
+		
 		myTransform = transform;
 		
 		var gameLogicGO : GameObject;
@@ -49,8 +64,7 @@ public class LevelLogic extends MonoBehaviour{
 			Debug.LogError("GameLogic Object not found. This will be because GameLogic is created in the first level of the game, the GameShow level, and is intended to pass (be kept alive) throughout all the scenes in the game. So, if the Kitchen level is played, this object won't exist, and there must be many Null reference errors. But none of this errors will avoid playing the game. ");
 		}
 		
-		
-		
+		//Part where players are instantiated
 		if(!amy || !harry) Debug.LogError("Missing player's prefab. Please add the prefabs of the players to the level logic script controlling this level.");
 		
 		var start: Transform = myTransform.Find("level_start");			//Looks for the start_point GameObject, that is (or should be) a son of the GameObject this script is attached to.
@@ -90,11 +104,6 @@ public class LevelLogic extends MonoBehaviour{
 		SendInfo();			//Sends info to the database to notifies that this level was started
 		
 		AddLevelGoals();		//Function to add the goals of this level
-		
-		GUIgo = Instantiate(GUIgo);
-		if (!GUIgo)	Debug.LogError("GUI prefab not found. The GUIgo public bar of the LevelLogic script must contain a reference to the prefab of the GUI placed at Prefabs/GUI/GUI");
-		GUIgo.transform.parent = transform.Find("main_camera").transform;		//The GUI needs to be son of the main camera object to move part of the elements of the gui such as the phone.
-		GUIHandler = GUIgo.GetComponent("GUIHandler");
 	}
 	
 	public class CameraBounds{		//The purpose of this class is to keep the settings of the camera in an object, so we'll be able to send this settings to the camera game object using the SendMessage() function
@@ -143,6 +152,18 @@ public class LevelLogic extends MonoBehaviour{
 		else{
 			Debug.Log("Connection not established (sessionKey not found) when trying to post the first trace.");
 		}
+	}
+	
+	public function ShowInfoLevel(){
+		//This function will be used by each level to call the method of the GUI that shows the instruction to play the level. 
+		//This function must be overwritten by all the classes inheriting from this script that want to show the instructions for the level.
+		playerScript.DisableControls();		//To avoid the player from moving while the instructions are being played
+	}
+	
+	public function ShowInfoLevelFinished(){
+		//This function will be called when the information of the beggining of the level has been displayed completely and the game can be resumed.
+		Debug.Log("LevelLogic has received the signal to resume the level after the information has been completely displayed");
+		playerScript.EnableControls();
 	}
 
 }
