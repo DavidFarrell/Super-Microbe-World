@@ -650,7 +650,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8f4463bfc81c42358a578aaa9848c18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: http://localhost:3030
   timelimit: 15
   connected: 0
 --- !u!1 &878088618

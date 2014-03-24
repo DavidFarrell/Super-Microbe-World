@@ -11,6 +11,8 @@ public class LevelLogicBody11 extends LevelLogic{
 	function Start () {
 		
 		super.Start();
+		//this.SetPickups(0, 0, 0);
+		ShowInfoLevel();
 		
 	}
 
@@ -23,6 +25,12 @@ public class LevelLogicBody11 extends LevelLogic{
 		
 		goals.SetGoals("iggy", "white blood cell", 3);			//The goal will be to take pictures to 3 patty
 
+	}
+	
+	public function ShowInfoLevel(){
+		super.ShowInfoLevel();
+		//yield new WaitForSeconds(0.2);
+		GUIHandler.showInfoLevel("body11", this);		//Plays the instruction animation for this level, the level one.
 	}
 
 }	//End of class brace.

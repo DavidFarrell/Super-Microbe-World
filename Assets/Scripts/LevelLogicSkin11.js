@@ -12,7 +12,9 @@ public class LevelLogicSkin11 extends LevelLogic{
 		
 		super.Start();
 		
-		this.SetPickups(0, 0, 0);
+//		this.SetPickups(0, 0, 0);
+		
+		ShowInfoLevel();
 		
 	}
 
@@ -25,6 +27,12 @@ public class LevelLogicSkin11 extends LevelLogic{
 		
 		goals.SetGoals("slurm", "washed up", 3);
 		
+	}
+	
+	public function ShowInfoLevel(){
+		super.ShowInfoLevel();
+		//yield new WaitForSeconds(0.2);
+		GUIHandler.showInfoLevel("skin11", this);		//Plays the instruction animation for this level, the level one.
 	}
 
 }	//End of class brace.

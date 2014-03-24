@@ -102,13 +102,6 @@ function Awake () {
 	
 	canBeHit = true;
 	
-}
-
-function Start () {
-	
-	//Just for testing
-	//Physics2D.IgnoreLayerCollision(utils.layers.player, utils.layers.projectiles, true);
-	
 	/*vvvvvvvvv GUI part vvvvv*/
 	GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, Antibiotics, whiteBloodCells);			//Debugging GUI. Delete when the new one is working
 	
@@ -118,8 +111,17 @@ function Start () {
 	else {
 		//Debug.Log("GUIHandler found. Comment this log if this feature is working");
 		GUIHandler = GUIHandlerGO.GetComponent("GUIHandler");
+		//Debug.Log("GUIHandler found. Ready to use.");
+		GUIHandler.UpdateGUI(life, soapDrops, whiteBloodCells, Antibiotics);
 	}
 	/*^^^^^^^^^ GUI part ^^^^^*/
+	
+}
+
+function Start () {
+	
+	//Just for testing
+	//Physics2D.IgnoreLayerCollision(utils.layers.player, utils.layers.projectiles, true);
 	
 }
 
@@ -165,22 +167,31 @@ function Update () {
 		
 		/*--v--v--v--v--v--v--Code to control other buttons--v--v--v--v--v--v--*/
 		
-		if (Input.GetButtonDown("Fire1")){
-			takePhoto();
+		if (Input.GetButtonDown("Fire1")){	//Should be left ctrl
+			//Fire 1 button should be the left control button. It's used to take photos and, if there is antibiotics available, drop them instead
+//			takePhoto();
+			if(Antibiotics > 0) useAntibiotics();
+			else takePhoto();
 		}
 		
 		if (Input.GetButtonDown("Fire2")){
-			shootSoap();
+			//Fire2 button is supposed to be the space bar. It will throw soap drops if available and if there is any white blood cells they will be dropped instead.
+//			shootSoap();
+			if (whiteBloodCells <= 0) {
+				shootSoap();
+			}else{
+				shootWBC();
+			}
 		}
 		
-		if (Input.GetButtonDown("Fire3")){
-			shootWBC();
-		}
-		
-		if (Input.GetKeyDown(KeyCode.Z)){
-			//Debug.Log("'Z' button pressed. Using Antibiotics (if any).");
-			useAntibiotics();
-		}
+//		if (Input.GetButtonDown("Fire3")){
+//			shootWBC();
+//		}
+//		
+//		if (Input.GetKeyDown(KeyCode.Z)){
+//			//Debug.Log("'Z' button pressed. Using Antibiotics (if any).");
+//			useAntibiotics();
+//		}
 		
 		horizAxis = Input.GetAxis("Horizontal");				//Cache the horizontal input. All the Input Calls must be done in the Update function. 
 	}//controlsEnabled's if
@@ -312,7 +323,7 @@ public function AddWhiteBloodCells(whitebc: int){
 }
 
 public function AddAntibiotics(antibiotics: int){
-	Antibiotics += antibiotics;
+	if (Antibiotics == 0) Antibiotics += antibiotics;
 	UpdateGUI();
 }
 
@@ -383,9 +394,9 @@ function useAntibiotics () {
 }
 
 public function UpdateGUI () {
-
-	GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, whiteBloodCells, Antibiotics);
 	
+	GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, whiteBloodCells, Antibiotics);
+	//Debug.Log("Trying to use GUIHandler...");
 	GUIHandler.UpdateGUI(life, soapDrops, whiteBloodCells, Antibiotics);
 }
 

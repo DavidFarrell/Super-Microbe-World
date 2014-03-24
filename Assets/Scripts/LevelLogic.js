@@ -36,12 +36,12 @@ public class LevelLogic extends MonoBehaviour{
 	
 	function Awake () {
 	
-		//Part of the GUIHandler
+		//Part of the GUIHandler  ****************************************************************************************
 		GUIgo = Instantiate(GUIgo);
 		if (!GUIgo)	Debug.LogError("GUI prefab not found. The GUIgo public bar of the LevelLogic script must contain a reference to the prefab of the GUI placed at Prefabs/GUI/GUI");
 		GUIgo.transform.parent = GameObject.Find("main_camera").transform;		//The GUI needs to be son of the main camera object to move part of the elements of the gui such as the phone.
 		GUIHandler = GUIgo.GetComponent("GUIHandler");
-		
+		//****************************************************************************************************************
 
 //		var GUIHandlerGO : GameObject;
 //		GUIHandlerGO = GameObject.Find("GUI").gameObject;

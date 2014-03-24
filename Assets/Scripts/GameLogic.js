@@ -58,6 +58,8 @@ public class GameLogic extends MonoBehaviour{
 		
 		db = transform.gameObject.GetComponent("DBconnector");
 		
+		db.AwakeServer();
+		
 		player = "";
 		
 		level = GameLevel.gameShow;
@@ -128,7 +130,7 @@ public class GameLogic extends MonoBehaviour{
 					ChangeLevel(GameLevel.gameShow_quiz2);
 					break;
 				case GameLevel.gameShow_quiz2:
-					currentRoundNum = 4;						//Quiz level 3 will be skipped as the questions are about the kitchen level - this in which the player has to place the food correctly into the fridge
+					currentRoundNum = 3;						//Quiz level 4 will be skipped as the questions are about the kitchen level - this in which the player has to place the food correctly into the fridge
 					ChangeLevel(GameLevel.kitchen31);
 					break;
 				case GameLevel.kitchen31:
@@ -137,7 +139,7 @@ public class GameLogic extends MonoBehaviour{
 				case GameLevel.kitchen32:
 					ChangeLevel(GameLevel.gameShow_quiz4);
 					break;
-				case GameLevel.gameShow_quiz4:
+				case GameLevel.gameShow_quiz4:				//It's actually level 3, because the 4th is the one in which the questions are about how to store the food in the kitchen. So the level is correct but the name is written wrong.
 					currentRoundNum = 5;
 					ChangeLevel(GameLevel.superinfection);
 					break;

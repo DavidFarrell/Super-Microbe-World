@@ -11,6 +11,7 @@ public class LevelLogicKitchen1 extends LevelLogic{
 	function Start () {
 		
 		super.Start();
+//		this.SetPickups(0, 0, 0);
 		ShowInfoLevel();
 	}
 
@@ -29,7 +30,7 @@ public class LevelLogicKitchen1 extends LevelLogic{
 	public function ShowInfoLevel(){
 		super.ShowInfoLevel();
 		//yield new WaitForSeconds(0.2);
-		GUIHandler.showInfoLevel(1, this);		//Plays the instruction animation for this level, the level one.
+		GUIHandler.showInfoLevel("kitchen1", this);		//Plays the instruction animation for this level, the level one.
 	}
 
 }	//End of class brace.

@@ -1337,8 +1337,8 @@ MonoBehaviour:
   whiteBCDamage: 0
   affectedBySoap: 0
   soapDamage: 0
-  affectedByAntibiotics: 0
-  antibioticsDamage: 0
+  affectedByAntibiotics: 1
+  antibioticsDamage: 5
   Speed: 1.5
   facingRight: 1
   moveDistance: 50
@@ -2107,7 +2107,7 @@ Transform:
   m_PrefabInternal: {fileID: 1462877348}
   m_GameObject: {fileID: 131065864}
   m_LocalRotation: {x: 0, y: 0, z: -.318720758, w: .947848678}
-  m_LocalPosition: {x: 38.4327621, y: -3.9750824, z: 0}
+  m_LocalPosition: {x: 45.3686104, y: -4.55711079, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 714555513}
@@ -6908,7 +6908,7 @@ Transform:
   m_GameObject: {fileID: 463070506}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 11.3800392, y: 2.36940527, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: .663872242, y: .663872242, z: 1.99161768}
   m_Children: []
   m_Father: {fileID: 1615069185}
 --- !u!95 &463070508
@@ -6936,7 +6936,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: .50999999, y: .219999999}
+  m_Size: {x: 1.11000001, y: .460000008}
   m_Center: {x: 0, y: 0}
 --- !u!114 &463070510
 MonoBehaviour:
@@ -6978,7 +6978,7 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 0
   m_SortingLayerID: 1024582385
-  m_Sprite: {fileID: 21300000, guid: 8ffa71b2df93041ce843a4c82b54d3e6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cd1c204fcc8f444919d1e42911b60ace, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &463890639
 GameObject:
@@ -7601,7 +7601,7 @@ Transform:
   m_PrefabInternal: {fileID: 2104650364}
   m_GameObject: {fileID: 503585586}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.93087196, y: -6.214118, z: 0}
+  m_LocalPosition: {x: 11.0100002, y: -6.214118, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -7920,7 +7920,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 02d2a97414b8e47e2961ab95a2e9d90b, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 24.9308033
+      value: 22.9200001
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 02d2a97414b8e47e2961ab95a2e9d90b, type: 2}
       propertyPath: m_LocalPosition.y
@@ -10680,9 +10680,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   life: 3
-  soapDrops: 50
-  whiteBloodCells: 50
-  Antibiotics: 50
+  soapDrops: 0
+  whiteBloodCells: 0
+  Antibiotics: 0
   groundDistance: 1.29999995
   maxSpeed: 5
   jumpForce: 700
@@ -11567,7 +11567,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 65baa74050c884035a218845414aa02c, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 3.43089485
+      value: 8.68000031
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 65baa74050c884035a218845414aa02c, type: 2}
       propertyPath: m_LocalPosition.y
@@ -13788,7 +13788,7 @@ Transform:
   m_PrefabInternal: {fileID: 1291662496}
   m_GameObject: {fileID: 872528795}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.5458841, y: -5.91520548, z: 0}
+  m_LocalPosition: {x: 12.0285254, y: -4.33079243, z: 0}
   m_LocalScale: {x: 1.14999998, y: 1.14999998, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -18508,7 +18508,7 @@ Transform:
   m_PrefabInternal: {fileID: 1749314556}
   m_GameObject: {fileID: 1192321908}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.8704443, y: -5.25242329, z: 0}
+  m_LocalPosition: {x: 1.14953995, y: -5.1877532, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 1089605282}
@@ -18546,8 +18546,8 @@ MonoBehaviour:
   whiteBCDamage: 0
   affectedBySoap: 0
   soapDamage: 0
-  affectedByAntibiotics: 0
-  antibioticsDamage: 0
+  affectedByAntibiotics: 1
+  antibioticsDamage: 5
   Speed: 1.5
   facingRight: 1
   moveDistance: 50
@@ -19149,7 +19149,7 @@ Transform:
   m_PrefabInternal: {fileID: 1232843977}
   m_GameObject: {fileID: 1224452100}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .630322933, y: -1.75640333, z: 0}
+  m_LocalPosition: {x: .84049964, y: -1.75640333, z: 0}
   m_LocalScale: {x: 1.29999995, y: 1.29999995, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -19264,7 +19264,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 6b080b24d998c49c7b6af8b8c6f97447, type: 2}
       propertyPath: m_LocalPosition.x
-      value: .630322933
+      value: .84049964
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6b080b24d998c49c7b6af8b8c6f97447, type: 2}
       propertyPath: m_LocalPosition.y
@@ -20254,11 +20254,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: d5c1299fe88644626a5b7dbcc7d0cab0, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 12.5458841
+      value: 12.0285254
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d5c1299fe88644626a5b7dbcc7d0cab0, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -5.91520548
+      value: -4.33079243
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d5c1299fe88644626a5b7dbcc7d0cab0, type: 2}
       propertyPath: m_LocalPosition.z
@@ -22455,7 +22455,7 @@ Transform:
   m_PrefabInternal: {fileID: 526119260}
   m_GameObject: {fileID: 1413188176}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 24.9308033, y: -5.71411943, z: 0}
+  m_LocalPosition: {x: 22.9200001, y: -5.71411943, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -23018,6 +23018,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amy: {fileID: 100002, guid: 1a3887aaff49b4495bc75356acd4282e, type: 2}
   harry: {fileID: 100008, guid: 7aa00c2a7a51c480aa5b6cf383e7fd50, type: 2}
+  GUIgo: {fileID: 100002, guid: f94892773b24f4ef28a5ab747fc196de, type: 2}
 --- !u!1 &1436350580
 GameObject:
   m_ObjectHideFlags: 0
@@ -23193,11 +23194,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 6b080b24d998c49c7b6af8b8c6f97447, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 42.3079414
+      value: 42.6636238
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6b080b24d998c49c7b6af8b8c6f97447, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -.0338588953
+      value: -1.81228137
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6b080b24d998c49c7b6af8b8c6f97447, type: 2}
       propertyPath: m_LocalPosition.z
@@ -23335,11 +23336,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 6071f72ab22ae4192ba8742db8f6d8a7, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 38.4327621
+      value: 45.3686104
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6071f72ab22ae4192ba8742db8f6d8a7, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -3.9750824
+      value: -4.55711079
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6071f72ab22ae4192ba8742db8f6d8a7, type: 2}
       propertyPath: m_LocalPosition.z
@@ -24664,9 +24665,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   life: 3
-  soapDrops: 50
-  whiteBloodCells: 50
-  Antibiotics: 50
+  soapDrops: 0
+  whiteBloodCells: 0
+  Antibiotics: 0
   groundDistance: 1.29999995
   maxSpeed: 5
   jumpForce: 700
@@ -24760,7 +24761,7 @@ Transform:
   m_PrefabInternal: {fileID: 738777413}
   m_GameObject: {fileID: 1537718713}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.43089485, y: -5.71411943, z: 0}
+  m_LocalPosition: {x: 8.68000031, y: -5.71411943, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -25221,7 +25222,7 @@ Transform:
   m_GameObject: {fileID: 1556126639}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.93712568, y: -.0580968857, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: .663872242, y: .663872242, z: 1.99161768}
   m_Children: []
   m_Father: {fileID: 1615069185}
 --- !u!114 &1556126641
@@ -25264,7 +25265,7 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 0
   m_SortingLayerID: 1024582385
-  m_Sprite: {fileID: 21300000, guid: 8ffa71b2df93041ce843a4c82b54d3e6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cd1c204fcc8f444919d1e42911b60ace, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!61 &1556126643
 BoxCollider2D:
@@ -25276,7 +25277,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: .50999999, y: .219999999}
+  m_Size: {x: 1.11000001, y: .460000008}
   m_Center: {x: 0, y: 0}
 --- !u!95 &1556126644
 Animator:
@@ -25347,8 +25348,8 @@ MonoBehaviour:
   whiteBCDamage: 0
   affectedBySoap: 0
   soapDamage: 0
-  affectedByAntibiotics: 0
-  antibioticsDamage: 0
+  affectedByAntibiotics: 1
+  antibioticsDamage: 5
   Speed: 1.5
   facingRight: 1
   moveDistance: 50
@@ -25495,7 +25496,7 @@ Transform:
   m_PrefabInternal: {fileID: 1455082226}
   m_GameObject: {fileID: 1562593877}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 42.3079414, y: -.0338588953, z: 0}
+  m_LocalPosition: {x: 42.6636238, y: -1.81228137, z: 0}
   m_LocalScale: {x: 1.29999995, y: 1.29999995, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -26257,6 +26258,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   db: {fileID: 0}
+  loadingText: {fileID: 0}
+  errorMessage: {fileID: 0}
 --- !u!4 &1615054781
 Transform:
   m_ObjectHideFlags: 0
@@ -28751,11 +28754,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400002, guid: dbffc0daa327e48479aa4dcc1d55b440, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 5.8704443
+      value: 1.14953995
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: dbffc0daa327e48479aa4dcc1d55b440, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -5.25242329
+      value: -5.1877532
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: dbffc0daa327e48479aa4dcc1d55b440, type: 2}
       propertyPath: m_LocalPosition.z
@@ -35563,7 +35566,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 55f222958d5bc41368f09086cc71db29, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 9.93087196
+      value: 11.0100002
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 55f222958d5bc41368f09086cc71db29, type: 2}
       propertyPath: m_LocalPosition.y

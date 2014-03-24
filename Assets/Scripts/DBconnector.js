@@ -19,7 +19,7 @@ public class DBconnector extends MonoBehaviour{
 	@HideInInspector
 	var connected: boolean = false;			//This variable should be checked after connecting with 
 	
-	private var debugMode = true;			//if true, a lot of information will be displayed in the console about the progress of the instructions
+	private var debugMode = false;			//if true, a lot of information will be displayed in the console about the progress of the instructions
 	
 	private var gameLogic: GameLogic;
 	
@@ -164,14 +164,24 @@ public class DBconnector extends MonoBehaviour{
 
 	}
 	
-}	//End of class brace
+	public function AwakeServer(){
+		//The server is hosted at heroku. When the server doesn't receive any request for an hour it goes to idle state, which takes 5 seconds or so to get into the awake state again.
+		//This is why we call this function, to awake the server before we have to do the first petition asking for the sessionkey.
+		if (url == "http://supermicrobeworld.herokuapp.com"){
+			/*if(debugMode)*/ Debug.Log("Waking up the server...");
+			var www = new WWW(url + "/unknownpage");	//At this time, the url gets an error if the main page is asked...
+			yield www;
+		}
+	}
+	
+}	//End of DBconnector class brace
 
 public class Connection{// extends System.Object{
 	//This class will post a trace in the database. 
 	//Creates a "Coroutiner" GameObject per connection, so if we want to make many connections this would't be the best solution... Is the only way I've found to call a coroutine from the constructor of a class not inheriting from MonoBehaviour so far. 
 	//Not suitable to make many connections per second for the reason explained in the line above.
 		
-	private var debugMode = true;			//if true, a lot of information will be displayed in the console about the progress of the instructions
+	private var debugMode = false;			//if true, a lot of information will be displayed in the console about the progress of the instructions
 	
 	private var url: String;
 	private var myTracks: JSONObject[];
@@ -251,6 +261,7 @@ public class Connection{// extends System.Object{
 	    	if(debugMode) Debug.Log('Connection.Connection() --> Response processed without errors.\nHeaders: ' + www.responseHeaders.ToString());
 	    }
 	}
+	
 } //End of Connection class
 
 	private class ConnectionQueue{

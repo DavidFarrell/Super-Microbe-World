@@ -2,20 +2,28 @@
 
 public class GUIHandler extends MonoBehaviour{
 
-	private var numImagesPhone: int;
+	//private var numImagesPhone: int;
 	//imagesLx will contain the images to be displayed on the phone for the level x. They will be displayed in order. The size of each array must be adjusted in the editor.
-	public var imagesL1: Texture2D[] = new Texture2D[numImagesPhone];
-	public var imagesL2: Texture2D[] = new Texture2D[numImagesPhone];
-	public var imagesL3: Texture2D[] = new Texture2D[numImagesPhone];
-	public var imagesL4: Texture2D[] = new Texture2D[numImagesPhone];
-	public var imagesL5: Texture2D[] = new Texture2D[numImagesPhone];
+	public var infoKitchen1: Texture2D[] = new Texture2D[7];			//Information pictures for the level kitchen1
+	public var infoSkin1: Texture2D[] = new Texture2D[2];
+	public var infoSkin2: Texture2D[] = new Texture2D[2];
+	public var infoKitchen2: Texture2D[] = new Texture2D[2];
+	//------------------------------------
+	public var infoSkin11: Texture2D[] = new Texture2D[2];
+	public var infoSkin12: Texture2D[] = new Texture2D[3];
+	public var infoBody11: Texture2D[] = new Texture2D[4];
+	//------------------------------------
+	public var infoKitchen31: Texture2D[] = new Texture2D[3];
+	public var infoKitchen32: Texture2D[] = new Texture2D[2];
+	//------------------------------------
+	public var infoSuperinfection: Texture2D[] = new Texture2D[6];
 	
 	private var infoImageWidth: int;
 	private var infoImageHeigth: int;
 	public var infoImagePos: Vector2;
 	private var showInfoImage: boolean; //Will be used to enable/disable showing the info images in the OnGUI() function
 	
-	private var currentLevel: int;
+	private var currentLevel: String;
 	private var currentArrayIm: Texture2D[];
 	private var currentImageNum: int;
 	private var currentImage: Texture2D;
@@ -44,7 +52,7 @@ public class GUIHandler extends MonoBehaviour{
 	private var widthScreen: int;
 	private var heightScreen: int;
 	
-	private var gameLogic: GameLogic;		//Keeps a reference of the gameLogic object
+	//private var gameLogic: GameLogic;		//Keeps a reference of the gameLogic object
 	private var currentLevelLogicScript: LevelLogic;	//Keeps a reference to the LevelLogicxxxxxx.js script that called the showInfoLevel() function to notify the script when finished displaying the information
 	
 	/**Other vars**/
@@ -52,13 +60,13 @@ public class GUIHandler extends MonoBehaviour{
 	
 	function Awake() {
 	
-		gameLogic = GameObject.Find("GameLogic").GetComponent("GameLogic");
+		//gameLogic = GameObject.Find("GameLogic").GetComponent("GameLogic");
 		
 		widthScreen = Screen.width;
 		heightScreen = Screen.height;
 		
-		infoImageWidth = imagesL1[0].width;
-		infoImageHeigth = imagesL1[0].height; 
+		infoImageWidth = infoKitchen1[0].width;
+		infoImageHeigth = infoKitchen1[0].height; 
 		
 		liveswidth = livesImg.width;
 		livesheight = livesImg.height;
@@ -116,7 +124,7 @@ public class GUIHandler extends MonoBehaviour{
 		if (antibiotic > 0) GUI.Label (Rect (antibioticPos.x,antibioticPos.y,antibioticwidth,antibioticheight), antibioticImg);
 		if (showInfoImage)
 			if (GUI.Button (Rect (infoImagePos.x, infoImagePos.y, infoImageWidth, infoImageHeigth), currentImage, "label")) {	//This will paint a button without border
-				print ("Next image");
+				//Debug.Log("Next image");
 				showNextInfoImage();
 			}
 	}
@@ -131,29 +139,48 @@ public class GUIHandler extends MonoBehaviour{
 	/*
 		This function will display the mobile phone with the information for the level selected.
 	*/
-	public function showInfoLevel(level: int, levelLogic: LevelLogic){
-		
+	public function showInfoLevel(level: String/*GameLogic.GameLevel*/, levelLogic: LevelLogic){	//GameLevel is an Enum type declared in the GameLogic.js script
+		Debug.Log("Showing the info for the level: " + level.ToString());
 		currentLevel = level;
 		currentLevelLogicScript = levelLogic;
 		switch (level){
-			case 1:
-				currentArrayIm = imagesL1;
+			case GameLogic.GameLevel.kitchen1.ToString():
+				currentArrayIm = infoKitchen1;
 				break;
-			case 2:
-				currentArrayIm = imagesL2;
+			case GameLogic.GameLevel.skin1.ToString():
+				currentArrayIm = infoSkin1;
 				break;
-			case 3:
-				currentArrayIm = imagesL3;
+			case GameLogic.GameLevel.skin2.ToString():
+				currentArrayIm = infoSkin2;
 				break;
-			case 4:
-				currentArrayIm = imagesL4;
+			case GameLogic.GameLevel.kitchen2.ToString():
+				currentArrayIm = infoKitchen2;
 				break;
-			case 5:
-				currentArrayIm = imagesL5;
+			//*******************************
+			case GameLogic.GameLevel.skin11.ToString():
+				currentArrayIm = infoSkin11;
 				break;
+			case GameLogic.GameLevel.skin12.ToString():
+				currentArrayIm = infoSkin12;
+				break;
+			case GameLogic.GameLevel.body11.ToString():
+				currentArrayIm = infoBody11;
+				break;
+			//********************************
+			case GameLogic.GameLevel.kitchen31.ToString():
+				currentArrayIm = infoKitchen31;
+				break;
+			case GameLogic.GameLevel.kitchen32.ToString():
+				currentArrayIm = infoKitchen32;
+				break;
+			//*********************************
+			case GameLogic.GameLevel.superinfection.ToString():
+				currentArrayIm = infoSuperinfection;
+				break;
+			
 			default:
-				currentArrayIm = imagesL1;
-				Debug.LogError("There isn't round number " + level + ". The rounds go from 1 to 5.");
+				currentArrayIm = infoKitchen1;
+				Debug.LogError("There isn't a round with this name: " + level.ToString + ". Check it.");
 		}
 		currentImageNum = 0;
 		phoneAnim.SetTrigger("PhoneBig");	//To make it small again the trigger is "PhoneSmall"

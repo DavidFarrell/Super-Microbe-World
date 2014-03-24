@@ -259,9 +259,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   life: 3
-  soapDrops: 50
-  whiteBloodCells: 50
-  Antibiotics: 50
+  soapDrops: 0
+  whiteBloodCells: 0
+  Antibiotics: 0
   groundDistance: 1.29999995
   maxSpeed: 5
   jumpForce: 700
