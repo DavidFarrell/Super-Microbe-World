@@ -58,7 +58,7 @@ public class GameLogic extends MonoBehaviour{
 		
 		db = transform.gameObject.GetComponent("DBconnector");
 		
-		db.AwakeServer();
+//		db.AwakeServer();	//Not needed if the game is executed from the webserver
 		
 		player = "";
 		
@@ -165,6 +165,10 @@ public class GameLogic extends MonoBehaviour{
 	private function ChangeLevel(newLevel : GameLevel){
 		//Here's why is so important that the name of the level var is the same than the scene
 		level = newLevel;
+		
+		//Testing this feature:
+		Resources.UnloadUnusedAssets();		//This will delete any object that is supposed not to be used again. Just testing it, maybe it is not only not useful but also costful to use!. Documentation can be found here: http://docs.unity3d.com/Documentation/ScriptReference/Resources.UnloadUnusedAssets.html
+		
 		var levelString: String = level.ToString();
 		if (levelString.Length == 14 && levelString.Substring(0, 13) == "gameShow_quiz"){	//In the case of the quiz level, we load the same stage
 		Debug.Log("GameLogic.ChangeLevel: Loading a quiz level! number " + currentRoundNum);

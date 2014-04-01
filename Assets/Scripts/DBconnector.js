@@ -164,15 +164,18 @@ public class DBconnector extends MonoBehaviour{
 
 	}
 	
-	public function AwakeServer(){
-		//The server is hosted at heroku. When the server doesn't receive any request for an hour it goes to idle state, which takes 5 seconds or so to get into the awake state again.
-		//This is why we call this function, to awake the server before we have to do the first petition asking for the sessionkey.
-		if (url == "http://supermicrobeworld.herokuapp.com"){
-			/*if(debugMode)*/ Debug.Log("Waking up the server...");
-			var www = new WWW(url + "/unknownpage");	//At this time, the url gets an error if the main page is asked...
-			yield www;
-		}
-	}
+	//This function is finally not needed if the game is being played from the server, because just asking the server for the page where the game will be loaded (and after that for the game itself) wakes the server
+	
+//	public function AwakeServer(){
+//		//The server is hosted at heroku. When the server doesn't receive any request for an hour it goes to idle state, which takes 5 seconds or so to get into the awake state again.
+//		//This is why we call this function, to awake the server before we have to do the first petition asking for the sessionkey.
+//		
+//		if (url == "http://supermicrobeworld.herokuapp.com"){
+//			/*if(debugMode)*/ Debug.Log("Waking up the server...");
+//			var www = new WWW(url + "/unknownpage");	//At this time, the url gets an error if the main page is asked...
+//			yield www;
+//		}
+//	}
 	
 }	//End of DBconnector class brace
 

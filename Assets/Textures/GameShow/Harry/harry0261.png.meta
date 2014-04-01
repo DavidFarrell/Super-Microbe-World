@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 27d8249070aa04a5cb0c644237f49a46
+guid: 38a242a1243754dddbaa1f6899e1e058
 TextureImporter:
   serializedVersion: 2
   mipmaps:
@@ -35,7 +35,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: .5, y: .5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 90
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings:

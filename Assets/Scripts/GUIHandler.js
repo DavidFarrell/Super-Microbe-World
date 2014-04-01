@@ -74,7 +74,7 @@ public class GUIHandler extends MonoBehaviour{
 		antibioticwidth = antibioticImg.width;
 		antibioticheight = antibioticImg.height;
 		
-		InGamePhone = Instantiate(InGamePhone);
+		//InGamePhone will be created by LevelLogic Script
 		var ingamephonetransform = transform.Find("InGamePhone");
 		if (!ingamephonetransform) Debug.Log("InGamePhone not found!!!!");
 		InGamePhone = ingamephonetransform.gameObject;

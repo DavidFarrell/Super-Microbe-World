@@ -44,7 +44,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.2893238, y: -5.54047251, z: -3}
+  m_LocalPosition: {x: 64.4949036, y: -5.57839584, z: -3}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -151,6 +151,7 @@ MonoBehaviour:
   timeWaiting: 3
   platformCheck: {fileID: 100002}
   turningOffset: .100000001
+  DestroysOnEnemyContact: 1
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -172,7 +173,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_SortingLayerID: 2511236001
-  m_Sprite: {fileID: 21300000, guid: 692638a692e784bab96d0199125fa9ba, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6b9fc2e2c14554c6c95fdeb4c03f80ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:

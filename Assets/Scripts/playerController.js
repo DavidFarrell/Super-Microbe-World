@@ -221,6 +221,8 @@ function FixedUpdate () {
 	low_anim.SetFloat("speed", Mathf.Abs(horizAxis));
 	up_anim.SetFloat("speed", Mathf.Abs(horizAxis));
 	
+	/*vvvvvvvvvvvvvvvvvvvvv part of the code using forces  vvvvvvvvvvvvvvvvvvvvv*/
+	
 	if(Mathf.Abs(myRigidbody2D.velocity.x) > 0.6 ){
 		if (horizAxis * myRigidbody2D.velocity.x >= maxSpeed){
 			myRigidbody2D.velocity = Vector2(Mathf.Sign(myRigidbody2D.velocity.x) * maxSpeed, myRigidbody2D.velocity.y);	// ... set the player's velocity to the maxSpeed in the x axis.
@@ -234,12 +236,14 @@ function FixedUpdate () {
 			myRigidbody2D.AddForce(Vector2.right * horizAxis * moveForce);				// ... add a force to the player.
 	}
 	
+	/*^^^^^^^^^^^^^^^^^^^^^ part of the code using velocity  ^^^^^^^^^^^^^^^^^^^^^*/
 	
 	/*it works!!!*/
 	/**/
-	//myRigidbody2D.velocity.x = horizAxis * maxSpeed;
+	//Idea: check if it's colliding with something before aplying this force to the body
+//	myRigidbody2D.velocity.x = horizAxis * maxSpeed;
 	/**/
-	/*it works!!!*/
+	/*^^^^^^^^^^^^^^^^^^^^^ part of the code using velocity  ^^^^^^^^^^^^^^^^^^^^^*/
 	
 	if(myRigidbody2D.velocity.x > 0.1 && !facingRight)						// If the input is moving the player right and the player is facing left...
 		Flip();																// ... flip the player.

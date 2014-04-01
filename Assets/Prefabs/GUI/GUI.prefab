@@ -40,7 +40,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.94000006, y: -2.51999998, z: -10}
+  m_LocalPosition: {x: 2.80999994, y: -2.51999998, z: -10}
   m_LocalScale: {x: 1.70000005, y: 1.70000005, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
@@ -103,7 +103,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 800159457d7244b649f6b0e6816efd36, type: 3}
   infoSkin12:
   - {fileID: 2800000, guid: 0d195b2c17df042f9a76d97ffbd8cb17, type: 3}
-  - {fileID: 2800000, guid: 0d195b2c17df042f9a76d97ffbd8cb17, type: 3}
+  - {fileID: 2800000, guid: b124d86ddc6124c3883d47e3e846c7ec, type: 3}
   - {fileID: 2800000, guid: 3f3d569631acc4557a9265024e6b1a5d, type: 3}
   infoBody11:
   - {fileID: 2800000, guid: 65045fad58ebc499484e7ded5963495e, type: 3}

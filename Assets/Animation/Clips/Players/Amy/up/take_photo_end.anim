@@ -18,21 +18,21 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 6c38b78dee7af4df39fe69866744a9d1, type: 3}
+      value: {fileID: 21300000, guid: d1550de2a39fd42248c9c74f6f8523cd, type: 3}
     - time: .0416666679
-      value: {fileID: 21300000, guid: 08534b2fd2da049c9880c29cf135bca7, type: 3}
+      value: {fileID: 21300000, guid: 242e1f7b09c8a48b493f32785806546b, type: 3}
     - time: .0833333358
-      value: {fileID: 21300000, guid: 2b8e251acf5b34b05bc844135e97c75c, type: 3}
+      value: {fileID: 21300000, guid: 12ac64ec4af1041b2b2488a6f442a666, type: 3}
     - time: .125
-      value: {fileID: 21300000, guid: 8303220cc3a96488496ffcfff3c42c1a, type: 3}
+      value: {fileID: 21300000, guid: 065e009cdafa04da0ac4a436b77dda5d, type: 3}
     - time: .166666672
-      value: {fileID: 21300000, guid: 1d786ac7c54b64cce982435dfdf3bab9, type: 3}
-    - time: .208333328
-      value: {fileID: 21300000, guid: 1b235f00619254870b5f09326671408d, type: 3}
+      value: {fileID: 21300000, guid: 7ded5fd51376b4505abb0ff40a646c05, type: 3}
+    - time: .208333343
+      value: {fileID: 21300000, guid: e3e0ef9a3ee5848b2ba8d79469b9f041, type: 3}
     - time: .25
-      value: {fileID: 21300000, guid: df1eda264bfe94ff29721bb0e313e1e7, type: 3}
+      value: {fileID: 21300000, guid: 30c4781a060034d35b18f0a2a3e1b1ad, type: 3}
     - time: .291666657
-      value: {fileID: 21300000, guid: 519e3e4c0c78047f8af7492d778f51c8, type: 3}
+      value: {fileID: 21300000, guid: 2b43a61990fc74addae207294b6b8ac9, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212

@@ -355,7 +355,7 @@ public class LevelLogicGameShow extends MonoBehaviour{
 			else{
 				Debug.Log("There was some problem with the player. Don't know which one to use.");
 			}
-		yield new WaitForSeconds(2);//3.5);									//Waits to play the shrinking animation TODO check the time
+		yield new WaitForSeconds(3.5);//3.5);									//Waits to play the shrinking animation TODO check the time
 //		Debug.Log("Finished ShrinkingZone");
 		
 		busy = false;
