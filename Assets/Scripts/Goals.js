@@ -40,6 +40,8 @@ public class Goals extends MonoBehaviour{
 	For example, if the 5th row is [0, 3, 0, 0, 0] that means that to complete this level, we need to wash away 3 colin microbes.
 	*/
 	
+	private var GUIHandlerScript: GUIHandler; //A refenence to the GUIHandler script, to update the goals of the level displayed on the screen.
+	
 	function Awake () {		//Initialize the matrix to zero
 		counterChanged = true;
 		goalsRemaining = false;
@@ -72,7 +74,22 @@ public class Goals extends MonoBehaviour{
 		//Debug.Log("Number of yoghurts lucy: " + counter[0, 4]);
 		GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI
 		
+		ConnectWithGUIHandler(numbers.micNumber, times);		//This function will search the GUI object (parent of the mobile phone) to set the microbe and number of goals
+		
 		counterChanged = true;
+	}
+	
+	private function ConnectWithGUIHandler(microbeNum: int, goalsToComplete: int){
+		//This function will search the GUI object (parent of the mobile phone) to set the microbe and number of goals still to complete
+		var GUIHandlerGO: GameObject = GameObject.Find("GUI(Clone)");
+		if (GUIHandlerGO){
+			GUIHandlerScript = GUIHandlerGO.GetComponent("GUIHandler");
+			GUIHandlerScript.SetPhoneInfo(microbeNum, goalsToComplete);			//Calls the function to update the microbe and number of goals
+			Debug.Log("Goals.js: UpdateGoals() GUIHandler.SetPhoneInfo()");
+		}																				
+		else{
+			Debug.LogError("GUI(Clone) Object not found. There will be GUI issues because of this. It should be son of the main camera game object.");
+		}
 	}
 	
 	public function GoalsAchieved() : boolean {
@@ -113,17 +130,20 @@ public class Goals extends MonoBehaviour{
 		
 //		Debug.Log("Goal achieved: Microbe: " + microbe + ". Action: " + action);
 		
-		if (counter[numbers.micNumber, numbers.actNumber] > 0) { 
+		if (counter[numbers.micNumber, numbers.actNumber] > 0) { //Goals will only be updated if this action was a goal to complete
 			counter[numbers.micNumber, numbers.actNumber]--;	//One goal achieved, one goal less to accomplish.
 			GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI.
+			GUIHandlerScript.UpdatePhoneInfo(numbers.micNumber, counter[numbers.micNumber, numbers.actNumber]);	//updates the guihandler
+			Debug.Log("Goals.js: UpdateGoals() GUIHandler.UpdatePhoneInfo()");
 			counterChanged = true;	//The next time that we call GoalsAchieved function, the matrix will be checked
 		}
 	}
 	
 	//Just for testing purposes. To skip some level without completing the goals.
 	public function CompleteAllGoals(){
-		for (var i : int = 0; i < 12; i++){		//To iterate over the microbes
-			for (var j : int = 0; i < 5; i++){	//To iterate over the actions
+		//The 2D arrays are quite tricky to loop through. This info about how to loop through 2D arrays was obtained here: 
+		for (var i : int = 0; i < counter.GetLength(0); i++){		//To iterate over the microbes
+			for (var j : int = 0; j < counter.GetLength(1); j++){	//To iterate over the actions
 				counter[i,j] = 0;
 			}
 		}

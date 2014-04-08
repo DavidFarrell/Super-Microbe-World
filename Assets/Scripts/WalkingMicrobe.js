@@ -146,7 +146,7 @@ public class WalkingMicrobe extends Microbe {
 	* Flips the texture in the Y axis. Useful to flip the characters when they reach an obstacle.
 	*
 	*/
-	private function Flip () {
+	protected function Flip () {
 			
 		facingRight = !facingRight;						
 		direction = facingRight ? Vector2.right : Vector2.right * (-1);

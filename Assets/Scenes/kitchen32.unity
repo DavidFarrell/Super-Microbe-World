@@ -1900,7 +1900,7 @@ MonoBehaviour:
   Speed: 1
   facingRight: 1
   moveDistance: 50
-  timeWaiting: 3
+  timeWaiting: .699999988
   platformCheck: {fileID: 1283423760}
   turningOffset: .5
   DestroysOnEnemyContact: 1
@@ -2643,7 +2643,7 @@ MonoBehaviour:
   Speed: 1
   facingRight: 1
   moveDistance: 50
-  timeWaiting: 3
+  timeWaiting: .699999988
   platformCheck: {fileID: 1852666489}
   turningOffset: .5
   DestroysOnEnemyContact: 1
@@ -3302,6 +3302,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
+      propertyPath: timeWaiting
+      value: .699999988
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
   m_RootGameObject: {fileID: 281175435}
@@ -3700,32 +3704,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1456327219}
---- !u!1 &723889889
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 723889890}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &723889890
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 723889889}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 60.0542946, y: -1.58838224, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
 --- !u!1 &729610116
 GameObject:
   m_ObjectHideFlags: 0
@@ -5459,32 +5437,6 @@ Transform:
   m_LocalScale: {x: .509133995, y: .509133995, z: 1}
   m_Children: []
   m_Father: {fileID: 1777723418}
---- !u!1 &1080552200
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1080552201}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1080552201
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1080552200}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 60.0542946, y: -1.58838224, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
 --- !u!1001 &1086465259
 Prefab:
   m_ObjectHideFlags: 0
@@ -5523,6 +5475,14 @@ Prefab:
     - target: {fileID: 11400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
       propertyPath: facingRight
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
+      propertyPath: turningOffset
+      value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
+      propertyPath: timeWaiting
+      value: .300000012
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
@@ -5984,6 +5944,10 @@ Prefab:
     - target: {fileID: 400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
+      propertyPath: timeWaiting
+      value: .600000024
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
@@ -6515,6 +6479,14 @@ Prefab:
     - target: {fileID: 400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
+      propertyPath: turningOffset
+      value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
+      propertyPath: timeWaiting
+      value: .699999988
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
@@ -7459,7 +7431,7 @@ MonoBehaviour:
   Speed: 1
   facingRight: 1
   moveDistance: 50
-  timeWaiting: 3
+  timeWaiting: .600000024
   platformCheck: {fileID: 962387287}
   turningOffset: .5
   DestroysOnEnemyContact: 1
@@ -9533,7 +9505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d89fcc10f1134570a193597a5d440e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xMargin: 2
+  xMargin: .5
   yMargin: 2
   xSmooth: 2
   ySmooth: 2
@@ -9729,7 +9701,7 @@ MonoBehaviour:
   Speed: 1
   facingRight: 0
   moveDistance: 50
-  timeWaiting: 3
+  timeWaiting: .300000012
   platformCheck: {fileID: 1071248931}
   turningOffset: .5
   DestroysOnEnemyContact: 1

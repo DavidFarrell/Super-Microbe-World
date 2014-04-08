@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-public class GUIHandler extends MonoBehaviour{
+public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is not the best name for this script... Should have been controller, but when I realized it was too late :)
 
 	//private var numImagesPhone: int;
 	//imagesLx will contain the images to be displayed on the phone for the level x. They will be displayed in order. The size of each array must be adjusted in the editor.
@@ -28,7 +28,7 @@ public class GUIHandler extends MonoBehaviour{
 	private var currentImageNum: int;
 	private var currentImage: Texture2D;
 	
-	private var lives: int;					//Amount of lives remaining		//NOTE: switch to private!    ********************************************
+	private var lives: int;					//Amount of lives remaining
 	public var livesImg: Texture2D;
 	public var livesPosHeight: int;
 	public var livesPos1x: int;
@@ -37,11 +37,27 @@ public class GUIHandler extends MonoBehaviour{
 	private var liveswidth: int;
 	private var livesheight: int;
 	
-	private var antibiotic: int;				//Amount of antibiotics remaining		//NOTE: switch to private!    ********************************************
+	private var antibiotic: int;				//Amount of antibiotics remaining
 	public var antibioticImg: Texture2D;
 	public var antibioticPos: Vector2;
 	private var antibioticwidth: int;
 	private var antibioticheight: int;
+	
+	//---------Goals----------------
+	public var greenCheck: Sprite;			//Texture for the green check
+	public var redCheck: Sprite;				//Texture for the green check
+	public var totalGoals: int;				//Normally there will be 3 goals, but there can be stages with just one goal... this var will control how much goals will be drawn
+	public var goalsCompleted: int;			//From 0 to 3, number of completed goals
+	//private var goalsArray: Sprite[] = new Sprite[3];		//array containing the 3 textures to be shown over the phone
+	private var goalsArrayGO: GameObject[];
+	private var currentGoalsGO: GameObject;
+	private var currentMicrobeNum: int;							//Number of the microbe to be displayed over the phone
+	private var currentMicrobeGO: GameObject;
+	public var microbesSprites: Sprite[] = new Sprite[12];		//Textures of all the microbes to be displayed over the phone (each microbe on its number. Eg. 0 lucy, 1 patty and so on)
+	public var microbePos: Vector2;
+	public var goalsPos: Vector2;
+	private var showPhoneScreen: boolean = false;		//if true, the goals and the bacterias will be drawn over the phone
+	//^^^^^^^^^^^Goals^^^^^^^^^^^^^
 	
 	private var whiteBloodCells: int;		//Amount of wbc remaining
 	private var soapDrops: int;				//Number of remainig soap drops
@@ -57,6 +73,8 @@ public class GUIHandler extends MonoBehaviour{
 	
 	/**Other vars**/
 	private var firstRun = true;		//To perform some operations in the update function just the first loop 
+	
+	private var mytimer: float = 0;
 	
 	function Awake() {
 	
@@ -99,8 +117,9 @@ public class GUIHandler extends MonoBehaviour{
 	function Update () {
 		if (firstRun){
 			firstRun = false;
-			
-			
+					
+			//ShowPhoneInfo();			
+				
 //			infoImageWidth = imagesL1[0].width;
 //			infoImageHeigth = imagesL1[0].height; 
 //			
@@ -114,6 +133,20 @@ public class GUIHandler extends MonoBehaviour{
 //		if(!InGamePhone) Debug.LogError("InGamePhone not found. Drag and drop the InGamePrefab to the public variable of the GUIHandler script attached to the GUI object in the editor.");
 //		else phoneAnim = InGamePhone.GetComponent(Animator);
 		}
+		
+		/*JUST FOR DEVELOPING*/
+		
+//		mytimer += Time.deltaTime;
+//		if (mytimer >= 5){
+//			mytimer = 0;
+//			Debug.Log("GUIHandler.Update() working every 5 seconds...");
+//			//ShowPhoneInfo();
+//		}
+		
+		//currentMicrobeGO.transform.position = microbePos;
+		
+		/*JUST FOR DEVELOPING*/
+		
 	}
 	
 	//MonoBehaviour's class to manage the GUI
@@ -127,6 +160,10 @@ public class GUIHandler extends MonoBehaviour{
 				//Debug.Log("Next image");
 				showNextInfoImage();
 			}
+		/*if (showPhoneScreen){
+			GUI.Label();
+			GUI.Label();
+		}*/
 	}
 	
 	public function UpdateGUI(life : int, soapDrops : int, whiteBloodCells : int, Antibiotics : int){
@@ -140,7 +177,7 @@ public class GUIHandler extends MonoBehaviour{
 		This function will display the mobile phone with the information for the level selected.
 	*/
 	public function showInfoLevel(level: String/*GameLogic.GameLevel*/, levelLogic: LevelLogic){	//GameLevel is an Enum type declared in the GameLogic.js script
-		Debug.Log("Showing the info for the level: " + level.ToString());
+		//Debug.Log("Showing the info for the level: " + level.ToString());
 		currentLevel = level;
 		currentLevelLogicScript = levelLogic;
 		switch (level){
@@ -201,5 +238,83 @@ public class GUIHandler extends MonoBehaviour{
 			currentLevelLogicScript.ShowInfoLevelFinished();
 		}
 	}
+	
+	/*---vvvvvvvvvvvvvvvvvvvvvvvvv Functions to display (and modify) the information of the goals over the phone when minimized vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv---*/
+	
+	public function ShowPhoneInfo(){		//updates the GUI
+		//This function will show the information about the goals to complete painted over the phone. For that reason, the phone must be minimized when calling this function
+		//NOTE that this function, if the microbe gameobject is already created won't be painted again. This is because usually there is no need for the 
+		if 	(!currentGoalsGO || !currentMicrobeGO){ //first time painting the phone, when the microbe and goals images haven't been painted yet.
+			
+			DisplayGoals();
+			DisplayMicrobe();
+		}
+		else{			//If the game objects are created
+			//Destroy(currentGoalsGO);
+			DisplayGoals();
+		}
+	}//End of function
+	
+	public function SetPhoneInfo (microbe: int, numberGoals: int){		//Sets the info in the vars BUT it does NOT display the phone
+		//Will get the number of goals in this level and the microbe to show over the phone. BUT it wont display them. 
+		currentMicrobeNum = microbe;
+		totalGoals = numberGoals;
+		goalsArrayGO = new GameObject[numberGoals];
+		goalsCompleted = 0;
+	}
+	
+	public function UpdatePhoneInfo (microbe: int, GoalsToComplete: int){			//Updates the completed goals AND the GUI
+		//Similar behaviour than the function above but showing the info AND updating the completed goals instead of the number of total goals
+		Debug.Log("GUIHandler: UpdatePhoneInfo() Updating goals. Previous goals number was " + goalsCompleted + " and now is " + (totalGoals - GoalsToComplete) + ".");
+		currentMicrobeNum = microbe;
+		goalsCompleted = totalGoals - GoalsToComplete;
+		ShowPhoneInfo(); //We will wait the phone to minimize before showing the info over the phone.
+	}
+	
+	private function DisplayGoals(){
+		var currentGoalSR: SpriteRenderer;
+		if (!currentGoalsGO){
+			currentGoalsGO = new GameObject();
+			currentGoalsGO.name = "Goals images";
+			currentGoalsGO.transform.parent = InGamePhone.transform;
+			currentGoalsGO.transform.localPosition = goalsPos;
+		}
+		if (totalGoals >= 0 && totalGoals <=3){				//Here we limit the amount of goals to 3. If this number wants to be increased later, the way to display the goals over the phone must be changed
+			for (var i : int = 0; i < goalsArrayGO.GetLength(0); i++){
+				if(!goalsArrayGO[i]){									//If the current goal hasn't been created yet
+					var thisGoal : GameObject = new GameObject();
+					thisGoal.transform.parent = currentGoalsGO.transform;
+					thisGoal.transform.localPosition = new Vector2((i * 0.5), 0);
+					thisGoal.name = i.ToString();		//First goal will be called "1", second "2"...
+					goalsArrayGO[i] = thisGoal;	//Adds the goal to the array so it can be reached later easily
+					
+					currentGoalSR = thisGoal.AddComponent(SpriteRenderer);
+					if (i >= goalsCompleted) currentGoalSR.sprite = redCheck;
+					else currentGoalSR.sprite = greenCheck;
+					currentGoalSR.sortingLayerName = "Foreground";
+					currentGoalSR.sortingOrder = 6;	//Because the phone is on the 5th order
+				}
+				else{				//If the current goal was created there's no need to create it again. Just change the sprite if neccesary
+					currentGoalSR = goalsArrayGO[i].GetComponent(SpriteRenderer);
+					if (i >= goalsCompleted) currentGoalSR.sprite = redCheck;
+					else currentGoalSR.sprite = greenCheck;
+				}
+			}//End for
+		}//End outer if
+	}//end function
+	
+	private function DisplayMicrobe(){
+		currentMicrobeGO = new GameObject();
+		currentMicrobeGO.name = "Microbe image";
+		currentMicrobeGO.transform.parent = InGamePhone.transform;
+		currentMicrobeGO.transform.localPosition = microbePos;
+		var currentMicrobeSR: SpriteRenderer;
+		currentMicrobeSR = currentMicrobeGO.AddComponent(SpriteRenderer);
+		currentMicrobeSR.sprite = microbesSprites[currentMicrobeNum];
+		currentMicrobeSR.sortingLayerName = "Foreground";
+		currentMicrobeSR.sortingOrder = 6;	//Because the phone is on the 5th order
+	}
+	
+	/*---^^^^^^^^^^^^^^^^^^^^^^^^^ Functions to display the information of the goals over the phone when minimized ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^---*/
 	
 }///End of class

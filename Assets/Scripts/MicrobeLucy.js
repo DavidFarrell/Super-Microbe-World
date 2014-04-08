@@ -61,6 +61,13 @@ public class MicrobeLucy extends WalkingMicrobe {
 		
 	}
 	
+	protected function Flip () {
+		//This function prevents lucy from turning when it has jumped
+		if (!jumped){
+			super.Flip();
+		}
+	}
+	
 	private function jumpToYoghurt() {
 		iTween.Stop(gameObject);						//Stops all the iTweens of this gameObject
 		jumpForce.x = jumpForce.x * yoghurtPosition;					//To jump left or right depending on the position of the yoghurt

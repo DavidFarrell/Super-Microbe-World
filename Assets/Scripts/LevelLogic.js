@@ -77,13 +77,15 @@ public class LevelLogic extends MonoBehaviour{
 			Debug.LogError("Start point not found.");
 		}
 		else{
-			if (PlayerPrefs.HasKey("player"))							//We'll instantiate amy or harry depending on which one was selected in the initial scene.
+			if (PlayerPrefs.HasKey("player")){							//We'll instantiate amy or harry depending on which one was selected in the initial scene.
 				playerName = PlayerPrefs.GetString("player");
+				Debug.Log("playerName found in PlayerPrefs: " + playerName);
+			}
 			else{
 				Debug.LogError("'player' attribute not found in the PlayerPrefs. Using Harry as default.");
-				playerName = "Harry";
+				playerName = "harry";
 			}
-			if (playerName == "Harry"){									//To instantiate Harry
+			if (playerName == "harry"){									//To instantiate Harry
 				player = Instantiate(harry, start.transform.position,  Quaternion.identity);
 			}
 			else{														//To instantiate Amy
@@ -162,8 +164,9 @@ public class LevelLogic extends MonoBehaviour{
 	
 	public function ShowInfoLevelFinished(){
 		//This function will be called when the information of the beggining of the level has been displayed completely and the game can be resumed.
-		Debug.Log("LevelLogic has received the signal to resume the level after the information has been completely displayed");
+		//Debug.Log("LevelLogic has received the signal to resume the level after the information has been completely displayed");
 		playerScript.EnableControls();
+		
 	}
 
 }

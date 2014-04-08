@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 212: {fileID: 21200000}
   - 95: {fileID: 9500000}
+  - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: InGamePhone
   m_TagString: Untagged
@@ -132,7 +133,37 @@ MonoBehaviour:
   livesPos3x: 840
   antibioticImg: {fileID: 2800000, guid: afbfbe4a4055146f3bece37da5e4a02c, type: 3}
   antibioticPos: {x: 827, y: 50}
+  greenCheck: {fileID: 21300000, guid: b791e4b5af51e4e5abb8d09a8aebe0dc, type: 3}
+  redCheck: {fileID: 21300000, guid: 7190b1ae7223e4426b71a530446edfb1, type: 3}
+  totalGoals: 3
+  goalsCompleted: 2
+  microbesSprites:
+  - {fileID: 21300000, guid: ec0b7228687a84498b180967169b960a, type: 3}
+  - {fileID: 21300000, guid: 176e631606c0e473fbabf3a9f769cc7b, type: 3}
+  - {fileID: 21300000, guid: db066f5a7e48b46c3a9a6934fcf43f4e, type: 3}
+  - {fileID: 21300000, guid: 58f8b5ebcff9b4821a21e62eb0fae6e9, type: 3}
+  - {fileID: 21300000, guid: be61ca6abd4ad4100a3ebf070e1bf268, type: 3}
+  - {fileID: 21300000, guid: 71c1d0476d09e4e728e3d92194b3a018, type: 3}
+  - {fileID: 21300000, guid: cfd1e50738955404296cfbf001c93835, type: 3}
+  - {fileID: 21300000, guid: cfc6dd6115d304016a7d59565f53514f, type: 3}
+  - {fileID: 21300000, guid: 78dc79660ae5a4bde9f80e11ffef3cc2, type: 3}
+  - {fileID: 21300000, guid: eaa37a7f0dacd4959804aaa7fc3366fe, type: 3}
+  - {fileID: 21300000, guid: 46835ebc6daed41eb89747f9cc54c951, type: 3}
+  - {fileID: 21300000, guid: 9d229c14a94c5487db421261b5464514, type: 3}
+  microbePos: {x: 3.53999996, y: -1.19000006}
+  goalsPos: {x: 3.25, y: -1.75999999}
   InGamePhone: {fileID: 100000, guid: f5a93743a950b48fdb2cda168c9d2a63, type: 2}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f658069da782143fc88e4212555b3aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

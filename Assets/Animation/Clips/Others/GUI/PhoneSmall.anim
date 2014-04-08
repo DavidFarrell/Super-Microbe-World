@@ -17,48 +17,48 @@ AnimationClip:
   m_FloatCurves: []
   m_PPtrCurves:
   - curve:
-    - time: 0
-      value: {fileID: 21300000, guid: 58eceab893bcf49479039ed382e7e96c, type: 3}
+    - time: -0
+      value: {fileID: 21300000, guid: 8687adf21fd4b40eda6d26bd918178ce, type: 3}
     - time: .0416666679
-      value: {fileID: 21300000, guid: 13a82c03787164462836f1ca56732a65, type: 3}
+      value: {fileID: 21300000, guid: c1362e80adbfb4029ab978adba0bb231, type: 3}
     - time: .0833333358
-      value: {fileID: 21300000, guid: d2c15c62a8d26476cbe0f403b1c30a79, type: 3}
+      value: {fileID: 21300000, guid: 6e6e19848de944244948a6ccb6a0c08d, type: 3}
     - time: .125
-      value: {fileID: 21300000, guid: 16b31a442d3d745eeaf396299e4c777c, type: 3}
+      value: {fileID: 21300000, guid: 94e75a842fbb84198a9e4d2dbc715347, type: 3}
     - time: .166666672
-      value: {fileID: 21300000, guid: cef238bd4986d47c889cf79941f4fa5a, type: 3}
+      value: {fileID: 21300000, guid: 14b35b90c34f148e989c49be373cffd4, type: 3}
     - time: .208333343
-      value: {fileID: 21300000, guid: b0b415d8bc8a1409396ba863363bed2c, type: 3}
+      value: {fileID: 21300000, guid: 93588cfac3bc445b0a7e27f58e76fa98, type: 3}
     - time: .25
-      value: {fileID: 21300000, guid: 44ec37bc9abd0444caa2c99a08d6d073, type: 3}
+      value: {fileID: 21300000, guid: 9e328be93cb724bef873ab648926e0f1, type: 3}
     - time: .291666657
-      value: {fileID: 21300000, guid: bd3140976e46f46a4adbade5582ec57a, type: 3}
+      value: {fileID: 21300000, guid: 902b619b163d44de39fcc15c97899ad7, type: 3}
     - time: .333333313
-      value: {fileID: 21300000, guid: 6aa7d87a46f80419e932c8e12490be9f, type: 3}
+      value: {fileID: 21300000, guid: 31577d32fd83f4b40a49d014325314b8, type: 3}
     - time: .37499997
-      value: {fileID: 21300000, guid: 60d61dc5dfa264ff5b45ebc5ab729c32, type: 3}
+      value: {fileID: 21300000, guid: 1b5639ce7478f471c8bf32575d267e22, type: 3}
     - time: .416666627
-      value: {fileID: 21300000, guid: 850d632a324f14fcd8146f738623c8a8, type: 3}
+      value: {fileID: 21300000, guid: ee551b6726a844d02ad104e69c39bf66, type: 3}
     - time: .458333284
-      value: {fileID: 21300000, guid: a826c1790862946e7a3c7ee372882db0, type: 3}
+      value: {fileID: 21300000, guid: 9bb099bff64d94634ac44e6a9d94555c, type: 3}
     - time: .49999994
-      value: {fileID: 21300000, guid: c06ac00b9dc144a6fb430da56646ae89, type: 3}
+      value: {fileID: 21300000, guid: f5d50fbc93cac47c597635fd047abe33, type: 3}
     - time: .541666627
-      value: {fileID: 21300000, guid: 66138a21374c640e9a98555ab9abc54e, type: 3}
+      value: {fileID: 21300000, guid: 0fb3b87139e264aee8e3a213d0dee54b, type: 3}
     - time: .583333313
-      value: {fileID: 21300000, guid: e3d15ab18498e4d678f527ae97af6895, type: 3}
+      value: {fileID: 21300000, guid: 2624a32740c1a43408926bfb75ab85c9, type: 3}
     - time: .625
-      value: {fileID: 21300000, guid: e40a22bfa05e143f095a53c2f74b7c20, type: 3}
+      value: {fileID: 21300000, guid: 4c5095aab3e784260b39a12b481fac12, type: 3}
     - time: .666666687
-      value: {fileID: 21300000, guid: 49fed2c62f4bd42d696a9adb885c4cf4, type: 3}
+      value: {fileID: 21300000, guid: 3ba917afe8ba94e4194c1938e4c6337d, type: 3}
     - time: .708333373
-      value: {fileID: 21300000, guid: e82232384a4124935a46e0c594d48d5b, type: 3}
+      value: {fileID: 21300000, guid: 5e14c197b737f42a2b9af0a764c89d32, type: 3}
     - time: .75000006
-      value: {fileID: 21300000, guid: f154d25cb3e9a48639384571470a6a6a, type: 3}
-    - time: .791666746
-      value: {fileID: 21300000, guid: 138821e168259469b86c3e5171b646dd, type: 3}
-    - time: .833333433
-      value: {fileID: 21300000, guid: 2115be718aa25431fba0e32f93268ce3, type: 3}
+      value: {fileID: 21300000, guid: 746b201ae5f7f4be7878d6c445547599, type: 3}
+    - time: .791666687
+      value: {fileID: 21300000, guid: 7e712a81f68354412ad2dd18a65c8f09, type: 3}
+    - time: .833333313
+      value: {fileID: 21300000, guid: d1df6171206d746d59cbc4c18fb09172, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -71,7 +71,7 @@ AnimationClip:
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: .875000119
+    m_StopTime: .875
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -87,4 +87,11 @@ AnimationClip:
     m_Mirror: 0
   m_EditorCurves: []
   m_EulerEditorCurves: []
-  m_Events: []
+  m_Events:
+  - time: .833333313
+    functionName: ShowPhoneInfo
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

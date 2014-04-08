@@ -7259,7 +7259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d89fcc10f1134570a193597a5d440e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xMargin: 2
+  xMargin: .5
   yMargin: 2
   xSmooth: 2
   ySmooth: 2

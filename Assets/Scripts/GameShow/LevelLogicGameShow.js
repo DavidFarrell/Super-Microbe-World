@@ -272,7 +272,7 @@ public class LevelLogicGameShow extends MonoBehaviour{
 		while (player == ""){
 			yield;
 		}
-				
+		Debug.Log("Player selected: " + player);
 		harryPlayerSelection.SwitchSelMode(false);
 		amyPlayerSelection.SwitchSelMode(false);
 		

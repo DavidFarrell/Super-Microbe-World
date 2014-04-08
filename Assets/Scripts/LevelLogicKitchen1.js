@@ -19,7 +19,7 @@ public class LevelLogicKitchen1 extends LevelLogic{
 //		
 //	}
 
-	protected function AddLevelGoals () {
+	protected function AddLevelGoals () {			//This function is called from the Start() function on LevelLogic. So, it's called from this script's Start function when calling super.Start()
 		//Function to add the goals of this level
 		
 		goals.SetGoals("lucy", "photo", 3);			//The goal will be to take pictures to 3 lucy bacteria
