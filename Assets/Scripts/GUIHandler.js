@@ -265,7 +265,7 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 	
 	public function UpdatePhoneInfo (microbe: int, GoalsToComplete: int){			//Updates the completed goals AND the GUI
 		//Similar behaviour than the function above but showing the info AND updating the completed goals instead of the number of total goals
-		Debug.Log("GUIHandler: UpdatePhoneInfo() Updating goals. Previous goals number was " + goalsCompleted + " and now is " + (totalGoals - GoalsToComplete) + ".");
+//		Debug.Log("GUIHandler: UpdatePhoneInfo() Updating goals. Previous goals number was " + goalsCompleted + " and now is " + (totalGoals - GoalsToComplete) + ".");
 		currentMicrobeNum = microbe;
 		goalsCompleted = totalGoals - GoalsToComplete;
 		ShowPhoneInfo(); //We will wait the phone to minimize before showing the info over the phone.

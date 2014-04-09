@@ -22,26 +22,26 @@ public class MicrobeLucy extends WalkingMicrobe {
 		var objectHit: GameObject = collisionInfo.gameObject;
 		
 		if(objectHit.tag == "Yoghurt"){
-			if(objectHit.transform.position.x > myTransform.position.x)			//The yoghurt is on the right.
-				yoghurtPosition = 1; 
-			else
-				yoghurtPosition = -1; 
-			//Debug.Log("Lucy: Trigger entered. Yoghurt detected!");
-			canJump = true;
-			yoghurtGO = objectHit;
-			//if (!jumped) jumpToYoghurt();
-			
+			if(!canJump){
+				if(objectHit.transform.position.x > myTransform.position.x)			//The yoghurt is on the right.
+					yoghurtPosition = 1; 
+				else
+					yoghurtPosition = -1; 
+				Debug.Log("Lucy: Trigger entered. Yoghurt detected!");
+				canJump = true;
+				yoghurtGO = objectHit;
+			}
 		}
 		
 		else{
-			//Debug.Log("Lucy: Trigger entered, but not Yoghurt");
+			Debug.Log("Lucy: Trigger entered, but not Yoghurt");
 			super.OnTriggerEnter2D(collisionInfo);								//To call the OnTriggerEnter2D of WalkingMicrobe's script.
 		}
 		
 	}
 	
 	function OnTriggerExit2D(other: Collider2D) {
-		//Debug.Log("Lucy: Trigger exited.");
+		Debug.Log("Lucy: Trigger exited.");
 		canJump = false;
 		yoghurtGO = null;
 	}
@@ -77,7 +77,7 @@ public class MicrobeLucy extends WalkingMicrobe {
 		
 		goals.UpdateGoals(microbeName, "thrown to yoghurt");				//To inform the Goals.js script about the change
 		
-		if (yoghurtGO) yoghurtGO.SendMessageUpwards("DrawYoghurt", 2);					//Tells the yoghurt's script to draw yoghurt overflowing the yoghurt can, to show that yoghurt was created. The number is the delay. 
+		if (yoghurtGO) yoghurtGO.SendMessageUpwards("DrawYoghurt", 1.9);					//Tells the yoghurt's script to draw yoghurt overflowing the yoghurt can, to show that yoghurt was created. The number is the delay. 
 		
 		disableColliders();
 		

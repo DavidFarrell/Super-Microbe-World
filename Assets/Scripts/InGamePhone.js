@@ -22,7 +22,7 @@ public class InGamePhone extends MonoBehaviour{
 		else{
 			GUIHandlerScript.ShowPhoneInfo();
 		}
-		Debug.Log("InGamePhone.js: ShowPhoneInfo() called.");
+//		Debug.Log("InGamePhone.js: ShowPhoneInfo() called.");
 	}//End of function
 	
 }//End of class

@@ -85,7 +85,7 @@ public class Goals extends MonoBehaviour{
 		if (GUIHandlerGO){
 			GUIHandlerScript = GUIHandlerGO.GetComponent("GUIHandler");
 			GUIHandlerScript.SetPhoneInfo(microbeNum, goalsToComplete);			//Calls the function to update the microbe and number of goals
-			Debug.Log("Goals.js: UpdateGoals() GUIHandler.SetPhoneInfo()");
+//			Debug.Log("Goals.js: UpdateGoals() GUIHandler.SetPhoneInfo()");
 		}																				
 		else{
 			Debug.LogError("GUI(Clone) Object not found. There will be GUI issues because of this. It should be son of the main camera game object.");
@@ -134,7 +134,7 @@ public class Goals extends MonoBehaviour{
 			counter[numbers.micNumber, numbers.actNumber]--;	//One goal achieved, one goal less to accomplish.
 			GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI.
 			GUIHandlerScript.UpdatePhoneInfo(numbers.micNumber, counter[numbers.micNumber, numbers.actNumber]);	//updates the guihandler
-			Debug.Log("Goals.js: UpdateGoals() GUIHandler.UpdatePhoneInfo()");
+//			Debug.Log("Goals.js: UpdateGoals() GUIHandler.UpdatePhoneInfo()");
 			counterChanged = true;	//The next time that we call GoalsAchieved function, the matrix will be checked
 		}
 	}
