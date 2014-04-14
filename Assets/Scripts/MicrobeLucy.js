@@ -21,29 +21,32 @@ public class MicrobeLucy extends WalkingMicrobe {
 		
 		var objectHit: GameObject = collisionInfo.gameObject;
 		
-		if(objectHit.tag == "Yoghurt"){
+		if(objectHit.tag == "Yoghurt" && collisionInfo.isTrigger){				//isTrigger means that it has intersected the collider of the jump platform, which is a trigger, and not the yoghurt
+			//Debug.Log("Name of the game object collided: " + objectHit.name);
 			if(!canJump){
 				if(objectHit.transform.position.x > myTransform.position.x)			//The yoghurt is on the right.
 					yoghurtPosition = 1; 
 				else
 					yoghurtPosition = -1; 
-				Debug.Log("Lucy: Trigger entered. Yoghurt detected!");
+//				Debug.Log("Lucy: Trigger entered. Yoghurt detected! Now Lucy can jump.");
 				canJump = true;
 				yoghurtGO = objectHit;
 			}
 		}
 		
 		else{
-			Debug.Log("Lucy: Trigger entered, but not Yoghurt");
+//			Debug.Log("Lucy: Trigger entered, but not Yoghurt");
 			super.OnTriggerEnter2D(collisionInfo);								//To call the OnTriggerEnter2D of WalkingMicrobe's script.
 		}
 		
 	}
 	
 	function OnTriggerExit2D(other: Collider2D) {
-		Debug.Log("Lucy: Trigger exited.");
-		canJump = false;
-		yoghurtGO = null;
+		if (canJump){
+//			Debug.Log("Lucy: Trigger exited. Now Lucy can't jump.");
+			canJump = false;
+			yoghurtGO = null;
+		}
 	}
 	
 	//If Lucy is hit while standing in the area near the yoghurt where it can jump, and the yoghurt and collision are on the right(approppriate) it jumps

@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-//This script will draw yoghurt overflowing on top of the yoghurt can when there's some lucy bacteria being dropped 
+//This script will draw yoghurt overflowing on top of the yoghurt glass and trigger the animation when there's some lucy bacteria being dropped in
 
 public var topping_left: GameObject;
 public var topping_mid: GameObject;

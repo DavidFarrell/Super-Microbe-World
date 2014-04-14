@@ -5,6 +5,7 @@
 
 private var timer: float;
 private var debugMode: boolean = false;				//When true, this script displays all the Debug messages.
+public var testVar1: float = 0;
 
 /*--v--v--v--v--v--v--*--v--v--v--v--v--v--Variables--v--v--v--v--v--v--*--v--v--v--v--v--v--*/
 
@@ -103,7 +104,7 @@ function Awake () {
 	canBeHit = true;
 	
 	/*vvvvvvvvv GUI part vvvvv*/
-	GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, Antibiotics, whiteBloodCells);			//Debugging GUI. Delete when the new one is working
+//	GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, Antibiotics, whiteBloodCells);			//Debugging GUI. Delete when the new one is working
 	
 	var GUIHandlerGO : GameObject;
 	GUIHandlerGO = GameObject.Find("GUI(Clone)").gameObject;
@@ -135,12 +136,16 @@ function Update () {
 	
 	//static function DrawRay(start: Vector3, dir: Vector3, color: Color = Color.white, duration: float = 0.0f, depthTest: bool = true): void;
 	
+	
 	Debug.DrawRay(myTransform.position, groundDirection*groundDistance, Color.black, 0);
+	Debug.DrawRay(Vector3(myTransform.position.x + 0.3, myTransform.position.y, 0), groundDirection*groundDistance, Color.green, 0);
+	Debug.DrawRay(Vector3(myTransform.position.x - 0.3, myTransform.position.y, 0), groundDirection*groundDistance, Color.green, 0);
 	
 	//static function RaycastNonAlloc(origin: Vector2, direction: Vector2, results: RaycastHit2D[], distance: float = Mathf.Infinity, layerMask: int = DefaultRaycastLayers, minDepth: float = -Mathf.Infinity, maxDepth: float = Mathf.Infinity): int;
 	
 	groundHitsNumber = Physics2D.RaycastNonAlloc(myTransform.position, groundDirection, groundHits, groundDistance, utils.layerMasks.groundAndBugs);
-	
+	groundHitsNumber += Physics2D.RaycastNonAlloc(Vector3(myTransform.position.x + 0.3, myTransform.position.y, 0), groundDirection, groundHits, groundDistance, utils.layerMasks.groundAndBugs);
+	groundHitsNumber += Physics2D.RaycastNonAlloc(Vector3(myTransform.position.x - 0.3, myTransform.position.y, 0), groundDirection, groundHits, groundDistance, utils.layerMasks.groundAndBugs);
 	
 	//Debug.DrawLine(myTransform.position, groundPoint, Color.red, 0, false);
 	//groundHitsNumber = Physics2D.LinecastNonAlloc(myTransform.position, groundDirection, groundHits, groundLayerMask);
@@ -193,7 +198,7 @@ function Update () {
 //			useAntibiotics();
 //		}
 		
-		horizAxis = Input.GetAxis("Horizontal");				//Cache the horizontal input. All the Input Calls must be done in the Update function. 
+		horizAxis = Input.GetAxisRaw("Horizontal");				//Cache the horizontal input. All the Input Calls must be done in the Update function. 
 	}//controlsEnabled's if
 	else{
 		horizAxis= 0;
@@ -206,17 +211,23 @@ function FixedUpdate () {
 	/*--v--v--v--v--v--v--Code to move--v--v--v--v--v--v--*/
 	
 	
-	/*
-	hitDirectionResetTimer += Time.deltaTime;
-	if (grounded && hitDirectionResetTimer > 0.35){						//To reset the hitDirection every 0.35 secs to avoid it from getting stuck when OnTriggerExit fails (it does fail).
-		hitDirectionResetTimer = 0;
-		//hitDirection.x = 0;
-	}
-	*/
-	/*
-	if(hitDirection.x != 0 && Mathf.Sign(horizAxis) == Mathf.Sign(hitDirection.x)) 			//To stop the player applying forces against some object if they are colliding
-		horizAxis = 0;
-	*/
+	/*vvvvTESTvvvv*/
+
+	/*^^^^TEST^^^^*/
+	
+	/**/
+//	hitDirectionResetTimer += Time.deltaTime;
+//	if (grounded && hitDirectionResetTimer > 0.25){						//To reset the hitDirection every 0.35 secs to avoid it from getting stuck when OnTriggerExit fails (it does fail).
+//		hitDirectionResetTimer = 0;
+//		hitDirection.x = 0;
+//	}
+//	
+//	
+//	/**/
+//	if(hitDirection.x != 0 && Mathf.Sign(horizAxis) == Mathf.Sign(hitDirection.x)){ 			//To stop the player applying forces against some object if they are colliding
+//		horizAxis = 0;
+//	}
+	
 	
 	low_anim.SetFloat("speed", Mathf.Abs(horizAxis));
 	up_anim.SetFloat("speed", Mathf.Abs(horizAxis));
@@ -245,10 +256,10 @@ function FixedUpdate () {
 	/**/
 	/*^^^^^^^^^^^^^^^^^^^^^ part of the code using velocity  ^^^^^^^^^^^^^^^^^^^^^*/
 	
-	if(myRigidbody2D.velocity.x > 0.1 && !facingRight)						// If the input is moving the player right and the player is facing left...
-		Flip();																// ... flip the player.
-	else if(myRigidbody2D.velocity.x < -0.1 && facingRight)					// Otherwise if the input is moving the player left and the player is facing right...
-		Flip();																//Note that there is a little margin of 0,2 to avoid it from flipping very fast. This margin should be tested an adjusted if is not well set.
+	if(myRigidbody2D.velocity.x > 0.15 && !facingRight)							// If the input is moving the player right and the player is facing left...
+		Flip();																	// ... flip the player.
+	else if(myRigidbody2D.velocity.x < -0.15 && facingRight)					// Otherwise if the input is moving the player left and the player is facing right...
+		Flip();																	//Note that there is a little margin of 0,2 to avoid it from flipping very fast. This margin should be tested an adjusted if is not well set.
 	
 }
 
@@ -399,35 +410,35 @@ function useAntibiotics () {
 
 public function UpdateGUI () {
 	
-	GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, whiteBloodCells, Antibiotics);
+	//GUITextPlayerInfo.SetInfoPlayer(life, soapDrops, whiteBloodCells, Antibiotics);
 	//Debug.Log("Trying to use GUIHandler...");
 	GUIHandler.UpdateGUI(life, soapDrops, whiteBloodCells, Antibiotics);
 }
 
-/*
-function OnTriggerEnter2D (hit: Collider2D) {
-	
-	var hitGameObject: GameObject = hit.gameObject;
-	//Debug.Log("Collision with object in Layer: " + hitGameObject.layer);
-	if(	hitGameObject.layer == utils.layers.ground || 
-		hitGameObject.layer == utils.layers.enemies || 
-		hitGameObject.layer == utils.layers.nonEnemies){
-		
-		if(facingRight)
-			hitDirection = Vector2(1, 0);
-		else 
-			hitDirection = Vector2(-1, 0);
-		Debug.Log("Collision direction: " + hitDirection + "Object layer: " + hitGameObject.layer);
-	}
-}
 
-function OnTriggerExit2D(hit: Collider2D){
+//function OnTriggerEnter2D (hit: Collider2D) {
+//	
+//	var hitGameObject: GameObject = hit.gameObject;
+//	//Debug.Log("Collision with object in Layer: " + hitGameObject.layer);
+//	if(	hitGameObject.layer == utils.layers.ground || 
+//		hitGameObject.layer == utils.layers.enemies || 
+//		hitGameObject.layer == utils.layers.nonEnemies){
+//		
+//		if(facingRight)
+//			hitDirection = Vector2(1, 0);
+//		else 
+//			hitDirection = Vector2(-1, 0);
+////		Debug.Log("Collision direction: " + hitDirection + "Object layer: " + hitGameObject.layer + ". Name: " + hitGameObject.name);
+//	}
+//}
+//
+//function OnTriggerExit2D(hit: Collider2D){
+//
+//	hitDirection = Vector2(0, 0);
+////	Debug.Log("Collision exit. Name: " + hit.gameObject.name);
+//
+//}
 
-	hitDirection = Vector2(0, 0);
-	Debug.Log("Collision exit");
-
-}
-*/
 
 //Plays the take photo animation and trigger this animation on any bug that is in the photo trayectory.
 private function takePhoto () {

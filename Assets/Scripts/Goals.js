@@ -72,7 +72,8 @@ public class Goals extends MonoBehaviour{
 //		Debug.Log("Setting goal: Microbe: " + microbe + ". Action: " + action + ". Times:" + times + ". Converted numbers: Microbe: " + numbers.micNumber +" Action: "+ numbers.actNumber);
 		
 		//Debug.Log("Number of yoghurts lucy: " + counter[0, 4]);
-		GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI
+		
+		//GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI
 		
 		ConnectWithGUIHandler(numbers.micNumber, times);		//This function will search the GUI object (parent of the mobile phone) to set the microbe and number of goals
 		
@@ -102,7 +103,7 @@ public class Goals extends MonoBehaviour{
 					if (counter[i,j] != 0) {
 						counterChanged = false;		//This "if" won't be executed again unless counterChanged is set to true again. counterChanged will be changed to true when the counter matrix suffers any change.
 //						Debug.Log("***Checking loop...*** There is still some goal that need to be completed. This is the first (maybe not only) one -> Bug: " + i + ". Action: " + j);
-						GUITextGoalsInfo.SetInfoGoals(i.ToString(), counter[i, 0], counter[i, 1], counter[i, 2], counter[i, 3], counter[i, 4]);	//To update the GUI. Note that this will display a number instead of the name of the bug. when changing the strings to enums to keep the name of the microbes this will change
+//						GUITextGoalsInfo.SetInfoGoals(i.ToString(), counter[i, 0], counter[i, 1], counter[i, 2], counter[i, 3], counter[i, 4]);	//To update the GUI. Note that this will display a number instead of the name of the bug. when changing the strings to enums to keep the name of the microbes this will change
 						return false;	//If there is any position different from 0, there is at least one goal without accomplish					
 					}
 				}
@@ -132,7 +133,7 @@ public class Goals extends MonoBehaviour{
 		
 		if (counter[numbers.micNumber, numbers.actNumber] > 0) { //Goals will only be updated if this action was a goal to complete
 			counter[numbers.micNumber, numbers.actNumber]--;	//One goal achieved, one goal less to accomplish.
-			GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI.
+			//GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI.
 			GUIHandlerScript.UpdatePhoneInfo(numbers.micNumber, counter[numbers.micNumber, numbers.actNumber]);	//updates the guihandler
 //			Debug.Log("Goals.js: UpdateGoals() GUIHandler.UpdatePhoneInfo()");
 			counterChanged = true;	//The next time that we call GoalsAchieved function, the matrix will be checked

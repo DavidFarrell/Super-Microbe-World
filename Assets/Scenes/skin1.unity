@@ -9333,7 +9333,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &729610117
 Transform:
   m_ObjectHideFlags: 0
@@ -10728,9 +10728,9 @@ MonoBehaviour:
   moveDistance: 50
   timeWaiting: 3
   platformCheck: {fileID: 2130806140}
-  turningOffset: .5
+  turningOffset: .100000001
   DestroysOnEnemyContact: 1
-  jumpForce: {x: 3600, y: 27000}
+  jumpForce: {x: 3600, y: 25000}
 --- !u!61 &813136692
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16872,9 +16872,9 @@ MonoBehaviour:
   moveDistance: 50
   timeWaiting: 3
   platformCheck: {fileID: 1030868505}
-  turningOffset: .5
+  turningOffset: .100000001
   DestroysOnEnemyContact: 1
-  jumpForce: {x: 3600, y: 27000}
+  jumpForce: {x: 3600, y: 25000}
 --- !u!61 &1236327565
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -25553,9 +25553,9 @@ MonoBehaviour:
   moveDistance: 50
   timeWaiting: 3
   platformCheck: {fileID: 1071248931}
-  turningOffset: .5
+  turningOffset: .100000001
   DestroysOnEnemyContact: 1
-  jumpForce: {x: 3600, y: 27000}
+  jumpForce: {x: 3600, y: 25000}
 --- !u!61 &1777723414
 BoxCollider2D:
   m_ObjectHideFlags: 0

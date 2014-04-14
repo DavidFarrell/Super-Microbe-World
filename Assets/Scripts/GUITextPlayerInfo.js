@@ -25,8 +25,8 @@ function Update () {
 }
 
 public static function SetInfoPlayer(lives: int, soap: int, wbc: int, ab: int){
-	mytext = "Lives: " + lives + " Soap: " + soap + " White blood cells: " + wbc + " Antibiotics: " + ab;
-	update = true;
+//	mytext = "Lives: " + lives + " Soap: " + soap + " White blood cells: " + wbc + " Antibiotics: " + ab;
+//	update = true;
 }
 
 @script RequireComponent(GUIText)

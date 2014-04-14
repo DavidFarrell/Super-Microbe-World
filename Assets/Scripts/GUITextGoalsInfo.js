@@ -23,14 +23,15 @@ function Update () {
 }
 
 public static function SetInfoGoals(microbe: String, photos: int, wash: int, wbc: int, antibiotics: int, yoghurt: int){
-	mytext = "Microbe: " + microbe;
-	if (photos > 0) mytext = mytext + " Photos: " + photos;
-	if (wash > 0) mytext = mytext + " To wash: " + wash;
-	if (wbc > 0) mytext = mytext + " Wbc: " + wbc;
-	if (antibiotics > 0) mytext = mytext + " Antibiotics: " + antibiotics;
-	if (yoghurt > 0) mytext = mytext + " Yoghurt: " + yoghurt;
-	//mytext = "";	//To hide the temporal GUI once the definitive one is done
-	update = true;
+//	mytext = "Microbe: " + microbe;
+//	if (photos > 0) mytext = mytext + " Photos: " + photos;
+//	if (wash > 0) mytext = mytext + " To wash: " + wash;
+//	if (wbc > 0) mytext = mytext + " Wbc: " + wbc;
+//	if (antibiotics > 0) mytext = mytext + " Antibiotics: " + antibiotics;
+//	if (yoghurt > 0) mytext = mytext + " Yoghurt: " + yoghurt;
+//	//mytext = "";	//To hide the temporal GUI once the definitive one is done
+//	update = true;
+	
 }
 
 

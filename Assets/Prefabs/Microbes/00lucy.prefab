@@ -44,7 +44,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 28.107193, y: -.407041311, z: -3}
+  m_LocalPosition: {x: 38.5003967, y: -2.43515563, z: -3}
   m_LocalScale: {x: 1.96411955, y: 1.96411955, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -147,7 +147,7 @@ MonoBehaviour:
   moveDistance: 50
   timeWaiting: 3
   platformCheck: {fileID: 100002}
-  turningOffset: .100000001
+  turningOffset: .5
   DestroysOnEnemyContact: 1
   jumpForce: {x: 3600, y: 25000}
 --- !u!212 &21200000

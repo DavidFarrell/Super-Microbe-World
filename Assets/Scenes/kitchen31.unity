@@ -118,7 +118,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: a0d757523259941a0b5ad4aa5881f405, type: 2}
   m_CullingMode: 1
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
 --- !u!114 &1814297
@@ -147,7 +147,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Size: {x: 3.3805356, y: 4.49603844}
-  m_Center: {x: -.00529098511, y: .00822401047}
+  m_Center: {x: 0, y: 0}
 --- !u!212 &1814299
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2939,7 +2939,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &729610117
 Transform:
   m_ObjectHideFlags: 0
@@ -3465,7 +3465,7 @@ GameObject:
   - 61: {fileID: 916498098}
   - 61: {fileID: 916498097}
   m_Layer: 0
-  m_Name: jump_platform
+  m_Name: jump_platfotm
   m_TagString: Yoghurt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3478,34 +3478,34 @@ Transform:
   m_PrefabInternal: {fileID: 1057385624}
   m_GameObject: {fileID: 916498095}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1814295}
 --- !u!61 &916498097
 BoxCollider2D:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 6100006, guid: 894e07905319d49fa9ab35946ce95c01,
+  m_PrefabParentObject: {fileID: 6100000, guid: 894e07905319d49fa9ab35946ce95c01,
     type: 2}
   m_PrefabInternal: {fileID: 1057385624}
   m_GameObject: {fileID: 916498095}
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: 2.5999999, y: 1.20000005}
-  m_Center: {x: 2, y: 2.9000001}
+  m_Size: {x: 2.25999999, y: 1.20000005}
+  m_Center: {x: 1.83000004, y: 2.9000001}
 --- !u!61 &916498098
 BoxCollider2D:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 6100008, guid: 894e07905319d49fa9ab35946ce95c01,
+  m_PrefabParentObject: {fileID: 6100002, guid: 894e07905319d49fa9ab35946ce95c01,
     type: 2}
   m_PrefabInternal: {fileID: 1057385624}
   m_GameObject: {fileID: 916498095}
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: 2.5999999, y: 1.20000005}
-  m_Center: {x: -2, y: 2.9000001}
+  m_Size: {x: 2.25999999, y: 1.19999981}
+  m_Center: {x: -1.83000004, y: 2.9000001}
 --- !u!1 &971208341
 GameObject:
   m_ObjectHideFlags: 0
