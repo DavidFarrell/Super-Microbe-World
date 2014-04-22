@@ -28,14 +28,14 @@ public class TextBox extends MonoBehaviour{
 	
 	var style : GUIStyle;						//The style of the text. Can be set up in the inspector in unity.
 	
-	var bufferSize : int = 50;				//Size of the buffer that will contain the messages to display. 
+	private var bufferSize : int = 50;				//Size of the buffer that will contain the messages to display. Number of sentences.
 	
 	var lettersPerSecond : int = 20;		//Letters that will be written per second when writting the dialogues. The frequency of writing.
 	private var period : float = 1 / lettersPerSecond;	//Inverse of the frequency. The period between the writing of each letter.
 	
 	
-	private var maxLettersPerLine = 75;						//Max letters that will be in one written line
-	private var maxLinesPerDialog = 4;						//Max lines per sentence that will be written
+	public var maxLettersPerLine = 75;						//Max letters that will be in one written line
+	public var maxLinesPerDialog = 4;						//Max lines per sentence that will be written
 	
 	private var textBuffer : TextBuffer;					//See the class TextBuffer below, at the end of this js file. It's a round buffer to manage all the sentences to show.
 	
@@ -198,7 +198,7 @@ public class TextBox extends MonoBehaviour{
 		return correctlyDone;
 	}
 	
-	//Show all the dialog line by line, waiting the player to click between lines, and writing each line letter by letter like "pokemon style".
+	//Show all the dialog line by line, waiting for the player to click between lines, and writing each line letter by letter like "pokemon style".
 	private function ShowAllLines () {
 		var actualLine : String = "";
 		EnableTextBox();
@@ -224,7 +224,9 @@ public class TextBox extends MonoBehaviour{
 				textToWrite = textToWrite + actualLine[count];
 				
 				if((count % maxLettersPerLine == 0) && (count != 0)){ 		//To add a line break every "maxLettersPerLine" letters
-					textToWrite = textToWrite + "\n";
+					//textToWrite = textToWrite +"\n";
+					textToWrite = InsertBreakLine(textToWrite, count);		//new!
+					//InsertBreakLine(textToWrite, count);
 					line++;
 					if (line == maxLinesPerDialog){							//If there is too many lines (more than "maxLinesPerDialog") it stops writing
 						break;
@@ -243,7 +245,20 @@ public class TextBox extends MonoBehaviour{
 		//The coroutine finishes and the control is returned to the coroutine that called this function.
 	}
 	
-	//Coroutine that will finished when the player presses any button of any controller (mouse, keyboard, game controller...)
+	//Inserts a breakline into the sentence avoiding breaking any word.
+	private function InsertBreakLine (textToWrite: String, count: int): String{
+		var pos: int = textToWrite.LastIndexOf(" ");
+		var breakline: String = "\n";
+		if (pos > 0){	//Controlling the possibility of the "pos" going to the beginning of the sentence looking for a space
+			//textToWrite[pos] = "\n";
+			return textToWrite.Insert(pos + 1, breakline); //pos + 1 will leave the space on the upper line.
+		}else{
+			Debug.LogWarning("Word too big to fit inside the textbox. It will be sliced.");
+			return textToWrite + "\n";
+		}
+	}
+	
+	//Coroutine that will finish when the player presses any button of any controller (mouse, keyboard, game controller...)
 	public function WaitForClick(){
 	
 		while (!Input.anyKeyDown){

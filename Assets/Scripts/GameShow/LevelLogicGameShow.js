@@ -219,7 +219,8 @@ public class LevelLogicGameShow extends MonoBehaviour{
 //				break;
 //			
 //		}
-		
+
+		yield showTVanimation();
 		yield introTalk();
 		yield PlayerSelect();
 		yield Talk2();
@@ -234,12 +235,30 @@ public class LevelLogicGameShow extends MonoBehaviour{
 		
 	}
 	
+	private function showTVanimation(){
+		//Here the code to show the television animation
+		var tvIntro: TVIntro = GameObject.Find("TVIntro").GetComponent(TVIntro);
+		if (tvIntro){
+			Debug.Log("TVIntro found! Waiting for a click...");
+			amyScoreBoard.Disable();
+			harryScoreBoard.Disable();
+			
+			yield tvIntro.finishedTVIntro();
+			
+			amyScoreBoard.Enable();
+			harryScoreBoard.Enable();
+		}
+		else{
+			Debug.LogError("TVIntro NOT found!");
+		}
+	}
+	
 	private function introTalk () {
 		
 		hostAnim.SetTrigger("excited");
 		
 		var intro : String[] = new String[3];
-		intro[0] = "Hello and welcome to the e-Bug Game Show!";
+		intro[0] = "Hello and welcome to the Super Microbe World Game Show!";
 		intro[1] = "Soon you will be visiting the weird world of the microbe.";
 		intro[2] = "But first, who do you want to play as?";
 		
@@ -348,13 +367,17 @@ public class LevelLogicGameShow extends MonoBehaviour{
 		if (player == "amy"){
 			amyShrinkGO.SetActive(true);
 		}
-		else 
+		else{
 			if (player == "harry"){
 				harryShrinkGO.SetActive(true);
 			}
 			else{
 				Debug.Log("There was some problem with the player. Don't know which one to use.");
 			}
+		}
+		
+		CameraShake.ShrinkingZone();
+			
 		yield new WaitForSeconds(3.5);//3.5);									//Waits to play the shrinking animation TODO check the time
 //		Debug.Log("Finished ShrinkingZone");
 		
