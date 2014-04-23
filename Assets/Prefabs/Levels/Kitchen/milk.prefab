@@ -9,6 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 212: {fileID: 21200000}
+  - 61: {fileID: 6100008}
   m_Layer: 0
   m_Name: Yog_Mid
   m_TagString: Untagged
@@ -44,6 +45,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400004}
   - 212: {fileID: 21200004}
+  - 61: {fileID: 6100010}
   m_Layer: 0
   m_Name: Yog_L
   m_TagString: Untagged
@@ -60,6 +62,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400006}
   - 212: {fileID: 21200006}
+  - 61: {fileID: 6100006}
   m_Layer: 0
   m_Name: Yog_R
   m_TagString: Untagged
@@ -117,7 +120,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 33.7159576, y: -3.97987127, z: 0}
+  m_LocalPosition: {x: 12.9110107, y: -.848623157, z: 0}
   m_LocalScale: {x: 1.26999998, y: 1, z: 1}
   m_Children:
   - {fileID: 400008}
@@ -179,8 +182,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: 2.25999999, y: 1.20000005}
-  m_Center: {x: 1.83000004, y: 2.9000001}
+  m_Size: {x: 1.94527328, y: 1.19999981}
+  m_Center: {x: 1.67263663, y: 2.9000001}
 --- !u!61 &6100002
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -203,6 +206,39 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_Size: {x: 3.3805356, y: 4.49603844}
   m_Center: {x: 0, y: 0}
+--- !u!61 &6100006
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 0
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Size: {x: .5, y: .5}
+  m_Center: {x: -4.76837158e-07, y: 0}
+--- !u!61 &6100008
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Size: {x: .5, y: .5}
+  m_Center: {x: 0, y: 2.98023224e-08}
+--- !u!61 &6100010
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Size: {x: .5, y: .5}
+  m_Center: {x: -2.38418579e-07, y: 2.98023224e-08}
 --- !u!95 &9500000
 Animator:
   serializedVersion: 2

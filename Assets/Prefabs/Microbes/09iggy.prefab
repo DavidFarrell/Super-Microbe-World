@@ -152,6 +152,9 @@ MonoBehaviour:
   platformCheck: {fileID: 100002}
   turningOffset: .100000001
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 1
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

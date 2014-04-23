@@ -445,6 +445,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 98756441}
   - 212: {fileID: 98756442}
+  - 61: {fileID: 98756443}
   m_Layer: 0
   m_Name: Yog_Mid
   m_TagString: Untagged
@@ -487,6 +488,18 @@ SpriteRenderer:
   m_SortingLayerID: 1535931219
   m_Sprite: {fileID: 21300000, guid: dd088f9957fff4e66afacda22bebf9b0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &98756443
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100008, guid: 894e07905319d49fa9ab35946ce95c01,
+    type: 2}
+  m_PrefabInternal: {fileID: 1270237569}
+  m_GameObject: {fileID: 98756440}
+  m_Enabled: 0
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Size: {x: .5, y: .5}
+  m_Center: {x: 0, y: 2.98023224e-08}
 --- !u!1 &99003569
 GameObject:
   m_ObjectHideFlags: 0
@@ -855,6 +868,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 217137096}
   - 212: {fileID: 217137097}
+  - 61: {fileID: 217137098}
   m_Layer: 0
   m_Name: Yog_L
   m_TagString: Untagged
@@ -897,6 +911,18 @@ SpriteRenderer:
   m_SortingLayerID: 1535931219
   m_Sprite: {fileID: 21300000, guid: f273722d6e4804b33b22044e6899c1e6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &217137098
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100010, guid: 894e07905319d49fa9ab35946ce95c01,
+    type: 2}
+  m_PrefabInternal: {fileID: 1270237569}
+  m_GameObject: {fileID: 217137095}
+  m_Enabled: 0
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Size: {x: .5, y: .5}
+  m_Center: {x: -2.38418579e-07, y: 2.98023224e-08}
 --- !u!1 &227928064
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,11 +996,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 8deac94d379844dceb69b0c975b4c4f8, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 30.8076267
+      value: 25.8357506
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8deac94d379844dceb69b0c975b4c4f8, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -4.60223961
+      value: -1.69347262
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8deac94d379844dceb69b0c975b4c4f8, type: 2}
       propertyPath: m_LocalPosition.z
@@ -990,11 +1016,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8deac94d379844dceb69b0c975b4c4f8, type: 2}
       propertyPath: m_LocalRotation.z
-      value: .29154247
+      value: .669122458
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8deac94d379844dceb69b0c975b4c4f8, type: 2}
       propertyPath: m_LocalRotation.w
-      value: .95655793
+      value: .743152201
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8deac94d379844dceb69b0c975b4c4f8, type: 2}
@@ -1312,6 +1338,9 @@ MonoBehaviour:
   platformCheck: {fileID: 1283423760}
   turningOffset: .5
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 0
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
   jumpForce: {x: 3600, y: 27000}
 --- !u!61 &281175439
 BoxCollider2D:
@@ -1743,6 +1772,9 @@ MonoBehaviour:
   platformCheck: {fileID: 1852666489}
   turningOffset: .5
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 0
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
   jumpForce: {x: 3600, y: 25000}
 --- !u!61 &474609792
 BoxCollider2D:
@@ -1818,7 +1850,7 @@ Transform:
   m_PrefabInternal: {fileID: 1276731613}
   m_GameObject: {fileID: 474609788}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.4385242, y: -4.59801149, z: -3}
+  m_LocalPosition: {x: 17.7210083, y: -4.59801292, z: -3}
   m_LocalScale: {x: 1.96411955, y: 1.96411955, z: 1}
   m_Children:
   - {fileID: 1852666490}
@@ -1832,6 +1864,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 515625840}
   - 212: {fileID: 515625841}
+  - 61: {fileID: 515625842}
   m_Layer: 0
   m_Name: Yog_R
   m_TagString: Untagged
@@ -1874,6 +1907,18 @@ SpriteRenderer:
   m_SortingLayerID: 1535931219
   m_Sprite: {fileID: 21300000, guid: 9348d2dc2fe8a45b4af505ae7c9520ae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &515625842
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100006, guid: 894e07905319d49fa9ab35946ce95c01,
+    type: 2}
+  m_PrefabInternal: {fileID: 1270237569}
+  m_GameObject: {fileID: 515625839}
+  m_Enabled: 0
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Size: {x: .5, y: .5}
+  m_Center: {x: -4.76837158e-07, y: 0}
 --- !u!1 &515760812
 GameObject:
   m_ObjectHideFlags: 0
@@ -4192,6 +4237,18 @@ Prefab:
       propertyPath: m_Center.x
       value: .915278018
       objectReference: {fileID: 0}
+    - target: {fileID: 6100006, guid: 894e07905319d49fa9ab35946ce95c01, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6100008, guid: 894e07905319d49fa9ab35946ce95c01, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6100010, guid: 894e07905319d49fa9ab35946ce95c01, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 894e07905319d49fa9ab35946ce95c01, type: 2}
   m_RootGameObject: {fileID: 185043618}
@@ -4206,11 +4263,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 16.4385242
+      value: 17.7210083
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -4.59801149
+      value: -4.59801292
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e0c9812f064a146d0890227bb8fe20b0, type: 2}
       propertyPath: m_LocalPosition.z
@@ -5330,8 +5387,8 @@ Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 8deac94d379844dceb69b0c975b4c4f8, type: 2}
   m_PrefabInternal: {fileID: 235161431}
   m_GameObject: {fileID: 1496878146}
-  m_LocalRotation: {x: 0, y: 0, z: .29154247, w: .95655793}
-  m_LocalPosition: {x: 30.8076267, y: -4.60223961, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: .669122458, w: .743152201}
+  m_LocalPosition: {x: 25.8357506, y: -1.69347262, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1295640207}
@@ -6132,6 +6189,9 @@ MonoBehaviour:
   platformCheck: {fileID: 1071248931}
   turningOffset: .5
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 0
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
   jumpForce: {x: 3600, y: 25000}
 --- !u!61 &1777723414
 BoxCollider2D:

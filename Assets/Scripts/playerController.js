@@ -389,6 +389,7 @@ function useAntibiotics () {
 	if(Antibiotics > 0){
 		Antibiotics--;
 		UpdateGUI();
+		CameraShake.AntibioticShake();
 		
 		var enemiesArray: GameObject[] = GameObject.FindGameObjectsWithTag("Enemy");
 		var nonEnemiesArray: GameObject[] = GameObject.FindGameObjectsWithTag("NonEnemy");
@@ -396,11 +397,11 @@ function useAntibiotics () {
 		
 		for(var enemy: GameObject in enemiesArray){
 			enemy.SendMessage("receiveAntibiotics");
-			//Debug.Log("useAntibiotics(): Message sent to: " + enemy.name);
+			Debug.Log("useAntibiotics(): Message sent to: " + enemy.name);
 		}
 		for(var nonEnemy: GameObject in nonEnemiesArray){
 			nonEnemy.SendMessage("receiveAntibiotics");
-			//Debug.Log("useAntibiotics(): Message sent to: " + nonEnemy.name);
+			Debug.Log("useAntibiotics(): Message sent to: " + nonEnemy.name);
 		}
 	}
 	else{

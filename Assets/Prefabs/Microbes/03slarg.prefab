@@ -14,10 +14,26 @@ GameObject:
   - 58: {fileID: 5800000}
   - 95: {fileID: 9500000}
   - 114: {fileID: 11400000}
+  - 68: {fileID: 6800000}
   m_Layer: 8
   m_Name: 03slarg
   m_TagString: Enemy
   m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100002
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400002}
+  m_Layer: 0
+  m_Name: platformChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: -1016138426, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -28,10 +44,22 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.30905914, y: -4.57047033, z: 0}
+  m_LocalPosition: {x: 38.975544, y: -4.6768446, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 400002}
   m_Father: {fileID: 0}
+--- !u!4 &400002
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .416346252, y: -1.13688684, z: -3}
+  m_LocalScale: {x: .666666687, y: .666666687, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400000}
 --- !u!50 &5000000
 Rigidbody2D:
   m_ObjectHideFlags: 1
@@ -69,6 +97,19 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_Size: {x: .751045942, y: 1.80174828}
   m_Center: {x: .0227572136, y: -.151719257}
+--- !u!68 &6800000
+EdgeCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Points:
+  - {x: .445042938, y: -.969055057}
+  - {x: .429555267, y: .884001434}
+  - {x: .18985495, y: 1.10271823}
 --- !u!95 &9500000
 Animator:
   serializedVersion: 2
@@ -91,7 +132,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df3788725a6e14ce786c665f13516f4c, type: 3}
+  m_Script: {fileID: 11500000, guid: eead232deebbe43a4bba1b85923168bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   life: 15
@@ -101,6 +142,16 @@ MonoBehaviour:
   soapDamage: 5
   affectedByAntibiotics: 1
   antibioticsDamage: 5
+  Speed: 1
+  facingRight: 1
+  moveDistance: 50
+  timeWaiting: 3
+  platformCheck: {fileID: 100002}
+  turningOffset: .100000001
+  DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 0
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

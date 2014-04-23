@@ -2002,6 +2002,9 @@ MonoBehaviour:
   platformCheck: {fileID: 920707447}
   turningOffset: .100000001
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 0
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
 --- !u!50 &443520119
 Rigidbody2D:
   m_ObjectHideFlags: 0
@@ -2958,6 +2961,9 @@ MonoBehaviour:
   platformCheck: {fileID: 126780628}
   turningOffset: .100000001
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 0
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
 --- !u!50 &652897308
 Rigidbody2D:
   m_ObjectHideFlags: 0
@@ -7054,6 +7060,9 @@ MonoBehaviour:
   platformCheck: {fileID: 952536966}
   turningOffset: .100000001
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 0
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
 --- !u!68 &1698531332
 EdgeCollider2D:
   m_ObjectHideFlags: 0
@@ -7815,7 +7824,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1890828077}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 62.6902008, y: -4.04318619, z: 0}
+  m_LocalPosition: {x: 60.4650574, y: -4.1106143, z: 0}
   m_LocalScale: {x: 1.38306701, y: 1.38306701, z: 1}
   m_Children: []
   m_Father: {fileID: 1434701468}

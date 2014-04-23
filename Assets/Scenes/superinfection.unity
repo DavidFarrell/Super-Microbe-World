@@ -2957,7 +2957,7 @@ CircleCollider2D:
     type: 2}
   m_PrefabInternal: {fileID: 661359742}
   m_GameObject: {fileID: 42389586}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Radius: .330636024
@@ -2993,9 +2993,9 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 4
+  m_SortingLayer: 2
   m_SortingOrder: 0
-  m_SortingLayerID: 1024582385
+  m_SortingLayerID: 1535931219
   m_Sprite: {fileID: 21300000, guid: 07e31e3cd584242059075cdbcd4f6b13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &42389590
@@ -4853,7 +4853,7 @@ CircleCollider2D:
     type: 2}
   m_PrefabInternal: {fileID: 179628932}
   m_GameObject: {fileID: 77388090}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Radius: .330636024
@@ -4889,9 +4889,9 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 4
+  m_SortingLayer: 2
   m_SortingOrder: 0
-  m_SortingLayerID: 1024582385
+  m_SortingLayerID: 1535931219
   m_Sprite: {fileID: 21300000, guid: 07e31e3cd584242059075cdbcd4f6b13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &77388094
@@ -12317,7 +12317,7 @@ Transform:
   m_PrefabInternal: {fileID: 746098716}
   m_GameObject: {fileID: 202257758}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 49.073494, y: -3.48552132, z: 0}
+  m_LocalPosition: {x: 47.3097725, y: -1.72179937, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 2086137667}
@@ -12365,6 +12365,9 @@ MonoBehaviour:
   platformCheck: {fileID: 2086137666}
   turningOffset: .100000001
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 1
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
 --- !u!61 &202257762
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15098,7 +15101,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: dbffc0daa327e48479aa4dcc1d55b440, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -4.60931349
+      value: -4.55892134
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: dbffc0daa327e48479aa4dcc1d55b440, type: 2}
       propertyPath: m_LocalPosition.z
@@ -15127,6 +15130,10 @@ Prefab:
     - target: {fileID: 11400000, guid: dbffc0daa327e48479aa4dcc1d55b440, type: 2}
       propertyPath: Speed
       value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: dbffc0daa327e48479aa4dcc1d55b440, type: 2}
+      propertyPath: MustJumpOnLedge
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dbffc0daa327e48479aa4dcc1d55b440, type: 2}
@@ -17593,7 +17600,7 @@ CircleCollider2D:
     type: 2}
   m_PrefabInternal: {fileID: 1203382079}
   m_GameObject: {fileID: 277358259}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Radius: .501277924
@@ -27805,6 +27812,9 @@ MonoBehaviour:
   platformCheck: {fileID: 194396252}
   turningOffset: .100000001
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 0
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
 --- !u!61 &449187615
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -45472,11 +45482,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 46265f38c87aa4e218a0d8eb0a9cbb6c, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 49.073494
+      value: 47.3097725
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 46265f38c87aa4e218a0d8eb0a9cbb6c, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -3.48552132
+      value: -1.72179937
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 46265f38c87aa4e218a0d8eb0a9cbb6c, type: 2}
       propertyPath: m_LocalPosition.z
@@ -50293,7 +50303,7 @@ CircleCollider2D:
     type: 2}
   m_PrefabInternal: {fileID: 1203382079}
   m_GameObject: {fileID: 839514008}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Radius: .501277924
@@ -53189,7 +53199,7 @@ Transform:
   m_PrefabInternal: {fileID: 2132093411}
   m_GameObject: {fileID: 891490339}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.2866163, y: -4.04353571, z: 0}
+  m_LocalPosition: {x: 17.5604267, y: -1.42315006, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 1331756560}
@@ -53237,6 +53247,9 @@ MonoBehaviour:
   platformCheck: {fileID: 1331756559}
   turningOffset: .100000001
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 1
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
 --- !u!61 &891490343
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -84430,6 +84443,10 @@ Prefab:
       propertyPath: timeWaiting
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 46265f38c87aa4e218a0d8eb0a9cbb6c, type: 2}
+      propertyPath: MustJumpOnLedge
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 46265f38c87aa4e218a0d8eb0a9cbb6c, type: 2}
   m_RootGameObject: {fileID: 449187611}
@@ -90454,6 +90471,9 @@ MonoBehaviour:
   platformCheck: {fileID: 1755034124}
   turningOffset: .100000001
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 1
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
 --- !u!61 &1507016983
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -90540,7 +90560,7 @@ Transform:
   m_PrefabInternal: {fileID: 1541458125}
   m_GameObject: {fileID: 1507016980}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 65.759491, y: -3.42778039, z: 0}
+  m_LocalPosition: {x: 65.4067459, y: -3.42778015, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 1755034125}
@@ -90776,6 +90796,9 @@ MonoBehaviour:
   platformCheck: {fileID: 2094956220}
   turningOffset: .300000012
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 0
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
 --- !u!68 &1512980541
 EdgeCollider2D:
   m_ObjectHideFlags: 0
@@ -92547,7 +92570,7 @@ CircleCollider2D:
     type: 2}
   m_PrefabInternal: {fileID: 1976678184}
   m_GameObject: {fileID: 1537268665}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Radius: .330636024
@@ -92583,9 +92606,9 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 4
+  m_SortingLayer: 2
   m_SortingOrder: 0
-  m_SortingLayerID: 1024582385
+  m_SortingLayerID: 1535931219
   m_Sprite: {fileID: 21300000, guid: 07e31e3cd584242059075cdbcd4f6b13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &1537268669
@@ -93000,11 +93023,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 46265f38c87aa4e218a0d8eb0a9cbb6c, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 65.759491
+      value: 65.4067459
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 46265f38c87aa4e218a0d8eb0a9cbb6c, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -3.42778039
+      value: -3.42778015
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 46265f38c87aa4e218a0d8eb0a9cbb6c, type: 2}
       propertyPath: m_LocalPosition.z
@@ -102951,6 +102974,7 @@ GameObject:
   - 124: {fileID: 1708630294}
   - 81: {fileID: 1708630293}
   - 114: {fileID: 1708630298}
+  - 114: {fileID: 1708630299}
   m_Layer: 0
   m_Name: main_camera
   m_TagString: MainCamera
@@ -103039,6 +103063,17 @@ MonoBehaviour:
   yMargin: 3
   xSmooth: 2
   ySmooth: 2
+--- !u!114 &1708630299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1708630292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbb146c2ff7114aefbfba1d38c8c47f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1710752354
 GameObject:
   m_ObjectHideFlags: 0
@@ -113968,7 +114003,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1890828077}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 62.5791245, y: -2.88481617, z: 0}
+  m_LocalPosition: {x: 61.495697, y: -2.91001225, z: 0}
   m_LocalScale: {x: 1.38306701, y: 1.38306701, z: 1}
   m_Children: []
   m_Father: {fileID: 1434701468}
@@ -118422,7 +118457,7 @@ Transform:
   m_PrefabInternal: {fileID: 249195094}
   m_GameObject: {fileID: 1970682180}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22.1802673, y: -4.60931349, z: 0}
+  m_LocalPosition: {x: 22.1802673, y: -4.55892134, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 133890634}
@@ -118469,6 +118504,9 @@ MonoBehaviour:
   platformCheck: {fileID: 133890633}
   turningOffset: 0
   DestroysOnEnemyContact: 1
+  MustJumpOnLedge: 0
+  jumpOnLedgeForce: {x: 3600, y: 25000}
+  SecondsBeforeJumping: 1
 --- !u!95 &1970682184
 Animator:
   serializedVersion: 2
@@ -126809,6 +126847,10 @@ Prefab:
       propertyPath: Speed
       value: .200000003
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: ac533d97e4b6d4b17a0d9b28cf7c2f59, type: 2}
+      propertyPath: MustJumpOnLedge
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ac533d97e4b6d4b17a0d9b28cf7c2f59, type: 2}
   m_RootGameObject: {fileID: 1512980538}
@@ -127397,11 +127439,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 46265f38c87aa4e218a0d8eb0a9cbb6c, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 11.2866163
+      value: 17.5604267
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 46265f38c87aa4e218a0d8eb0a9cbb6c, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -4.04353571
+      value: -1.42315006
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 46265f38c87aa4e218a0d8eb0a9cbb6c, type: 2}
       propertyPath: m_LocalPosition.z

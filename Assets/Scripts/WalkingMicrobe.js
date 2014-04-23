@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+
+
 public class WalkingMicrobe extends Microbe {
 	
 	/*Public vars*/
@@ -10,7 +12,10 @@ public class WalkingMicrobe extends Microbe {
 	public var platformCheck: GameObject;		//An empty GameObject placed in front (on the right) of the microbe under the ground. It will be used to see if there is more platform in front of it to continue walking. When there is not platform in this point, the microbe will turn.
 	public var turningOffset: float = 0.5;		//The sprites of some Microbes are not centered, so when turning, the movement doesn't look natural. It may be neccesary to move a little the sprite when turning to solve this priblem. That's what this variable is for. (Look the Flip() method to see how it's used)
 	public var DestroysOnEnemyContact: boolean = true;	//The microbe with this boolean set to true will be killed in contact with an enemy. Eg if this bug has the "enemy" tag, and bumps with a microbe with the "nonEnemy" tag, both will die. The opposite also happens.
-	
+	public var MustJumpOnLedge: boolean = false;		//If true, when the microbe is displayed on the screen and reachs a ledge it will jump. BE CAREFUL! only jumper microbes can jump (slurm, super_slurm, colin, super colin, steve and iggy). The rest of them does't have the jump animation
+	public var jumpOnLedgeForce: Vector2 = Vector2(3600, 25000);	//Force to be applied on the jump.
+	private var hasJumped: boolean = false;		//Will be true when the microbe has jumped an is on the air (false when landed)
+	public var SecondsBeforeJumping: float = 1;	//Time that the microbe will wait before jumping.
 	
 	protected var isWalking: boolean = false;
 	protected var isWaiting: boolean = false;
@@ -58,6 +63,8 @@ public class WalkingMicrobe extends Microbe {
 			}
 			else{			//if it's walking and not waiting
 				
+				/*vvvvvvvvv- Part to check if there is ground to continue walking in front of the microbe -vvvvvvvvvvv*/
+				
 				// Calculate the number of objects in the layer Ground that overlap with the given point ( local point (+-0.16, -1.2) placed under the ground, in front of the player) to turn around if it's 0
 				//because this means that there is no ground where to continue walking.
 				groundPoint = platformTransform.position;		
@@ -69,8 +76,15 @@ public class WalkingMicrobe extends Microbe {
 				if (groundHitsNumber == 0){
 					if (debugMode) Debug.Log("Pos: " + groundPoint + " No floor ahead. Turning around...");		
 					//Debug.Log("Hit: " + groundHits[0]);
-					StopThenFlip();
+					
+					if (!renderer.isVisible){	//If the microbe is not visible
+						StopThenFlip();			//Continue walking
+					}else{
+						LedgeReached();
+					}
 				}
+				
+				/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 				
 			}
 		}
@@ -93,8 +107,11 @@ public class WalkingMicrobe extends Microbe {
 		checkCollision(collisionInfo.gameObject);
 	}
 	
+	
 	function OnCollisionEnter2D(collisionInfo: Collision2D){
 		super.OnCollisionEnter2D(collisionInfo);
+		
+		if (hasJumped)	JumpFinished();
 		
 		checkCollision(collisionInfo.gameObject);
 		
@@ -108,11 +125,13 @@ public class WalkingMicrobe extends Microbe {
 			&& renderer.isVisible		//if is visible on the camera...
 			&& ( ( gameObject.layer == utils.layers.enemies && collisionLayer == utils.layers.nonEnemies ) || (gameObject.layer == utils.layers.nonEnemies && collisionLayer == utils.layers.enemies) ) ){
 			
-			if(gameObject.layer == utils.layers.enemies){
-				this.beWashedAway();	//The bug will be destroyed
-			}else{
-				this.beKilled();	//The bug will be destroyed
-			}
+//			if(gameObject.layer == utils.layers.enemies){
+//				this.beWashedAway();	//The bug will be destroyed
+//			}else{														//This part of commented code was to wash the baddies and kill the goodies
+//				this.beKilled();	//The bug will be destroyed
+//			}
+
+			this.beKilled();	//The bug will be destroyed
 		}
 	}
 	
@@ -128,7 +147,7 @@ public class WalkingMicrobe extends Microbe {
 	/*Stops all the animations of this gameObject playing the idle animation for "timeWaiting" seconds. When finished waiting it Flips the character.
 	*
 	*/
-	private function StopThenFlip (){
+	protected function StopThenFlip (){
 		
 		isWaiting = true;
 		
@@ -140,6 +159,45 @@ public class WalkingMicrobe extends Microbe {
 		
 		isWaiting = false;
 		
+	}
+	/*	This function is meant to be executed when some walking microbe has reached a ledge or a cliff and is currently displayed on the screen 
+	*	It will check the global boolean variable MustJumpOnLedge to see if it should jump or stop and flip instead. Only a few microbes have the jump Animation! Be careful with this.
+	*	All Lucy bacterias supossed to jump to a milk glass MUST have MustJumpOnLedge value to false. Because if it jumps it'll be impossible to push her to the glass anymore.
+	*	Three ball staphilococus must override this function, because they have an special behaviour on this situations (bounce instead of jumping)
+	*/
+	protected function LedgeReached(){
+//		Debug.Log("Ledge reached");
+		if (!MustJumpOnLedge){
+			StopThenFlip ();					//For the microbes that don't jump
+		}else{
+//			Debug.Log("Jumping on ledge!");
+			isWaiting = true;
+			isWalking = false;
+			
+			anim.SetFloat("speed", 0.0); 					//To play the "idle" animation
+			iTween.Stop(gameObject);						//Stops all the iTweens of this gameObject
+			
+			yield new WaitForSeconds(SecondsBeforeJumping);
+			direction = facingRight ? Vector2.right : Vector2.right * (-1);			//Updating direction...
+//			if (direction.x > 0) Debug.Log("Jumping right");
+//			else Debug.Log("Jumping left");
+			anim.SetTrigger("jump_start");
+			if (facingRight) myTransform.rigidbody2D.AddForce(jumpOnLedgeForce);
+			else myTransform.rigidbody2D.AddForce(Vector2(jumpOnLedgeForce.x * (-1), jumpOnLedgeForce.y));
+			
+			hasJumped = true;
+		}
+	}
+	
+	/*	To be called when the microbe lands after a jump on a ledge
+	
+	*/
+	protected function JumpFinished(){
+//		Debug.Log("Jump finished");
+		anim.SetTrigger("jump_end");
+		hasJumped = false;
+		if (Random.Range(0, 2) == 0) Flip();		//Flips half of the times
+		isWaiting = false;
 	}
 
 	/**

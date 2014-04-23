@@ -7,12 +7,15 @@ public class CameraShake extends MonoBehaviour{
 	
 	private static var zoom : boolean = false;
 	private static var OldSize: float;
-	public static var secondsToZoom: float = 0.5;
-	public static var zoomTo: float = 4;
+	private static var secondsToZoom: float = 0.5;
+	private static var zoomTo: float = 4;
 	private static var currentZoom: float = 0;
 	
-	public static var shakeTime: float = 3.5;
-	public static var shakeAmount : float = 0.2;
+	private static var shakeTime: float = 3.5;
+	private static var shakeAmount : float = 0.2;
+	
+	private static var shakeTimeAntibiotic: float = 1;
+	private static var shakeAmountAntibiotic : float = 0.05;
 	
 	function Start () {
 		myGameObject = gameObject;
@@ -36,6 +39,10 @@ public class CameraShake extends MonoBehaviour{
 			
 			iTween.ShakePosition(myGameObject, Vector3(shakeAmount,shakeAmount,0), shakeTime);
 		}
+	}
+	
+	public static function AntibioticShake(){
+		iTween.ShakePosition(myGameObject, Vector3(shakeAmountAntibiotic,shakeAmountAntibiotic,0), shakeTimeAntibiotic);
 	}
 
 }//End of class

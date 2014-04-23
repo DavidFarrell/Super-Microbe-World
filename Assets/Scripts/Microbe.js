@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+import iTween;
+
 public class Microbe extends MonoBehaviour{
 	
 	public var life: int; 							//Life of the microbe. 
@@ -33,7 +35,7 @@ public class Microbe extends MonoBehaviour{
 //	protected var groundLayerMask: int = 1 << groundLayer;	//The number of layer for the ground is 12: so the mask will be 0000 0000 0000 0000 0001 0000 0000 0000
 //	protected var groundAndChars: int = (1 << groundLayer) | (1 << playerLayer) | (1 << nonEnemiesLayer) | (1 << enemiesLayer);
 	
-	private var canBeHit: boolean = true;
+	private var canBeHit: boolean = true;				//Will be false for a little while after the microbe has been hit
 	protected var killedAlready: boolean = false;
 	protected var beenPhotographed : boolean = false;	//To keep track whether the microbe has been photographed or not 
 	
@@ -88,7 +90,7 @@ public class Microbe extends MonoBehaviour{
 	
 	//To detect the collisions with the player
 	function OnCollisionEnter2D (coll: Collision2D) {
-		if (canBeHit && coll.collider.gameObject.layer == utils.layers.player)
+		if (canBeHit && gameObject.layer == utils.layers.enemies && coll.collider.gameObject.layer == utils.layers.player)	//Only enemies are hit
 			beHit();
 
 	}
