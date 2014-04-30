@@ -48,15 +48,18 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 	public var redCheck: Sprite;				//Texture for the green check
 	public var totalGoals: int;				//Normally there will be 3 goals, but there can be stages with just one goal... this var will control how much goals will be drawn
 	public var goalsCompleted: int;			//From 0 to 3, number of completed goals
+	private var actionToDo: int;			//Which action is the goal about: 0: photo, 1: wash up, 2: white blood cell, 3: antibiotics, 4: throw to yoghurt.
+	
 	//private var goalsArray: Sprite[] = new Sprite[3];		//array containing the 3 textures to be shown over the phone
 	private var goalsArrayGO: GameObject[];
 	private var currentGoalsGO: GameObject;
 	private var currentMicrobeNum: int;							//Number of the microbe to be displayed over the phone
 	private var currentMicrobeGO: GameObject;
 	public var microbesSprites: Sprite[] = new Sprite[12];		//Textures of all the microbes to be displayed over the phone (each microbe on its number. Eg. 0 lucy, 1 patty and so on)
+	public var yoghurtSprite: Sprite;
+	public var portalSprite: Sprite;
 	public var microbePos: Vector2;
 	public var goalsPos: Vector2;
-	private var showPhoneScreen: boolean = false;		//if true, the goals and the bacterias will be drawn over the phone
 	//^^^^^^^^^^^Goals^^^^^^^^^^^^^
 	
 	private var whiteBloodCells: int;		//Amount of wbc remaining
@@ -64,6 +67,7 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 	
 	public var InGamePhone: GameObject;		//The phone
 	private var phoneAnim : Animator;	//The Animator component attached to the InGamePhone GameObject
+	private var idleAnimation: AnimationState;
 	
 	private var widthScreen: int;
 	private var heightScreen: int;
@@ -97,7 +101,9 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 		if (!ingamephonetransform) Debug.Log("InGamePhone not found!!!!");
 		InGamePhone = ingamephonetransform.gameObject;
 		if(!InGamePhone) Debug.LogError("InGamePhone not found. Drag and drop the InGamePrefab to the public variable of the GUIHandler script attached to the GUI object in the editor.");
-		else phoneAnim = InGamePhone.GetComponent(Animator);
+		else{
+			phoneAnim = InGamePhone.GetComponent(Animator);
+		}
 	
 	}
 	
@@ -117,21 +123,6 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 	function Update () {
 		if (firstRun){
 			firstRun = false;
-					
-			//ShowPhoneInfo();			
-				
-//			infoImageWidth = imagesL1[0].width;
-//			infoImageHeigth = imagesL1[0].height; 
-//			
-//			liveswidth = livesImg.width;
-//			livesheight = livesImg.height;
-//			
-//			antibioticwidth = antibioticImg.width;
-//			antibioticheight = antibioticImg.height;
-//			
-//			InGamePhone = transform.Find("InGamePhone").gameObject;
-//		if(!InGamePhone) Debug.LogError("InGamePhone not found. Drag and drop the InGamePrefab to the public variable of the GUIHandler script attached to the GUI object in the editor.");
-//		else phoneAnim = InGamePhone.GetComponent(Animator);
 		}
 		
 		/*JUST FOR DEVELOPING*/
@@ -147,7 +138,7 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 		
 		/*JUST FOR DEVELOPING*/
 		
-	}
+	}//end update
 	
 	//MonoBehaviour's class to manage the GUI
 	public function OnGUI(){
@@ -160,10 +151,6 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 				//Debug.Log("Next image");
 				showNextInfoImage();
 			}
-		/*if (showPhoneScreen){
-			GUI.Label();
-			GUI.Label();
-		}*/
 	}
 	
 	public function UpdateGUI(life : int, soapDrops : int, whiteBloodCells : int, Antibiotics : int){
@@ -235,7 +222,10 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 			currentImage = null;
 			phoneAnim.SetTrigger("PhoneSmall");
 			//Inform the LevelLogic script that info has finished to be displayed and we can continue with the game
-			currentLevelLogicScript.ShowInfoLevelFinished();
+			currentLevelLogicScript.ShowInfoLevelFinished();			//This will enable the player controls again.
+			
+			yield new WaitForSeconds(1);	//waits until the animation is finished
+			ShowPhoneInfo();	//Paints the microbe, or yoghurt and the goals over the phone.
 		}
 	}
 	
@@ -244,21 +234,25 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 	public function ShowPhoneInfo(){		//updates the GUI
 		//This function will show the information about the goals to complete painted over the phone. For that reason, the phone must be minimized when calling this function
 		//NOTE that this function, if the microbe gameobject is already created won't be painted again. This is because usually there is no need for the 
-		if 	(!currentGoalsGO || !currentMicrobeGO){ //first time painting the phone, when the microbe and goals images haven't been painted yet.
+		
+//		if 	(!currentGoalsGO || !currentMicrobeGO){ //first time painting the phone, when the microbe and goals images haven't been painted yet.
 			
 			DisplayGoals();
 			DisplayMicrobe();
-		}
-		else{			//If the game objects are created
-			//Destroy(currentGoalsGO);
-			DisplayGoals();
-		}
+//		}
+//		else{			//If the game objects are created
+//			//Destroy(currentGoalsGO);
+//			DisplayGoals();
+//		}
 	}//End of function
 	
-	public function SetPhoneInfo (microbe: int, numberGoals: int){		//Sets the info in the vars BUT it does NOT display the phone
+	public function SetPhoneInfo (microbe: int, numberGoals: int, actionToDo: int){		//Sets the info in the vars BUT it does NOT display the phone
 		//Will get the number of goals in this level and the microbe to show over the phone. BUT it wont display them. 
+		//actionToDo: Which action is the goal about: 0: photo, 1: wash up, 2: white blood cell, 3: antibiotics, 4: throw to yoghurt.
 		currentMicrobeNum = microbe;
 		totalGoals = numberGoals;
+		this.actionToDo = actionToDo;
+		
 		goalsArrayGO = new GameObject[numberGoals];
 		goalsCompleted = 0;
 	}
@@ -304,15 +298,38 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 	}//end function
 	
 	private function DisplayMicrobe(){
-		currentMicrobeGO = new GameObject();
-		currentMicrobeGO.name = "Microbe image";
-		currentMicrobeGO.transform.parent = InGamePhone.transform;
-		currentMicrobeGO.transform.localPosition = microbePos;
+		/*Paints the microbe that must be interacted with over the phone.
+		If the goal is throw lucy to the yoghurt, the yoghurt will be displayed instead.
+		This function can be changed to show a camera if the objective is take photos or a white blood cell... to make clearer which are the goals in the QualityLevel
+		When all the goals are completed, the portal image will be shown.
+		*/
+	
 		var currentMicrobeSR: SpriteRenderer;
-		currentMicrobeSR = currentMicrobeGO.AddComponent(SpriteRenderer);
-		currentMicrobeSR.sprite = microbesSprites[currentMicrobeNum];
-		currentMicrobeSR.sortingLayerName = "Foreground";
-		currentMicrobeSR.sortingOrder = 6;	//Because the phone is on the 5th order
+		if(!currentMicrobeGO){
+			currentMicrobeGO = new GameObject();
+			currentMicrobeGO.name = "Microbe image";
+			currentMicrobeGO.transform.parent = InGamePhone.transform;
+			currentMicrobeGO.transform.localPosition = microbePos;
+
+			currentMicrobeSR = currentMicrobeGO.AddComponent(SpriteRenderer);
+			if (actionToDo == 4){			//actionToDo: Which action is the goal about: 0: photo, 1: wash up, 2: white blood cell, 3: antibiotics, 4: throw to yoghurt.
+				currentMicrobeSR.sprite = yoghurtSprite;
+				Debug.Log("PHONE: setting the yoghurt sprite");
+			}else{
+				currentMicrobeSR.sprite = microbesSprites[currentMicrobeNum];	
+				Debug.Log("PHONE: setting the microbe sprite");
+			}
+			currentMicrobeSR.sortingLayerName = "Foreground";
+			currentMicrobeSR.sortingOrder = 6;	//Because the phone is on the 5th order
+		}
+		else{
+			if (goalsCompleted == totalGoals){											//All goals completed --> change image if available
+			//TODO code to show the portal!
+				currentMicrobeSR = currentMicrobeGO.GetComponent(SpriteRenderer);
+				currentMicrobeSR.sprite = portalSprite;
+				Debug.Log("PHONE: setting the portal sprite");
+			}
+		}
 	}
 	
 	/*---^^^^^^^^^^^^^^^^^^^^^^^^^ Functions to display the information of the goals over the phone when minimized ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^---*/

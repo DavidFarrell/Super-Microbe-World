@@ -19,7 +19,7 @@ public class DBconnector extends MonoBehaviour{
 	@HideInInspector
 	var connected: boolean = false;			//This variable should be checked after connecting with 
 	
-	private var debugMode = false;			//if true, a lot of information will be displayed in the console about the progress of the instructions
+	private var debugMode = true;			//if true, a lot of information will be displayed in the console about the progress of the instructions
 	
 	private var gameLogic: GameLogic;
 	
@@ -261,7 +261,7 @@ public class Connection{// extends System.Object{
 	        Debug.LogError('DBConnector.Track() ERROR -> ' + www.error);
 	    }
 	    else{
-	    	if(debugMode) Debug.Log('Connection.Connection() --> Response processed without errors.\nHeaders: ' + www.responseHeaders.ToString());
+	    	/*if(debugMode) */Debug.Log('Connection.Connection() --> Response processed without errors.\nHeaders: ' + www.responseHeaders.ToString());
 	    }
 	}
 	

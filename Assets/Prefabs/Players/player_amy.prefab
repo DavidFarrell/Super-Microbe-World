@@ -264,7 +264,7 @@ MonoBehaviour:
   whiteBloodCells: 0
   Antibiotics: 0
   groundDistance: 1.29999995
-  maxSpeed: 5
+  maxSpeed: 5.69999981
   jumpForce: 900
   moveForce: 50
   dropSoapPrefab: {fileID: 5000000, guid: 781fd03618e9643fcbde37831ae47506, type: 2}

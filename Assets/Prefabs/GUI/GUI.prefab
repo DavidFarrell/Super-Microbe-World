@@ -150,6 +150,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: eaa37a7f0dacd4959804aaa7fc3366fe, type: 3}
   - {fileID: 21300000, guid: 46835ebc6daed41eb89747f9cc54c951, type: 3}
   - {fileID: 21300000, guid: 4e392f979279c407da888fcc8d697e7c, type: 3}
+  yoghurtSprite: {fileID: 21300000, guid: 73e1260181d2543d9ab5310d236c9007, type: 3}
+  portalSprite: {fileID: 21300000, guid: 289de71f562d64dfdbc103e10e21171f, type: 3}
   microbePos: {x: 3.53999996, y: -1.19000006}
   goalsPos: {x: 3.25, y: -1.75999999}
   InGamePhone: {fileID: 100000, guid: f5a93743a950b48fdb2cda168c9d2a63, type: 2}

@@ -23,7 +23,7 @@ import Boomlagoon.JSON;
 public class GameLogic extends MonoBehaviour{
 	
 	//This enum type will contain the EXACT name of all the scenes of the game.				IMPORTANT
-	enum GameLevel {gameShow, kitchen1, skin1, skin2, kitchen2, gameShow_quiz1, skin11, skin12, body11, gameShow_quiz2, kitchen31, kitchen32, gameShow_quiz3, gameShow_quiz4, superinfection, gameShow_quiz5};
+	enum GameLevel {gameShow, gameShow_quiz1b, kitchen1, skin1, skin2, kitchen2, gameShow_quiz1, gameShow_quiz2b, skin11, skin12, body11, gameShow_quiz2, gameShow_quiz3b, kitchen31, kitchen32, gameShow_quiz3, gameShow_quiz4, gameShow_quiz5b, superinfection, gameShow_quiz5};	//The quiz round 4 is never shown because it's about the kitchen game, which is not implemented yet.
 	
 	private var level : GameLevel;			//The current level being played
 	
@@ -31,7 +31,8 @@ public class GameLogic extends MonoBehaviour{
 	
 	private var goals : Goals;					//To have a reference to the Goals.js script
 	
-	private var isConnected : boolean;			//True if connected to the Database
+	@HideInInspector
+	public var isConnected : boolean;			//True if connected to the Database
 	
 	private var currentRoundNum : int = 1;			//Contains the current quiz round number 
 	
@@ -45,6 +46,8 @@ public class GameLogic extends MonoBehaviour{
 	
 	public var loadingText : GUIText;	//To show the loading progress. It's a prefab located in Assets/Prefabs/Levels/GameShow
 	public var errorMessage: GUIText;		//Points to a prefab placed in Assets/Prefabs/LogicManagement. Is a GUIText to show error messages in the built versions.
+	
+	public var ShowBlindRounds : boolean = false;	//If "true", the blind round of questions will be shown before playing the level. If "false", blind round questions won't be shown. 
 	
 	//private var changeStateTrigger : boolean = false;
 	
@@ -84,7 +87,15 @@ public class GameLogic extends MonoBehaviour{
 	}
 
 	function Update () {
-		
+		if (Input.GetKeyDown(KeyCode.W)){	//To activate or deactivate the blind round question
+			if (ShowBlindRounds){
+				ShowBlindRounds = false;
+				PrintError("Blind rounds disabled", 2);
+			}else{
+				ShowBlindRounds = true;
+				PrintError("Blind rounds enabled", 2);
+			}
+		}
 	}
 
 	function OnGUI() {
@@ -101,9 +112,15 @@ public class GameLogic extends MonoBehaviour{
 			switch (level){
 				
 				case GameLevel.gameShow:
-					currentRoundNum = 1;
-				 	ChangeLevel(GameLevel.kitchen1);
+					currentRoundNum = 1;									//The next question round will be the number 1.
+				 	if (!ShowBlindRounds) ChangeLevel(GameLevel.kitchen1);
+				 	else ChangeLevel(GameLevel.gameShow_quiz1b);			//if we should load the blind round level.
 					break;
+				
+				case GameLevel.gameShow_quiz1b:
+					ChangeLevel(GameLevel.kitchen1);
+					break;
+				
 				case GameLevel.kitchen1:
 					ChangeLevel(GameLevel.skin1);
 					break;
@@ -116,10 +133,16 @@ public class GameLogic extends MonoBehaviour{
 				case GameLevel.kitchen2:
 					ChangeLevel(GameLevel.gameShow_quiz1);
 					break;
+					
 				case GameLevel.gameShow_quiz1:
 					currentRoundNum = 2;
+					if (!ShowBlindRounds) ChangeLevel(GameLevel.skin11);
+				 	else ChangeLevel(GameLevel.gameShow_quiz2b);			
+					break;
+				case GameLevel.gameShow_quiz2b:
 					ChangeLevel(GameLevel.skin11);
 					break;
+				
 				case GameLevel.skin11:
 					ChangeLevel(GameLevel.skin12);
 					break;
@@ -129,20 +152,32 @@ public class GameLogic extends MonoBehaviour{
 				case GameLevel.body11:
 					ChangeLevel(GameLevel.gameShow_quiz2);
 					break;
+
 				case GameLevel.gameShow_quiz2:
 					currentRoundNum = 3;						//Quiz level 4 will be skipped as the questions are about the kitchen level - this in which the player has to place the food correctly into the fridge
+					if (!ShowBlindRounds) ChangeLevel(GameLevel.kitchen31);
+				 	else ChangeLevel(GameLevel.gameShow_quiz3b);			
+					break;
+				case GameLevel.gameShow_quiz3b:
 					ChangeLevel(GameLevel.kitchen31);
 					break;
+					
 				case GameLevel.kitchen31:
 					ChangeLevel(GameLevel.kitchen32);
 					break;
 				case GameLevel.kitchen32:
 					ChangeLevel(GameLevel.gameShow_quiz4);
 					break;
+				
 				case GameLevel.gameShow_quiz4:				//It's actually level 3, because the 4th is the one in which the questions are about how to store the food in the kitchen. So the level is correct but the name is written wrong.
 					currentRoundNum = 5;
+					if (!ShowBlindRounds) ChangeLevel(GameLevel.superinfection);
+				 	else ChangeLevel(GameLevel.gameShow_quiz5b);			
+					break;
+				case GameLevel.gameShow_quiz5b:
 					ChangeLevel(GameLevel.superinfection);
 					break;
+					
 				case GameLevel.superinfection:
 					ChangeLevel(GameLevel.gameShow_quiz5);
 					break;
@@ -170,7 +205,7 @@ public class GameLogic extends MonoBehaviour{
 		Resources.UnloadUnusedAssets();		//This will delete any object that is supposed not to be used again. Just testing it, maybe it is not only not useful but also costful to use!. Documentation can be found here: http://docs.unity3d.com/Documentation/ScriptReference/Resources.UnloadUnusedAssets.html
 		
 		var levelString: String = level.ToString();
-		if (levelString.Length == 14 && levelString.Substring(0, 13) == "gameShow_quiz"){	//In the case of the quiz level, we load the same stage
+		if ((levelString.Length == 14 || levelString.Length == 15) && levelString.Substring(0, 13) == "gameShow_quiz"){	//In the case of the quiz level, we load the same stage
 		Debug.Log("GameLogic.ChangeLevel: Loading a quiz level! number " + currentRoundNum);
 			if (Application.CanStreamedLevelBeLoaded ("gameShow_quiz")){
 				Application.LoadLevel("gameShow_quiz");		//Which round of questions to load will be asked later inside the quiz level scripts.
@@ -295,6 +330,10 @@ public class GameLogic extends MonoBehaviour{
 	public function checkConnection() : boolean {
 	
 //		return (PlayerPrefs.HasKey("sessionKey"));
+//		return isConnected;
+		
+		if (db.connected) isConnected = true;
+		
 		return isConnected;
 	
 	}
@@ -311,6 +350,36 @@ public class GameLogic extends MonoBehaviour{
 		return currentRoundNum;
 		
 	}
+	
+	public function IsBlindRound(): boolean{
+		//This function will be called from the LevelLogicQuiz.js script to see if the current QUIZ LEVEL is blind or not.
+		//Will return yes if ShowBlindRounds == true and the current level is of a blind question round. Will also return true if ShowBlindRounds == true and we'e in the gameShow level
+		//Normal quiz levels have names like gameShow_quiz1, and blind levels have names like gameShow_quiz1b 
+		var levelString: String = level.ToString();
+		if (!ShowBlindRounds) {
+			return false;
+			Debug.Log("IsBlindRound == FALSE");
+		}else{
+			if (levelString.Length == 15 && levelString.Substring(0, 13) == "gameShow_quiz"){
+					Debug.Log("IsBlindRound == TRUE");
+					return true;
+			}
+			else{
+				if(levelString.Length == 8 && levelString == "gameShow"){
+					Debug.Log("IsBlindRound == TRUE");
+					return true;
+				}else{
+					Debug.Log("IsBlindRound == FALSE");
+					return false;
+				}
+			}
+		}
+	}//end of function
+	
+	public function IsBlindGame(): boolean{
+		//will return if the current game is a blind game or not.
+		return ShowBlindRounds;
+	}//end of function
 	
 //	public function GetQuestions(){
 //		//This class begins the process of getting the round object containing the questions and answers

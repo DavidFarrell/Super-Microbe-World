@@ -155,79 +155,21 @@ public class LevelLogicGameShow extends MonoBehaviour{
 		
 	}
 	
-//	function nextStep () {
-//		
-//		switch (nextState) {
-//		
-//		case stateMachine.init:						//Actual State
-//			busy = true;
-//			nextState = stateMachine.introTalk;			//Set the state to be played after the actual
-//			yield introTalk();							//Plays the actions of the actual state
-//			break;
-//		case stateMachine.introTalk:
-//			busy = true;
-//			nextState = stateMachine.playerSelection;			
-//			yield PlayerSelect();						
-//			break;
-//		case stateMachine.playerSelection:
-//			busy = true;
-//			nextState = stateMachine.talk2;			
-//			yield Talk2();						
-//			break;
-//		case stateMachine.talk2:
-//			busy = true;
-//			nextState = stateMachine.getDataForm;			
-//			yield ShowDataForm();						
-//			break;
-//		case stateMachine.getDataForm:
-//			busy = true;
-//			nextState = stateMachine.talk3;			
-//			yield Talk3();						
-//			break;
-//		case stateMachine.talk3:
-//			busy = true;
-//			nextState = stateMachine.shrinkingZone;			
-//			yield ShrinkingZone();						
-//			break;
-//		case stateMachine.shrinkingZone:
-//			busy = true;
-//			//nextState = stateMachine.introTalk;			
-//			gameLogic.NextLevel();					
-//			break;
-//			
-//		}
-//		
-//	}
-	
 	function levelActions () {
-		
-//		
-//		write text welcome
-//		selection player Screen
-//		text
-//		get data form
-//		text
-//		shrink
-//		next level
-//		
-//		switch (state){
-//			
-//			case stateMachine.introTalk : 
-//				introTalk();
-//				break;
-//			case stateMachine.playerSelection :
-//				break;
-//			
-//		}
 
 		yield showTVanimation();
 		yield introTalk();
 		yield PlayerSelect();
 		yield Talk2();
 		yield ShowDataForm();
-		yield Talk3();
-		yield ShrinkingZone();
 		
+		if (!gameLogic.IsBlindRound()){//If the game is being played in the blind mode, the blind round number one will be loaded after this level, so it wouldn't make sense to shrink the player...
+			yield Talk3();
+			yield ShrinkingZone();	
+		}
+		else{
+			yield Talk4();
+		}
 		//Debug.Log("GameShow level finished. Going to the next level.");
 		gameLogic.NextLevel();
 		
@@ -244,6 +186,8 @@ public class LevelLogicGameShow extends MonoBehaviour{
 			harryScoreBoard.Disable();
 			
 			yield tvIntro.finishedTVIntro();
+			
+			Debug.Log("Finished playing TV animation!");
 			
 			amyScoreBoard.Enable();
 			harryScoreBoard.Enable();
@@ -355,6 +299,17 @@ public class LevelLogicGameShow extends MonoBehaviour{
 		
 		busy = false;
 		
+	}
+	
+	private function Talk4(){
+		var toSay : String[] = new String[1];
+		toSay[0] = "Thanks!";
+		
+		yield textBox.SayThis("Game host", toSay);
+		
+		hostAnim.SetTrigger("stop");
+		
+		busy = false;
 	}
 	
 	public function ShrinkingZone (){

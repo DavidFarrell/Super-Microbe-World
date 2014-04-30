@@ -43,7 +43,8 @@ public class LevelLogicQuiz extends MonoBehaviour{
 	
 	private var levelStarted: boolean = false;		//This boolean is used to launch just once the sequencial part of the level from the Update() method
 	
-	private var blindMode: boolean = false;	//This boolean is to choose whether the game is going to be played on normal mode (false) or blind mode (true)
+	private var blindMode: boolean = false;		//This boolean is to choose whether the game is going to be played on normal mode (false) or blind mode (true)
+	private var blindRound: boolean = false;	//This boolean is to know if this is a blind round or a normal round, independently of the value of the variable above.
 	private var debugMode = true;
 	
 	private var CurrentRoundNum: int;				//stores the number of the current round of questions
@@ -57,6 +58,10 @@ public class LevelLogicQuiz extends MonoBehaviour{
 	public var textStyle : GUIStyle;		//Style of the GUI of the form
 	public var buttonStyle : GUIStyle;		//Style of the buttons of the form
 	
+	public var amyShrinkGO : GameObject;
+	public var harryShrinkGO : GameObject;
+	public var shrinkingZone : GameObject;
+	
 	//private var NextQuestion: int = ;
 	
 	function Awake () {
@@ -64,6 +69,8 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		gameLogic = GameObject.Find("GameLogic").GetComponent("GameLogic");
 		
 		CurrentRoundNum = gameLogic.GetRoundNumber();							//Will get from the GameLogic script the number of quiz level that the player have to play now. 
+		blindRound = gameLogic.IsBlindRound();
+		blindMode = gameLogic.IsBlindGame();
 		if (debugMode) Debug.Log("Awake function of the LevelLogicQuiz.js. Round number is: " + CurrentRoundNum);
 		
 		/*if (!CurrentRound){
@@ -82,6 +89,10 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		formBackground = Instantiate(formBackground);
 		
 		textBoxGO = GameObject.Find("TextBox");						//Keep a reference to the GameObject Text Box
+		
+		amyShrinkGO = Instantiate(amyShrinkGO);
+		harryShrinkGO = Instantiate(harryShrinkGO);
+		shrinkingZone = Instantiate(shrinkingZone);
 		
 		answers = new List.<int>();			//To initialize the answers array
 		
@@ -108,6 +119,11 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		//See Round class for more information
 		
 		formBackground.SetActive(false);							//Disable the form background, which will be enabled when needed
+		
+		amyShrinkGO.SetActive(false);								//Disable it (just in case it was enabled). It will be enabled later when it's needed.
+		harryShrinkGO.SetActive(false);
+		
+		shrinkingZone.SetActive(false);								//Disable the background of the shrinking zone, which will be enabled when needed
 		
 		//Load the animators
 		amyAnim = playerAmy.GetComponent(Animator);
@@ -184,6 +200,9 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			firstTrack.Add("type", "logic");
 			firstTrack.Add("event", "Loading quiz level number " + CurrentRoundNum);
 			firstTrack.Add("round", CurrentRoundNum.ToString());
+			if (blindRound) firstTrack.Add("blind", true);		//To inform if this was a blind question round or not
+			else firstTrack.Add("blind", false);
+			
 			var tracks : JSONObject[] = new JSONObject[1];
 			if (!firstTrack || ! tracks) Debug.LogError("Unable to create JSONObject or array");
 			tracks[0] = firstTrack;
@@ -193,35 +212,6 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			Debug.Log("Connection not established (sessionKey not found) when trying to post the first trace.");
 		}
 	}
-	
-//	function TestXmlSerializer(){
-//	//This function is to TEST if the xml serializer works.
-//		
-//		Debug.Log("Starting to parse the xml...");
-//		
-//		//CurrentRound = new Round();
-//		CurrentRound = Round.LoadFromText(TextFromXML);
-//		
-//		Debug.Log("Parsed.");
-//		
-//		Debug.Log("Round id: " + CurrentRound.id);
-//		Debug.Log("Name: " + CurrentRound.name);
-//		Debug.Log("Round Id: " + CurrentRound.round_id);
-//		Debug.Log("Next Round: " + CurrentRound.next_round);
-//		
-//		var blindStatements: String = "";
-//		for(var blindStatement: String in CurrentRound.intro_text.blind){
-//			blindStatements = blindStatements + "\n" + blindStatement;
-//		}
-//		Debug.Log("Intro text (blind statements): " + blindStatements);
-//		
-//		var normalStatements: String = "";
-//		for(var normalStatement: String in CurrentRound.intro_text.normal){
-//			normalStatements = normalStatements + "\n" + normalStatement;
-//		}
-//		Debug.Log("Intro text: (normal statements)" + normalStatements);
-//		//Debug.Log("Questions: " + CurrentRound.name);
-//	}
 	
 		public function GetQuestions() : Round{
 		//This class begins the process of getting the round object containing the questions and answers
@@ -257,7 +247,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 	}
 	
 	public function StartShowingQuestions(myRound: Round){
-		//This function will execute all the sequence of actions that have to be done during the level
+		//This function will execute all the sequence of actions that must be done during the level
 		
 		//if (debugMode) Debug.Log("*************LevelLogicQuiz: Executing StartShowingQuestions() method.");
 		
@@ -279,9 +269,9 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		
 		hostAnim.SetTrigger("excited");
 		
-		//blindMode = true;				//blindMode is False by default
+		//blindRound = true;				//blindRound is False by default
 		
-		if(blindMode){
+		if(blindRound){
 			yield textBox.SayThis("Game host", CurrentRound.intro_text.blind);
 		}else{
 			yield textBox.SayThis("Game host", CurrentRound.intro_text.normal);
@@ -347,21 +337,21 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		if(CurrentAnswerValue>0){
 			answers.Add(1);				//To store the answer
 			//Do the gamehost tell the result if not in the blindmode.
-			if(!blindMode){	
+			if(!blindRound){	
 				playerAnim.SetTrigger("happy");
 				yield textBox.SayThis("Game host", "Your answer was: " + CurrentAnswer + "\nThis is the CORRECT answer");
 			}
 		}else{
 			if(CurrentAnswerValue<0){
 				answers.Add(-1);	
-				if(!blindMode){	
+				if(!blindRound){	
 					playerAnim.SetTrigger("disappointed");
 					yield textBox.SayThis("Game host", "Your answer was: " + CurrentAnswer + "\nThis is the WRONG answer");
 					opponentScoreBoard.ChangePoints(5);			//If the player fails its answer, the opponent will get an extra 5 points!
 				}
 			}else{	//score == 0
 				answers.Add(0);		
-				if(!blindMode){	
+				if(!blindRound){	
 					yield textBox.SayThis("Game host", "You chose the safe answer");	
 				}
 			}
@@ -373,11 +363,11 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		if (score < 0){						//score<0 means that the player chose the wrong answer, so we add 0 points to the player and add 5 points to the opponent.
 			score = 0;
 		}
-		if(!blindMode){	
+		if(!blindRound){	
 			playerScoreBoard.ChangePoints(score);			//To update the scoreboard of the player (score will be added to the old score)
 		}
 		
-		if(!blindMode){	
+		if(!blindRound){	
 			//Generating the answer of the other player
 			var rndNum: int = Random.Range(0, 3);	//Will generate numbers between 0 and 2 (0 means that the opponent fail the question, 1, that he doesn't know and 2 that he answered the question correctly)
 			switch(rndNum){
@@ -402,6 +392,7 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		if (CurrentQuestionNum == TotalQuestions){		//There's not any more questions in this round
 			SubmitResults();								//To submit the score to the database
 			Debug.Log("This was the last question. Now we'll change the level.");
+			yield checkShrinkingZone();
 			gameLogic.NextLevel();
 		}
 		else{									//Shows the next question
@@ -438,6 +429,12 @@ public class LevelLogicQuiz extends MonoBehaviour{
 			firstTrack.Add("type", "logic");
 			firstTrack.Add("event", "Quiz level number " + CurrentRoundNum + " score");
 			firstTrack.Add("round", CurrentRoundNum.ToString());
+			
+			if (blindRound) firstTrack.Add("blind", true);		//To inform if this was a blind question round or not
+			else firstTrack.Add("blind", false);
+			
+			
+			
 			firstTrack.Add("score", stringanswers);
 			var tracks : JSONObject[] = new JSONObject[1];
 			tracks[0] = firstTrack;
@@ -449,5 +446,56 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		}
 		
 	}
+	
+	private function checkShrinkingZone(){
+		//checks if it's neccesary to play the shrinking animation and plays it
+		
+		//This variables are updated just in case, but its' values are given in the Awake() function.
+		blindRound = gameLogic.IsBlindRound();
+		blindMode = gameLogic.IsBlindGame();
+		
+		if (!blindMode){
+			Debug.Log("The game is not in Blind mode, so the shrink animation is played.");
+			yield ShrinkingZone();
+		}
+		else{							//the current game is blind. Shrinking zone must be played only in the blind rounds
+			if (blindRound){			//as well as the current round
+				Debug.Log("Blind Game: This round IS blind, so the shrink animation is played.");
+				yield ShrinkingZone();	//so we play the shrinking animation
+			}else{
+				Debug.Log("Blind Game: This round is NOT blind, so the shrink animation is played.");
+			}
+		}
+	}
+	
+	private function ShrinkingZone (){
+		//Shows the shrinking animation.
+		
+		
+//		Debug.Log("Beggining SrinkingZone()...");
+		
+		amyScoreBoard.Disable();
+		harryScoreBoard.Disable();
+		
+		shrinkingZone.SetActive(true);
+		if (playerName == "amy"){
+			amyShrinkGO.SetActive(true);
+		}
+		else{
+			if (playerName == "harry"){
+				harryShrinkGO.SetActive(true);
+			}
+			else{
+				Debug.Log("There was some problem with the player. Don't know which one to use.");
+			}
+		}
+		
+		CameraShake.ShrinkingZone();
+			
+		yield new WaitForSeconds(3.5);//3.5);									//Waits to play the shrinking animation TODO check the time
+		
+//		Debug.Log("Finished ShrinkingZone");
+
+	}//end of function
 	
 }//End of class brace

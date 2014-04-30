@@ -23,6 +23,6 @@ function enableClick(){
 }
 
 public function finishedTVIntro(){
-	while (!canSkip) yield new WaitForSeconds(0.2);
+	while (!canSkip) yield new WaitForSeconds(0.1);
 	Debug.Log("Giving back the control to the LevelLogic script.");
 }

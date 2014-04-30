@@ -75,17 +75,17 @@ public class Goals extends MonoBehaviour{
 		
 		//GUITextGoalsInfo.SetInfoGoals(microbe, counter[numbers.micNumber, 0], counter[numbers.micNumber, 1], counter[numbers.micNumber, 2], counter[numbers.micNumber, 3], counter[numbers.micNumber, 4]);	//To update the GUI
 		
-		ConnectWithGUIHandler(numbers.micNumber, times);		//This function will search the GUI object (parent of the mobile phone) to set the microbe and number of goals
+		ConnectWithGUIHandler(numbers.micNumber, times, numbers.actNumber);		//This function will search the GUI object (parent of the mobile phone) to set the microbe and number of goals
 		
 		counterChanged = true;
 	}
 	
-	private function ConnectWithGUIHandler(microbeNum: int, goalsToComplete: int){
-		//This function will search the GUI object (parent of the mobile phone) to set the microbe and number of goals still to complete
+	private function ConnectWithGUIHandler(microbeNum: int, goalsToComplete: int, actionToDo: int){
+		//This function will search the GUI object (parent of the mobile phone) to set the microbe, number of goals still to complete and the goal itself
 		var GUIHandlerGO: GameObject = GameObject.Find("GUI(Clone)");
 		if (GUIHandlerGO){
 			GUIHandlerScript = GUIHandlerGO.GetComponent("GUIHandler");
-			GUIHandlerScript.SetPhoneInfo(microbeNum, goalsToComplete);			//Calls the function to update the microbe and number of goals
+			GUIHandlerScript.SetPhoneInfo(microbeNum, goalsToComplete, actionToDo);			//Calls the function to update the microbe and number of goals
 //			Debug.Log("Goals.js: UpdateGoals() GUIHandler.SetPhoneInfo()");
 		}																				
 		else{
