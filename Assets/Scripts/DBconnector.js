@@ -93,52 +93,6 @@ public class DBconnector extends MonoBehaviour{
 
 		
 	}
-	
-//	public function ConnectToGleaner (userID: String, session: String){//: Object{
-//		Debug.Log("Beginning the connection to the DB");
-//		
-//		
-//		
-//		if (PlayerPrefs.HasKey("sessionKey")) PlayerPrefs.DeleteKey("sessionKey");		//just to make sure
-//		
-//		/*Creating the heades for the http get request*/
-//		var headers = new Hashtable();
-//		headers.Add("Authorization", userID);
-//		
-//		/*Sending the request*/
-//		if(debugMode) Debug.Log('DBConnector.ConnectToGleaner() -> Beginning connection...');
-//		var www = new WWW(url + "/start/"+session, null, headers);
-//		yield www;
-//		
-//		/*Dealing with the response*/
-//		if (!String.IsNullOrEmpty(www.error)){
-//	        Debug.LogError('DBConnector.ConnectToGleaner() -> Error in the http response' + www.error);
-//	    }
-//	    else{
-//	    	if (www.text){
-//	        	var resJSON : JSONObject = JSONObject.Parse(www.text);					//resJSON should contain the parsed JSON if there hasn't been errors
-//	        	if(debugMode) Debug.LogError('DBConnector.ConnectToGleaner() -> Connection established');
-//	        	if (resJSON.ContainsKey('sessionKey')){
-//	        		
-//	        		sessionkey = resJSON.GetValue('sessionKey').ToString();
-//	        		
-//	        		var lastin = sessionkey.LastIndexOf('"');        		
-//	        		sessionkey = sessionkey.Substring(1, lastin-1);
-//	               		
-//	        		PlayerPrefs.SetString("sessionKey", sessionkey);					//Stores the session key in PlayerPrefs (See http://docs.unity3d.com/Documentation/ScriptReference/PlayerPrefs.html)
-//	        		connected = true;													//Change connected so we won't try to connect again if the sessionkey was already generated
-//	        		//Debug.Log('DBConnector.EstablishConnection() -> sessionkey: ' + sessionkey);
-//	        	}
-//				if(debugMode) Debug.Log("DBConnector.ConnectToGleaner() -> Text returned by " + url+ "/start/"+session + ": \n" + www.text);
-//				if(debugMode) Debug.Log('DBConnector.ConnectToGleaner() -> Text returned by the JSONObject (after Parsing and Stringifying it):\n' + resJSON.ToString());
-//			}
-//			else{
-//				Debug.LogError('DBConnector.ConnectToGleaner() -> The www response was received, but did not have \'text\' field.');
-//			}
-//		}
-//
-//		
-//	}
 
 	/**
 	*	myTracks: Note that this is a built-in .NET array (more info -> http://docs.unity3d.com/Documentation/ScriptReference/Array.html) and 
@@ -164,7 +118,7 @@ public class DBconnector extends MonoBehaviour{
 
 	}
 	
-	//This function is finally not needed if the game is being played from the server, because just asking the server for the page where the game will be loaded (and after that for the game itself) wakes the server
+	//This function is finally not needed if the game is being played from the online server, because just asking the server for the page where the game will be loaded (and after that for the game itself) wakes the server
 	
 //	public function AwakeServer(){
 //		//The server is hosted at heroku. When the server doesn't receive any request for an hour it goes to idle state, which takes 5 seconds or so to get into the awake state again.

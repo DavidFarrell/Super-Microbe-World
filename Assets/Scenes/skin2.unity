@@ -11322,7 +11322,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 65baa74050c884035a218845414aa02c, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 8.68000031
+      value: 6.46999979
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 65baa74050c884035a218845414aa02c, type: 2}
       propertyPath: m_LocalPosition.y
@@ -24482,7 +24482,7 @@ Transform:
   m_PrefabInternal: {fileID: 738777413}
   m_GameObject: {fileID: 1537718713}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.68000031, y: -5.71411943, z: 0}
+  m_LocalPosition: {x: 6.46999979, y: -5.71411943, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -25954,6 +25954,7 @@ GameObject:
   - 4: {fileID: 1615054781}
   - 114: {fileID: 1615054780}
   - 114: {fileID: 1615054779}
+  - 114: {fileID: 1615054782}
   m_Layer: 0
   m_Name: GameLogic
   m_TagString: Untagged
@@ -25985,9 +25986,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccfb5daf995754ca78e31e2acaf426e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isConnected: 0
   db: {fileID: 0}
-  loadingText: {fileID: 0}
-  errorMessage: {fileID: 0}
+  loadingText: {fileID: 13200000, guid: b5bb2eeab7c344722b293057b7d297e2, type: 2}
+  errorMessage: {fileID: 13200000, guid: 482e136c5dd4946e98c6d198e5028781, type: 2}
   ShowBlindRounds: 1
 --- !u!4 &1615054781
 Transform:
@@ -26000,6 +26002,20 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!114 &1615054782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400004, guid: 17bab7d8f26d4479fa4019a6935ac68d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1013826529}
+  m_GameObject: {fileID: 1615054778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f4463bfc81c42358a578aaa9848c18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timelimit: 15
+  connected: 0
 --- !u!1 &1615069184
 GameObject:
   m_ObjectHideFlags: 0
