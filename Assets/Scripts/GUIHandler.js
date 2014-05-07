@@ -125,6 +125,11 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 			firstRun = false;
 		}
 		
+		if(showInfoImage && Input.anyKeyDown){
+			Debug.Log("Next image anyKeyDown");
+			showNextInfoImage();
+		}
+		
 		/*JUST FOR DEVELOPING*/
 		
 //		mytimer += Time.deltaTime;
@@ -146,11 +151,13 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 		if (lives>1) GUI.Label (Rect (livesPos2x,livesPosHeight,liveswidth,livesheight), livesImg);		//Second heart
 		if (lives>2) GUI.Label (Rect (livesPos3x,livesPosHeight,liveswidth,livesheight), livesImg);		//First heart
 		if (antibiotic > 0) GUI.Label (Rect (antibioticPos.x,antibioticPos.y,antibioticwidth,antibioticheight), antibioticImg);
-		if (showInfoImage)
+		if (showInfoImage){
+			
 			if (GUI.Button (Rect (infoImagePos.x, infoImagePos.y, infoImageWidth, infoImageHeigth), currentImage, "label")) {	//This will paint a button without border
-				//Debug.Log("Next image");
-				showNextInfoImage();
+//				Debug.Log("Next image ButtonPressed");
+			//The clich will be checked on the update function above this OnGUI function, calling the showNextInfoImage() method
 			}
+		}
 	}
 	
 	public function UpdateGUI(life : int, soapDrops : int, whiteBloodCells : int, Antibiotics : int){
@@ -213,6 +220,7 @@ public class GUIHandler extends MonoBehaviour{		//Yes, I know that handler is no
 	}
 	
 	private function showNextInfoImage(){
+		Debug.Log("showNextInfoImage(): Showing image -> " + currentImageNum);
 		if(currentImageNum < currentArrayIm.length){		//There is still at least one more image to show
 			currentImage = currentArrayIm[currentImageNum];
 			showInfoImage = true;

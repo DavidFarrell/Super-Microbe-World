@@ -54,6 +54,11 @@ public class LevelLogicGameShow extends MonoBehaviour{
 	private var ageString : String = "?";			//The age of the player
 	private var emailString : String = "?";			//The email of the player
 	
+	//Vars for the tv animation
+	private var canSkipTV: boolean = false;
+	private var clickEnabledTV: boolean = false;	//When true 
+	private var TVIntroGO: GameObject = null;		//Will contain the GameObject containing the tv intro anumation so it can be destroyed when it's convenient
+	
 	
 	function Awake () {
 	
@@ -126,6 +131,13 @@ public class LevelLogicGameShow extends MonoBehaviour{
 			loadingText.enabled = true;
 		}
 		
+		if(clickEnabledTV && Input.anyKeyDown){
+			canSkipTV = true;
+			Debug.Log("Click detected while playing the TV animation");
+			Destroy(TVIntroGO);
+			clickEnabledTV = false;	//to avoid clicking more than once
+		}
+		
 	}
 	
 	function OnGUI () {
@@ -179,15 +191,23 @@ public class LevelLogicGameShow extends MonoBehaviour{
 	
 	private function showTVanimation(){
 		//Here the code to show the television animation
-		var tvIntro: TVIntro = GameObject.Find("TVIntro").GetComponent(TVIntro);
-		if (tvIntro){
-			Debug.Log("TVIntro found! Waiting for a click...");
+		TVIntroGO = GameObject.Find("TVIntro");
+		if (TVIntroGO){
+			Debug.Log("TVIntro found!");
 			amyScoreBoard.Disable();
 			harryScoreBoard.Disable();
 			
-			yield tvIntro.finishedTVIntro();
+			//yield tvIntro.finishedTVIntro();
 			
-			Debug.Log("Finished playing TV animation!");
+			yield new WaitForSeconds(3);	//Time that takes the intro to be played
+			
+			Debug.Log("Finished playing TV animation! Waiting for the click.");
+			
+			clickEnabledTV = true;
+			
+			while (!canSkipTV) yield new WaitForSeconds(0.1);
+			
+			Debug.Log("Finished with the showTVanimation() method, going on!");
 			
 			amyScoreBoard.Enable();
 			harryScoreBoard.Enable();

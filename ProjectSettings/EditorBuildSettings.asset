@@ -29,3 +29,5 @@ EditorBuildSettings:
     path: Assets/Scenes/kitchen32.unity
   - enabled: 1
     path: Assets/Scenes/superinfection.unity
+  - enabled: 1
+    path: Assets/Scenes/gameShow_game_end.unity

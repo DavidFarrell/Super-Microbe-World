@@ -125,7 +125,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 248b2b05c39784c4b879e8ee1138853e, type: 3}
   - {fileID: 2800000, guid: 5f4effca33313466b96e7b5975cfc9c0, type: 3}
   - {fileID: 2800000, guid: 204f0ebbbd35343f1be7d77c2b17890e, type: 3}
-  infoImagePos: {x: 274, y: 184}
+  infoImagePos: {x: 290.299988, y: 189}
   livesImg: {fileID: 2800000, guid: 7a8504960ecef478f97a88592ded4aa5, type: 3}
   livesPosHeight: 14
   livesPos1x: 900

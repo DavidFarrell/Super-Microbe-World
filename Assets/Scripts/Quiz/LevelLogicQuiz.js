@@ -454,6 +454,11 @@ public class LevelLogicQuiz extends MonoBehaviour{
 		blindRound = gameLogic.IsBlindRound();
 		blindMode = gameLogic.IsBlindGame();
 		
+		if (gameLogic.IsLastRound()){ 		//In the last stage we don't want to play the shrinking animation
+			Debug.Log("As this is the last question round the shrinking animation won't be played.");
+			return;
+		}
+		
 		if (!blindMode){
 			Debug.Log("The game is not in Blind mode, so the shrink animation is played.");
 			yield ShrinkingZone();

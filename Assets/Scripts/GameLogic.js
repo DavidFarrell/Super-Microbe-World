@@ -23,7 +23,7 @@ import Boomlagoon.JSON;
 public class GameLogic extends MonoBehaviour{
 	
 	//This enum type will contain the EXACT name of all the scenes of the game.				IMPORTANT
-	enum GameLevel {gameShow, gameShow_quiz1b, kitchen1, skin1, skin2, kitchen2, gameShow_quiz1, gameShow_quiz2b, skin11, skin12, body11, gameShow_quiz2, gameShow_quiz3b, kitchen31, kitchen32, gameShow_quiz3, gameShow_quiz4, gameShow_quiz5b, superinfection, gameShow_quiz5};	//The quiz round 4 is never shown because it's about the kitchen game, which is not implemented yet.
+	enum GameLevel {gameShow, gameShow_quiz1b, kitchen1, skin1, skin2, kitchen2, gameShow_quiz1, gameShow_quiz2b, skin11, skin12, body11, gameShow_quiz2, gameShow_quiz3b, kitchen31, kitchen32, gameShow_quiz3, gameShow_quiz4, gameShow_quiz5b, superinfection, gameShow_quiz5, gameShow_game_end};	//The quiz round 4 is never shown because it's about the kitchen game, which is not implemented yet.
 	
 	private var level : GameLevel;			//The current level being played
 	
@@ -181,10 +181,9 @@ public class GameLogic extends MonoBehaviour{
 				case GameLevel.superinfection:
 					ChangeLevel(GameLevel.gameShow_quiz5);
 					break;
-//				case GameLevel.gameShow_quiz2:
-//					currentRoundNum = 3;
-//					ChangeLevel(GameLevel.gameShow_quiz2);
-//					break;
+				case GameLevel.gameShow_quiz5:
+					ChangeLevel(GameLevel.gameShow_game_end);
+					break;
 				default:
 					Debug.Log("Game finished");
 					Application.Quit();				//As this game is going to be built as a web application there is no sense on exiting the application. So We'll have to show some kind of ending screen.
@@ -380,6 +379,11 @@ public class GameLogic extends MonoBehaviour{
 		//will return if the current game is a blind game or not.
 		return ShowBlindRounds;
 	}//end of function
+	
+	public function IsLastRound(){
+		//Returns true if the current level is the last question round. This way we will know if we should show the shrinking animation or not.
+		return (level == GameLevel.gameShow_quiz5);
+	}
 	
 //	public function GetQuestions(){
 //		//This class begins the process of getting the round object containing the questions and answers
