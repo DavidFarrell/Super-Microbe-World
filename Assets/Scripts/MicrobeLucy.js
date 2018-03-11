@@ -74,7 +74,7 @@ public class MicrobeLucy extends WalkingMicrobe {
 	private function jumpToYoghurt() {
 		iTween.Stop(gameObject);						//Stops all the iTweens of this gameObject
 		jumpForce.x = jumpForce.x * yoghurtPosition;					//To jump left or right depending on the position of the yoghurt
-		myTransform.rigidbody2D.AddForce(jumpForce);
+		myTransform.GetComponent.<Rigidbody2D>().AddForce(jumpForce);
 		jumped = true;
 		anim.SetTrigger("dive");
 		

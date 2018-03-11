@@ -46,7 +46,7 @@ public class Microbe extends MonoBehaviour{
 		anim = gameObject.GetComponent(Animator);	//To store the animator component
 		myTransform = transform;
 		myGameObject = gameObject;
-		myRigidbody2D = myTransform.rigidbody2D;
+		myRigidbody2D = myTransform.GetComponent.<Rigidbody2D>();
 		
 		var gameLogicGO : GameObject;
 		gameLogicGO = GameObject.Find("GameLogic");
@@ -165,7 +165,7 @@ public class Microbe extends MonoBehaviour{
 			killedAlready = true;
 			anim.SetTrigger("be_killed");
 			//rigidbody2D.AddForce(Vector2(0, 20));
-			rigidbody2D.gravityScale = 0;
+			GetComponent.<Rigidbody2D>().gravityScale = 0;
 			disableColliders();
 			Destroy(gameObject, 1); //TODO Check this time
 		}
@@ -181,7 +181,7 @@ public class Microbe extends MonoBehaviour{
 //			rigidbody2D.AddForce(Vector2(0, 20));
 
 			//rigidbody2D.gravityScale = 0;
-			rigidbody2D.isKinematic = true;
+			GetComponent.<Rigidbody2D>().isKinematic = true;
 			disableColliders();
 			
 			iTween.MoveAdd(gameObject, {"y": 70, "time": 3, "easetype": EaseType.easeInQuart});	//, "oncomplete": "DestroyMicrobe"});

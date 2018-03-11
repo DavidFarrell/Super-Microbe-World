@@ -35,8 +35,8 @@ function Update () {
 function RespawnPickup(){
 	yield new WaitForSeconds(TimeToRespawn);
 	hasCollidedAlready = false;
-	transform.collider2D.enabled= true;
-	transform.renderer.enabled = true;
+	transform.GetComponent.<Collider2D>().enabled= true;
+	transform.GetComponent.<Renderer>().enabled = true;
 }
 
 function makeInvisible(){

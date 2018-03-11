@@ -77,7 +77,7 @@ public class WalkingMicrobe extends Microbe {
 					if (debugMode) Debug.Log("Pos: " + groundPoint + " No floor ahead. Turning around...");		
 					//Debug.Log("Hit: " + groundHits[0]);
 					
-					if (!renderer.isVisible){	//If the microbe is not visible
+					if (!GetComponent.<Renderer>().isVisible){	//If the microbe is not visible
 						StopThenFlip();			//Continue walking
 					}else{
 						LedgeReached();
@@ -122,7 +122,7 @@ public class WalkingMicrobe extends Microbe {
 		var collisionLayer: int = collisionObject.layer;
 		
 		if( DestroysOnEnemyContact	//If this boolean is true, and an enemie bumps with a non enemie, or the opposite...
-			&& renderer.isVisible		//if is visible on the camera...
+			&& GetComponent.<Renderer>().isVisible		//if is visible on the camera...
 			&& ( ( gameObject.layer == utils.layers.enemies && collisionLayer == utils.layers.nonEnemies ) || (gameObject.layer == utils.layers.nonEnemies && collisionLayer == utils.layers.enemies) ) ){
 			
 //			if(gameObject.layer == utils.layers.enemies){
@@ -182,8 +182,8 @@ public class WalkingMicrobe extends Microbe {
 //			if (direction.x > 0) Debug.Log("Jumping right");
 //			else Debug.Log("Jumping left");
 			anim.SetTrigger("jump_start");
-			if (facingRight) myTransform.rigidbody2D.AddForce(jumpOnLedgeForce);
-			else myTransform.rigidbody2D.AddForce(Vector2(jumpOnLedgeForce.x * (-1), jumpOnLedgeForce.y));
+			if (facingRight) myTransform.GetComponent.<Rigidbody2D>().AddForce(jumpOnLedgeForce);
+			else myTransform.GetComponent.<Rigidbody2D>().AddForce(Vector2(jumpOnLedgeForce.x * (-1), jumpOnLedgeForce.y));
 			
 			hasJumped = true;
 		}
@@ -227,7 +227,7 @@ public class WalkingMicrobe extends Microbe {
 			isWalking = false;
 			
 			//rigidbody2D.gravityScale = 0;
-			rigidbody2D.isKinematic = true;
+			GetComponent.<Rigidbody2D>().isKinematic = true;
 			disableColliders();
 			
 			iTween.Stop(gameObject);															//Stops all the iTweens of this gameObject

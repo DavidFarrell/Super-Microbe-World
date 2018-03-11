@@ -74,7 +74,7 @@ function Awake () {
 	myTransform = transform;
 	low_anim = myTransform.Find("low_player").GetComponent(Animator);
 	up_anim = myTransform.Find("up_player").GetComponent(Animator);
-	myRigidbody2D = myTransform.rigidbody2D;
+	myRigidbody2D = myTransform.GetComponent.<Rigidbody2D>();
 	facingRight = true;
 	facingDirection = Vector2.right;
 	controlsEnabled = true;

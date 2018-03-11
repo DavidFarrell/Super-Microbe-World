@@ -16,7 +16,7 @@ function Start () {
 function Update () {
 
 	if (update){
-		guiText.text = mytext;
+		GetComponent.<GUIText>().text = mytext;
 		update = false;
 	}
 
