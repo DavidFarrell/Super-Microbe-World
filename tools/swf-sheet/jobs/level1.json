@@ -1,6 +1,7 @@
 {
  "scale": 2,
  "margin": 4,
+ "nested": "frame",
  "jobs": [
   {
    "swf": "movies/introductionToMicrobes_platformer.swf",

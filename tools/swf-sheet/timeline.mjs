@@ -17,7 +17,7 @@ import {
   TAG, SHAPE_TAGS, MORPH_TAGS, TEXT_TAGS, BUTTON_TAGS, BITMAP_TAGS, FONT_TAGS, DEFINING_TAGS,
   DROPPED_ROOT_TAGS, readSwf, shapeSubpaths, parseShapeRecords, rewriteShapeBody, parseSprite, parsePlace, parseButtonRecords, definitionBounds,
   encodePlace, encodeSprite, encodeTag, writeSwf, transformRect, unionRect, intersectRect,
-  filterReach, IDENTITY, BitReader,
+  filterReach, IDENTITY, BitReader, multiply,
 } from './swf-io.mjs';
 
 // ---------------------------------------------------------------------------------------------
@@ -163,6 +163,25 @@ export class SwfLibrary {
   // instance on the root timeline's frame 1) to { id, placement } where placement is the root
   // place record (or null).
   resolve(target) {
+    // "a/b/c": resolve a, then descend through instances named b, c on each clip's frame 1,
+    // composing their placement matrices (so the result shares a's registration point). The
+    // innermost colour transform, filters and blend mode are kept; outer ones are reported.
+    if (typeof target === 'string' && target.includes('/') && !target.startsWith('root:') || /^root:[^/]+\//.test(String(target))) {
+      const parts = String(target).split('/');
+      let { id, placement } = this.resolve(/^\d+$/.test(parts[0]) ? +parts[0] : parts[0]);
+      let matrix = placement ? placement.matrix : IDENTITY;
+      for (const name of parts.slice(1)) {
+        const c = this.chars.get(id);
+        if (!c || c.kind !== 'sprite') throw new Error(`${this.name}: ${target}: ${id} is not a sprite`);
+        const inst = [...displayListAt(c.timeline, 1).values()].find(v => v.name === name);
+        if (!inst) throw new Error(`${this.name}: ${target}: no instance named ${name}`);
+        if (placement && (placement.cxform || placement.filters || placement.blendMode > 1)) console.warn(`  note: ${target}: outer effects of ${placement.name} are not applied`);
+        matrix = multiply(matrix, inst.matrix);
+        id = inst.charId;
+        placement = { ...inst, matrix };
+      }
+      return { id, placement };
+    }
     if (target === 'root') return { id: -1, placement: null };
     if (typeof target === 'number' || /^\d+$/.test(String(target))) return { id: +target, placement: null };
     if (String(target).startsWith('root:')) {
@@ -173,6 +192,66 @@ export class SwfLibrary {
     }
     if (!this.exports.has(target)) throw new Error(`${this.name}: no export named ${target}`);
     return { id: this.exports.get(target), placement: null };
+  }
+
+  // Display list of sprite id at frame k, memoised.
+  dl(id, k) {
+    const c = this.chars.get(id);
+    if (!c.dls) c.dls = new Map();
+    if (!c.dls.has(k)) c.dls.set(k, displayListAt(c.timeline, k));
+    return c.dls.get(k);
+  }
+
+  // State of a freshly created instance of sprite id after `age` ticks: { frame, created } where
+  // created maps each depth of the display list at that frame to the tick its current instance
+  // was created on. Constant frame scripts are followed (as playSequence). An instance survives
+  // a frame change (linear play, loop or goto) when the new frame's display list holds the same
+  // character at that depth from the same PlaceObject (same birth frame), as Flash and Ruffle
+  // keep it; otherwise it is created afresh. So a nested clip inside a stopped or one-frame
+  // parent keeps playing, as in Flash, instead of being frozen at its first frame.
+  stateAt(id, age) {
+    const c = this.chars.get(id);
+    if (!c.history) {
+      const tl = c.timeline, n = tl.frameCount;
+      const labelFrame = t => typeof t === 'number' ? Math.min(Math.max(1, t), n) : tl.labels[t];
+      const h = { states: [], frame: 1, playing: true, live: new Map() };
+      h.reconcile = tick => {
+        const list = this.dl(id, h.frame), next = new Map();
+        for (const [depth, inst] of list) {
+          const prev = h.live.get(depth);
+          next.set(depth, prev && prev.charId === inst.charId && prev.born === inst.born ? prev : { charId: inst.charId, born: inst.born, created: tick });
+        }
+        h.live = next;
+      };
+      h.enter = () => {
+        for (let guard = 0; guard < 8; guard++) {
+          const before = h.frame;
+          for (const a of tl.frames[h.frame - 1]?.actions || []) {
+            if (a[0] === 'complex') break;
+            if (a[0] === 'stop') h.playing = false;
+            else if (a[0] === 'play') h.playing = true;
+            else if (a[0] === 'next') { h.frame = Math.min(n, h.frame + 1); h.playing = false; }
+            else if (a[0] === 'prev') { h.frame = Math.max(1, h.frame - 1); h.playing = false; }
+            else if (a[0] === 'goto') { const t = labelFrame(a[1]); if (!t) continue; h.frame = t; h.playing = a[2]; }
+          }
+          if (h.frame === before) return;
+        }
+      };
+      h.push = tick => {
+        h.reconcile(tick);
+        h.states.push({ frame: h.frame, created: new Map([...h.live].map(([d, v]) => [d, v.created])) });
+      };
+      // Tick 0: frame 1 is placed, then its script runs (it may jump elsewhere at once).
+      h.reconcile(0); h.enter(); h.push(0);
+      c.history = h;
+    }
+    const h = c.history, n = c.timeline.frameCount;
+    while (h.states.length <= age) {
+      const tick = h.states.length;
+      if (h.playing) { h.frame = h.frame >= n ? 1 : h.frame + 1; h.enter(); }
+      h.push(tick);
+    }
+    return h.states[age];
   }
 
   // Frame after `ticks` frame advances of a freshly created instance of sprite id, following
@@ -267,9 +346,14 @@ function playSequence(timeline) {
 
 export class Snapshotter {
   // options: omitText (skip static and edit text), hide (Set of instance names to skip).
-  constructor(lib, { omitText = false, hide = [] } = {}) {
+  // nested: 'age' (default) plays nested clips by their own age since creation (SwfLibrary.stateAt),
+  // so clips inside stopped or one-frame parents keep animating as in Flash; 'frame' is the
+  // original model (a child's frame follows its parent's frame number), which the level-1 sheets
+  // were rendered with. The two agree whenever parents play straight through.
+  constructor(lib, { omitText = false, hide = [], nested = 'age' } = {}) {
     this.lib = lib;
     this.omitText = omitText;
+    this.nested = nested;
     this.hide = new Set(hide);
     this.nextId = lib.maxId + 1;
     this.memo = new Map();       // content key -> id
@@ -307,13 +391,36 @@ export class Snapshotter {
     for (const [depth, inst] of [...list].sort((a, b) => a[0] - b[0])) {
       if (inst.name && this.hide.has(inst.name)) { items.push({ depth, missing: true, clipDepth: inst.clipDepth }); continue; }
       const child = this.lib.chars.get(inst.charId);
-      const childFrame = child?.kind === 'sprite' ? this.lib.frameAfter(inst.charId, frame - inst.born + ageOffset) : 1;
-      const n = this.node(inst.charId, childFrame, inst.ratio);
+      let n;
+      if (child?.kind === 'sprite' && this.nested === 'age') n = this.aged(inst.charId, frame - inst.born + ageOffset);
+      else n = this.node(inst.charId, child?.kind === 'sprite' ? this.lib.frameAfter(inst.charId, frame - inst.born + ageOffset) : 1, inst.ratio);
       if (!n) { items.push({ depth, missing: true, clipDepth: inst.clipDepth }); continue; }
       items.push({ depth, inst, n });
     }
     this.stack.delete(key0);
     return this.emit(items);
+  }
+
+  // Snapshot of a nested sprite instance that is `age` ticks old (see SwfLibrary.stateAt).
+  aged(spriteId, age) {
+    const key0 = spriteId + '~' + age;
+    if (!this.agedMemo) this.agedMemo = new Map();
+    if (this.agedMemo.has(key0)) return this.agedMemo.get(key0);
+    if (this.stack.has(key0)) throw new Error(`Recursive sprite ${spriteId}`);
+    this.stack.add(key0);
+    const { frame, created } = this.lib.stateAt(spriteId, Math.max(0, age));
+    const items = [];
+    for (const [depth, inst] of [...this.lib.dl(spriteId, frame)].sort((a, b) => a[0] - b[0])) {
+      if (inst.name && this.hide.has(inst.name)) { items.push({ depth, missing: true, clipDepth: inst.clipDepth }); continue; }
+      const child = this.lib.chars.get(inst.charId);
+      const n = child?.kind === 'sprite' ? this.aged(inst.charId, age - created.get(depth)) : this.node(inst.charId, 1, inst.ratio);
+      if (!n) { items.push({ depth, missing: true, clipDepth: inst.clipDepth }); continue; }
+      items.push({ depth, inst, n });
+    }
+    this.stack.delete(key0);
+    const node = this.emit(items);
+    this.agedMemo.set(key0, node);
+    return node;
   }
 
   buttonSnapshot(buttonId) {

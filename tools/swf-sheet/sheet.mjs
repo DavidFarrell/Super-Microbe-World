@@ -9,7 +9,9 @@
 // Jobs file: { "scale": 2, "jobs": [ { "swf": "movies/x.swf", "symbol": "lucy_icon" |
 //   1495 | "root:<instance>", "name": "out name", "scale": 2, "frames": "1-10,20",
 //   "omitText": false, "hide": ["instanceName"], "track": ["instanceName"], "ticks": 30,
-//   "margin": 4, "pageMax": 4096 } ] }. SWF paths are relative to
+//   "margin": 4, "pageMax": 4096, "nested": "age" | "frame" } ] }. "nested" picks how nested clips
+// advance (see Snapshotter in timeline.mjs): "age" (default) is Flash's behaviour; "frame" is the
+// original model, pinned in jobs/level1.json so a forced rebuild reproduces the shipped sheets. SWF paths are relative to
 // reference/Junior_Game. A symbol is an export name, a character id, or an instance on the
 // root timeline's first frame (its root placement matrix is applied, so it shares the movie's
 // registration point, as the avatar halves in harry.swf and amy.swf need).
@@ -120,7 +122,7 @@ export async function renderJob(job, capturer, { defaults = {}, force = false, l
   const { id, placement } = lib.resolve(job.symbol);
   const char = lib.chars.get(id);
   if (!char) throw new Error(`${job.swf}: character ${id} is not defined in this file`);
-  const snap = new Snapshotter(lib, { omitText: job.omitText ?? defaults.omitText, hide: job.hide || [] });
+  const snap = new Snapshotter(lib, { omitText: job.omitText ?? defaults.omitText, hide: job.hide || [], nested: job.nested ?? defaults.nested ?? 'age' });
   const erased = eraseShapeRegions(lib, job.erase);
   const ticks = job.ticks || 0;
   const frameCount = ticks || (char.kind === 'sprite' ? char.timeline.frameCount : 1);
@@ -181,7 +183,7 @@ export async function renderJob(job, capturer, { defaults = {}, force = false, l
     scripts: char.kind === 'sprite' && !ticks ? normaliseScripts(char.timeline) : {},
     mode: ticks ? 'ticks' : 'frames',
     placement: placement ? { depth: placement.depth, name: placement.name, matrix: placement.matrix } : null,
-    options: { omitText: !!(job.omitText ?? defaults.omitText), hide: job.hide || [], frames: job.frames || 'all', ticks: ticks || undefined, atFrame: job.atFrame },
+    options: { omitText: !!(job.omitText ?? defaults.omitText), hide: job.hide || [], frames: job.frames || 'all', ticks: ticks || undefined, atFrame: job.atFrame, nested: job.nested ?? defaults.nested ?? 'age' },
   };
   meta.frames = Array.from({ length: frameCount }, (_, i) => {
     const c = frameCell.get(i + 1);
