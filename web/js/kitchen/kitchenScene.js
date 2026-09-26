@@ -127,8 +127,8 @@ const STYLE = `
 #ui .kz-page .kz-notes { pointer-events: auto; }
 .kz-notes p { margin: 0; flex: none; font: 400 calc(16px * var(--text-scale, 1))/1.35 ${VERDANA}; color: #111; animation: kz-row-in 0.35s ease both; }
 .kz-notes.slots p { min-height: ${NOTE_SLOT - 12}px; }
-.kz-notes.many { gap: 7px; top: 46px; height: 284px; }
-.kz-notes.many p { font-size: calc(14px * var(--text-scale, 1)); line-height: 1.28; }
+.kz-notes.many { gap: 4px; top: 46px; height: 284px; }
+.kz-notes.many p { font-size: calc(14px * var(--text-scale, 1)); line-height: 1.25; }
 .kz-notes.scrolls { justify-content: flex-start; padding-bottom: 26px; -webkit-mask-image: linear-gradient(#000 calc(100% - 44px), transparent); mask-image: linear-gradient(#000 calc(100% - 44px), transparent); }
 .kz-notes.scrolls.end { -webkit-mask-image: none; mask-image: none; }
 .kz-notes p.none { color: #13854a; font-weight: 700; }
@@ -351,11 +351,14 @@ export function kitchenScene(app) {
     tutorialStep = 'ask';
     held = false; dragging = false;
     current = makeItem(25, -1);
-    const hint = el('div', { class: 'kz-hint', role: 'status' }, t('kitchen.tutorial.hint.' + device(), words()));
-    setPage(hint);
+    tutorialHint();
     showControls(['item', ...DEST_ORDER]);
     if (device() !== 'touch') setFocus('item');
     app.touch.show(TOUCH_PAUSE);
+  }
+
+  function tutorialHint() {
+    setPage(el('div', { class: 'kz-hint', role: 'status' }, t('kitchen.tutorial.hint.' + device(), words())));
   }
 
   function tutorialAnswer(loc) {
@@ -1129,7 +1132,11 @@ export function kitchenScene(app) {
   function onDeviceChange() {
     if (mode === 'play') buildLegend();
     if (mode === 'intro') showIntro(introPage, { quiet: true });
-    if (mode === 'tutorial') showTutorial();
+    // The tutorial keeps its state (a lifted spring onion stays lifted); only the hint changes.
+    if (mode === 'tutorial') {
+      tutorialHint();
+      if (device() !== 'touch' && !focusId) setFocus(held ? DEST_ORDER[0] : 'item');
+    }
     if (device() === 'touch' && (mode === 'play' || mode === 'tutorial')) focusId = null;
   }
 

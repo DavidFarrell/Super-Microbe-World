@@ -120,7 +120,7 @@ export const tests = [
       // cancel, so she stays on her spawn cell as in the captures (NOTES-levels-decisions.md 5). The
       // exit portal is not solid and is listed by rule below.
       const KNOWN_OVERLAPS = new Set([
-        'alpha_level4 patty_icon@(4,11) loaf_end_L_obj@(4,14)', 'alpha_level4 patty_icon@(4,11) loaf_mid_obj@(4,15)',
+        'alpha_level4 patty_icon@(4,11) loaf_end_L_obj@(4,14)',
         'alpha_level5 slurm_icon@(5,39) spot_small_obj@(6,40)',
         'alpha_level6 slarg_icon@(3,43) skin_surface_tile@(7,43)', 'alpha_level6 slarg_icon@(3,43) skin_surface_tile@(7,44)',
       ]);

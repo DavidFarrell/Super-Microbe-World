@@ -1,5 +1,6 @@
 {
   "_comment": "Platform game strings added for levels 2-10 (web/js/platformer).",
+  "platform.snap": "Snap!",
   "platform.yogurt": "Yogurt!",
   "platform.superDefeated": "Superinfection defeated!",
   "platform.goalLabel.photo": "Photos",

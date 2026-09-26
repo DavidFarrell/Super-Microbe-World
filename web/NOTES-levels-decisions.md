@@ -63,7 +63,11 @@ traces are unaffected except through hit-stop (whole logic steps, PD "Feel impro
   burst, a fanfare (`superDefeated`) and the banner "Superinfection defeated!".
 - **Milk**: a splash sound and milk droplets when Lucy lands in the glass (`milkHit`); the yogurt
   turn adds rising bubbles, a "Yogurt!" popup, a flash of the glass, light shake and haptics.
-- **Bombs**: the fuse blink and the off-screen badge of decision 7.
+- **Bombs**: the fuse blink and the off-screen badge of decision 7. With reduced motion the fuse
+  is a steady red tint that deepens as it runs down, and the badge neither pulses nor bobs. A
+  badge appears only once the capsule's art is wholly off screen; several on one side are spread
+  50 px apart in world-height order (the one that goes off first drawn on top), so each badge and
+  its fuse ring can be read (level 10 often has three pending bombs at the same height).
 - **HUD banner** ("The portal is open!", "Superinfection defeated!") moves down to mid-screen while
   the player rides along the top of the screen (levels 8 and 10 end high up), so it never covers
   the player.
@@ -95,7 +99,7 @@ traces are unaffected except through hit-stop (whole logic steps, PD "Feel impro
   | 1 | 239 | 490 | 15 | 3 | 3 Lucy photos (+5 each), portal |
   | 2 | 138 | 288 | 15 | 3 | 3 Lucy photos |
   | 3 | 215 | 442 | 15 | 3 | 3 Steve photos |
-  | 4 | 137 | 286 | 15 | 3 | 3 Patty photos |
+  | 4 | 181 | 374 | 15 | 3 | 3 Patty photos (re-recorded with Patty's 187.89 x 141.53 box, section 5) |
   | 5 | 276 | 570 | 109 | 3 | 14 soap pickups (+7), 2 Slurms washed away (+3, +5 each), 1 Slurm and Steve kill each other (+5, -10) |
   | 6 | 249 | 516 | 87 | 3 | 9 soap pickups, 3 bad microbes washed away (+3, +5 each) |
   | 7 | 258 | 534 | 136 | 3 | 16 white blood cell pickups, 3 Iggys washed away (+3, +5 each) |
@@ -123,7 +127,16 @@ traces are unaffected except through hit-stop (whole logic steps, PD "Feel impro
   entity and the briefing pages have art in the level's atlas set; (d) every level's briefing plays
   with real Space presses, shows as many pages as `levels.json` has, fills every placeholder with
   keyboard keys ("Press X to throw soap", "Press C to use the antibiotic"), and the ePhone shows the
-  expected picture and mode icon.
+  expected picture and mode icon. (c) also checks that level 4's first Patty is still on her
+  spawn cell after 80 steps (section 5).
+- **`web/tests/levels-ui.spec.mjs`** (section 7): (e) the first briefing draws no tiles, a window
+  blur stops its autoplay (no play and no clock after 2500 ticks), a key press brings it back, play
+  starts as the phone starts shrinking and the level runs under it, the re-opened briefing keeps
+  the tiles; (f) with `reducedMotion: 'reduce'` the briefing autoplays through to play; (g) the
+  game-over card: Enter retries with nothing focused; on a touch viewport the prompt says "Tap",
+  reads "Press Enter" after a key press and a tap on the backdrop retries; (h) the level 10 trace
+  on a 667 x 375 touch viewport: the whiteout's first frame is white over the score, a heart and the
+  timer, and off-screen badges on one side are at least 45 px apart (three at once at tick 86).
 - **`web/tests/unit/levels.test.mjs`**: decision 7 (an off-screen bomb explodes and counts),
   decision 10 (+3 then +5; nothing on the superinfection), decision 6 (both entity orders).
 - **`web/tests/level1.spec.mjs`**: the last test opened level 1 through the splash's New Game,
@@ -133,12 +146,28 @@ traces are unaffected except through hit-stop (whole logic steps, PD "Feel impro
 
 ## 5. Original data quirks found by the data checks (kept)
 
+- **Patty's box is 187.89 x 141.53** (fixed after review; was 203.32 x 150.39). The two bounds
+  surveys disagree (NOTES.md 4.4 row 13 and 12.6 left it to Ruffle): `swf-inventory.json`
+  `boundsFrame1` gives 203.32 x 150.39, `reference/analysis/levels.json:1699-1706` (and
+  `flash-levels.md:225`) 187.89 x 141.53. With the larger box level 4's first Patty (4,11) was
+  pushed 53.3 px left by the loaf at (4,14) and 50.4 px up by the cheese at (6,8) on step 2 and
+  hovered at (496.7, 149.6), her pot 60 px above the bread stick, for the whole level. Captures
+  `050-level4-opening@2x.png` (clock 176) and `051-level4-moving.png` (clock 172) show her
+  standing on the bread stick at her spawn cell. With 187.89 x 141.53 the loaf and cheese pushes
+  cancel within one constraint pass and she stays at (550, 200) (headless: 300 steps, no drift),
+  as captured; the 3.32 px overlaps of Patty (5,23) into the jam toast and Patty (5,51) into the
+  pepper pot disappear too. Only the physics box (the palette's `w`/`h`, through
+  `BOX_OVERRIDES` in `tools/convert-levels.mjs`) changes; the clip bounds that `hitTest`, the
+  photo range and the on-screen test read (`web/js/platformer/data/clips.js`, Flash's live
+  `_width`) are a separate question the captures do not answer and stay as they were. Only level 4
+  places Patty; its trace is re-recorded (section 4). Settling NOTES.md is requested in
+  `web/requests/levels.md` item 4.
 - **Wide microbe boxes reach into tiles** (frame-1 art bounds, NOTES.md 4.4): level 4 Patty at
-  (4,11) into the loaf at (4,14)-(4,15), Patty at (5,23) into the jam toast at (7,27), Patty at
-  (5,51) into the pepper pot at (4,55); level 5 Slurm at (5,39) into the small spot at (6,40);
-  level 6 Slarg at (3,43) into the skin at (7,43)-(7,44). They spawn in FALL and, like any microbe
-  walking into big tile art, are pushed out by the physics (NOTES.md 3.17). The spec lists them explicitly, so a data change that adds
-  or removes one is flagged.
+  (4,11) into the loaf end at (4,14) (37.9 px; she is not pushed out because the cheese below
+  pushes back, see above); level 5 Slurm at (5,39) into the small spot at (6,40); level 6 Slarg
+  at (3,43) into the skin at (7,43)-(7,44). The Slurm and the Slarg spawn in FALL and, like any
+  microbe walking into big tile art, are pushed out by the physics (NOTES.md 3.17). The spec
+  lists them explicitly, so a data change that adds or removes one is flagged.
 - **The exit portal** (103.6 x 163.8 on a 100 x 150 slot) sinks 13.8 px into the floor and 3.6 px
   into the next column in every level; it is not solid and the tiles are drawn over it, as in the
   SWF (PD "Depth order"). In level 8 it also touches the salt pot at (0,33) by 3.6 px.
@@ -157,3 +186,29 @@ traces are unaffected except through hit-stop (whole logic steps, PD "Feel impro
   completes all ten levels with her too (checked, page and headless agree), without writing traces.
 - `web/NOTES-platformer-decisions.md` "Follow-ups" (bots for levels 4-10, art for the other levels)
   are done by this work; that file is outside this area and is left as it is.
+
+## 7. Review fixes (briefing, cards, level 10 hints, Patty)
+
+| Finding | What changed | Source | Where | Verified by |
+|---|---|---|---|---|
+| L4 Patty hovers in mid-air | Patty's physics box 187.89 x 141.53 (section 5) | captures 050, 051; `levels.json:1699-1706` | `tools/convert-levels.mjs` `BOX_OVERRIDES`, `web/data/levels/alpha_level4.json`, `tile_definitions.json`, L4 trace | headless run (Patty stays at (550, 200) for 300 steps), `levels.spec` (a) L4 and (c) |
+| Briefing drawn over the tiles | While the first briefing is up the level is drawn without its tiles (background, entities, player and HUD only), as the original, which duplicated tile clips only in RENDER_WORLD. The re-opened briefing (port only) keeps them. | `PlatformGame.as:540-551` (INIT_DIALOGUE), `1090-1107` (RENDER_WORLD); captures 035, 044, 048, 049, 087, 105, 106, 109, 180 | `render.js` `draw(..., { tiles })`, `platformScene.js` `render()` | `levels-ui` (e): `tilesDrawn` 0 under the first briefing, > 0 once play starts and in the re-opened briefing |
+| Play started 800 ms late | The first briefing starts play (and the clock) when the phone starts shrinking; the shrinking phone is drawn over the running level. A re-opened briefing still resumes when the phone has gone. Opening the briefing again, restarting or pausing during the shrink is handled (the old phone is dropped; paused, it waits). | `PlatformGame.as:545-549`; capture 182 | `intro.js` `onShrinkStart`, `platformScene.js` `showIntro()`, `update()` | `levels-ui` (e): `ui` 'play' while `intro.phase` is 'shrink', `stepCount` advances under it; `level1.spec` (P during the shrink) |
+| Milk glass white on the L8/L9 pages | Atlas is outside this area: requested (`web/requests/levels.md` item 3). | captures 105, 106, 109 | - | - |
+| Whiteout under the HUD | The whiteout is drawn by `Hud.draw()` over the timer, score, hearts and held antibiotic; the ePhone and the banner stay above it (the phone's depth after `swapDepths(this.getNextHighestDepth())` cannot be read from the sources). Particles and popups are drawn before the HUD, so they sit under the white for its first frames too. | NOTES.md 3.24 (whiteout depth 194; score 89, hearts 111-119, held 123, timer 125); `PlatformGame.as:542` | `render.js` (fill removed), `hud.js` `draw({ whiteout })` | `levels-ui` (h): white pixels over the score, a heart and the timer at the first whiteout frame |
+| Tick boxes capped at `required` | Every counted goal event ticks the next box, up to the six boxes, so an overshoot ticks a grey box as in the original. | `PlatformGame.as:918-925` | `hud.js` `drawStatus()` and the fallback phone | code review (overshoot is rare: two kills in one step in L5/L6) |
+| Blur during the briefing started the level unattended | `onHidden()` during the first briefing suspends its autoplay (the pause card is for play only, `main.js:37-40`); the player's next key (jump, confirm, arrows, back) or tap turns it back on and restarts the 5 s count. No `document.hasFocus()` test at play start (headless browsers report no focus). | review run t4 | `platformScene.js` `onHidden()`, `intro.js` `suspendAutoplay()` / `resumeAutoplay()` | `levels-ui` (e): 2500 ticks after a blur: still page 0, step 0, 180 s; Space then autoplay reaches play |
+| Reduced motion: no autoplay, hint dimmed | `revealedAt` is set wherever the page is shown at once, so the autoplay, the full-opacity hint and the progress bar work the same with reduced motion. | review run t8 | `intro.js` `advance()`, `update()` | `levels-ui` (f): play reached after 670 ticks |
+| Game-over prompt only true with focus | Enter on the game-over or level-complete card presses its main button when no card button has focus (a focused button takes Enter natively, so nothing is pressed twice); a click or tap anywhere off the buttons retries, as the original's "click to try again" page; the prompt is re-worded when the input device changes. | original summary page ("click to try again"); review run t15 | `platformScene.js` `onGameOver()`, `confirmCard()`, `update()` | `levels-ui` (g) |
+| Briefing hint hard to read | The hint is drawn at 17 stage px on a dark pill, at 85 % opacity while the text types and 92.5-100 % (a gentle pulse) after. | review screenshots | `intro.js` `drawChrome()` | screenshot `levels-ui-briefing.png` |
+| Off-screen bomb badges stacked | See section 3 "Bombs": art-rectangle test, 50 px spread per side. | review run t10 | `render.js` `drawBombHints()`, `spreadInBand()` | `levels-ui` (h): up to 3 badges on one side, at least 45 px apart |
+| Fuse blink and hurt blink ignore reduced motion | Reduced motion: steady fuse tint (0.3 + 0.45 x fuse used); the hurt player is steadily see-through (60 %) instead of the 9 Hz blink. | `GOAL_PROMPT.md:145`, NOTES.md 11.1 item 9 (reduced motion honours `prefers-reduced-motion`) | `render.js` `bombBlink()`, `drawPlayer()` | code review |
+| "Snap!" not translatable | `platform.snap` in `web/data/lang/en/platform.json`. | - | `platformScene.js` `handleFx()` | `levels.spec`, `level1.spec` (no missing-key errors) |
+
+New test probe fields (cosmetic, not in the determinism check): `tilesDrawn`, `bombHints`,
+`whiteout`, `intro.autoplay`.
+
+Starting play on the tick of the closing key press does not make the player hop: that press's
+edge is used by the briefing, `beginPlay()` clears the step input, and jumps are edge-triggered
+(`jumpFeel`, `player.js`), so a Space still held when play starts is not a jump. The traces are
+recorded with `intro=0` and are unaffected; the other nine replayed unchanged after these fixes.

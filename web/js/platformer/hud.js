@@ -276,7 +276,7 @@ export class Hud {
     const phone = sprites.symbol('e_phone'), status = sprites.symbol('status');
     const [dx, dy] = this.phoneOffset();
     if (!phone || !status) { const r = this.phoneRect(); return { x: r.x + r.w / 2, y: r.y + r.h * 0.75 }; }
-    const s = phone.tracks.screen[1], b = status.tracks['button' + (i + 1)][0];
+    const s = phone.tracks.screen[1], b = status.tracks['button' + (clamp(i, 0, 5) + 1)][0];
     // box centre (9, 9) through button matrix, then screen matrix, then root + layout offset
     const bx = b[0] * 9 + b[2] * 9 + b[4], by = b[1] * 9 + b[3] * 9 + b[5];
     const sx = s[0] * bx + s[2] * by + s[4], sy = s[1] * bx + s[3] * by + s[5];
@@ -284,9 +284,13 @@ export class Hud {
   }
 
   // Draws the HUD. game: the PlatformGame; opts.phone = false hides the ePhone (while the intro
-  // animates it).
-  draw(ctx, game, { phone = true, reducedMotion = false } = {}) {
-    if (!this.visible) return;
+  // animates it). opts.whiteout (0..1): the antibiotic whiteout, which in the original (root
+  // depth 194, NOTES.md 3.24) covered the timer (125), held antibiotic (123), hearts (111-119)
+  // and score (89). The ePhone's depth after INIT_DIALOGUE's swapDepths
+  // (this.getNextHighestDepth() of the game clip, PlatformGame.as:542) cannot be read from the
+  // sources; the port keeps the phone and the banner above the white.
+  draw(ctx, game, { phone = true, reducedMotion = false, whiteout = 0 } = {}) {
+    if (!this.visible) { drawWhiteout(ctx, whiteout); return; }
     const have = sprites.hasSymbol('score');
     this.drawTimer(ctx, game, have);
     if (have) this.drawScore(ctx, reducedMotion); else this.drawFallbackScore(ctx);
@@ -298,6 +302,7 @@ export class Hud {
       sprites.drawSymbol(ctx, 'antibiotic_pickup', null, 0, 0, 0);
       ctx.restore();
     }
+    drawWhiteout(ctx, whiteout);
     if (phone) this.drawPhone(ctx, game, reducedMotion);
     if (this.banner) this.drawBanner(ctx);
   }
@@ -431,11 +436,14 @@ export class Hud {
     ctx.restore();
     const mode = goalMode(this.goal);
     if (mode) { ctx.save(); mat(ctx, st.tracks.mode[0]); sprites.drawFrame(ctx, mode, 1); ctx.restore(); }
+    // Every counted goal event ticks the next box, with no bound (PlatformGame.as:918-925), so an
+    // overshoot (two kills in one step in levels 5 and 6, which place 4 bad microbes for 3) also
+    // ticks a grey box.
     const required = this.goal ? this.goal.required : 0;
     for (let b = 0; b < 6; b++) {
       ctx.save();
       mat(ctx, st.tracks['button' + (b + 1)][0]);
-      const state = b < this.ticksShown && b < required ? 'tick' : b < required ? 'empty' : 'grey';
+      const state = b < this.ticksShown ? 'tick' : b < required ? 'empty' : 'grey';
       const p = this.tickPop[b];
       if (p) { const s = 1 + 0.6 * Math.sin(p * Math.PI) * p; ctx.translate(9, 9); ctx.scale(s, s); ctx.translate(-9, -9); }
       sprites.drawFrame(ctx, 'tick_box_button', TICK_FRAME[state]);
@@ -450,7 +458,7 @@ export class Hud {
     roundRectPath(ctx, r.x, r.y, r.w, r.h, 12); ctx.fill(); ctx.stroke();
     const req = this.goal ? this.goal.required : 0;
     for (let b = 0; b < 6; b++) {
-      ctx.fillStyle = b < this.ticksShown && b < req ? '#3c3' : b < req ? '#fff' : '#555';
+      ctx.fillStyle = b < this.ticksShown ? '#3c3' : b < req ? '#fff' : '#555';
       ctx.fillRect(r.x + 10 + (b % 3) * 26, r.y + 110 + Math.floor(b / 3) * 26, 18, 18);
     }
     ctx.restore();
@@ -476,6 +484,15 @@ export class Hud {
   setVisible(v) { this.visible = v; this.placePhoneButton(); }
 
   destroy() { this.live.remove(); this.phoneBtn.remove(); }
+}
+
+function drawWhiteout(ctx, k) {
+  if (!(k > 0)) return;
+  ctx.save();
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = `rgba(255,255,255,${Math.min(1, k)})`;
+  ctx.fillRect(0, 0, 800, 450);
+  ctx.restore();
 }
 
 export function roundRectPath(ctx, x, y, w, h, r) {

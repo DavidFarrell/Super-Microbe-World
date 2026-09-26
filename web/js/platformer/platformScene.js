@@ -120,6 +120,7 @@ export function platformScene(app) {
   let stats = { photos: 0 };
   let untrap = null;             // removes the open dialog's Tab trap
   let controlRects = null, controlKey = '';
+  let retryPrompt = null;        // the game-over card's prompt { node, dev }, re-worded per device
   const occluding = new Set();   // ids of touch controls currently faded over a target
 
   // ------------------------------------------------------------------------------------------
@@ -206,16 +207,26 @@ export function platformScene(app) {
   // ------------------------------------------------------------------------------------------
   // The ePhone briefing: at level start, and re-opened with the phone action (pauses play).
   // ------------------------------------------------------------------------------------------
+  // The first briefing starts play as its phone starts shrinking, as the original did
+  // (PlatformGame.as:545-549: shrink(), start the clock, UPDATE_WORLD in one call), so the level
+  // runs under the phone as it turns away; a re-opened briefing resumes once the phone has gone.
   function showIntro(briefing) {
     clearOverlay();
+    if (intro) { intro.destroy(); intro = null; }   // the first phone may still be shrinking
     mode = briefing ? 'briefing' : 'intro';
     app.touch.hide();
     hud.setVisible(true);
-    intro = new IntroPhone({
+    const phone = new IntroPhone({
       app, title: game.level.title || 'level1', briefing, reducedMotion,
       phoneOffset: () => hud.phoneOffset(),
-      onDone: () => { intro.destroy(); intro = null; if (briefing) resume(); else beginPlay(); },
+      onShrinkStart: () => { if (!briefing && intro === phone && mode === 'intro') beginPlay(); },
+      onDone: () => {
+        if (intro !== phone) return;
+        intro.destroy(); intro = null;
+        if (briefing && mode === 'briefing') resume();
+      },
     });
+    intro = phone;
     intro.goalText = goalSentence();
     intro.refreshDom();
     audio.musicLevel(0.45);
@@ -367,6 +378,9 @@ export function platformScene(app) {
   // The original's summary page: "You Died!" / "You ran out of time." and "click to try again".
   // Retrying keeps the score, as the original did. (The original restarted the round from its
   // first level; the flow controller can restore that through params.onGameOver.)
+  // The prompt follows the input device ("Press Enter" / "Tap"), and both are true: Enter retries
+  // whatever has focus (see update()), and a click or tap anywhere off the buttons retries, as the
+  // original's "click to try again" page did.
   function onGameOver() {
     mode = 'gameover';
     const reason = game.exitReason;
@@ -374,13 +388,32 @@ export function platformScene(app) {
     audio.play('gameOver');
     audio.musicLevel(0.3);
     if (typeof params.onGameOver === 'function') { params.onGameOver(result); return; }
+    const retry = () => { params = { ...params, intro: '0', score: game.score }; startLevel(); };
+    const prompt = el('p', {}, tp('gameover.retryPrompt'));
     const card = el('div', { class: 'pf-card', role: 'dialog', 'aria-label': reason === END.TIME ? t('gameover.time') : t('gameover.died') },
       el('h2', {}, reason === END.TIME ? t('gameover.time') : t('gameover.died')),
-      el('p', {}, tp('gameover.retryPrompt')),
+      prompt,
       el('div', { class: 'row' },
-        button(t('gameover.retry'), () => { params = { ...params, intro: '0', score: game.score }; startLevel(); }, { class: 'primary', id: 'pf-retry' }),
+        button(t('gameover.retry'), retry, { class: 'primary', id: 'pf-retry' }),
         button(t('gameover.quit'), () => quit(), { id: 'pf-quit' })));
     showOverlay(card);
+    retryPrompt = { node: prompt, dev: device() };
+    overlay.addEventListener('pointerdown', e => {
+      if (e.button > 0 || (e.target instanceof Element && e.target.closest('button'))) return;
+      e.preventDefault();
+      retry();
+    });
+  }
+
+  // Enter on the game-over or level-complete card when no card button has focus (after a click
+  // on the backdrop, or on touch, where nothing is focused): the card's main button. A focused
+  // button takes Enter natively, so it is not pressed twice.
+  function confirmCard() {
+    if (!overlay || !input.pressed('confirm')) return;
+    const a = document.activeElement;
+    if (a && a.tagName === 'BUTTON' && overlay.contains(a)) return;
+    const main = overlay.querySelector('#pf-retry, #pf-next');
+    if (main) main.click();
   }
 
   // ------------------------------------------------------------------------------------------
@@ -419,7 +452,7 @@ export function platformScene(app) {
           const b = e && e.artBounds ? e.artBounds() : { x: 0, y: 0, w: 40, h: 60 };
           const cx = f.x + b.x + b.w / 2, cy = f.y + b.y + b.h / 2;
           particles.emit(cx, cy, { count: 16, colors: ['#fff4a8', '#ffffff', '#6fe0a8'], shape: 'star', speed: 3.5, life: 30, size: 5, gravity: 0.05 });
-          popups.add('Snap!', cx, f.y + b.y - 8, { color: '#fff4a8', size: 22 });
+          popups.add(t('platform.snap'), cx, f.y + b.y - 8, { color: '#fff4a8', size: 22 });
           renderer.hitFlash(e, 7);
           hitStop = Math.max(hitStop, HIT_STOP.photo);
           shake.add(0.12);
@@ -673,7 +706,12 @@ export function platformScene(app) {
       if (app.__platform === scene) app.__platform = null;
     },
 
-    onHidden() { pause(); },
+    // The player is away. In play: the pause card. During the first briefing (which has no
+    // pause card): its autoplay stops, so it cannot start the level unattended.
+    onHidden() {
+      if (mode === 'intro' && intro) intro.suspendAutoplay();
+      else pause();
+    },
 
     update() {
       tick++;
@@ -681,6 +719,8 @@ export function platformScene(app) {
       if (!game) return;
       startMusicWhenUnlocked();
       const dev = device();
+      // The first briefing's phone shrinking away over the running level (paused: it waits).
+      if (intro && mode !== 'intro' && mode !== 'briefing' && mode !== 'paused') intro.update();
       if (mode === 'intro' || mode === 'briefing') {
         if (intro) intro.update();
       } else if (mode === 'paused') {
@@ -713,8 +753,15 @@ export function platformScene(app) {
       } else if (mode === 'ending') {
         if (++endAge >= 40) onGameOver();
       } else if (mode === 'complete') {
+        confirmCard();
         // Confetti behind the summary card.
         if (!reducedMotion && tick % 4 === 0 && tick < 100000) screenFx.emit(80 + (tick * 37) % 640, -10, { count: 2, colors: ['#ffd84a', '#ff8a5c', '#5fd4ff', '#6fe0a8', '#ffffff'], shape: 'square', speed: 1.2, spread: 1, angle: Math.PI / 2, life: 150, size: 6, gravity: 0.03, drag: 0.99 });
+      } else if (mode === 'gameover') {
+        if (retryPrompt && retryPrompt.node.isConnected && retryPrompt.dev !== dev) {
+          retryPrompt.dev = dev;
+          retryPrompt.node.textContent = tp('gameover.retryPrompt');
+        }
+        confirmCard();
       }
       updateOcclusion();
       syncCameraBadge(!!game.player.has_antibiotic && (mode === 'play' || mode === 'paused' || mode === 'briefing'));
@@ -737,13 +784,16 @@ export function platformScene(app) {
       const a = mode === 'play' && !frozen ? Math.min(1, (phase + alpha) / TICKS_PER_STEP) : 1;
       game.camera.shakeX = shake.x;
       game.camera.shakeY = shake.y;
-      renderer.draw(ctx, a, time);
+      // While the first briefing is up the original had built no tiles yet (INIT_DIALOGUE comes
+      // before the first RENDER_WORLD, PlatformGame.as:540-551 and 1090-1107): only the
+      // background, the level's entities and the HUD show around the phone.
+      renderer.draw(ctx, a, time, { tiles: mode !== 'intro' });
       const vx = game.camera.viewX(a);
       particles.draw(ctx, vx, shake.y);
       popups.draw(ctx, vx, shake.y);
       if (flash > 0) { ctx.fillStyle = `rgba(255,255,255,${flash})`; ctx.fillRect(0, 0, 800, 450); }
       const introOn = !!intro;
-      hud.draw(ctx, game, { phone: !introOn, reducedMotion });
+      hud.draw(ctx, game, { phone: !introOn, reducedMotion, whiteout: game.whiteout / 100 });
       if (mode === 'exiting' || mode === 'complete') drawIris(ctx);
       screenFx.draw(ctx);
       for (const f of flyers) drawFlyer(ctx, f);
@@ -813,7 +863,8 @@ export function platformScene(app) {
       hitStop, device: device(), flyers: flyers.length, time,
       fx: { particles: particles.items.length, popups: popups.items.length, shake: shake.trauma },
       occluding: [...occluding].sort(), reducedMotion: !!reducedMotion,
-      intro: intro ? { phase: intro.phase, page: intro.page, pages: intro.pages.length, text: intro.text, briefing: intro.briefing } : null,
+      intro: intro ? { phase: intro.phase, page: intro.page, pages: intro.pages.length, text: intro.text, briefing: intro.briefing, autoplay: intro.autoplayOn } : null,
+      tilesDrawn: renderer ? renderer.tilesDrawn || 0 : 0, bombHints: renderer ? renderer.bombHints || [] : [], whiteout: game.whiteout,
       hud: hud ? { ticksShown: hud.ticksShown, touchLayout: hud.touchMix > 0.5, phone: hud.phoneRect(), ...hud.goalPicture() } : null,
       music: musicOn,
     };

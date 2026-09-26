@@ -78,8 +78,15 @@ export class PlatformRenderer {
    * @param {CanvasRenderingContext2D} ctx  in logical 800x450 units
    * @param {number} alpha  0..1 between the previous and the current logic step
    * @param {number} t      seconds of scene time (25 fps clock for one-frame symbols)
+   * @param {object} [o]
+   * @param {boolean} [o.tiles=true]  false while the first ePhone briefing is up: the original
+   *   duplicated tile clips only in RENDER_WORLD, which INIT_DIALOGUE never reaches
+   *   (PlatformGame.as:540-551, 1090-1107), so only the background and the entities showed.
+   *
+   * The antibiotic whiteout is not drawn here: it covers the score, hearts, timer and held
+   * antibiotic too (root depth 194, NOTES.md 3.24), so Hud.draw() draws it over those.
    */
-  draw(ctx, alpha, t = 0) {
+  draw(ctx, alpha, t = 0, { tiles = true } = {}) {
     const g = this.game;
     const cam = g.camera;
     const vx = cam.viewX(alpha);
@@ -107,10 +114,12 @@ export class PlatformRenderer {
     const c0 = Math.floor(vx / TILE) - 6, c1 = Math.ceil((vx + STAGE_W) / TILE) + 1;
     const snap = ctx.getTransform().a;
     const ox = Math.round(vx * snap) / snap;
+    this.tilesDrawn = 0;       // for tests
     for (const [r, c, id] of this.cells) {
-      if (c < c0 || c > c1) continue;
+      if (!tiles || c < c0 || c > c1) continue;
       const d = g.level.def(id);
       sprites.drawSymbol(ctx, d.movie, null, 0, c * TILE - ox, r * TILE);
+      this.tilesDrawn++;
     }
 
     for (const e of order) { if (layer(e) === 5) this.drawEntity(ctx, e, vx, alpha, t); }
@@ -118,11 +127,7 @@ export class PlatformRenderer {
     ctx.restore();
 
     this.drawPortalArrow(ctx, vx, t);
-    this.drawBombHints(ctx, vx, t);
-    if (g.whiteout > 0) {
-      ctx.fillStyle = `rgba(255,255,255,${Math.min(1, g.whiteout / 100)})`;
-      ctx.fillRect(0, 0, STAGE_W, STAGE_H);
-    }
+    this.drawBombHints(ctx, vx, alpha, t);
   }
 
   // Interpolated registration point of an entity's clip, in world coordinates.
@@ -149,8 +154,9 @@ export class PlatformRenderer {
     if (MICROBE_NAMES[e.symbol] && e.symbol !== 'superinfection_icon') text = MICROBE_NAMES[e.symbol] + (e.hasBeenPhotographed ? ' ✓' : '');
     if (e.type === T.SUPERINFECTION) text = e.lives > 0 ? `Superinfection  ${'●'.repeat(e.lives)}` : null;
     const fl = this.flash.get(e) || 0;
-    // A thrown antibiotic blinks red faster and faster as its fuse runs down (cosmetic).
-    const fuse = e.type === T.ANTIBIOTIC_BOMB ? bombBlink(e, t) : 0;
+    // A thrown antibiotic blinks red faster and faster as its fuse runs down (cosmetic); with
+    // reduced motion it reddens steadily instead.
+    const fuse = e.type === T.ANTIBIOTIC_BOMB ? bombBlink(e, t, this.reducedMotion) : 0;
     sprites.drawSymbol(ctx, e.symbol || clip.symbol, label, frame, sx, y, {
       flipX: e.flip, alpha: Math.max(0, clip.alpha) / 100, t, text,
       tint: fl ? '#ffffff' : fuse ? '#ff2a3c' : null, tintAmount: fl ? fl / 8 : fuse * 0.75,
@@ -211,9 +217,13 @@ export class PlatformRenderer {
   // play the left edge is free and the right edge sits between the hearts and the ePhone; in
   // touch play the ePhone is at the top left and the thumb buttons are at the bottom, so the
   // left hint moves to the right of the phone and both stay in the middle band.
+  edgeBand(right, inset) {
+    if (right) return { x: STAGE_W - inset, lo: 150, hi: this.touchLayout ? 240 : 250 };
+    return this.touchLayout ? { x: 104 + inset, lo: 130, hi: 300 } : { x: inset, lo: 130, hi: 330 };
+  }
   edgeSpot(right, worldY, inset) {
-    if (right) return { x: STAGE_W - inset, y: clamp(worldY, 150, this.touchLayout ? 240 : 250) };
-    return this.touchLayout ? { x: 104 + inset, y: clamp(worldY, 130, 300) } : { x: inset, y: clamp(worldY, 130, 330) };
+    const b = this.edgeBand(right, inset);
+    return { x: b.x, y: clamp(worldY, b.lo, b.hi) };
   }
 
   // An arrow at the screen edge pointing to an open portal that is off screen.
@@ -238,38 +248,56 @@ export class PlatformRenderer {
 
   // Thrown antibiotics that are off screen (NOTES.md 11.9 #7: they now explode wherever they
   // are): a badge at the screen edge with the capsule, an arrow towards it and a ring that
-  // empties as the fuse runs down.
-  drawBombHints(ctx, vx, t) {
+  // empties as the fuse runs down. A badge shows only once the capsule's art is wholly off
+  // screen; several on one side are spread 50 px apart (in world-height order) so each one and
+  // its fuse can be read.
+  drawBombHints(ctx, vx, alpha, t) {
+    this.bombHints = [];       // for tests: [{ id, side, y }]
     if (this.exit) return;
+    const sides = { left: [], right: [] };
     for (const e of this.game.entities) {
       if (!e || e.type !== T.ANTIBIOTIC_BOMB || e.removed) continue;
-      const cx = e.particle.position.x + e.particle.width / 2 - vx;
-      if (cx > -4 && cx < STAGE_W + 4) continue;
-      const right = cx >= STAGE_W;
-      const spot = this.edgeSpot(right, e.particle.position.y + e.particle.height / 2, 40);
-      const bob = this.reducedMotion ? 0 : Math.sin(t * 8) * 3;
-      const x = spot.x + (right ? bob : -bob), y = spot.y;
+      const b = e.artBounds();
+      const { x: rx, y: ry } = this.clipPos(e, alpha);
+      const x0 = (e.flip ? rx - (b.x + b.w) : rx + b.x) - vx;
+      if (x0 + b.w > 0 && x0 < STAGE_W) continue;
       const left = e.state === BOMB.COUNTING_DOWN ? clamp(e.fuse / BOMB_FUSE_STEPS, 0, 1) : 1;
-      ctx.save();
-      ctx.translate(x, y);
-      // Arrow towards the bomb.
-      ctx.save();
-      if (!right) ctx.scale(-1, 1);
-      ctx.fillStyle = '#ff5a6a'; ctx.strokeStyle = '#1b1640'; ctx.lineWidth = 3; ctx.lineJoin = 'round';
-      ctx.beginPath(); ctx.moveTo(34, 0); ctx.lineTo(22, -10); ctx.lineTo(22, 10); ctx.closePath(); ctx.stroke(); ctx.fill();
-      ctx.restore();
-      // Badge and fuse ring.
-      const pulse = e.state === BOMB.COUNTING_DOWN && !this.reducedMotion ? 1 + 0.08 * Math.max(0, Math.sin(t * (8 + 30 * (1 - left)))) : 1;
-      ctx.scale(pulse, pulse);
-      ctx.fillStyle = 'rgba(27, 22, 64, 0.85)';
-      ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)'; ctx.lineWidth = 4;
-      ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI * 2); ctx.stroke();
-      ctx.strokeStyle = left < 0.35 ? '#ff5a6a' : '#fff4a8'; ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.arc(0, 0, 22, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * left); ctx.stroke();
-      sprites.drawSymbol(ctx, 'antibiotic_pickup', null, 0, -19.15, -8.15);
-      ctx.restore();
+      sides[x0 >= STAGE_W ? 'right' : 'left'].push({ e, want: ry + b.y + b.h / 2, left });
     }
+    for (const [side, list] of Object.entries(sides)) {
+      if (!list.length) continue;
+      const right = side === 'right';
+      const band = this.edgeBand(right, 40);
+      list.sort((a, b) => a.want - b.want || a.left - b.left);
+      const ys = spreadInBand(list.map(h => clamp(h.want, band.lo, band.hi)), band.lo, band.hi, 50);
+      // The one that goes off first is drawn last, on top of any neighbour it touches.
+      const order = list.map((h, i) => ({ ...h, y: ys[i] })).sort((a, b) => b.left - a.left);
+      for (const h of order) { this.drawBombBadge(ctx, h, right, band.x, t); this.bombHints.push({ id: h.e.indexId, side, y: Math.round(h.y * 10) / 10 }); }
+    }
+  }
+
+  drawBombBadge(ctx, { e, y, left }, right, bx, t) {
+    const bob = this.reducedMotion ? 0 : Math.sin(t * 8) * 3;
+    const x = bx + (right ? bob : -bob);
+    ctx.save();
+    ctx.translate(x, y);
+    // Arrow towards the bomb.
+    ctx.save();
+    if (!right) ctx.scale(-1, 1);
+    ctx.fillStyle = '#ff5a6a'; ctx.strokeStyle = '#1b1640'; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(34, 0); ctx.lineTo(22, -10); ctx.lineTo(22, 10); ctx.closePath(); ctx.stroke(); ctx.fill();
+    ctx.restore();
+    // Badge and fuse ring.
+    const pulse = e.state === BOMB.COUNTING_DOWN && !this.reducedMotion ? 1 + 0.08 * Math.max(0, Math.sin(t * (8 + 30 * (1 - left)))) : 1;
+    ctx.scale(pulse, pulse);
+    ctx.fillStyle = 'rgba(27, 22, 64, 0.85)';
+    ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)'; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = left < 0.35 ? '#ff5a6a' : '#fff4a8'; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.arc(0, 0, 22, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * left); ctx.stroke();
+    sprites.drawSymbol(ctx, 'antibiotic_pickup', null, 0, -19.15, -8.15);
+    ctx.restore();
   }
 
   drawPlayer(ctx, p, vx, alpha, t) {
@@ -277,9 +305,10 @@ export class PlatformRenderer {
     const { x, y } = this.clipPos(p, alpha);
     const sx = x - vx;
     const hurt = p.state === PLAYER_STATE.BE_HURT;
-    // Invulnerability: a white flash as the hit lands, then blinking until control returns.
+    // Invulnerability: a white flash as the hit lands, then blinking until control returns
+    // (with reduced motion: steadily see-through instead of the 9 Hz blink).
     const fl = this.flash.get(p) || 0;
-    const blink = hurt && !fl && Math.floor(t * 18) % 2 === 0 ? 0.3 : 1;
+    const blink = !hurt || fl ? 1 : this.reducedMotion ? 0.6 : Math.floor(t * 18) % 2 === 0 ? 0.3 : 1;
     const left = p.flip ? sx - p.particle.width : sx;
     const footX = left + p.particle.width / 2, footY = y + p.particle.height;
     let fade = 1;
@@ -314,12 +343,27 @@ export class PlatformRenderer {
 
 const g2frame = t => Math.floor(t * 25);
 
-// 0..1 red flash on a counting-down antibiotic: slow at first, fast near the end.
-function bombBlink(e, t) {
+// 0..1 red flash on a counting-down antibiotic: slow at first, fast near the end. Reduced
+// motion: a steady tint that deepens as the fuse runs down.
+function bombBlink(e, t, reduced = false) {
   if (e.state !== BOMB.COUNTING_DOWN) return 0;
   const left = clamp(e.fuse / BOMB_FUSE_STEPS, 0, 1);
+  if (reduced) return 0.3 + 0.45 * (1 - left);
   const rate = 4 + 26 * (1 - left);
   return Math.max(0, Math.sin(t * rate)) ** 2;
+}
+
+// Spreads sorted positions at least `gap` apart inside [lo, hi], as close to where they want to
+// be as it can; a block too tall for the band is spaced evenly across it.
+export function spreadInBand(want, lo, hi, gap) {
+  const n = want.length;
+  if (!n) return [];
+  if ((n - 1) * gap > hi - lo) return want.map((_, i) => (n === 1 ? (lo + hi) / 2 : lo + (i * (hi - lo)) / (n - 1)));
+  const y = want.map(v => clamp(v, lo, hi));
+  for (let i = 1; i < n; i++) y[i] = Math.max(y[i], y[i - 1] + gap);
+  y[n - 1] = Math.min(y[n - 1], hi);
+  for (let i = n - 2; i >= 0; i--) y[i] = Math.min(y[i], y[i + 1] - gap);
+  return y;
 }
 
 // A single logical animation name (debug avatar and tests).

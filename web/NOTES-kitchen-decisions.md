@@ -18,7 +18,8 @@ merged into `web/NOTES.md`. Everything not listed here behaves as the original d
 | `sounds.js` | Synthesised effects (`audio.defineSynth`) and the `kitchenGame` music loop (`defineTrack`). |
 | `kitchenScene.js` | Scene `kitchen`: loading, intro screens and tutorial, play (the `main()` state machine on the frame clock), outro pages, pause, standalone chaining, juice, `__test` probe `kitchen`. |
 
-Strings: `web/data/lang/en/kitchen.json` (namespace `kitchen`). Tests: `web/tests/kitchen.spec.mjs`.
+Strings: `web/data/lang/en/kitchen.json` (namespace `kitchen`). Tests: `web/tests/kitchen.spec.mjs`
+and `web/tests/kitchen-controls.spec.mjs`.
 
 ## Contract (web/js/flow/contract.md)
 
@@ -45,8 +46,12 @@ Strings: `web/data/lang/en/kitchen.json` (namespace `kitchen`). Tests: `web/test
 - A game second is exactly 25 frames (the original's `getTimer() - timer > 1000` polled every
   40 ms made each "second" about 1040 ms, `:145`). The clock starts at 60 (120 in level 3), counts
   down once a second, and the level ends when it would pass 0, as `timeLeft < 0` did
-  (`:146-151`): 61 seconds of play for a 60 s level. The outro follows at the next second tick in
-  both endings (all items placed, `pickItem` `:781-782`; or time out).
+  (`:146-151`): 61 seconds of play for a 60 s level. After a time-out the outro follows at the
+  next second tick, as in the original (`:168-177`). **Port change** when every item is placed
+  (`pickItem` `:781-782` sets `END_OF_LEVEL`): the outro waits for the first second tick at least
+  40 ticks (0.6 s) after the last placement (`BANNER_MIN`), so the last item lands and the "All put
+  away!" banner can be read; it appears 0.6 to 1.6 s after the last placement instead of 0 to 1 s.
+  The clock stops meanwhile, and nothing is scored after `END_OF_LEVEL`, so results are unchanged.
 - The sneeze window is 50 frames (`setInterval(makeSneeze, 2000)`, `:548`). Because the window and
   the seconds share one clock, a sneeze always ends on a second boundary; the second is handled
   first in that frame (no roll while sneezing), then the window, so a new sneeze never starts in
@@ -115,28 +120,57 @@ Strings: `web/data/lang/en/kitchen.json` (namespace `kitchen`). Tests: `web/test
   targets (cupboard, bowl, top / middle / bottom shelf, drawers, door, bin); a placement fills the
   location's next free slot, and when all are full it reuses the oldest (the original replaced the
   item shown in the clicked slot; every placement still counts). The tissues, cling film, sink and
-  the item on the counter are targets too. Every target is at least 53 stage px in both
-  directions, i.e. 44 CSS px at a 667 x 375 landscape phone (checked by the spec). The fridge's
-  four bands share the fridge column and are stretched to its top frame and body; highlights follow
-  the shelves' art.
+  the item on the counter are targets too. Every target is at least 56 stage px in both
+  directions, i.e. 44 CSS px down to a stage scale of 0.79 (a 640 x 360 landscape phone; checked
+  by both specs). The fridge's four bands share the fridge column and are stretched to its top
+  frame and body: top 38-112, middle 112-168, bottom 168-224, drawers 224-300. The middle/bottom
+  boundary is the shelf in the art (y 168); the middle band takes the bottom 6 px of the top
+  shelf's art and the bottom band the top 12 px of the drawers'. Highlights follow the shelves'
+  art.
 - Ways to place: tap (or click) a place directly, as the original's click did; or tap the item to
   pick it up (the places light up), then tap a place; or drag the item onto a place (mouse or
   finger; a drop elsewhere puts it back). Keyboard: Tab / Shift+Tab and the arrow keys move
   between targets (spatially), Enter or Space picks up and puts away (Enter on a place puts the
   item there directly), T tissues, C cling film, H wash hands (also 1, 2, 3), Backspace puts a
-  lifted item back, Esc pauses. A key legend shows on keyboard devices. Gamepad: d-pad, A, and X /
-  B / Y for cling film / tissues / washing. Touch: a pause button.
+  lifted item back, Esc pauses. Gamepad: d-pad to choose, A to pick up and put away (and for the
+  intro, outro and pause buttons), B tissues (or, with an item lifted, puts it back), X cling
+  film, Y wash hands, Start pause. A control legend shows on keyboard and gamepad devices; it
+  names the pause and move keys as remapped in Settings (`keyFor`, "Arrows" while the arrows are
+  first), while Tab, Enter, T, C and H stay literal because `controls.js` reads them directly. The
+  HUD bubbles name the key or button too: "Tissue! (T)" / "Tissue! (B)", "Wash (H)" / "Wash (Y)",
+  and just "Tissue!" / "Wash" on touch. Touch: a pause button.
 - A sneeze drops a lifted item (the player needs their hands); picking up is ignored during a
   sneeze and while washing.
-- Intro screens: the 2009 texts (NOTES 5.11) in white bold on the dimmed live kitchen, with a blue
-  button ("Next", "Start" on the last screen) where the original's "Click" button was. `{click}` in
-  the texts reads "click" or "tap" for the input in use. Level 0's tutorial keeps the original
-  logic (the drawer is right; the cupboard, bowl, shelves, door and bin are wrong; "Wrong! Try
-  again." repeats the two rules) with a short hint line for how to answer.
-- Outro: the three original pages on the white panel, then a new fourth page, "Points This Level"
+- Intro screens: the 2009 texts (NOTES 5.11) as the SWFs set them: white Verdana Bold 20 (23 for
+  "Wrong! Try again."), centred, every line the same colour and size, "Level N" included (NOTES
+  8.6; the port uses the Verdana stack the other areas use, `Verdana, "DejaVu Sans", ...`). Each
+  line starts at the top of its original text field (`text0`..`text11`, DefineEditText rectangles
+  of `kitchen_game_intro_level_N.swf`, e.g. level 0 `text0` at y 63.75 and `text1` at 158.9, the
+  wrong page's lines at 54.95 / 204.2 / 256.75); a line that wraps further (larger text sizes)
+  pushes the following ones down instead of overlapping them. Fields are widened by up to 40 px a
+  side about their centre, because the browser's stand-in for Verdana Bold can run a little wider
+  than Flash's; "Level N"'s 84 px field is widened about its centre (x 393). A faint text shadow
+  (0 1px 2px, 35 % black) is the only addition. The backdrop is the live kitchen with the chosen
+  child at 30 % over dark grey (`rgba(51,51,51,0.7)` on top; the SWFs' background cxform is alpha
+  77/256 and the grey is the stage behind, sampled from captures 600 and 607). A blue button
+  ("Next", "Start" on the last screen) stands where the original's "Click" button was. The
+  sentences that name a control use the input in use: touch reads the 2009 wording with "tap";
+  keyboard (which also covers the mouse) keeps "click" and adds the key, e.g. "click on the tissues
+  (or press T)", "Click on the cling film (or press C)", "Click the button (or press Enter)";
+  gamepad names the buttons, e.g. "press B for the tissues", "Press A when ready to start"
+  (`kitchen.intro.N.K.keyboard` / `.gamepad` variants of intro 0.8, 0.ready, 1.8, 1.9 and 2.5; the
+  rest of the 2009 wording is unchanged). Level 0's tutorial keeps the original logic (the drawer
+  is right; the cupboard, bowl, shelves, door and bin are wrong; "Wrong! Try again." repeats the
+  two rules) with a short hint line for how to answer, per device.
+- Outro: the three original pages on the white panel, in the outro SWF's fonts (NOTES 8.6,
+  `kitchen_game_outro.swf`): titles Verdana Bold 20, rows Verdana 20 with bold "X" and "=",
+  reminders Verdana 16. The reminders start just under the title, as `text1`..`text4` do (y 63.9,
+  71 px apart); up to four sit on those 71 px slots. Then a new fourth page, "Points This Level"
   (new string), using the original's unused "Points Awarded", "Points Deducted" and "Total Points"
   strings (`:1173-1177`): awarded and deducted side by side, the level's total large, then the
-  running kitchen score. Only non-zero values are coloured (green right, red wrong), on every page.
+  running kitchen score, in one column so larger text sizes push the blocks down rather than
+  overlap (the 30 to 56 px numerals keep their size; the labels scale). Only non-zero values are
+  coloured (green right, red wrong), on every page.
   Page 1 throws a little confetti from the panel's top corners when the level scored points (kept
   clear of the rows).
 - HUD additions: an items-put-away counter (a tick glyph and "n of N") beside the clock, a
@@ -149,8 +183,20 @@ Strings: `web/data/lang/en/kitchen.json` (namespace `kitchen`). Tests: `web/test
   bin gets a tick and "Binned". Germs orbit sneezed-on or meat-contaminated items.
 - Juice: items hop out of the shopping bag onto the counter and arc into place; a lifted item
   bobs with a shadow; cling film shimmers; the sink runs (its unused `tab_wash_hand` animation) with
-  bubbles; the clock pulses red with a tick in the last ten seconds; "All put away!" / "Time's up!"
-  banner. Reduced motion shortens or removes movement.
+  bubbles; the clock (Verdana Bold 20, `#20648c`, as `KitchenGame.as:180` sets it) turns red and
+  pulses with a tick in the last ten seconds; "All put away!" / "Time's up!" banner. Reduced
+  motion (read every tick, so switching it in pause > Settings takes effect at once) removes the
+  particle effects (sneeze spray, tissue puff, cling film stars, landing bursts, bin dust, arrival
+  puff, confetti, bubbles) and the movement, and keeps the popups, marks and sounds.
+- Text size (Settings): every kitchen DOM text scales with `--text-scale`, the pause card
+  included; the canvas HUD (clock, items pill, bubbles, popups) scales with `textScale`; bubbles
+  stay on the stage.
+- Pause: available on the intro, tutorial, play and outro. "Restart level" from play starts the
+  level again at once; from the intro or the tutorial it shows the intro screens (and level 0's
+  tutorial) again; it is not offered on the outro, where it would throw the finished result away.
+  A switch of input device while paused (a phone with a Bluetooth keyboard, a touchscreen laptop)
+  updates the prompts, hint and legend on resume; in the tutorial only the hint changes (a lifted
+  spring onion stays lifted).
 - Sound (the original was silent): synthesised fridge door, cupboard, bowl, bin, cling film,
   water, sneeze build-up, sneeze, tissue, right, wrong, germs, pop and page effects; music track
   `kitchenGame` (a jaunty 1950s-kitchen loop).
@@ -170,3 +216,44 @@ Strings: `web/data/lang/en/kitchen.json` (namespace `kitchen`). Tests: `web/test
   out after 61 s with the clock at 0 and the outro a second later), pause freezing the clock;
 - drag and drop with a mouse and a finger; tap-target sizes at 915 x 412 and 667 x 375; the touch
   pause button; standalone chaining and arrow-key navigation.
+
+`web/tests/kitchen-controls.spec.mjs` (`node web/tests/run.mjs --no-unit kitchen-controls`):
+- intro lines at the SWF field tops in white Verdana Bold 20 (23 on the wrong page), "Level 2"
+  like the others, and the dim measured on the canvas (0.3 x lit + 0.7 x 51, within 8);
+- a gamepad alone (a `navigator.getGamepads` stub): intro, tutorial (wrong then right), play,
+  Start to pause, A on Resume and on Restart not also acting on the kitchen or the outro, the
+  outro paged with A
+  into the next level, and A / B / X / Y / Start / D-pad in the texts, hint, legend and bubbles;
+- keyboard wording ("or press T", "or press Enter"), then a switch to touch on the pause card:
+  the intro says "tap" and play drops the legend after Resume;
+- Restart from the intro and the tutorial (intro page 1 again) and from play (play at once);
+  reduced motion switched on mid-level (no particles after a placement);
+- remapped keys (WASD, P) in the hint and legend; at 130 % text a long reminders list starts under
+  the title, scrolls, and keeps the page on Space; the points page's blocks do not overlap and
+  clear the button;
+- every target at least 44 CSS px at 640 x 360.
+
+## Review fixes (second review)
+
+| Finding | Fix | Source |
+|---|---|---|
+| Clock and intro text in the port's UI fonts and colours | Clock Verdana Bold 20 `#20648c` (red pulse in the last ten seconds kept, logged above); intro lines white Verdana Bold 20, "Wrong!" 23, no per-line colour or size | NOTES 8.6; `KitchenGame.as:180`; intro SWF DefineEditText |
+| Intro backdrop darker than the original | `rgba(51,51,51,0.70)` over the kitchen (30 % picture over #333) | captures 600 / 607; SWF cxform alpha 77 |
+| Intro lines spread evenly | Lines start at their text fields' tops | `kitchen_game_intro_level_N.swf` text0..text11 |
+| Reminders centred in the panel | Start under the title; up to four on the 71 px slots | outro frame 30, text1..text4 |
+| `BANNER_MIN` contradicted the timing note | Kept as a deliberate change; the timing note above now says so | `KitchenGame.as:168-177, 781-782` |
+| Gamepad stuck on intro and outro pages; keyboard or touch wording for gamepads | A clicks the focused button; a card button pressed with A no longer also acts on the page it brings back; gamepad strings, hint, legend and bubbles | `web/js/ui/prompts.js` names |
+| Device switch while paused left stale prompts | Device check after the pause card, so resume sees the change | |
+| Restart skipped the intro and tutorial; offered on the outro | Restart replays the intro and tutorial when paused there; not offered on the outro | |
+| Reduced motion read only at level start; particles ignored it | Read every tick; particle effects skipped | |
+| Points page cramped at 130 % text; pause card and HUD ignored text size | Points page in one column; card fonts and canvas HUD scale | |
+| Legend hard-coded Esc and Arrows | Pause and move keys from Settings (`keyFor`) | |
+| Space on the reminders list turned the page | Space, Enter and the arrows scroll the list natively while it has the focus; the arrows and d-pad also scroll it from the button | |
+| Focus ring low contrast on the fridge | Two-tone ring: 8 px dark (`#1b1640`) under 4 px cyan | |
+| Keyboard players told to "click" | Keyboard and gamepad variants of the five intro sentences that name a control | |
+| Fridge shelves under 44 CSS px at 640 x 360 | 56 px bands meeting at the art's shelf (the reviewer's 60 px bands would have put the top/middle boundary 20 px above the top shelf's floor, so taps on the lower half of a top-shelf item would have gone to the middle shelf) | `layout.js` |
+
+Also found while fixing: a touch-to-keyboard switch on an intro page ate the first Enter (the page
+was rebuilt and focused its button in the same tick; the key is now judged by where the focus was
+when it went down), and the pause card's arrow and gamepad navigation kept running under the
+flow's settings overlay (now paused while that overlay is open).

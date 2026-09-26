@@ -2,8 +2,8 @@
 // web/NOTES-kitchen-decisions.md "Review fixes"). Deterministic (?manual=1 and __test.step).
 //   - intro text in the original's text fields (Verdana Bold 20, white, fixed tops), the dimmed
 //     backdrop, the outro fonts and the "Microbial Mistakes" slots;
-//   - a gamepad alone (navigator.getGamepads stub): intro, tutorial, play, pause and outro, with
-//     A / B / X / Y names in every prompt;
+//   - a gamepad alone (navigator.getGamepads stub): intro, tutorial, play, pause (Resume and
+//     Restart) and outro, with A / B / X / Y names in every prompt;
 //   - a device switch while paused, restart from the intro and the outro, reduced motion switched
 //     on mid-level, remapped keys in the legend, the reminders list keeping Space;
 //   - tap targets on a 640 x 360 phone, and the points page at the largest text size.
@@ -197,6 +197,13 @@ export const tests = [
       await padPress(page, PAD.A);
       p = await probe(page);
       assert(p.mode === 'play' && !p.held && p.placements.length === placed, `A on Resume: mode ${p.mode}, held ${p.held}, placed ${p.placements.length}`);
+      // Start, d-pad to Restart, A: play starts again, and the A does not lift the new item.
+      await padPress(page, PAD.START);
+      await padPress(page, PAD.RIGHT);
+      assert(await page.evaluate(() => document.activeElement && document.activeElement.id) === 'kz-restart', 'the d-pad did not reach Restart');
+      await padPress(page, PAD.A);
+      p = await probe(page);
+      assert(p.mode === 'play' && !p.held && p.placements.length === 0 && p.timeLeft === 60, `A on Restart: mode ${p.mode}, held ${p.held}, time ${p.timeLeft}`);
       await page.screenshot({ path: `${ctx.shots}/kitchen-controls-gamepad-play.png` });
       // Let the time run out, then page through the outro with A (Restart is not offered there).
       await page.evaluate(() => window.__test.stepUntil(t => t.probe('kitchen').mode === 'outro', 4400, 10));
@@ -334,12 +341,15 @@ export const tests = [
       await step(page, 2);
       await context.close();
 
-      // Level 4 at 130 % text: everything to the cupboard for a long reminders list.
+      // Level 4 at 130 % text: a sneeze on the food, then everything to the cupboard, for a long
+      // reminders list.
       const run = await open(ctx, DESKTOP, '&level=3&seed=185&avatar=harry', { textScale: 1.3 });
       const pg = run.page;
       await pg.mouse.click(5, 5);
       p = await probe(pg);
       for (let i = 0; i < 6 && p.mode === 'intro'; i++) { await pg.keyboard.press('Enter'); await step(pg, 1); p = await probe(pg); }
+      assert(await pg.evaluate(() => window.__test.stepUntil(t => t.probe('kitchen').state === 'sneeze', 6000)) >= 0, 'no sneeze');
+      await pg.evaluate(() => window.__test.stepUntil(t => t.probe('kitchen').state !== 'sneeze', 400));
       await keyTo(pg, 'cupboard');
       for (let guard = 0; guard < 400 && p.mode === 'play'; guard++) {
         if (p.state === 'wait' && p.current) { await pg.keyboard.press('Enter'); await step(pg, 2); } else await step(pg, 5);
@@ -350,7 +360,7 @@ export const tests = [
       await pg.keyboard.press('Enter'); await step(pg, 2);
       await pg.keyboard.press('Enter'); await step(pg, 2);
       p = await probe(pg);
-      assert(p.outro.page === 2 && p.outro.notes.length >= 7, `reminders page with ${p.outro && p.outro.notes.length} notes`);
+      assert(p.outro.page === 2 && p.outro.notes.length >= 10 && p.outro.notes.includes('sneeze'), `reminders page with ${p.outro && p.outro.notes}`);
       const box = await pg.evaluate(() => { const n = document.querySelector('.kz-notes'); return { sh: n.scrollHeight, ch: n.clientHeight, cls: n.className }; });
       assert(box.sh > box.ch, `the list should scroll at 130 % (${box.sh} <= ${box.ch}, ${box.cls})`);
       const first = await stageRect(pg, '.kz-notes p');
