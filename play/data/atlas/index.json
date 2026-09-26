@@ -1,0 +1,203 @@
+{
+ "format": "smw-atlas-index/1",
+ "atlases": {
+  "tiles-kitchen": {
+   "json": "tiles-kitchen.json",
+   "images": [
+    "tiles-kitchen-0.webp"
+   ],
+   "bytes": 174732,
+   "pixels": 786432,
+   "symbols": [
+    "pepper_obj",
+    "salt_obj",
+    "Yog_L_Tile",
+    "Yog_Mid_Tile",
+    "Yog_R_Tile",
+    "Cheese_L_Tile",
+    "Cheese_Mid_Tile",
+    "Cheese_R_Tile",
+    "yoghurt_lid_obj",
+    "yoghurt_obj",
+    "loaf_end_L_obj",
+    "loaf_mid_obj",
+    "loaf_end_R_obj",
+    "Chip_L_Tile",
+    "Chip_Mid_Tile",
+    "Chip_R_Tile",
+    "Sausage_L_Tile",
+    "Sausage_Mid_Tile",
+    "Sausage_R_Tile",
+    "C_Chip_L_Tile",
+    "C_Chip_Mid_Tile",
+    "C_Chip_R_Tile",
+    "Unit_1_Tile",
+    "Unit_2_Tile",
+    "Unit_3_Tile",
+    "Unit_4_Tile",
+    "Unit_5_Tile",
+    "Unit_6_Tile"
+   ]
+  },
+  "microbe-lucy": {
+   "json": "microbe-lucy.json",
+   "images": [
+    "microbe-lucy-0.webp"
+   ],
+   "bytes": 644288,
+   "pixels": 4194304,
+   "symbols": [
+    "lucy_icon"
+   ]
+  },
+  "entities": {
+   "json": "entities.json",
+   "images": [
+    "entities-0.webp"
+   ],
+   "bytes": 203506,
+   "pixels": 2088960,
+   "symbols": [
+    "portal_exit_icon",
+    "white_pickup",
+    "soap_pickup",
+    "white_projectile",
+    "soap_projectile",
+    "wbc_projectile",
+    "camera_flash"
+   ]
+  },
+  "hud": {
+   "json": "hud.json",
+   "images": [
+    "hud-0.webp"
+   ],
+   "bytes": 80014,
+   "pixels": 2316448,
+   "symbols": [
+    "heart",
+    "heart_half",
+    "digit",
+    "score",
+    "timer",
+    "e_phone",
+    "status",
+    "status_background",
+    "lucy_image",
+    "exit_status",
+    "camera_icon",
+    "tick_box_button",
+    "ephone_ingame",
+    "level_background"
+   ]
+  },
+  "player-harry": {
+   "json": "player-harry.json",
+   "images": [
+    "player-harry-0.webp"
+   ],
+   "bytes": 772882,
+   "pixels": 4186112,
+   "symbols": [
+    "harry_lower",
+    "harry_upper"
+   ]
+  },
+  "player-amy": {
+   "json": "player-amy.json",
+   "images": [
+    "player-amy-0.webp"
+   ],
+   "bytes": 802076,
+   "pixels": 3678208,
+   "symbols": [
+    "amy_lower",
+    "amy_upper"
+   ]
+  },
+  "intro-level1": {
+   "json": "intro-level1.json",
+   "images": [
+    "intro-level1-0.webp"
+   ],
+   "bytes": 25126,
+   "pixels": 864864,
+   "symbols": [
+    "level_intros"
+   ]
+  }
+ },
+ "symbols": {
+  "pepper_obj": "tiles-kitchen",
+  "salt_obj": "tiles-kitchen",
+  "Yog_L_Tile": "tiles-kitchen",
+  "Yog_Mid_Tile": "tiles-kitchen",
+  "Yog_R_Tile": "tiles-kitchen",
+  "Cheese_L_Tile": "tiles-kitchen",
+  "Cheese_Mid_Tile": "tiles-kitchen",
+  "Cheese_R_Tile": "tiles-kitchen",
+  "yoghurt_lid_obj": "tiles-kitchen",
+  "yoghurt_obj": "tiles-kitchen",
+  "loaf_end_L_obj": "tiles-kitchen",
+  "loaf_mid_obj": "tiles-kitchen",
+  "loaf_end_R_obj": "tiles-kitchen",
+  "Chip_L_Tile": "tiles-kitchen",
+  "Chip_Mid_Tile": "tiles-kitchen",
+  "Chip_R_Tile": "tiles-kitchen",
+  "Sausage_L_Tile": "tiles-kitchen",
+  "Sausage_Mid_Tile": "tiles-kitchen",
+  "Sausage_R_Tile": "tiles-kitchen",
+  "C_Chip_L_Tile": "tiles-kitchen",
+  "C_Chip_Mid_Tile": "tiles-kitchen",
+  "C_Chip_R_Tile": "tiles-kitchen",
+  "Unit_1_Tile": "tiles-kitchen",
+  "Unit_2_Tile": "tiles-kitchen",
+  "Unit_3_Tile": "tiles-kitchen",
+  "Unit_4_Tile": "tiles-kitchen",
+  "Unit_5_Tile": "tiles-kitchen",
+  "Unit_6_Tile": "tiles-kitchen",
+  "lucy_icon": "microbe-lucy",
+  "portal_exit_icon": "entities",
+  "white_pickup": "entities",
+  "soap_pickup": "entities",
+  "white_projectile": "entities",
+  "soap_projectile": "entities",
+  "wbc_projectile": "entities",
+  "camera_flash": "entities",
+  "heart": "hud",
+  "heart_half": "hud",
+  "digit": "hud",
+  "score": "hud",
+  "timer": "hud",
+  "e_phone": "hud",
+  "status": "hud",
+  "status_background": "hud",
+  "lucy_image": "hud",
+  "exit_status": "hud",
+  "camera_icon": "hud",
+  "tick_box_button": "hud",
+  "ephone_ingame": "hud",
+  "level_background": "hud",
+  "harry_lower": "player-harry",
+  "harry_upper": "player-harry",
+  "amy_lower": "player-amy",
+  "amy_upper": "player-amy",
+  "level_intros": "intro-level1"
+ },
+ "sets": {
+  "level1": [
+   "tiles-kitchen",
+   "microbe-lucy",
+   "entities",
+   "hud",
+   "intro-level1"
+  ],
+  "player-harry": [
+   "player-harry"
+  ],
+  "player-amy": [
+   "player-amy"
+  ]
+ },
+ "totalBytes": 2702624
+}

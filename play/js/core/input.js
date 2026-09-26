@@ -13,19 +13,26 @@ class Input extends EventTarget {
     super();
     this.keysDown = new Set();
     this.touchDown = new Map(); // action -> count of pointers holding it
+    // Keys / touch actions pressed since the last poll. A tap that goes down and up between two
+    // 15 ms polls would otherwise be lost; it now counts as down for one poll.
+    this.keysTapped = new Set();
+    this.touchTapped = new Set();
     this.injected = new Set();
     this.padDown = new Set();
     this.down = new Set();
     this.prev = new Set();
     this.pressedSet = new Set();
     this.releasedSet = new Set();
-    this.lastDevice = matchMedia('(pointer: coarse)').matches ? 'touch' : 'keyboard';
+    // Start with the touch controls on any device with a touchscreen (phones and tablets, and
+    // touchscreen laptops, whose primary pointer is fine); the first key press hides them.
+    this.lastDevice = matchMedia('(pointer: coarse), (any-pointer: coarse)').matches ? 'touch' : 'keyboard';
     this.enabled = true;
     this.log = null; // when an array, every tick's down-set is recorded for replays
     this._codeToActions = new Map();
     this._rebuildKeymap();
     settings.addEventListener('change', e => { if (e.detail.key === 'keys') this._rebuildKeymap(); });
     this._attachKeyboard();
+    this._attachPointer();
     addEventListener('blur', () => this.clearAll());
     document.addEventListener('visibilitychange', () => { if (document.hidden) this.clearAll(); });
   }
@@ -48,9 +55,19 @@ class Input extends EventTarget {
       if (typing) return;
       this._setDevice('keyboard');
       if (NO_SCROLL_CODES.has(e.code) && !(t && t.closest && t.closest('[data-native-keys]'))) e.preventDefault();
-      if (!e.repeat) this.keysDown.add(e.code);
+      if (!e.repeat) { this.keysDown.add(e.code); this.keysTapped.add(e.code); }
     });
     addEventListener('keyup', e => this.keysDown.delete(e.code));
+  }
+
+  // Any touch anywhere (canvas, letterbox bars, menus) switches to touch, so the on-screen
+  // controls come back after a key press (a phone with a Bluetooth keyboard, a stray key) without
+  // needing a control that is hidden in keyboard mode. A mouse press switches back.
+  _attachPointer() {
+    addEventListener('pointerdown', e => {
+      if (e.pointerType === 'touch' || e.pointerType === 'pen') this._setDevice('touch');
+      else if (e.pointerType === 'mouse') this._setDevice('keyboard');
+    }, { capture: true, passive: true });
   }
 
   _setDevice(device) {
@@ -61,7 +78,7 @@ class Input extends EventTarget {
   }
 
   // Touch buttons: each held pointer increments the action's count.
-  touchPress(action) { this._setDevice('touch'); this.touchDown.set(action, (this.touchDown.get(action) || 0) + 1); }
+  touchPress(action) { this._setDevice('touch'); this.touchDown.set(action, (this.touchDown.get(action) || 0) + 1); this.touchTapped.add(action); }
   touchRelease(action) {
     const n = (this.touchDown.get(action) || 0) - 1;
     if (n <= 0) this.touchDown.delete(action); else this.touchDown.set(action, n);
@@ -72,7 +89,9 @@ class Input extends EventTarget {
 
   clearAll() {
     this.keysDown.clear();
+    this.keysTapped.clear();
     this.touchDown.clear();
+    this.touchTapped.clear();
     this.padDown.clear();
   }
 
@@ -100,10 +119,14 @@ class Input extends EventTarget {
     const next = new Set();
     if (this.enabled) {
       for (const code of this.keysDown) for (const a of this._codeToActions.get(code) || []) next.add(a);
+      for (const code of this.keysTapped) for (const a of this._codeToActions.get(code) || []) next.add(a);
       for (const a of this.touchDown.keys()) next.add(a);
+      for (const a of this.touchTapped) next.add(a);
       for (const a of this.padDown) next.add(a);
     }
     for (const a of this.injected) next.add(a);
+    this.keysTapped.clear();
+    this.touchTapped.clear();
     this.prev = this.down;
     this.down = next;
     this.pressedSet = new Set([...next].filter(a => !this.prev.has(a)));

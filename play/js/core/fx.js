@@ -78,6 +78,7 @@ export class Shake {
     this.y = (fxRng.next() * 2 - 1) * 7 * s;
     this.trauma = Math.max(0, this.trauma - 0.035);
   }
+  clear() { this.trauma = 0; this.x = 0; this.y = 0; }
 }
 
 // Floating labels ("+7", "Snap!") that rise and fade.
@@ -105,6 +106,8 @@ export class Popups {
     }
     ctx.globalAlpha = 1;
   }
+
+  clear() { this.items.length = 0; }
 }
 
 export function haptic(pattern) {

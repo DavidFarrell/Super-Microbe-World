@@ -125,6 +125,9 @@ class Audio {
   stopMusic(fade = 0.4) {
     if (this.music) { this.music.stop(fade); this.music = null; }
   }
+
+  // Ducks the music (1 = full level) without stopping it.
+  musicLevel(v) { if (this.music) this.music.level(v); }
 }
 
 // Synthesised effects, tuned to feel cartoony and soft (a children's game).
@@ -156,6 +159,17 @@ const SYNTHS = {
   wash: (a, v) => { a.noise({ dur: 0.6, vol: 0.12 * v, freq: 1500, q: 0.5 }); a.tone({ type: 'sine', freq: 700, to: 1400, dur: 0.1, vol: 0.05 * v, delay: 0.3 }); },
   bin: (a, v) => a.noise({ dur: 0.2, vol: 0.18 * v, freq: 300, type: 'lowpass' }),
   cheer: (a, v) => { for (let i = 0; i < 6; i++) a.noise({ dur: 0.5, vol: 0.05 * v, freq: 1000 + i * 300, delay: i * 0.05 }); SYNTHS.goal(a, v); },
+  // Platform game additions (the 2009 original had no sound at all).
+  phoneGrow: (a, v) => { a.tone({ type: 'sine', freq: 520, to: 1040, dur: 0.22, vol: 0.07 * v }); a.tone({ type: 'triangle', freq: 1320, dur: 0.08, vol: 0.05 * v, delay: 0.2 }); },
+  phoneShrink: (a, v) => a.tone({ type: 'sine', freq: 1040, to: 440, dur: 0.2, vol: 0.06 * v }),
+  pageTurn: (a, v) => { a.noise({ dur: 0.07, vol: 0.05 * v, freq: 3200, q: 0.8 }); a.tone({ type: 'triangle', freq: 990, dur: 0.05, vol: 0.05 * v }); },
+  tickLand: (a, v, r) => { a.tone({ type: 'triangle', freq: 1175 * r, dur: 0.08, vol: 0.1 * v }); a.tone({ type: 'triangle', freq: 1568 * r, dur: 0.16, vol: 0.1 * v, delay: 0.07 }); a.noise({ dur: 0.12, vol: 0.04 * v, freq: 7000, type: 'highpass', delay: 0.05 }); },
+  portalOpen: (a, v) => { [523, 659, 784, 1047, 1319].forEach((f, i) => a.tone({ type: 'triangle', freq: f, dur: 0.3, vol: 0.08 * v, delay: i * 0.07 })); a.tone({ type: 'sine', freq: 180, to: 900, dur: 0.8, vol: 0.06 * v }); },
+  suck: (a, v) => { a.tone({ type: 'sine', freq: 900, to: 120, dur: 0.55, vol: 0.1 * v }); a.noise({ dur: 0.5, vol: 0.08 * v, freq: 2500, to: 300 }); },
+  heartLost: (a, v) => { a.tone({ type: 'square', freq: 330, to: 165, dur: 0.18, vol: 0.06 * v }); a.tone({ type: 'triangle', freq: 220, to: 110, dur: 0.25, vol: 0.08 * v, delay: 0.08 }); },
+  countTick: (a, v, r) => a.tone({ type: 'square', freq: 1200 * r, dur: 0.025, vol: 0.035 * v }),
+  lowTime: (a, v) => a.tone({ type: 'square', freq: 1760, dur: 0.04, vol: 0.05 * v }),
+  squelch: (a, v) => { a.noise({ dur: 0.18, vol: 0.16 * v, freq: 500, to: 150, type: 'lowpass' }); a.tone({ type: 'sine', freq: 260, to: 90, dur: 0.16, vol: 0.1 * v }); },
 };
 
 // A tiny step sequencer for procedural area music. A track is
@@ -197,6 +211,10 @@ class MusicPlayer {
     const f = ctx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 7000;
     const g = ctx.createGain(); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.04);
     s.connect(f).connect(g).connect(this.gain); s.start(t); s.stop(t + 0.06);
+  }
+  // Smoothly sets this track's level (1 = full), e.g. ducked under a menu.
+  level(v, time = 0.25) {
+    this.gain.gain.setTargetAtTime(Math.max(0.0001, v), this.a.ctx.currentTime, time);
   }
   stop(fade) {
     clearInterval(this.timer);

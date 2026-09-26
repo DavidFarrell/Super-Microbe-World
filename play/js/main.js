@@ -21,14 +21,42 @@ const app = {
 app.scenes = new SceneManager(app);
 app.loop = new Loop({
   update: tick => { input.poll(); app.scenes.update(tick); },
-  render: alpha => { const ctx = app.view.begin(); app.scenes.render(ctx, alpha); },
+  render: alpha => {
+    const t0 = performance.now();
+    const ctx = app.view.begin();
+    app.scenes.render(ctx, alpha);
+    // The resolution governor only reacts to real-time play (tests step the loop by hand).
+    if (!app.loop.manual) app.view.noteRender(performance.now() - t0);
+  },
 });
+// ?manual=1 (tests): the loop never ticks in real time, so every tick is stepped by the test and
+// runs with the same seed and inputs are reproducible from the first tick.
+if (params.get('manual') === '1') app.loop.manual = true;
 installTestHooks(app);
 
-// Pause the simulation when the tab is hidden; scenes may show a pause menu.
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) app.scenes.current?.onHidden?.();
-});
+// Pause when the player is away: the tab is hidden, the window loses focus (alt-tab, a system
+// overlay), or a phone is turned to portrait, where the rotate prompt covers the game. Scenes
+// show their pause menu (onHidden only pauses from play), so the player chooses when to resume.
+const away = () => app.scenes.current?.onHidden?.();
+document.addEventListener('visibilitychange', () => { if (document.hidden) away(); });
+addEventListener('blur', away);
+// Same query as the #rotate prompt in index.html. While it shows, the loop stops ticking (the
+// level clock, microbes and the briefing's autoplay all wait) and only renders.
+const portrait = matchMedia('(orientation: portrait) and (pointer: coarse)');
+function applyOrientation() {
+  if (portrait.matches) away();
+  app.loop.setPaused(portrait.matches);
+}
+portrait.addEventListener('change', applyOrientation);
+
+// Offline support, registered once the first level is being played (scenes call this), so the
+// worker's precache does not compete with the level's own downloads.
+let swRequested = false;
+app.registerServiceWorker = () => {
+  if (swRequested) return;
+  swRequested = true;
+  registerServiceWorker();
+};
 
 async function boot() {
   const bar = document.getElementById('boot-bar');
@@ -45,8 +73,8 @@ async function boot() {
   const start = params.get('scene') || 'splash';
   app.scenes.go(start, Object.fromEntries(params), { style: 'none' });
   app.loop.start();
+  applyOrientation();
   window.focus();
-  registerServiceWorker();
 }
 
 function registerServiceWorker() {
