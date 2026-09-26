@@ -32,7 +32,9 @@ Living checklist for the remake (see `../GOAL_PROMPT.md` for the full brief and 
 - [x] PWA: manifest, icons, service worker with stamped precache; artifact build script
 
 ## Content
-- [ ] Asset pipeline: atlases (WebP), level JSON, text JSON (11 languages), sounds (level 1 atlases done; English platformer text done; the original has no sounds)
+- [x] SWF art pipeline (`tools/swf-sheet`): sprites rendered from the 2009 SWFs via Ruffle into WebP atlases
+- [x] Level JSON for all 11 platform levels (`tools/convert-levels.mjs`)
+- [ ] Text JSON (11 languages), remaining atlases (skin, body, other microbes, game show, kitchen) (level 1 atlases done; English platformer text done; the original has no sounds)
 - [x] Vertical slice: level 1 end to end with touch, juice, sound, bot test (publishing pending)
   - [x] Original art in play: tiles, Lucy, Harry/Amy (upper + lower clips), pickups, projectiles, camera flash, portal, background
   - [x] Canvas HUD from the original art (score digits, hearts, timer, ePhone status with goal picture and tick boxes); touch layout variant
