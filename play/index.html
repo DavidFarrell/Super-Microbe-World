@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Super Microbe World</title>
+<meta name="description" content="A platform and game-show adventure about microbes, hygiene and antibiotics. A remake of the 2009 Flash game.">
+<meta name="theme-color" content="#1b1640">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Microbe World">
+<link rel="manifest" href="manifest.webmanifest" data-pwa>
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" data-pwa>
+<link rel="apple-touch-icon" href="icons/icon-180.png" data-pwa>
+<style id="game-style">
+  :root {
+    color-scheme: dark;
+    --ground: #1b1640;
+    --ink: #fdf8ec;
+    --accent: #ff8a5c;
+    --accent-2: #5fd4ff;
+    --good: #6fe0a8;
+    --bad: #ff6b81;
+    --panel: #2c2466;
+    --touch-opacity: 0.55;
+    --ui-font: "Baloo", "Trebuchet MS", "Arial Rounded MT Bold", system-ui, sans-serif;
+    --body-font: "Atkinson", "Verdana", system-ui, sans-serif;
+  }
+  html, body { margin: 0; height: 100%; background: var(--ground); overflow: hidden; overscroll-behavior: none; }
+  body {
+    color: var(--ink); font-family: var(--body-font);
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+    touch-action: none; -webkit-text-size-adjust: 100%;
+  }
+  #app { position: fixed; inset: 0; display: grid; }
+  #stage-root {
+    position: absolute;
+    inset: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  }
+  #game { position: absolute; display: block; background: #000; }
+  #ui {
+    position: absolute; width: 800px; height: 450px; transform-origin: 0 0; overflow: hidden;
+    font-family: var(--ui-font); pointer-events: none;
+  }
+  #ui * { pointer-events: auto; }
+  #ui .passthrough, #ui .passthrough * { pointer-events: none; }
+
+  /* Buttons */
+  .btn {
+    font: 800 22px/1 var(--ui-font); color: #1b1640; background: var(--ink);
+    border: 0; border-radius: 999px; padding: 12px 26px 10px; min-height: 48px; min-width: 48px; cursor: pointer;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35); transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
+    letter-spacing: 0.3px;
+  }
+  .btn:hover { background: #fff; transform: translateY(-1px); }
+  .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35); }
+  .btn.primary { background: var(--accent); color: #2a1030; }
+  .btn:focus-visible { outline: 4px solid var(--accent-2); outline-offset: 3px; }
+  .btn.pop { animation: pop 0.22s ease; }
+  @keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+  /* Touch controls (anchored to the screen, not the stage) */
+  #touch { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
+  #touch[hidden], #touch [hidden] { display: none !important; }
+  html[data-input="keyboard"] #touch, html[data-input="gamepad"] #touch { display: none; }
+  .touch-btn {
+    pointer-events: auto; position: absolute; display: grid; place-items: center; color: #fff;
+    background: rgba(20, 14, 60, calc(var(--touch-opacity) * 0.9)); border: 3px solid rgba(255, 255, 255, var(--touch-opacity));
+    border-radius: 50%; touch-action: none; opacity: calc(0.4 + var(--touch-opacity));
+    transition: transform 0.06s ease, background 0.06s ease;
+  }
+  .touch-btn svg { width: 55%; height: 55%; }
+  .touch-btn.down { transform: scale(0.92); background: rgba(255, 138, 92, 0.75); }
+  .touch-dpad {
+    pointer-events: auto; position: absolute; touch-action: none;
+    left: calc(env(safe-area-inset-left, 0px) + 18px); bottom: calc(env(safe-area-inset-bottom, 0px) + 18px);
+    width: 196px; height: 96px;
+  }
+  .touch-dpad .touch-btn { width: 88px; height: 88px; top: 4px; }
+  .touch-left { left: 0; } .touch-right { right: 0; }
+  .touch-actions { position: absolute; right: calc(env(safe-area-inset-right, 0px) + 18px); bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); width: 240px; height: 190px; }
+  .touch-jump { width: 96px; height: 96px; right: 0; bottom: 0; }
+  .touch-fire { width: 78px; height: 78px; right: 108px; bottom: 6px; }
+  .touch-camera { width: 70px; height: 70px; right: 40px; bottom: 108px; }
+  .touch-top { position: absolute; right: calc(env(safe-area-inset-right, 0px) + 14px); top: calc(env(safe-area-inset-top, 0px) + 12px); width: 130px; height: 60px; }
+  .touch-top .touch-btn { width: 54px; height: 54px; top: 0; border-radius: 16px; }
+  .touch-phone { right: 66px; } .touch-pause { right: 0; }
+  @media (max-height: 420px) {
+    .touch-dpad { width: 172px; height: 84px; } .touch-dpad .touch-btn { width: 78px; height: 78px; }
+    .touch-jump { width: 84px; height: 84px; } .touch-fire { width: 68px; height: 68px; right: 94px; } .touch-camera { width: 60px; height: 60px; right: 34px; bottom: 94px; }
+  }
+
+  /* Portrait prompt on phones */
+  #rotate { position: fixed; inset: 0; z-index: 20; display: none; place-content: center; text-align: center; gap: 14px; background: var(--ground); font: 800 24px/1.2 var(--ui-font); padding: 24px; }
+  #rotate svg { width: 96px; height: 96px; margin: 0 auto; animation: tilt 2.4s ease-in-out infinite; }
+  @keyframes tilt { 0%, 30% { transform: rotate(0); } 55%, 80% { transform: rotate(-90deg); } 100% { transform: rotate(0); } }
+  @media (orientation: portrait) and (pointer: coarse) { #rotate { display: grid; } }
+  @media (prefers-reduced-motion: reduce) { #rotate svg { animation: none; } .btn { transition: none; } .btn.pop { animation: none; } }
+
+  /* Boot / focus prompt */
+  #boot { position: fixed; inset: 0; display: grid; place-content: center; gap: 16px; text-align: center; z-index: 10; background: var(--ground); font: 800 28px var(--ui-font); }
+  #boot[hidden] { display: none; }
+  #boot .bar { width: min(60vw, 360px); height: 14px; border-radius: 999px; background: rgba(255, 255, 255, 0.15); overflow: hidden; margin: 0 auto; }
+  #boot .bar i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: inherit; transition: width 0.15s ease; }
+  #boot small { font: 400 15px var(--body-font); opacity: 0.8; }
+  #boot button { margin: 0 auto; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage-root">
+    <canvas id="game" aria-label="Super Microbe World game screen"></canvas>
+    <div id="ui"></div>
+  </div>
+  <div id="touch" hidden></div>
+</div>
+<div id="rotate" role="alert">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
+  <div>Turn your device sideways to play</div>
+</div>
+<div id="boot" role="status">
+  <div id="boot-title">Super Microbe World</div>
+  <div class="bar"><i id="boot-bar"></i></div>
+  <small id="boot-msg">Loading...</small>
+</div>
+<div id="live" class="sr-only" aria-live="polite"></div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
