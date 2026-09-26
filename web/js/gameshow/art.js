@@ -9,7 +9,7 @@
 // Rig symbols (gs_host, gs_harry, gs_amy) are drawn part by part as in
 // tools/swf-sheet/atlas-draw.js (format in tools/build-atlas.cjs): rig.frames[f - 1] is a pose, a
 // flat list [part, a, b, c, d, tx, ty, ...] drawn back to front.
-import { sprites } from '../platformer/sprites.js';
+import { sprites, drawable } from '../platformer/sprites.js';
 
 export const FRAME_MS = 40;            // the SWF's 25 fps timeline
 // Frame clock on the 15 ms engine tick: 3 frames every 8 ticks (NOTES 12.1).
@@ -18,7 +18,7 @@ export const frameOfTick = tick => Math.floor((tick * 3) / 8);
 // Loads the named atlases (memoised by sprites.loadAtlas); resolves to true when all loaded.
 // onProgress(0..1) is reported by atlas.
 export async function loadAtlases(ids, onProgress = () => {}) {
-  await sprites.loadIndex();
+  await sprites.ensureIndex();
   const known = ids.filter(id => sprites.index && sprites.index.atlases && sprites.index.atlases[id]);
   let done = 0;
   onProgress(0);
@@ -56,7 +56,7 @@ export const mul = (p, c) => [
 function drawRect(ctx, images, r, scale) {
   const [img, x, y, w, h, ox, oy] = r;
   const page = images[img];
-  if (!page) return;
+  if (!drawable(page)) return;
   const k = 1 / scale;
   ctx.drawImage(page, x, y, w, h, -ox * k, -oy * k, w * k, h * k);
 }
@@ -118,7 +118,7 @@ function blitCached(ctx, name, frame, r, e) {
   if (m.b !== 0 || m.c !== 0 || Math.abs(m.a - base) > 1e-6 || Math.abs(m.d - base) > 1e-6) return false;
   const [img, x, y, w, h, ox, oy] = r;
   const page = e.images[img];
-  if (!page) return false;
+  if (!drawable(page)) return false;
   const k = 1 / (e.sym.scale || 1);
   if (w * k * h * k < MIN_BLIT_AREA) return false;
   // Device-space rectangle of the frame at this transform.

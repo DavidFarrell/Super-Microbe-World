@@ -17,6 +17,7 @@ let manifest = null;
 
 // HTML lang values for the original language codes (screen readers and hyphenation use them).
 const BCP47 = { en: 'en-GB', bg_fl: 'nl-BE', bg_fr: 'fr-BE', cz_cz: 'cs', dk_dk: 'da', fr_fr: 'fr', gk_gk: 'el', it_it: 'it', pl_pl: 'pl', por_por: 'pt', sp_sp: 'es' };
+export const langTag = code => BCP47[code] || 'en-GB';
 
 async function loadManifest() {
   manifest ||= await loadJson('data/lang/manifest.json').catch(() => ({ languages: ['en'], namespaces: [] }));
@@ -39,8 +40,6 @@ async function loadTable(code) {
   return Object.assign({}, ...parts.filter(Boolean));
 }
 
-export const availableLanguages = () => (manifest ? manifest.languages : ['en']);
-
 export async function loadLanguage(code = settings.get('language') || 'en') {
   if (!tables.en || !Object.keys(tables.en).length) tables.en = (await loadTable('en')) || {};
   await loadManifest();
@@ -49,7 +48,9 @@ export async function loadLanguage(code = settings.get('language') || 'en') {
   if (!manifest.languages.includes(code)) code = 'en';
   if (code !== 'en' && !tables[code]) tables[code] = (await loadTable(code)) || {};
   active = code;
-  document.documentElement.lang = BCP47[active] || active;
+  // The page's language is the UI's: English unless the language has UI tables of its own (the
+  // quiz and host text carry their own lang where they are shown: talkie, board, language names).
+  document.documentElement.lang = langTag((manifest.uiTables || ['en']).includes(active) ? active : 'en');
   return active;
 }
 

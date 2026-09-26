@@ -57,11 +57,14 @@ function goalMode(goal) {
 // level 7, where Iggy is the only bad microbe (PlatformGame.as:337-358). Both are built here
 // from the microbe's own idle frame, in the style of the shipped pictures (microbes on black
 // with a soft white glow, 151 x 168.5 status units). Layout entries are [centre x, centre y,
-// scale, flip] in status units.
-const PORTRAITS = {
+// scale, flip] in status units. Level select draws the same pictures (web/js/flow/levelSelect.js)
+// through composePortrait() with its own art source.
+export const PORTRAITS = {
   patty: { symbol: 'patty_icon', layout: [[75.5, 86, 0.82, false]] },
   iggy: { symbol: 'iggy_icon', layout: [[48, 56, 1.3, false], [104, 50, 1.2, true], [112, 108, 1.35, true], [40, 116, 1.25, false], [76, 86, 1.45, false]] },
 };
+// Portrait size in status units (the goal pictures' 151 x 168.5), drawn at 2x.
+export const PORTRAIT_SIZE = { w: 151, h: 168.5, scale: 2 };
 const portraitCache = new Map();
 
 // The portrait for a goal, or null to keep the original picture. badTypes: the type ids of
@@ -73,13 +76,15 @@ export function goalPortrait(goal, badTypes = []) {
   return null;
 }
 
-// Composes a portrait once (at the atlases' 2x) and caches it; null until its art is loaded.
-function portraitCanvas(name) {
-  if (portraitCache.has(name)) return portraitCache.get(name);
+// Composes portrait `name` (a PORTRAITS key) into a new 302 x 337 canvas. sym is the microbe's
+// atlas symbol (for its idle frame's bounds); drawIdle(ctx, x, y, scale, flip) draws that idle
+// frame with its registration point at (x, y) in status units, scaled about that point and
+// mirrored when flip is set. Any art source works: the HUD passes the shared sprites, Level select
+// a privately loaded sheet it frees at once.
+export function composePortrait(name, sym, drawIdle) {
   const p = PORTRAITS[name];
-  const sym = p && sprites.symbol(p.symbol);
-  if (!sym || !sprites.hasSymbol('status_background')) return null;
-  const K = 2, W = 302, H = 337;
+  if (!p || !sym) return null;
+  const K = PORTRAIT_SIZE.scale, W = Math.round(PORTRAIT_SIZE.w * K), H = Math.round(PORTRAIT_SIZE.h * K);
   const make = () => (typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(W, H) : Object.assign(document.createElement('canvas'), { width: W, height: H }));
   // The idle frame's bounds about the registration point (its label-start image).
   const fr = (sym.frames || [])[(sym.labels && sym.labels.idle ? sym.labels.idle : 1) - 1];
@@ -87,9 +92,9 @@ function portraitCanvas(name) {
   const b = fr ? { x: -fr[5] / s0, y: -fr[6] / s0, w: fr[3] / s0, h: fr[4] / s0 } : { x: 0, y: 0, w: 50, h: 50 };
   const art = make(), ag = art.getContext('2d');
   ag.setTransform(K, 0, 0, K, 0, 0);
-  for (const [cx, cy, s, flip] of p.layout) {
-    const rx = cx - (flip ? -(b.x + b.w / 2) : b.x + b.w / 2) * s, ry = cy - (b.y + b.h / 2) * s;
-    sprites.drawSymbol(ag, p.symbol, 'idle', 0, rx, ry, { flipX: flip, scaleX: s, scaleY: s, pivotX: rx, pivotY: ry });
+  for (const [cx, cy, sc, flip] of p.layout) {
+    const rx = cx - (flip ? -(b.x + b.w / 2) : b.x + b.w / 2) * sc, ry = cy - (b.y + b.h / 2) * sc;
+    drawIdle(ag, rx, ry, sc, flip);
   }
   const out = make(), g = out.getContext('2d');
   g.fillStyle = '#000';
@@ -99,7 +104,19 @@ function portraitCanvas(name) {
   g.drawImage(art, 0, 0);
   g.shadowBlur = 0;
   g.drawImage(art, 0, 0);
-  portraitCache.set(name, out);
+  return out;
+}
+
+// The HUD's portrait from the shared sprites, composed once and cached; null until its art is
+// loaded.
+export function portraitCanvas(name) {
+  if (portraitCache.has(name)) return portraitCache.get(name);
+  const p = PORTRAITS[name];
+  const sym = p && sprites.symbol(p.symbol);
+  if (!sym || !sprites.hasSymbol('status_background')) return null;
+  const out = composePortrait(name, sym, (ctx, x, y, sc, flip) =>
+    sprites.drawSymbol(ctx, p.symbol, 'idle', 0, x, y, { flipX: flip, scaleX: sc, scaleY: sc, pivotX: x, pivotY: y }));
+  if (out) portraitCache.set(name, out);
   return out;
 }
 
@@ -111,7 +128,7 @@ export function goalText(goal) {
     case G.PHOTOGRAPH_GOOD: return t('goal.photoGood', { n });
     case G.PHOTOGRAPH_ANY: return t('goal.photoAny', { n });
     case G.KILL_ALL: return t('goal.killAll', { n });
-    case G.YOGURT: return t('goal.yogurt', { n });
+    case G.YOGURT: return n === 1 ? t('goal.yogurtOne') : t('goal.yogurt', { n });
     case G.ANTIBIOTIC: return t('goal.antibiotic', { n });
     default: return t('goal.other');
   }
@@ -136,6 +153,7 @@ export class Hud {
     app.ui.append(this.live, this.phoneBtn);
     this.touchMix = 0;          // 0 = keyboard layout, 1 = touch layout (eased)
     this.visible = true;
+    this.phoneAlpha = 1;        // eased by the scene: faded while the player or a target is under it
   }
 
   // Starts a level: counters jump to the game's values without animating.
@@ -303,7 +321,7 @@ export class Hud {
       ctx.restore();
     }
     drawWhiteout(ctx, whiteout);
-    if (phone) this.drawPhone(ctx, game, reducedMotion);
+    if (phone) this.drawPhone(ctx, game, reducedMotion, { alpha: this.phoneAlpha });
     if (this.banner) this.drawBanner(ctx);
   }
 

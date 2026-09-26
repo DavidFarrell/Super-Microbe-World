@@ -5,9 +5,10 @@ import { settings } from '../core/settings.js';
 import { input } from '../core/input.js';
 import { t, has } from '../core/i18n.js';
 
-const ACTIONS = ['left', 'right', 'jump', 'fire', 'camera', 'phone', 'pause', 'confirm', 'back'];
-// Standard gamepad layout names (core/input.js GAMEPAD_BUTTONS).
-const PAD = { jump: 'A', camera: 'B', fire: 'X', phone: 'Y', pause: 'Start', confirm: 'A', back: 'Back', left: '←', right: '→' };
+const ACTIONS = ['left', 'right', 'jump', 'fire', 'camera', 'phone', 'pause', 'confirm', 'back', 'tissues', 'clingfilm', 'wash'];
+// Standard gamepad layout names (core/input.js GAMEPAD_BUTTONS). The kitchen tools are the camera,
+// fire and phone buttons (web/js/kitchen/kitchenScene.js).
+const PAD = { jump: 'A', camera: 'B', fire: 'X', phone: 'Y', pause: 'Start', confirm: 'A', back: 'Back', left: '←', right: '→', tissues: 'B', clingfilm: 'X', wash: 'Y' };
 
 // Short display name of a KeyboardEvent.code.
 export function keyLabel(code) {

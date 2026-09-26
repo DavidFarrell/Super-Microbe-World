@@ -448,6 +448,17 @@
    "name": "level_intros_all",
    "frames": "40-421",
    "omitText": true
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "level_intros",
+   "name": "level_intros_r3",
+   "frames": "190-240",
+   "omitText": true,
+   "pin": {
+    "glass": "yogurt"
+   },
+   "why": "level 8 and 9 pages: the milk_image on the page runs glass.gotoAndStop(\"yogurt\") in its frame 1 script, so the glass shows its yoghurt state (captures 105, 106, 109)"
   }
  ]
 }

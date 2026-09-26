@@ -3,7 +3,8 @@
 //
 //   files  cached when the worker installs: the shell (HTML, JS, fonts, language, manifest and
 //          small icons), every level JSON (a few KB each, so progression works offline) and the
-//          atlases of level 1 with the default avatar (Harry) plus the shared HUD and entities.
+//          atlases of level 1 with the default avatar (Harry) plus the shared HUD and entities,
+//          the splash and the summary card.
 //   lazy   every other atlas (the other avatar, other areas' sets): cached by the worker the
 //          first time the game fetches them, so a first visit downloads only what level 1 uses.
 //
@@ -14,9 +15,10 @@ import crypto from 'node:crypto';
 
 // Optional argument: the web folder to process (default: this repo's web/).
 const WEB = path.resolve(process.argv[2] || path.join(path.dirname(new URL(import.meta.url).pathname), '../web'));
-// Not part of the game: tests, screenshots, notes, source maps, dotfiles, loose PNGs, and the
-// 512 px icons (the browser fetches manifest icons itself when installing).
-const SKIP = [/^tests\//, /^screenshots\//, /^precache\.json$/, /^NOTES.*\.md$/, /^PROGRESS\.md$/, /^README\.md$/, /\.map$/, /(^|\/)\./, /^artifact\//, /\.png$/, /-512\.png$/];
+// Not part of the game: tests, screenshots, notes and other Markdown (NOTES, PROGRESS, README, the
+// area requests, js/flow/contract.md), source maps, dotfiles, loose PNGs, and the 512 px icons (the
+// browser fetches manifest icons itself when installing).
+const SKIP = [/^tests\//, /^screenshots\//, /^precache\.json$/, /\.md$/, /\.map$/, /(^|\/)\./, /^artifact\//, /\.png$/, /-512\.png$/];
 const KEEP_PNG = [/^icons\/icon-(180|192)\.png$/];
 const DEFAULT_AVATAR = 'harry';
 const FIRST_LEVEL_SET = 'level1';
@@ -36,7 +38,9 @@ all.sort();
 // Atlas files outside the first level's set go to the lazy list.
 const index = JSON.parse(fs.readFileSync(path.join(WEB, 'data/atlas/index.json'), 'utf8'));
 const sets = index.sets || {};
-const coreAtlases = new Set([...(sets[FIRST_LEVEL_SET] || []), ...(sets['player-' + DEFAULT_AVATAR] || []), 'hud', 'entities']);
+// Plus the splash (the screen every visit boots to, so an offline start always has its art) and
+// the small summary card a failed level shows.
+const coreAtlases = new Set([...(sets[FIRST_LEVEL_SET] || []), ...(sets['player-' + DEFAULT_AVATAR] || []), 'hud', 'entities', ...(sets.splash || []), ...(sets.summary || [])]);
 const lazyFiles = new Set();
 for (const [id, a] of Object.entries(index.atlases || {})) {
   if (coreAtlases.has(id)) continue;

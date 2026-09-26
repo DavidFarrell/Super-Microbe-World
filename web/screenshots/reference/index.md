@@ -1,6 +1,6 @@
 # Flash reference screens
 
-These 800 x 450 images are the "Flash reference" column of the fidelity gallery. Ruffle cannot click past the splash, so each screen is composed from the original SWFs instead: every element is a Ruffle render of the original symbol (the cached sheets in `tools/.cache/sheets`, 2x, drawn at 1x), and every position comes from the SWFs themselves (root timelines, instance placements, the tracks recorded by the render jobs) or from the `attachMovie` coordinates in the AS2 source. Nothing is hand placed.
+These 800 x 450 images are the "Flash, composed" pictures in the fidelity gallery (`../index.html`), shown beside the Ruffle captures of the running original. Each screen is composed from the original SWFs rather than captured, so it shows the art without text, logos or mid-animation poses: every element is a Ruffle render of the original symbol (the cached sheets in `tools/.cache/sheets`, 2x, drawn at 1x), and every position comes from the SWFs themselves (root timelines, instance placements, the tracks recorded by the render jobs) or from the `attachMovie` coordinates in the AS2 source. Nothing is hand placed.
 
 Regenerate with:
 

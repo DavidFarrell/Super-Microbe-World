@@ -19,14 +19,18 @@
 // player was on with the scores it started with. Randomness: a new journey draws a fresh run seed
 // (or takes ?seed=), and each step gets a seed derived from it, so a saved journey replays the
 // same way. A level played from Level select gets its own seed, never the journey's.
-// Art for the next screen is fetched while the current one plays (the shrinking zone during the
-// cutscene and the quiz, the level during the shrinking zone), as Flash preloaded every SWF.
+// Art for the next screen is fetched while the current one plays, as Flash preloaded every SWF
+// (NOTES 2.1): decoded ahead when that screen surely comes next (the shrinking zone during the
+// cutscene and the quiz, the level or kitchen during the shrinking zone, the summary card during
+// a level), downloaded only (not decoded, so no texture memory) when it may come next (the
+// cutscene and game show art on the splash, the next level of the round, or the game show,
+// during a level). Each prefetch starts once the current screen's own art is in.
 import { loadJson } from '../core/assets.js';
 import { load, save } from '../core/save.js';
 import { settings } from '../core/settings.js';
 import { loadLanguage } from '../core/i18n.js';
 import { sprites } from '../platformer/sprites.js';
-import { loadKitchenArt } from '../kitchen/art.js';
+import { loadKitchenArt, kitchenAtlases } from '../kitchen/art.js';
 import * as art from './art.js';
 
 const SAVE_KEY = 'progress';
@@ -55,9 +59,9 @@ export function freshSeed() {
   return ((Date.now() ^ Math.floor(performance.now() * 1000)) >>> 0) || 1;
 }
 
-// Language of the quiz and the host's introduction (web/data/quiz/<code>.json). Read from the
-// setting rather than i18n's active language, which stays English while only English UI tables
-// exist (web/requests/flow.md #1).
+// Language of the quiz and the host's introduction (web/data/quiz/<code>.json). i18n keeps any
+// offered language active even without UI tables (core/i18n.js), but the setting is read here so
+// the right quiz file is chosen even before loadLanguage() has finished.
 let languages = null;
 export function quizLanguage() {
   const code = settings.get('language');
@@ -139,9 +143,11 @@ export function createFlow(app) {
   const langParam = app.params && app.params.get('lang');
   const manifestJob = loadJson('data/lang/manifest.json').then(m => { languages = m.languages || ['en']; return m; }).catch(() => ({ languages: ['en'], names: { en: 'English' } }));
   manifestJob.then(m => {
-    if (langParam && (m.languages || []).includes(langParam) && settings.get('language') !== langParam) {
-      settings.set('language', langParam);
-      if (langParam === 'en') loadLanguage('en');
+    if (langParam && (m.languages || []).includes(langParam)) {
+      if (settings.get('language') !== langParam) settings.set('language', langParam);
+      // Boot loaded the saved language; make the URL's the active one (UI text falls back to
+      // English key by key, and a language without UI tables makes no requests).
+      loadLanguage(langParam);
     }
   });
 
@@ -204,6 +210,59 @@ export function createFlow(app) {
     const id = round.levels[0];
     if (id) prefetch(() => sprites.loadForLevel(id, avatar));
   }
+  // During a level (after its own art is in, `ready`): download what follows it, the round's next
+  // level or, after the last one, the game show (download only: sprites.prefetchSet).
+  function prefetchAfter(ready, round, part, avatar) {
+    const next = round.levels[part + 1];
+    prefetch(() => Promise.resolve(ready).then(() => (next && round.kind !== 'kitchen'
+      ? sprites.loadIndex().then(() => sprites.prefetchSet(sprites.atlasesFor(next, avatar)))
+      : next ? null : sprites.prefetchSet('gameshow'))));
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Texture memory (NOTES 8.4). Decoded atlas pages cost width x height x 4 bytes each, and iOS
+  // Safari evicts or crashes a page well before 400-500 MB, so at every scene change the atlases
+  // the next screen does not use are closed (sprites.release). Kept: the next screen's own set,
+  // the set the flow decodes ahead during it (the shrinking zone during the cutscene and a quiz,
+  // the level or kitchen during the shrinking zone, the summary card during a level), and the
+  // player's hoverboard, HUD and pickups, which every level uses. The compressed bytes stay in
+  // memory, so art needed again later decodes without downloading. null keeps everything (the
+  // summary card between a level and its retry, Settings, unknown scenes).
+  // ---------------------------------------------------------------------------------------------
+  let lastReleased = [];
+  function keepFor(name, params = {}) {
+    const idx = sprites.index;
+    if (!idx) return null;
+    const sets = idx.sets || {};
+    const avatar = AVATARS.includes(params.avatar) ? params.avatar : AVATARS.includes(profile.avatar) ? profile.avatar : 'harry';
+    const ids = new Set(['hud', 'entities', 'player-' + avatar]);
+    const add = list => (list || []).forEach(id => ids.add(id));
+    const addSet = n => add(sets[n]);
+    const action = round => {
+      if (!round) return;
+      if (round.kind === 'kitchen') add(kitchenAtlases(idx, avatar));
+      else if (round.levels[0]) add(sprites.atlasesFor(round.levels[0], avatar));
+    };
+    switch (name) {
+      case 'splash': addSet('splash'); break;
+      case 'cutscene': addSet('cutscene'); addSet('shrink'); break;
+      case 'shrink': addSet('shrink'); action(table && table.rounds[(Number(params.round) || 1) - 1]); break;
+      case 'platform': add(sprites.atlasesFor(params.level, avatar)); addSet('summary'); break;
+      case 'kitchen': add(kitchenAtlases(idx, avatar)); addSet('summary'); break;
+      case 'gameshow': addSet('gameshow'); addSet('shrink'); break;
+      case 'ending': addSet('gameshow'); addSet('splash'); break;
+      case 'levelSelect':
+        for (const id of Object.keys(idx.atlases || {})) if (/^tiles-|^hud/.test(id)) ids.add(id);
+        addSet('splash');
+        break;
+      default: return null;
+    }
+    return ids;
+  }
+  app.scenes.beforeEnter = (name, params) => {
+    const keep = keepFor(name, params);
+    lastReleased = keep ? sprites.releaseExcept(keep) : [];
+  };
 
   // ---------------------------------------------------------------------------------------------
   // Journey steps
@@ -255,6 +314,7 @@ export function createFlow(app) {
     nextFocus = null;
     if (round.kind === 'kitchen') {
       const start = r.kitchen;
+      prefetchAfter(loadKitchenArt(r.avatar), round, r.part, r.avatar);
       launch('kitchen', {
         level: kitchenNumber(id), avatar: r.avatar, score: start, seed: seedFor(`kitchen${id}`),
         onComplete: res => afterLevel(numberOr(res && res.score, start) - start, numberOr(res && res.score, start)),
@@ -264,6 +324,7 @@ export function createFlow(app) {
     }
     const start = r.hover;
     prefetch(() => art.loadSet('summary'));       // the card a failed level shows
+    prefetchAfter(sprites.loadForLevel(id, r.avatar), round, r.part, r.avatar);
     // The retry straight after the summary card skips the briefing just read; a level reached
     // any other way (Continue, a round restart) shows it.
     const skipIntro = retrying;
@@ -295,6 +356,10 @@ export function createFlow(app) {
   function playQuiz(round, blind) {
     const r = run();
     const blindOn = !!settings.get('blindRounds');
+    // The step after this quiz is fixed now, with the host's closing line: "Step right this way"
+    // is always followed by the shrinking zone. Changing the blind-rounds setting during a quiz
+    // (Settings is reachable from its pause menu) takes effect from the next quiz.
+    const next = blind ? 'shrink' : (blindOn ? 'blind' : 'shrink');
     launch('gameshow', {
       round: round.number, avatar: r.avatar, nickname: nickFor(r), cpuName: avatarName(otherAvatar(r.avatar)),
       playerScore: r.quiz, cpuScore: r.cpu, blind, seed: seedFor(`quiz${round.number}${blind ? 'b' : 's'}`),
@@ -306,10 +371,8 @@ export function createFlow(app) {
           r.round++;
           r.part = 0;
           if (r.round >= ROUNDS) return finish();
-          r.step = settings.get('blindRounds') ? 'blind' : 'shrink';
-        } else {
-          r.step = 'shrink';
         }
+        r.step = next;
         goStep();
       },
       onQuit: () => flow.toSplash(),
@@ -396,6 +459,12 @@ export function createFlow(app) {
       persist();
       mode = 'journey';
       prefetchShrink();
+      // Level 1's art that does not depend on the avatar (tiles, Lucy, pickups, HUD, briefing),
+      // downloaded (not decoded) while the cutscene plays, once the cutscene's own art is in.
+      prefetch(() => sprites.prefetchSet('cutscene').then(() => roundTable()).then(t => {
+        const first = t.rounds[0] && t.rounds[0].kind !== 'kitchen' && t.rounds[0].levels[0];
+        return first ? sprites.prefetchSet(sprites.atlasesFor(first, 'harry').filter(id => !/^player-/.test(id))) : null;
+      }));
       launch('cutscene', {
         onComplete: ({ avatar, nickname } = {}) => {
           const a = AVATARS.includes(avatar) ? avatar : 'harry';
@@ -441,6 +510,10 @@ export function createFlow(app) {
       persist();
     },
 
+    // The splash's own art is in: download the cutscene's (the game show studio and cast, which
+    // every quiz uses too), the likeliest next screen, without decoding it.
+    prefetchMenu() { prefetch(() => sprites.prefetchSet('cutscene')); },
+
     probe() {
       const r = progress.run;
       return {
@@ -456,6 +529,7 @@ export function createFlow(app) {
         shrinkSeen: !!progress.shrinkSeen,
         retrying,
         language: quizLanguage(),
+        art: { decodedBytes: sprites.decodedBytes(), loaded: [...sprites.decoded.keys()], released: lastReleased.slice() },
       };
     },
   };

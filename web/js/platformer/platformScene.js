@@ -18,6 +18,9 @@ import { Particles, Shake, Popups, haptic } from '../core/fx.js';
 import { gameRng } from '../core/rng.js';
 import { ease, clamp } from '../core/tween.js';
 import { device, tp } from '../ui/prompts.js';
+import { openSettings } from '../flow/settings.js';
+import { confirmDialog, tickNav, ensureStyle } from '../flow/ui.js';
+import { fullscreenButton } from '../ui/fullscreen.js';
 import { PlatformGame, GAME_STATE } from './game.js';
 import { PlatformRenderer } from './render.js';
 import { Hud, goalText } from './hud.js';
@@ -31,8 +34,10 @@ const HIT_STOP = { hurt: 4, kill: 3, photo: 2 };   // logic steps frozen for imp
 const SUCK_TICKS = 34;                              // player drawn into the portal
 const IRIS_TICKS = 36;                              // iris closing on the portal
 const FLYER_TICKS = 38;                             // photo sparkle flying to the ePhone
-// On-screen controls that fade while a target is under them (see updateOcclusion).
-const TOUCH_BUTTON_IDS = ['touch-left', 'touch-right', 'touch-jump', 'touch-fire', 'touch-camera', 'touch-pause', 'touch-phone'];
+// On-screen controls that fade while a target is under them (see updateOcclusion). The d-pad and
+// Jump, which a thumb holds most of the time (and so covers the target anyway), stay solid: a
+// control the child is pressing must not flicker between solid and ghosted.
+const TOUCH_BUTTON_IDS = ['touch-fire', 'touch-camera', 'touch-pause', 'touch-phone'];
 const PROJECTILE_TYPES = [T.BULLET, T.CAMERA_FLASH, T.ANTIBIOTIC_BOMB];
 
 // Sounds for the later levels' mechanics (the original had no sound at all).
@@ -81,8 +86,11 @@ const STYLE = `
 .pf-toggle { font-size: 16px; min-height: max(44px, calc(46px / var(--stage-scale, 1))); padding: 8px 18px 6px; }
 .pf-cam-badge { position: absolute; right: -6px; top: -6px; width: 40px; height: 22px; border-radius: 11px; background: #1b1640; border: 2px solid #fff; display: grid; place-items: center; pointer-events: none; animation: pf-badge-in 0.3s cubic-bezier(.2,1.6,.4,1) both; }
 .pf-cam-badge svg { width: 30px; height: 14px; }
+.pf-ammo-badge { position: absolute; right: -6px; top: -6px; min-width: 26px; height: 24px; padding: 0 5px; box-sizing: border-box; border-radius: 12px; background: #1b1640; border: 2px solid #fff; color: #fff; font: 800 14px/20px var(--ui-font); text-align: center; pointer-events: none; }
+.touch-btn.empty { opacity: 0.35; }
 @keyframes pf-badge-in { from { transform: scale(0.2); } to { transform: scale(1); } }
 html.reduced-motion .pf-cam-badge { animation: none; }
+.pf-art-retry { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); z-index: 6; font-size: 15px; min-height: max(40px, calc(44px / var(--stage-scale, 1))); padding: 6px 16px 4px; }
 .pf-intro { position: absolute; inset: 0; }
 .pf-intro-tap { position: absolute; inset: 0; cursor: pointer; }
 .pf-intro-next { position: absolute; right: 12px; bottom: 6px; }
@@ -158,25 +166,62 @@ export function platformScene(app) {
     if (!document.getElementById('pf-scene-style')) document.head.append(el('style', { id: 'pf-scene-style' }, STYLE));
     const name = String(params.level || 'alpha_level1').replace(/\.xml$/, '');
     const avatar = params.avatar === 'amy' ? 'amy' : 'harry';
+    mode = 'loading';
+    loadProgress = 0;
+    let ids = [];
     try {
-      [levelData, levelIndex] = await Promise.all([
+      [levelData, levelIndex, ids] = await Promise.all([
         loadJson(`data/levels/${name}.json`),
         loadJson('data/levels/index.json').catch(() => null),
         sprites.loadForLevel(name, avatar, p => { loadProgress = p; }),
       ]);
     } catch (e) {
+      if (destroyed) return;
       console.warn(e);
-      mode = 'error';
-      showOverlay(el('div', { class: 'pf-card' }, el('h2', {}, t('level.notFound')), el('p', {}, t('level.notFoundText', { name })),
-        el('div', { class: 'row' }, button(t('ui.back'), () => app.scenes.go('splash'), { class: 'primary' }))));
+      // A missing level (404) cannot be fixed by asking again; anything else is the connection.
+      showLoadError(name, /\(404\)/.test(String(e && e.message)) ? 'missing' : navigator.onLine === false ? 'offline' : 'network');
       return;
     }
     if (destroyed) return;
+    // Pictures that did not download: offline, the level waits for the connection rather than
+    // playing with placeholder shapes; online, it plays and offers to fetch them again.
+    const missingArt = (ids || []).filter(id => sprites.failed.has(id));
+    if (missingArt.length && navigator.onLine === false) { showLoadError(name, 'offline'); return; }
     if (params.seed != null) gameRng.seed(Number(params.seed));
     const counts = {};
     for (const [, , id] of levelData.tiles) { const a = areaOf(id); if (a) counts[a] = (counts[a] || 0) + 1; }
     area = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'kitchen';
     startLevel();
+    if (missingArt.length) showArtRetry(name, avatar);
+  }
+
+  // The level could not be loaded: say why, and offer Try again (the loaders keep no failure, so
+  // a second attempt really downloads again) and Back.
+  function showLoadError(name, kind) {
+    mode = 'error';
+    const title = t(kind === 'missing' ? 'level.notFound' : kind === 'offline' ? 'level.offline' : 'level.loadFailed');
+    const text = kind === 'missing' ? t('level.notFoundText', { name }) : t(kind === 'offline' ? 'level.offlineText' : 'level.loadFailedText');
+    showOverlay(el('div', { class: 'pf-card', role: 'dialog', 'aria-label': title }, el('h2', {}, title), el('p', {}, text),
+      el('div', { class: 'row' },
+        kind === 'missing' ? null : button(t('level.retry'), () => { clearOverlay(); load(); }, { class: 'primary', id: 'pf-load-retry' }),
+        button(t('ui.back'), () => quit(), { class: kind === 'missing' ? 'primary' : '', id: 'pf-load-back' }))));
+  }
+
+  // Some of the level's pictures failed while online: a small button at the top fetches them
+  // again (meanwhile those symbols draw as clean placeholder shapes).
+  let artRetry = null;
+  function showArtRetry(name, avatar) {
+    if (artRetry) artRetry.remove();
+    const b = button(t('level.artMissing'), async () => {
+      b.disabled = true;
+      await sprites.loadForLevel(name, avatar);
+      if (destroyed) return;
+      if (sprites.atlasesFor(name, avatar).some(id => sprites.failed.has(id))) { b.disabled = false; return; }
+      b.remove();
+      if (artRetry === b) artRetry = null;
+    }, { class: 'pf-art-retry', id: 'pf-art-retry' });
+    artRetry = b;
+    app.ui.append(b);
   }
 
   function startLevel() {
@@ -253,6 +298,14 @@ export function platformScene(app) {
     mode = 'paused';
     audio.play('tap');
     audio.musicLevel(0.35);
+    showPauseCard();
+  }
+
+  // The pause card. Settings opens the flow's settings panel over it (web/js/flow/contract.md:
+  // the level stays paused and takes no input meanwhile); Level select leaves the level for the
+  // flow's Level select (NOTES 11.1 #3: reachable from the splash, the pause menu and the winner
+  // screen). A journey is saved at the start of every step, so Continue resumes this level.
+  function showPauseCard(focusId = null) {
     const soundLabel = () => (settings.get('muted') ? '🔇 ' + t('pause.soundOff') : '🔊 ' + t('pause.soundOn'));
     const toggle = button(soundLabel(), () => {
       settings.set('muted', !settings.get('muted'));
@@ -269,17 +322,64 @@ export function platformScene(app) {
       }, { id, class: 'pf-toggle', 'aria-pressed': String(!!settings.get(key)) });
       return b;
     };
+    const flow = app.flow;
     const card = el('div', { class: 'pf-card', role: 'dialog', 'aria-label': t('pause.title') },
       el('h2', {}, t('pause.title')),
       el('p', {}, goalSentence()),
       el('div', { class: 'row' },
         button(t('pause.resume'), () => resume(), { class: 'primary', id: 'pf-resume' }),
-        button(t('pause.restart'), () => restart(), { id: 'pf-restart' }),
-        button(t('pause.quit'), () => quit(), { id: 'pf-quit' })),
+        button(t('pause.restart'), () => confirmThen('restart', restart, 'pf-restart'), { id: 'pf-restart' }),
+        button(t('pause.quit'), () => confirmThen('leave', quit, 'pf-quit'), { id: 'pf-quit' })),
+      el('div', { class: 'row' },
+        button(t('pause.settings'), () => openSettingsOverlay(), { id: 'pf-settings', class: 'pf-toggle' }),
+        flow && typeof flow.openLevelSelect === 'function'
+          ? button(t('pause.levelSelect'), () => confirmThen('leave', () => flow.openLevelSelect(), 'pf-level-select'), { id: 'pf-level-select', class: 'pf-toggle' }) : null,
+        fullscreenButton(button, { id: 'pf-fullscreen', class: 'pf-toggle' })),
       el('div', { class: 'row' }, toggle,
         motionToggle('reducedMotion', 'pf-motion', 'pause.reduceMotion'),
         motionToggle('reducedShake', 'pf-shake', 'pause.reduceShake')));
-    showOverlay(card);
+    showOverlay(card, { focus: !focusId });
+    if (focusId) document.getElementById(focusId)?.focus({ preventScroll: true });
+  }
+
+  // Restart, Quit and Level select throw the level in progress away, so each asks first (No is
+  // focused, and Escape or Back answers No); one mis-tap next to Resume cannot lose a level. The
+  // card's own keys are off while the question is up; the flow's focus stack drives it.
+  let confirming = false;
+  async function confirmThen(kind, action, fromId) {
+    if (confirming || mode !== 'paused') return;
+    confirming = true;
+    if (untrap) { untrap(); untrap = null; }
+    nav = null;
+    ensureStyle();
+    const restartKind = kind === 'restart';
+    const ok = await confirmDialog(app.ui, {
+      title: t(restartKind ? 'pause.confirmRestart' : 'pause.confirmLeave'), text: t('pause.confirmText'),
+      yes: t(restartKind ? 'pause.confirmRestartYes' : 'pause.confirmLeaveYes'), no: t('pause.confirmNo'), danger: true,
+    });
+    confirming = false;
+    if (destroyed || mode !== 'paused') return;
+    if (ok) { action(); return; }
+    if (overlay) {
+      nav = focusNavigator(overlay);
+      untrap = trapFocus(overlay);
+      if (device() !== 'touch') document.getElementById(fromId)?.focus({ preventScroll: true });
+    }
+  }
+
+  // The flow's settings panel over the pause card. The card's own keyboard handling (arrow
+  // navigation and the Tab trap) is off while the panel is open; on close the card is built
+  // again, so its sound and motion toggles show what was changed in the panel.
+  function openSettingsOverlay() {
+    if (mode !== 'paused') return;
+    if (untrap) { untrap(); untrap = null; }
+    nav = null;
+    openSettings(app, {
+      onClose: () => {
+        if (destroyed || mode !== 'paused') return;
+        showPauseCard('pf-settings');
+      },
+    });
   }
 
   // Reduced motion can change mid-level (the pause toggle, or the OS setting while it is followed).
@@ -634,6 +734,7 @@ export function platformScene(app) {
   }
 
   function updateOcclusion() {
+    updatePhoneFade();
     const on = new Set();
     if (mode === 'play' && device() === 'touch') {
       const rects = stageControlRects();
@@ -655,6 +756,31 @@ export function platformScene(app) {
     }
   }
 
+  // The HUD ePhone (at the left edge in the touch layout) fades while the player or a live
+  // microbe or pickup is under it, as the touch controls do: level 5 starts with the player
+  // behind it on a phone.
+  const PHONE_FADE = 0.35;
+  function updatePhoneFade() {
+    if (!hud || !game) return;
+    let under = false;
+    if (mode === 'play' || mode === 'exiting') {
+      const r = hud.phoneRect();
+      const camX = game.camera.x;
+      const hit = (x, y, w, h) => r.x < x + w && x < r.x + r.w && r.y < y + h && y < r.y + r.h;
+      const pb = game.player.particle;
+      under = hit(pb.position.x - camX, pb.position.y, pb.width, pb.height);
+      for (let i = 1; !under && i < game.entities.length; i++) {
+        const e = game.entities[i];
+        if (!e || e.removed || e.state === S.BE_KILLED || e.state === S.IGNORE || PROJECTILE_TYPES.includes(e.type)) continue;
+        const a = e.artRect();
+        under = hit(a.x - camX, a.y, a.w, a.h);
+      }
+    }
+    const target = under ? PHONE_FADE : 1;
+    hud.phoneAlpha += (target - hud.phoneAlpha) * (reducedMotion ? 1 : 0.2);
+    if (Math.abs(target - hud.phoneAlpha) < 0.01) hud.phoneAlpha = target;
+  }
+
   // While an antibiotic is carried the camera button throws it (PlayerEntity.as:193-197): the
   // touch camera button wears a capsule badge and says so to screen readers.
   let camBadge = null, camLabel = null;
@@ -673,6 +799,24 @@ export function platformScene(app) {
     }
   }
 
+  // The Throw button: dimmed (and aria-disabled) while there is nothing to throw, which is the
+  // whole of seven levels, with the soap or white blood cell count on a badge when there is. It
+  // stays in place and tappable, so the layout and a thumb's reach never change.
+  let fireAmmo = null, fireBadge = null;
+  function syncFireButton(ammo) {
+    const n = mode === 'exited' ? null : Math.max(0, ammo | 0);
+    if (n === fireAmmo) return;
+    fireAmmo = n;
+    const btn = document.getElementById('touch-fire');
+    if (!btn) return;
+    btn.classList.toggle('empty', n === 0);
+    if (n === 0) btn.setAttribute('aria-disabled', 'true'); else btn.removeAttribute('aria-disabled');
+    if (n && n > 0) {
+      if (!fireBadge) { fireBadge = el('span', { class: 'pf-ammo-badge', 'aria-hidden': 'true' }); btn.append(fireBadge); }
+      fireBadge.textContent = String(n);
+    } else if (fireBadge) { fireBadge.remove(); fireBadge = null; }
+  }
+
   function startMusicWhenUnlocked() {
     if (musicOn || !audio.unlocked || !audio.ctx || audio.ctx.state !== 'running') return;
     musicOn = true;
@@ -685,7 +829,6 @@ export function platformScene(app) {
     enter(p = {}) {
       params = { ...p };
       app.touch.hide();
-      app.__platform = scene;
       settings.addEventListener('change', onSettingChange);
       window.__test && window.__test.register('platform', probe);
       load();
@@ -697,13 +840,16 @@ export function platformScene(app) {
       mode = 'exited';
       updateOcclusion();
       syncCameraBadge(false);
+      syncFireButton(0);
+      const fire = document.getElementById('touch-fire');
+      if (fire) { fire.classList.remove('empty'); fire.removeAttribute('aria-disabled'); }
+      if (fireBadge) { fireBadge.remove(); fireBadge = null; }
       clearOverlay();
       if (intro) intro.destroy();
       if (hud) hud.destroy();
       app.touch.hide();
       audio.stopMusic();
       window.__test && window.__test.unregister('platform');
-      if (app.__platform === scene) app.__platform = null;
     },
 
     // The player is away. In play: the pause card. During the first briefing (which has no
@@ -715,6 +861,9 @@ export function platformScene(app) {
 
     update() {
       tick++;
+      // The flow's settings panel is open over the pause card: it has the input (contract.md).
+      if (app.flow && app.flow.overlayOpen) return;
+      if (confirming) { tickNav(); return; }   // a pause-card question is up (confirmThen)
       if (nav) nav();
       if (!game) return;
       startMusicWhenUnlocked();
@@ -765,6 +914,7 @@ export function platformScene(app) {
       }
       updateOcclusion();
       syncCameraBadge(!!game.player.has_antibiotic && (mode === 'play' || mode === 'paused' || mode === 'briefing'));
+      syncFireButton(game.player.ammo);
       flash = Math.max(0, flash - 0.04);
       // Paused or briefing: the picture under the card or phone is frozen (particles, popups,
       // shake, sparkles in flight and HUD counters wait); only the HUD's layout follows the device.
@@ -804,6 +954,7 @@ export function platformScene(app) {
   function drawLoading(ctx) {
     ctx.fillStyle = '#1b1640';
     ctx.fillRect(0, 0, 800, 450);
+    if (mode === 'error') return;   // the load error card is up
     ctx.fillStyle = 'rgba(255,255,255,0.15)';
     ctx.fillRect(250, 262, 300, 12);
     ctx.fillStyle = '#ff8a5c';
@@ -857,16 +1008,16 @@ export function platformScene(app) {
 
   // window.__test probe: everything a bot or test needs to plan moves.
   function probe() {
-    if (!game) return { level: params.level || null, state: mode, ui: mode, ready: false, loadProgress };
+    if (!game) return { level: params.level || null, avatar: params.avatar === 'amy' ? 'amy' : 'harry', state: mode, ui: mode, ready: false, loadProgress, error: mode === 'error' ? (overlay && overlay.querySelector('h2') || {}).textContent || '' : null };
     return {
-      ...game.snapshot(), ui: mode, ready: true, stageWidth: STAGE_W, levelWidth: game.level.width, levelRows: game.level.rows,
+      ...game.snapshot(), avatar: game.avatar, ui: mode, ready: true, stageWidth: STAGE_W, levelWidth: game.level.width, levelRows: game.level.rows,
       hitStop, device: device(), flyers: flyers.length, time,
       fx: { particles: particles.items.length, popups: popups.items.length, shake: shake.trauma },
       occluding: [...occluding].sort(), reducedMotion: !!reducedMotion,
       intro: intro ? { phase: intro.phase, page: intro.page, pages: intro.pages.length, text: intro.text, briefing: intro.briefing, autoplay: intro.autoplayOn } : null,
       tilesDrawn: renderer ? renderer.tilesDrawn || 0 : 0, bombHints: renderer ? renderer.bombHints || [] : [], whiteout: game.whiteout,
-      hud: hud ? { ticksShown: hud.ticksShown, touchLayout: hud.touchMix > 0.5, phone: hud.phoneRect(), ...hud.goalPicture() } : null,
-      music: musicOn,
+      hud: hud ? { ticksShown: hud.ticksShown, touchLayout: hud.touchMix > 0.5, phone: hud.phoneRect(), phoneAlpha: hud.phoneAlpha, ...hud.goalPicture() } : null,
+      music: musicOn, artRetry: !!(artRetry && artRetry.isConnected),
     };
   }
 

@@ -126,12 +126,12 @@
    "images": [
     "intro-level1-0.webp"
    ],
-   "bytes": 25126,
-   "pixels": 864864,
+   "bytes": 45352,
+   "pixels": 3239600,
    "symbols": [
     "level_intros"
    ],
-   "jsonBytes": 4678
+   "jsonBytes": 4692
   },
   "gameshow-bg": {
    "json": "gameshow-bg.json",
@@ -158,14 +158,14 @@
    "images": [
     "gameshow-cast-0.webp"
    ],
-   "bytes": 1027950,
-   "pixels": 10485760,
+   "bytes": 1363078,
+   "pixels": 14680064,
    "symbols": [
     "gs_host",
     "gs_harry",
     "gs_amy"
    ],
-   "jsonBytes": 1359204
+   "jsonBytes": 1745854
   },
   "cutscene": {
    "json": "cutscene.json",
@@ -583,7 +583,7 @@
    "images": [
     "intro-r3-0.webp"
    ],
-   "bytes": 30044,
+   "bytes": 30524,
    "pixels": 863408,
    "symbols": [
     "level_intros_level8",
@@ -1014,6 +1014,6 @@
    "intro-r5"
   ]
  },
- "totalBytes": 9472384,
- "totalJsonBytes": 3441210
+ "totalBytes": 9828218,
+ "totalJsonBytes": 3827874
 }

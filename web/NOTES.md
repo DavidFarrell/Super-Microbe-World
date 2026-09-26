@@ -4,7 +4,7 @@ The single authoritative design reference for the browser remake of **Super Micr
 
 Status: written 2026-09-26 from the Flash, Unity and documentation surveys and the Ruffle capture survey (`reference/analysis/flash-ruffle.md`, 340 captures in `reference/captures/`, described one by one in `reference/captures/index.md`). Ruffle 0.6.0 ran under SwiftShader at about half speed, so its timings confirm order and rough size only; items that still need a measurement are listed in section 12.6 and marked **[Ruffle]** where they appear.
 
-`web/NOTES-platformer-decisions.md` is the platformer engine agent's working log. Its content is folded in here (sections 3, 9, 10 and 12); where the two disagree, this file wins, and the engine log should be updated to match. **Where this file overrides the engine log**: (1) the +3 "bullet hits bad microbe" points are to be awarded (10.1 #18; the engine keeps them dead); (2) L4 and L7 get composed Patty and Iggy phone portraits (10.1 #19; the engine keeps the blank and Slurm pictures). Everything else in the engine log stands.
+**This file is the single entry point.** Each area of the build kept a working log of its decisions, fixes and tests (listed in section 14); their bug fixes are consolidated in section 10 and the design they settled is folded into the sections here. Where a log and this file disagree, this file wins. The two points where this file once overrode the platformer engine log (the +3 "bullet hits bad microbe" points and the composed Patty and Iggy phone portraits, 10.1 #18 and #19) are now built as this file says.
 
 ## Contents
 
@@ -21,6 +21,7 @@ Status: written 2026-09-26 from the Flash, Unity and documentation surveys and t
 11. Decisions and open questions
 12. Engine porting notes (timing)
 13. Verification log (completeness check against the sources; section 1.4 lists every source file and its status)
+14. Area decision logs (where each area's working log lives and what it holds)
 
 ---
 
@@ -105,7 +106,7 @@ Checked file by file (section 13). "Runtime" means compiled into a SWF the shipp
 
 | # | Screen | Flash behaviour | Source | Port |
 |---|---|---|---|---|
-| 0 | Loader | Main SWF preloads 10 SWFs **one at a time** (`junior_game_assets`, `splash`, `eBugGameShow`, `introductionToMicrobes_mainMenu` (never shown), `cutscene_introduction`, `introductionToMicrobes_platformer`, `harry`, `amy`, `summary_page`, `KitchenGame`). Text `"Looding: <name>"` (typo) and `Math.ceil(assetsLoaded * (1/n*100)) + " %"`. A red debug `fps` text (Arial 26, `#ff0000`, top left) is never hidden: it reads "FPS" until the first platform level, then the platformer's `main()` calls per second (the compiled class still does `_root.fps.text = fps`, commented out in `PlatformGame.as:201`), frozen over the quiz and kitchen afterwards [R §6.3]. Every sub-SWF runs its frame 1 while hidden (game show constructor, cutscene XML, kitchen level 0), see 2.8 for the bugs this causes. | `GameController.as:60,63-97,99-113`; `movies/e-Bug Junior Game.swf` root frame 1; [F §1.1] | Load lazily per area; no preload side effects; progress bar; no FPS text. |
+| 0 | Loader | Main SWF preloads 10 SWFs **one at a time** (`junior_game_assets`, `splash`, `eBugGameShow`, `introductionToMicrobes_mainMenu` (never shown), `cutscene_introduction`, `introductionToMicrobes_platformer`, `harry`, `amy`, `summary_page`, `KitchenGame`). Text `"Looding: <name>"` (typo) and `Math.ceil(assetsLoaded * (1/n*100)) + " %"`. A red debug `fps` text (Arial 26, `#ff0000`, top left) is never hidden: it reads "FPS" until the first platform level, then the platformer's `main()` calls per second (the compiled class still does `_root.fps.text = fps`, commented out in `PlatformGame.as:201`), frozen over the quiz and kitchen afterwards [R §6.3]. Every sub-SWF runs its frame 1 while hidden (game show constructor, cutscene XML, kitchen level 0), see 2.8 for the bugs this causes. | `GameController.as:60,63-97,99-113`; `movies/e-Bug Junior Game.swf` root frame 1; [F §1.1] | Load per area, with the next screen's art fetched while the current one plays (`web/js/flow/contract.md` "Loading"); no preload side effects; a loading ring or bar instead of placeholder art; no FPS text. |
 | 1 | Splash | Animated wooden 1950s TV on a pale green floor under a pale blue sky (sprite 58, **170 frames = 6.8 s**); its screen goes dark, then static with "Tuning" and green bars, then the studio, then the e-Bug logo [R §8.1]; `NewGame` button ("New Game", export `button_new_game`) appears at **frame 150 (6.0 s)**; frame 170 `stop(); NewGame.onRelease = function(){ _root.newGame(); }`. | `movies/splash.swf` sprite 58; [F §1.2] | Same timing, TV shows the "Super Microbe World" title instead of the e-Bug logo (branding, 11.2). Add Continue / Level select / Settings once there is progress (11.1). |
 | 2 | New game | `player = new Player(); player.forename = "david"` (debug leftover, never shown). | `GameController.as:118-129` | Fresh run state. |
 | 3 | Cutscene | Host lines 0-2 in the talkie, avatar choice, host line 4, details form, host line 8, then `_root.startQuizShow()`. | `movies/cutscene_introduction.swf` root frames 1-30; [F §3]; section 2.4 | Form keeps the nickname only (11.2). |
@@ -209,7 +210,7 @@ nextLine():   // root frame 10; called at start_intro and as the talkie callback
 - In Ruffle the summary page appears over the frozen level, dimmed by a 50% black layer (orange turns brown), and the retry replays the round's first level **with its ePhone intro**; the clock shows "-1" from the previous attempt until its first tick (`509`, `510`) [R §6.3].
 - Summary page (`movies/summary_page.swf`, 139 frames): `text0` at (82, 21.9) (bold heading, static "Things to remember"), `text1`..`text4` below, `click_button` "Click" at (292.2, 351.9), 218.6 x 78.9, calling `callObj[callFunc]()`. Yellow-olive `#cccc00` background. The documentation's claim that it summarises kitchen levels (`doc:393`) is wrong.
 - **Port**: restart **the failed level**, score kept (engine brief; `platformScene` exposes `params.onGameOver(result)` so the flow controller could restore round restarts) [PD "Differences in flow"]. Rationale: the evaluation lost 50% of players per level (`eval:78`); replaying up to four levels after one death is the likeliest cause. Logged in 9 and 11.
-- Level complete card (port addition): score, photos, time, lives; Next level / Play again / Quit [PD].
+- Level complete card (port addition): score, photos, time, lives; Next level / Play again / Quit [PD]. Level select and standalone play only; the journey goes straight to the next level as Flash did (`platformScene.js` hands the result to the flow's `onComplete`).
 
 ### 2.7 Kitchen hand-off
 
@@ -222,10 +223,10 @@ All from [F §8] unless noted:
 1. Game show constructed during preload: the player avatar, podium and CPU name are fixed to the **male branch**: player = Harry (right podium), CPU = Amy (middle podium), `cpuName = "Amy"`, even when the child chose Amy (`GameShow.as:52,85-104`). Inferred from code plus a preload trace, not watched end to end. **Port**: the chosen child is the player, the other child is the CPU and is named after that child.
 2. `player.playerAnswers[...] = ...` writes silently fail (`GameShow.as:107-109,234-269`); research data used `roundAnswersBlind/Sighted` instead. Not ported.
 3. `showRoundText` leaves `busy = true` when switching to questions (`GameShow.as:147-166`): after the **last intro line of every quiz half the first click does nothing** and a second click is needed (the second `nextRoundText()` clears `busy`, then `main()` asks the question). Seen at the end of all ten quiz halves in Ruffle, and in the Amy run: as-built behaviour, not a Ruffle artefact [R §6.1]. **Port**: one click goes to the first question.
-4. The kitchen is handed a throwaway `new Player()` (`movies/KitchenGame.swf` root frame 1): the kitchen avatar is always Harry, and kitchen points never reach the real score (`KitchenGame.as:806`, `GameController.as:273-281`).
-5. The ending click does nothing (`_root.exit` is not defined); `GameController.exit()` (`GameController.as:325-328`), which would re-run root frame 1, is unreachable [R §6.3].
-6. Loading word "Looding" (`GameController.as:60`); FPS counter left visible.
-7. `introductionToMicrobes_mainMenu.swf` preloaded but never shown; its buttons call `gotoGameScreen`, which is commented out (`GameController.as:336-375`).
+4. The kitchen is handed a throwaway `new Player()` (`movies/KitchenGame.swf` root frame 1): the kitchen avatar is always Harry, and kitchen points never reach the real score (`KitchenGame.as:806`, `GameController.as:273-281`). **Port**: the chosen child, and a running kitchen total kept by the flow (10.3 #75).
+5. The ending click does nothing (`_root.exit` is not defined); `GameController.exit()` (`GameController.as:325-328`), which would re-run root frame 1, is unreachable [R §6.3]. **Port**: a winner card with Play again, Level select and Main menu (10.2 #46).
+6. Loading word "Looding" (`GameController.as:60`); FPS counter left visible. **Port**: neither exists (10.2 #49).
+7. `introductionToMicrobes_mainMenu.swf` preloaded but never shown; its buttons call `gotoGameScreen`, which is commented out (`GameController.as:336-375`). **Port**: the splash has its own menu (New Game, Continue, Level select, Settings).
 8. `timestamp()` uses the day of the week and no padding (`GameController.as:162-168`); only used for the research ID.
 
 ---
@@ -591,7 +592,7 @@ Type ids (`Constants.as:29-58`); `tile_definitions.xml` index in brackets; the l
 | 10 | Camera flash (runtime) | `CameraFlashEntity` | - | 75 x 75 | static, exempt | 3.13 | alpha 0 after 10 UPDATEs | - | - | - |
 | 11 | Lucy Lactobacillus (`lucy_icon` [93]) | `LucyLactobacillus` | good (bacterium) | 42.32 x 97.58 | dynamic, exempt while walking | patrol; slides when pushed; dives into milk | touching a walking/idle bad microbe; antibiotic; milk dive (removed, no points) | photo +5; death -10 | killed | 1, 2, 8, 9, 10 |
 | 12 | Sandy Streptococcus (`sandy_icon` [99]) | `GoodMicrobe` | good | 90.08 x 226.05 | as Lucy | patrol | as Lucy | photo +5; death -10 | killed | none |
-| 13 | Patty Pennicillium (sic; port "Patty Penicillium") (`patty_icon` [98]) | `GoodMicrobe` | good (fungus) | 203.32 x 150.39 ([P], [S], web data) or 187.89 x 141.53 ([L] §2) **[Ruffle]** | as Lucy | patrol | bad-microbe contact | photo +5; death -10 | **immune** | 4 |
+| 13 | Patty Pennicillium (sic; port "Patty Penicillium") (`patty_icon` [98]) | `GoodMicrobe` | good (fungus) | **187.89 x 141.53** ([L] §2; settled by captures `050`, `051`, 10.4 #83; [P] and [S] give 203.32 x 150.39) | as Lucy | patrol | bad-microbe contact | photo +5; death -10 | **immune** | 4 |
 | 14 | Steve Staphylococcus (`steve_icon` [94]) | `GoodMicrobe` | good (bacterium) | 74.10 x 72.94 | as Lucy | patrol | bad contact; antibiotic | photo +5; death -10 | killed | 3, 5 |
 | 15 | Colin Campylobacter (`colin_icon` [95]); Super Campy (`super_colin_icon` [103], 50.51 x 98.05) | `BadMicrobe` | bad | `colin_icon` **not exported** (no clip, no body) | - | patrol | - | - | killed +15 | none |
 | 16 | Slarg Staphyloccus (sic; port "Slarg Staphylococcus") (`slarg_icon` [101]); Super Slarg [104] **not exported** | `BadMicrobe` | bad | 90.57 x 225.48 ([L] §2: 90.37) | dynamic, exempt while walking | patrol | contact kill, wash away, antibiotic | kill/wash +5; photo +15 | killed +15 | 6 |
@@ -713,7 +714,7 @@ Microbe `act()` (`GoodMicrobe.as:115-212`, `BadMicrobe.as:126-244`): THINK, WALK
 | Player + superinfection | Hurt each time the hurt state ends while touching; the superinfection is unaffected. |
 | Player + good microbe | The microbe SLIDEs, pushed with physics: the "push Lucy" mechanic. |
 | Player + milk / superinfection | Pushed; both float (gravity exempt) and creep afterwards (3.4). |
-| Bullet + bad microbe | Bullet splats; microbe **washed away** (+5 when the fade ends; counts). The dispatcher's +3 bonus is dead code in Flash (planned fix, 10.1 #18). |
+| Bullet + bad microbe | Bullet splats; microbe **washed away** (+5 when the fade ends; counts). The dispatcher's +3 bonus is dead code in Flash; the port awards it once per projectile (10.1 #18). |
 | Bullet + good microbe | Bullet splats; microbe slides, unhurt (`hurtGood` is never read). |
 | Bullet + superinfection / milk | Bullet splats; no effect. |
 | Good + bad microbe, both IDLE/WALK | **Both die**: good -10, bad +5 (kill, not wash). The bad death counts for KILL_ALL (L5 places Steve among the Slurms; L10 Lucy near Slurm); the good death would count for PHOTOGRAPH_GOOD, but L2 (the only level with that goal) has no bad microbes. |
@@ -765,7 +766,7 @@ Event order is always COLLIDE(lower index) then COLLIDE(higher index); the playe
 | Event | Points | Source |
 |---|---|---|
 | Collect soap / white pickup | +7 | `PlatformGame.as:649-657` |
-| Bullet hits bad microbe | +3 **never awarded** in Flash (tests type 5, never assigned); planned fix awards it (10.1 #18) | `:658-665` |
+| Bullet hits bad microbe | +3 **never awarded** in Flash (tests type 5, never assigned); the port awards it once per projectile, not on the superinfection (10.1 #18) | `:658-665` |
 | Bad microbe killed or washed away (BE_KILLED) | +5 (the trace text says 15) | `:945-947` |
 | Good microbe killed (BE_KILLED) | -10 | `:948-950` |
 | Player dies | -10 | same |
@@ -847,10 +848,10 @@ Root timeline of `movies/introductionToMicrobes_platformer.swf` [P §8.1]:
 |---|---|---|
 | PHOTOGRAPH_GOOD (1) | `lucy_image` (always Lucy) | `camera_icon` |
 | PHOTOGRAPH_SPECIFIC (0), Lucy 11 / Steve 14 / Sandy 12 / Slarg 16 / Slurm 17 | `lucy_image` / `steve_image` / `sandy_image` / `slarg_image` / `slurm_image` | `camera_icon` |
-| PHOTOGRAPH_SPECIFIC, **Patty 13** | **no branch**: the default `background` stays (L4 shows no Patty) | `camera_icon` |
+| PHOTOGRAPH_SPECIFIC, **Patty 13** | **no branch**: the default `background` stays (L4 shows no Patty). Port: a composed Patty portrait (10.1 #19) | `camera_icon` |
 | YOGURT (7) | `milk_image` | none (`yog_icon` export unused) |
 | ANTIBIOTIC (6) | `superinfection_image` | none (`antibiotic_icon` export unused) |
-| anything else (KILL_ALL) | `slurm_image`, even in the Iggy level 7 | `kill_icon` |
+| anything else (KILL_ALL) | `slurm_image`, even in the Iggy level 7. Port: a composed Iggy portrait in level 7 (10.1 #19) | `kill_icon` |
 
 When the goal is met the background becomes `exit_status`.
 
@@ -926,7 +927,7 @@ From [L §4]:
 - **L1**: cols 61-68 behind the salt/pepper wall at cols 59-60 are empty dead space. Row-8 floor gaps (col 16, 27-28, 38-46, 50-51) are ditches: the world floor is y 450.
 - **L2**: declares 11 rows; rows 9-10 are empty. Cols 40-43 behind the hair wall at col 39 look unreachable. `plaster_singular_obj` at (8,43) is 200 px wide and runs past the world edge (x 2200). The Lucy at (0,13) sits on the top platforms.
 - **L3**: declares 11 rows. 8 cells at cols 45-46 are beyond `cols="44"`: **drawn but not solid** (physics covers cols `0..cols` inclusive), so the visible hair wall at col 45 is 50 px right of the real barrier, the world clamp at x 2200. (8,44) gets a box but lies outside the world.
-- **L4**: cols 57-68 behind the two pepper pillars at cols 55-56 are dead space. **The ePhone shows no Patty picture** (no Patty branch in CREATE_GUI).
+- **L4**: cols 57-68 behind the two pepper pillars at cols 55-56 are dead space. **The ePhone shows no Patty picture** (no Patty branch in CREATE_GUI; the port composes one, 10.1 #19). Patty's box is 187.89 x 141.53 (10.4 #83): with the other survey's 203.32 x 150.39 her first copy hovers above the bread stick.
 - **L5**: cell (12,65) is beyond row 8: dead data. Row-8 gaps at cols 11-14 and 16-30 are ditches. Overshoot deadlock risk in the original (4 bad for 3; fixed by `>=`).
 - **L6**: cols 56-68 empty except a stray `skin_base_tile` at (7,59). Plan says "kill all bad", XML asks 3 of 4. Same overshoot risk.
 - **L7**: cell (10,12) beyond row 8: dead data. Fully walled (cols 0 and 74, roof row 0).
@@ -975,7 +976,7 @@ Generated by `node tools/convert-levels.mjs` into `web/data/levels/`:
 
 `tile_definitions.json`: `source`, `note`, `types` (name to id, as in 3.16), `definitions[]` with `id`, `label`, `typeString`, `type`, `typeName`, `movie` (runtime linkage), `w`, `h`, `ax`, `ay`.
 
-Box sizes come from frame-1 SWF bounds, not from runtime measurement; two surveys disagree for Patty (203.32 x 150.39 vs 187.89 x 141.53) and Slarg (90.57 vs 90.37 wide). The port uses the first values (matching [P] and [S]). **[Ruffle]**
+Box sizes come from frame-1 SWF bounds, not from runtime measurement; two surveys disagree for Patty (203.32 x 150.39 vs 187.89 x 141.53) and Slarg (90.57 vs 90.37 wide). **Patty is settled at 187.89 x 141.53** (the `levels.json` survey, "union of frame-1 child bounds, mask layers excluded"): captures `050-level4-opening` and `051-level4-moving` show her standing on the bread stick at her spawn cell, which only that box gives (10.4 #83; `tools/convert-levels.mjs` `BOX_OVERRIDES` writes it into `alpha_level4.json` and `tile_definitions.json`). Slarg keeps the first value (90.57, matching [P] and [S]) and stays open **[Ruffle]**. The clip bounds that `hitTest`, the photo range and the on-screen test read (`web/js/platformer/data/clips.js`) are a separate question the captures do not answer.
 
 ### 4.5 Unity layouts (not used)
 
@@ -1218,17 +1219,18 @@ Avatar `upper` labels (`kitchen_game_main.swf` sprite 169 in `harry`, sprite 612
 
 | Bug | Source | Intent clear? | Port |
 |---|---|---|---|
-| `FoodItem` objects shared, never cloned: cling film and sneeze flags stick to that food for the rest of the kitchen game (a sneezed-on "Carrots" is contaminated in every later level; earlier cling film counts later), and an item drawn twice in one level shares its state (Ruffle `633`: a Raw Sausages put away without cling film scored correct because its later twin was wrapped; the sneeze reminder reappears in later levels, `157`, `166`, `635`, `644`, [R §6.4]) | `KitchenGame.as:784`; `FoodItem.clone()` unused (`FoodItem.as:48-55`) | yes | **fix**: clone per draw |
-| Cling film overlays not removed between levels | `:820-823` | yes | **fix** |
-| Raw-meat hand contamination wrong index and property; no scoring effect | `:685-689` | partly | keep (no effect); open question |
-| `badFood` not set in the BOWL case: "Bad Food" can repeat | `:396-398` | yes | **fix** (once per level) |
-| Only four admonishment slots | outro frame 30; `:340-342` | yes | **fix** (show all) |
-| Level times contradict comments and the level 3 intro | `:844-848,911,1024` | no | keep 60/60/60/120; fix the intro text |
-| Clock shows 99 for a second at time-out; malformed `</face>` | `:151,180` | yes | **fix** (show 0) |
-| Mouldy/burst items in the wrong place get their category's location reminder | `:552-600` | yes | **fix**: give "Bad Food" / "Burst Container" instead |
-| `validLocations` built but unused | `:1204-1232` | - | ignore |
-| Kitchen gets a throwaway `Player`: avatar always Harry, points lost | `movies/KitchenGame.swf` frame 1 | yes (avatar) | **fix** avatar; points: open question |
-| One-second tick is `> 1000` polled every 40 ms, so a "second" is 1040 ms | `:145` | - | port uses exact 1000 ms seconds (section 12) |
+| `FoodItem` objects shared, never cloned: cling film and sneeze flags stick to that food for the rest of the kitchen game (a sneezed-on "Carrots" is contaminated in every later level; earlier cling film counts later), and an item drawn twice in one level shares its state (Ruffle `633`: a Raw Sausages put away without cling film scored correct because its later twin was wrapped; the sneeze reminder reappears in later levels, `157`, `166`, `635`, `644`, [R §6.4]) | `KitchenGame.as:784`; `FoodItem.clone()` unused (`FoodItem.as:48-55`) | yes | **Fixed**: a new item per draw (10.3 #67) |
+| Cling film overlays not removed between levels | `KitchenGame.as:820-823` | yes | **Fixed** (10.3 #68) |
+| Raw-meat hand contamination wrong index and property; no scoring effect | `KitchenGame.as:685-689` | yes (11.9 #13) | **Fixed**: the hands carry raw-meat microbes until washed, with the "Raw Meat Hands" reminder (10.3 #69) |
+| `badFood` not set in the BOWL case: "Bad Food" can repeat | `KitchenGame.as:396-398` | yes | **Fixed** (once per level, 10.3 #70) |
+| Only four admonishment slots | outro frame 30; `KitchenGame.as:340-342` | yes | **Fixed** (all shown, 10.3 #71) |
+| Level times contradict comments and the level 3 intro | `KitchenGame.as:844-848,911,1024` | no (11.9 #12) | 60/60/60/120 kept; the intro says 120 seconds (10.3 #72) |
+| Clock shows 99 for a second at time-out; malformed `</face>` | `KitchenGame.as:151,180` | yes | **Fixed** (shows 0, 10.3 #73) |
+| Mouldy/burst items in the wrong place get their category's location reminder | `KitchenGame.as:552-600` | yes | **Fixed**: "Bad Food" / "Burst Container" instead (10.3 #74) |
+| `validLocations` built but unused | `KitchenGame.as:1204-1232` | - | ignore |
+| Kitchen gets a throwaway `Player`: avatar always Harry, points lost | `movies/KitchenGame.swf` frame 1 | yes | **Fixed**: the chosen child; kitchen points shown and kept, not counted towards the winner (11.9 #4; 10.3 #75) |
+| One-second tick is `> 1000` polled every 40 ms, so a "second" is 1040 ms | `KitchenGame.as:145` | - | port uses exact 1000 ms seconds (section 12) |
+| The 2 s sneeze interval outlives the end of the level (a time-out during a sneeze restarts play at 99 s) | `KitchenGame.as:548,602-611` vs `:148-151` | yes | **Fixed**: cancelled when the level ends (10.3 #76) |
 
 ---
 
@@ -1376,7 +1378,7 @@ callback: askQuestion (next question); the host's own animation is unchanged
 | 5 Q5 | Antibiotics help when you have a cough | Disagree | | Disagree |
 | 5 Q6 | Most coughs and colds get better without antibiotics | Agree | | Agree |
 
-Intro lines, live `en_en` (used by the port; spelling and spacing normalised, e.g. "Ready ?" -> "Ready?"):
+Intro lines, live `en_en` (used by the port). Two 2009 data defects are corrected in the data by `tools/convert-text.mjs` as counted per-language corrections (the tool fails unless each matches exactly twice): English "Ready ?" becomes "Ready?" (rounds 1 and 2), and the Polish points line in the Portuguese rounds 1 and 2 becomes the translator's own Portuguese line (10.2 #65, #66). The tables below quote the XML as it is:
 
 | Round | Blind (only if enabled) | Sighted |
 |---|---|---|
@@ -1441,7 +1443,7 @@ Port wording changes: "reload this web page" becomes a Play again button (the li
 
 Answer correctness is **not** in the text tables; the port keeps it in the round data (value -1/0/1 per button, identical across languages).
 
-- **Port runtime text**: `web/data/lang/manifest.json` (`languages: ["en"]`, `namespaces: ["platform", "levels", "gameshow", "kitchen", "flow"]`), per-namespace files `web/data/lang/<code>/<namespace>.json` (flat `key: string`, currently empty placeholders) and `web/data/lang/en.json` (the platformer strings in use: prompts, key names, `intro.levelN.i` pages, with `{press_camera}`-style placeholders filled from live bindings by `web/js/ui/prompts.js`). Missing keys fall back to English. Language choice: `?lang=<code>` (mirroring the flashvar), then a saved setting, then `navigator.language` mapped to the nearest code, then English; a language picker in Settings and on the splash.
+- **Port runtime text**: `web/data/lang/manifest.json` (the 11 `languages` with their native `names`, `namespaces: ["platform", "levels", "gameshow", "kitchen", "flow"]`, and `uiTables: ["en"]`, the languages that have UI string files), `web/data/lang/en.json` (common UI strings: prompts, key names, pause and summary cards, goal sentences) and one file per area, `web/data/lang/<code>/<namespace>.json` (flat `key: string`; the level briefing pages `intro.levelN.i` live only in `en/levels.json`). `{press_camera}`-style placeholders are filled from live bindings by `web/js/ui/prompts.js`. A language without UI tables stays active (its quiz and host text load from `web/data/quiz/<code>.json`, written by `tools/convert-text.mjs`) and makes no string-file requests; every UI key falls back to English. Language choice: `?lang=<code>` (mirroring the flashvar), then a saved setting, then `navigator.language` mapped to the nearest code, then English; a language picker in Settings and on the splash.
 - Data check (E2E): every text file parses in every language; every key used by the code exists in English; per language, every quiz key present in `en_en` exists (English fallback allowed only for the English-only groups above).
 
 ### 7.3 Brand strings in the text
@@ -1548,7 +1550,8 @@ Sampled values are Ruffle's anti-aliased output; take exact colours from the SWF
 
 - Budget about **15 MB** total payload (GOAL_PROMPT). `web/` is 7.1 MB today with level 1's atlases (2.7 MB). Unity's referenced PNGs alone are 40 MB, which is why the port renders only the frames each clip uses, deduplicates, trims and packs to WebP.
 - Level 1 decodes about **58 MB of RGBA** atlas pages (Lucy 2048 x 2048, Harry 2044 x 2048, HUD 1516 x 1528) [PD "Follow-ups"]. iOS Safari evicts or crashes well before 400-500 MB, and older iPhones earlier. Plan: split `level_intros` and `e_phone` out of the HUD atlas, 1.5x pages for large animated sheets on coarse-pointer devices, load atlases per area (platformer setting, game show, kitchen), `ImageBitmap.close()` on atlases the next area does not use, and decimate the game-show emotion clips (Unity shows 5-7 poses per emotion at 5 fps; the port can hold every second frame at 12.5 fps).
-- The service worker precaches the shell, every level JSON and level 1's atlases (2.5 MB); other atlases are cached on first fetch [PD].
+- **Built (whole-game review, 10.6)**: one atlas store (`sprites.js`; the kitchen, flow and game show art modules draw from it) with `release()`, and at every scene change (`SceneManager.beforeEnter`, between the old scene's `exit()` and the new one's `enter()`) the flow closes every decoded atlas the next screen does not use (`flow.js` `keepFor`: the next screen's set, the set decoded ahead during it, and the player's hoverboard, HUD and pickups). The compressed bytes stay in memory, so art needed again decodes without a download. A whole journey used to hold about 383 MB decoded by the ending; now the peak is 127 MB (a quiz with the shrinking zone decoded ahead) and a level 71-120 MB (`web/tests/memory.spec.mjs`, budget 150 MB).
+- The service worker precaches the shell, every level JSON, level 1's atlases and the splash and summary atlases (3.4 MiB); other atlases are cached on first fetch [PD]. It registers only once level 1 starts, so on a first visit the splash, menus and cutscene were downloaded before it took over; the page then posts the URLs it has loaded and the worker adopts the missing `/data/` files (`sw.js` "adopt"), so every screen played online also works offline (`web/tests/pwa.spec.mjs`). A few seconds into the first level the page also asks the worker to fetch the rest of the game (`precache.json` "lazy", about 11 MB) in the background, one file at a time, not on a Save-Data connection and stopping when offline (`sw.js` "cache-rest"), so a player who loses the connection after level 1 can carry on; `pwa.spec` plays levels 2 and 5 offline with no placeholder art.
 
 ### 8.5 Sound
 
@@ -1568,7 +1571,7 @@ Sampled values are Ruffle's anti-aliased output; take exact colours from the SWF
 | Pickup collected (ammo, antibiotic) | `pickup` |
 | Player hurt; heart lost | `hurt`; `heartLost` |
 | Good microbe killed (-10) | `wrong` |
-| Portal opens | `portalOpen` (`goal` and `portal` are defined in `SYNTHS` but not played) |
+| Portal opens | `portalOpen` (`goal` is defined in `SYNTHS` but not played; the unused `portal` synth was removed in the whole-game review) |
 | Entering the portal; level complete | `suck`; `levelComplete` |
 | Death or time-out | `gameOver` |
 | Last seconds of the timer | `lowTime` (the port code plays it in the last **10** s, `platformScene.js:609`, while 3.24 turns the clock red for the last 20 s: align one to the other) |
@@ -1661,7 +1664,7 @@ Unity sources: [UL] sections as cited. "Port" is the decision for the remake. Fl
 
 ## 10. Bugs fixed
 
-Every candidate bug in the original, with its citation, whether the intent is clear, and what the port does. GOAL_PROMPT rule: fix where the intent is clear; otherwise keep the original behaviour and note it. Status: **Fixed** (in the port now), **Planned** (to fix when that area is built), **Kept** (faithful on purpose), **Changed** (deliberate design change, not a bug fix), **n/a** (not ported). "PD n" is the engine log's numbering.
+Every bug found in the original across the four areas (platformer and levels, game flow and quiz, kitchen, level data), with its citation, whether the intent is clear, and what the port does. GOAL_PROMPT rule: fix where the intent is clear; otherwise keep the original behaviour and note it. Status: **Fixed** (in the port now), **Kept** (faithful on purpose), **Changed** (deliberate design change, not a bug fix), **n/a** (not ported). Every row that section 11.9 decided is marked as built. The area logs hold the details and tests behind each row; they are cited as [PD n] (engine, `web/NOTES-platformer-decisions.md` "Bugs fixed" row n), [LV §n] (levels 2-10), [FL Fn] or [FL §n] (flow), [GS Gn] (game show), [KD] (kitchen "Fixes" table) and [ART §n] (art pipeline); section 14 lists the logs. Numbers are stable: rows added after the first survey continue from 63, whatever their subsection. Bugs the port itself had and fixed during the area reviews are not original bugs; they are summarised in 10.5.
 
 ### 10.1 Platformer
 
@@ -1684,15 +1687,15 @@ Every candidate bug in the original, with its citation, whether the intent is cl
 | 15 | Seams between flush tiles push bodies sideways (smaller-penetration rule) | `ParticleSystem.as:590-611` | yes | **Fixed** (PD 15) |
 | 16 | Home / Alt skip the level (debug cheat in the release) | `PlatformGame.as:1287-1290` | yes | **Fixed** (removed; debug flag only; PD 16) |
 | 17 | Intro autoplay intervals stack when clicking quickly, skipping pages | `level_intros` frame scripts (`startAutoplay`) | yes | **Fixed** (`web/js/platformer/intro.js`) |
-| 18 | "+3 when a bullet hits a bad microbe" never fires (tests type 5, never assigned) | `PlatformGame.as:658-665`; `doc:1234` describes it | yes (documented) | **Planned** (award +3 on the bullet COLLIDE; the engine currently keeps it out: update `web/js/platformer/game.js` and PD) |
-| 19 | L4's ePhone shows no Patty picture (no `patty_image` branch or art); KILL_ALL always shows Slurm, even in the Iggy level | `PlatformGame.as:340-358` | yes | **Planned** (compose a portrait from the microbe's own idle frame: Patty for L4, Iggy for L7) |
+| 18 | "+3 when a bullet hits a bad microbe" never fires (tests type 5, never assigned) | `PlatformGame.as:658-665`; `doc:1234` describes it | yes (documented) | **Fixed** (a bullet that hits an on-screen bad microbe pays +3 once per projectile, then +5 when it is washed away; the superinfection pays nothing; `web/js/platformer/game.js` `dispatch()` COLLIDE, unit test "decision 10"; 11.9 #10, [LV §1]) |
+| 19 | L4's ePhone shows no Patty picture (no `patty_image` branch or art); KILL_ALL always shows Slurm, even in the Iggy level | `PlatformGame.as:340-358` | yes | **Fixed** (portraits composed from the microbe's own idle frame: one Patty for L4, five Iggys for L7; `web/js/platformer/hud.js` `PORTRAITS`, `composePortrait()`, shared with Level select; 11.9 #9, [LV §1], [FL §10b]) |
 | 20 | Quick taps between two input polls are lost | engine | yes | **Fixed** (PD 17, `web/js/core/input.js`) |
 | 21 | Double-jump dead press: the press after landing from a double jump only re-arms | `PlayerEntity.as:180-184,418-419,432` | no (side effect of the re-arm rule) | **Changed** (jump buffer and coyote time; `options.jumpFeel = false` restores) |
 | 22 | Camera has no edge clamp and pans towards the margin even when the player moves away | `PlatformGame.as:1033-1047` | no | **Changed** (eased, clamped, look-ahead) |
-| 23 | Perpetual horizontal creep (0.1 px snap + 3 dp rounding: coasting never stops) | `Vector3.as:24-41,61`; `PlatformGame.as:1017` | no | **Kept** (part of the hoverboard feel; open question 11.3) |
+| 23 | Perpetual horizontal creep (0.1 px snap + 3 dp rounding: coasting never stops) | `Vector3.as:24-41,61`; `PlatformGame.as:1017` | no | **Kept** (part of the hoverboard feel; 11.9 #8) |
 | 24 | PHOTOGRAPH_GOOD also counts good-microbe deaths; unreachable second KILL_ALL case; types 2 and 5 unimplemented | `Goal.as:62-139` | no | **Kept** |
 | 25 | A flash takes the first overlapping microbe even if already photographed (wasted shot) | `CameraFlashEntity.as:79-88` | no | **Kept** |
-| 26 | Lucy/milk result depends on dynamic index order (a walking Lucy can dive without making yoghurt) | `MilkGlassEntity.as:64-93`; `LucyLactobacillus.as:145-175` | no | **Kept** (pushing always works; open question 11.3) |
+| 26 | Lucy/milk result depends on dynamic index order (a walking Lucy can dive without making yoghurt) | `MilkGlassEntity.as:64-93`; `LucyLactobacillus.as:145-175` | no | **Kept** (pushing always works; 11.9 #6; unit test "decision #6" pins both entity orders, [LV §1]) |
 | 27 | `bodyLevel` missing means true: L1-L4 throw white blood cells in the kitchen and on the hand | `MapBuilder.as:49` | no | **Kept** |
 | 28 | `infiniteAmmo = true` from the start: pickups only give points | `PlayerEntity.as:124` | no | **Kept** |
 | 29 | Microbes see only anchor cells (wide tiles look like voids); `walkThink` LEFT branch reuses the right-edge test | `GameEntity.as:275,431-465` | no | **Kept** |
@@ -1703,35 +1706,59 @@ Every candidate bug in the original, with its citation, whether the intent is cl
 | 34 | Spawned clips sit at world x until the next render | `ParticleSystem.as:204-205` | - | **Kept** (spawned entities do not advance until rendered) |
 | 35 | Avatar `upper`/`lower` read in the constructor race the async `loadClip` | `PlayerEntity.as:108-109`; `PlatformGame.as:165-169` | - | n/a |
 | 36 | A second `player_start` nulls `levelDataGeometry[old]` | `MapBuilder.as:107` | - | n/a (one start per level) |
-| 37 | Antibiotic bomb off screen never explodes (L10 then lacks a detonation) | `AntibioticBombEntity.as:36-57`; `PlatformGame.as:621` | no | **Kept** (open question 11.3) |
+| 37 | Antibiotic bomb off screen never explodes (L10 then lacks a detonation) | `AntibioticBombEntity.as:36-57`; `PlatformGame.as:621` | no (decided) | **Fixed** (11.9 #7: a thrown bomb keeps advancing off screen, so its 67-step fuse always runs out and every detonation counts; an edge badge with a fuse ring shows where it is; the blast still kills only on-screen bacteria; unit test "decision 7", [LV §1]) |
+| 63 | An antibiotic kills a bacterium that is already dying: a killed microbe stays listed and on screen in `BE_KILLED` while its animation plays (Lucy about 1.1 s), and the victim search has no state test, so every further blast in that time kills it again, charging -10 (Lucy, Sandy, Steve) or paying +15 (Slurm, Slarg, Colin) once more | `PlatformGame.as:829-857`; `GameEntity.as:504-511` | yes | **Fixed** (victims must not already be dying; `game.js` `explodeAntibiotic()`, unit test "an antibiotic does not kill a bacterium that is already dying"; with 11.9 #7 bombs thrown in quick succession go off within a second of each other, [LV §1a]) |
 
 ### 10.2 Game flow and quiz
 
 | # | Bug | Source | Intent clear? | Status |
 |---|---|---|---|---|
 | 38 | Kitchen found with `round == 2` (counter incremented lazily elsewhere) | `GameController.as:206-216,238-263` | yes | **Fixed** by design (explicit round table, 2.2) |
-| 39 | Game show built during preload: player always Harry on the right podium, CPU always "Amy"; shrinking zone's `userAvatar` always Harry | `GameShow.as:52,85-104`; `ShrinkingZone.as:14-42,76-82` | yes | **Planned** (chosen child is the player; the other child is the CPU, by name) |
+| 39 | Game show built during preload: player always Harry on the right podium, CPU always "Amy"; shrinking zone's `userAvatar` always Harry | `GameShow.as:52,85-104`; `ShrinkingZone.as:14-42,76-82` | yes | **Fixed** (the chosen child is the player on their own podium, the other child is the CPU and is named after that child; the shrinking zone shows the chosen child; [FL F8], [GS G2]) |
 | 40 | `player.playerAnswers` never initialised; writes silently fail | `GameShow.as:107-109,234-269` | - | n/a |
-| 41 | Last question of every sighted round: no host feedback, no CPU turn | `GameShow.as:293-298` | yes (build B added it, `doc:1911-1915`) | **Planned** |
-| 42 | `showRoundText` leaves `busy = true`: the last intro line of every quiz half needs a second click (confirmed in Ruffle) | `GameShow.as:147-166`; [R §6.1] | yes | **Planned** (one click goes to question 1) |
-| 43 | Blind reaction requests `"confident"`; the label is `condifent` | `GameShow.as:227`; `eBugGameShow.swf` sprites 479, 732 | yes | **Planned** (play `condifent`) |
-| 44 | Blind intro promises "a great bonus later"; no bonus exists | `levels/alpha_gameshow_round1.xml:10` | no | open question 11.3 (blind rounds are off by default) |
-| 45 | Tie counts as a loss (`player.score > cpu.score`) | `GameShow.as:452` | no | open question 11.3 (default: draw) |
-| 46 | Ending click does nothing (`_root.exit` undefined; the `gotoAndPlay("init")` restart is unreachable); host says "reload this web page" | [R §6.3]; `GameController.as:325-328`; `GameShow.as:451-459` | yes | **Planned** (winner screen, real Play again) |
+| 41 | Last question of every sighted round: no host feedback, no CPU turn | `GameShow.as:293-298` | yes (build B added it, `doc:1911-1915`) | **Fixed** (every question, including the last, gets its reply: in a sighted round the verdict and the CPU turn; in the blind half the echo and the blind notice, which build A built but never showed (capture 031), then "Step right this way..."; [GS G1]) |
+| 42 | `showRoundText` leaves `busy = true`: the last intro line of every quiz half needs a second click (confirmed in Ruffle) | `GameShow.as:147-166`; [R §6.1] | yes | **Fixed** (one press moves on to question 1; [GS G3]) |
+| 43 | Blind reaction requests `"confident"`; the label is `condifent` | `GameShow.as:227`; `eBugGameShow.swf` sprites 479, 732 | yes | **Fixed** (the blind reaction plays `condifent`; its poses, and `curious`, are rendered into `gameshow-cast` (`tools/swf-sheet/jobs/gameshow.json` `entryLabels`); `web/js/gameshow/studio.js` keeps a fallback to `cautious` for a missing label; [GS G4]) |
+| 44 | Blind intro promises "a great bonus later"; no bonus exists | `levels/alpha_gameshow_round1.xml:10` | no (decided) | **Fixed** by decision (11.9 #2: the sentence is dropped by position, round 1 line 3 and round 2 line 2, the same slots in all 11 languages; no bonus exists; [GS G7]) |
+| 45 | Tie counts as a loss (`player.score > cpu.score`) | `GameShow.as:452` | no (decided) | **Changed** (11.9 #3: a tie is a draw with its own host line; [FL §6]) |
+| 46 | Ending click does nothing (`_root.exit` undefined; the `gotoAndPlay("init")` restart is unreachable); host says "reload this web page" | [R §6.3]; `GameController.as:325-328`; `GameShow.as:451-459` | yes | **Fixed** (winner card with Play again, Level select and Main menu; the host line ends at "Thank you for playing."; [FL §6]) |
 | 47 | Cutscene: build A line 3 "Excellent!" never shown; live 10-line XML's last line never shown by build A code; privacy line spoken after the form; pre-filled age "2" and e-mail "dont@have.one"; no validation | `cutscene_introduction.swf` root frames 1-30 | yes | **Changed** (nickname-only form, 2.4) |
-| 48 | Death or time-out restarts the round from its first level | `PlatformGame.as:187-192`; `GameController.as:249-255,283-308` | no (possibly intended) | **Changed** (restart the same level; 2.6) |
+| 48 | Death or time-out restarts the round from its first level | `PlatformGame.as:187-192`; `GameController.as:249-255,283-308` | no (possibly intended) | **Changed** (restart the same level, score kept, lives and time reset; the `restartScope: "round"` setting restores Flash's round restart with the first level's briefing; 2.6, 11.9 #5, [FL F5, F5b]) |
 | 49 | Loading word "Looding"; debug `fps` counter visible for the whole game (shows `main()` calls per second, then frozen) | `GameController.as:60`; main SWF root | yes | **Fixed** by design (new loader) |
 | 50 | `introductionToMicrobes_mainMenu.swf` preloaded, never shown | `GameController.as:86,336-375` | - | n/a |
 | 51 | `timestamp()` uses day of week, no padding | `GameController.as:162-168` | - | n/a (not ported) |
-| 52 | Talkie shows placeholder text `"df"` at a transition | `Talkie.as:40-60` | yes | **Planned** (never show it) |
-| 52a | Talkie "next" arrow blinks 0.4 s after every line starts, while still typing | `Talkie.as:40-59,62-77`; [R §6.2] | yes | **Planned** (arrow only when complete) |
+| 52 | Talkie shows placeholder text `"df"` at a transition | `Talkie.as:40-60` | yes | **Fixed** (text is drawn from the statement only; [GS G6]) |
+| 52a | Talkie "next" arrow blinks 0.4 s after every line starts, while still typing | `Talkie.as:40-59,62-77`; [R §6.2] | yes | **Fixed** (the arrow blinks only once the page is complete; [GS G5]) |
 | 53 | Board stopwatch `timer` never driven | `question_board` sprite 77 | no | **Kept** (no answer time limit; the stopwatch may be decorative) |
 | 54 | Documentation's live build: `endOfKitchen` calls `startNonBlindRound()`, `endofHoverboard` calls `nextRound()` (inconsistent) | `doc:650-673` | - | resolved by decision (each action is followed by its own round's questions) |
 | 55 | `<statment>` / `<lable>` typos in every quiz file | `levels/alpha_gameshow_round*.xml`; `doc:2018,2041` | - | harmless with positional parsing (port) |
+| 64 | The ending's win line always names "Amy" as the beaten opponent (`cpuName` fixed at preload), whoever the CPU was | `GameShow.as:73,451-459` | yes | **Fixed** (the real opponent's name; [FL §6]) |
+| 65 | Portuguese quiz data defect: the sighted intro of rounds 1 and 2 carries the Polish points line ("Za prawidłową odpowiedź otrzymasz 10 punktów, ...") | `Assets/Resources/TextFiles/quiz/por_por_gameshow_round1.xml`, `_round2.xml` | yes | **Fixed** in the data: a counted per-language correction in `tools/convert-text.mjs` (exactly 2 replacements, or the tool fails) writes the translator's own points line from rounds 3-5 without "Lembra-te que" into `web/data/quiz/por_por.json`; `pl_pl` keeps the sentence legitimately ([GS G9]) |
+| 66 | Live English intro has "Ready ?" with a space (rounds 1 and 2) | `en_en_gameshow_round1.xml`, `_round2.xml` | yes | **Fixed** in the data (counted correction in `tools/convert-text.mjs`, exactly 2); the game show's English spacing rule (`rules.js` `normaliseIntro()`) stays as a guard. French "Prêt ?" is correct French spacing and is untouched ([GS G8], 6.8) |
+| 87 | Portuguese quiz data defect: round 4 (Food Hygiene) question 3 is the blind-round notice "Como é uma pergunta cega, só saberás o resultado no final." ("As this is a blind question, you'll only find out the result at the end."), scored with the values of the English "It is safe to put opened tins in the fridge." (Disagree right), so a Portuguese child agreed or disagreed with a host line and never met the opened-tins fact | `Assets/Resources/TextFiles/quiz/por_por_gameshow_round4.xml:63` (question id 2) | yes | **Fixed** in the data: a counted correction in `tools/convert-text.mjs` (exactly 1) writes "É seguro guardar latas abertas no frigorífico." into `web/data/quiz/por_por.json`, in the translator's register ("frigorífico" as in questions 2 and 5); a native-speaker check is a follow-up, as for the brand line (11.9 #11). `content.spec` (a) now fails any question that is a round intro line or reads like a blind-round or bonus notice in any of the 11 languages (found by the whole-game review) |
 
 ### 10.3 Kitchen
 
-See 5.13 for details. Summary: shared `FoodItem` state across levels (**Planned** fix: clone), cling film overlays left on screen (**Planned**), BOWL "Bad Food" repeat (**Planned**), four admonishment slots (**Planned**: show all), clock shows 99 at time-out and malformed `</face>` (**Planned**), misleading reminders for mouldy/burst items (**Planned**), throwaway `Player` avatar (**Planned**: chosen child), raw-meat hand contamination (`KitchenGame.as:685-689`; **Kept** as no effect, open), level 3 intro "45 seconds" vs 120 s (open), one-second tick is 1040 ms (**Changed**: exact seconds).
+Citations are `KitchenGame.as` (`reference/Junior_Game/src/ebug/junior/fridge/KitchenGame.as`) unless named; 5.13 has the background and [KD] the port details and tests.
+
+| # | Bug | Source | Intent clear? | Status |
+|---|---|---|---|---|
+| 67 | `FoodItem` objects shared, never cloned: cling film and sneeze flags leak between twins in a level and into later levels (Ruffle `633`, `157`, `166`, `635`, `644`) | `KitchenGame.as:784`; `FoodItem.as:48-55` (`clone()` unused) | yes | **Fixed** (every draw is a new item with its own state, `web/js/kitchen/rules.js` `makeItem`) |
+| 68 | Cling film overlays left in the fridge between levels | `KitchenGame.as:820-823` | yes | **Fixed** (each level starts with an empty kitchen) |
+| 69 | Raw meat on the hands: wrong index and property, so handling raw meat has no effect | `KitchenGame.as:685-689` | yes (11.9 #13) | **Fixed** (placing raw meat contaminates the hands until they are washed; items placed meanwhile carry raw-meat microbes and raise the unused "Raw Meat Hands" reminder, `KitchenGame.as:1185`; no points change; a red-germ hand badge shows) |
+| 70 | "Bad Food" can repeat in the BOWL case (`badFood` not set) | `KitchenGame.as:396-398` | yes | **Fixed** (every reminder is raised once per level) |
+| 71 | Only four reminder slots on the "Microbial Mistakes" page | outro frame 30; `KitchenGame.as:340-342` | yes | **Fixed** (all reminders listed; a compact layout above six, scrolling at large text sizes) |
+| 72 | Level 4 intro says "45 seconds"; the code gives 120 | `KitchenGame.as:844-848`; `kitchen_game_intro_level_3.swf` | no (11.9 #12) | **Fixed** by decision (120 s kept; the intro says "You have 120 seconds this time.") |
+| 73 | Clock shows 99 for a second at time-out; malformed `</face>` | `KitchenGame.as:151,180` | yes | **Fixed** (the clock shows 0) |
+| 74 | Mouldy or burst items in a wrong place get their category's location reminder | `KitchenGame.as:552-600` | yes | **Fixed** ("Bad Food" or "Burst Container" instead; `judge` checks mouldy and burst first) |
+| 75 | The kitchen is handed a throwaway `Player`: the avatar is always Harry and kitchen points never reach the real score | `movies/KitchenGame.swf` frame 1; `KitchenGame.as:806,1105-1109`; `GameController.as:273-281` (2.8 #4) | yes | **Fixed** (the chosen child with its own atlas; the flow keeps a running kitchen total, shown but not counted towards the winner, 11.9 #4; [FL F4]) |
+| 76 | The 2 s sneeze interval outlives the end of the level and can set the state back to WAIT: a time-out during a sneeze restarts play at 99 s | `KitchenGame.as:548,602-611` vs `:148-151` | yes | **Fixed** (the sneeze is cancelled when the level ends) |
+| 77 | Intro screens are one JPEG with Amy in it whatever the choice | `kitchen_game_intro_level_N.swf` backdrops | yes | **Fixed** (the intro backdrop is the live kitchen with the chosen child, dimmed as the SWFs dim their picture) |
+| 78 | The runtime kitchen Amy (`kitchen_game_main.swf` `amy/upper`) is unfinished: her parts are placed and removed on alternate frames, so she flickers (never seen, because the kitchen always used Harry) | `kitchen_game_main.swf`; `flash-flow.md` 5.12 | yes | **Fixed** in the art (rendered from `avatar_amy_Fridge.swf` sprite 310, identical geometry, complete animation; [ART §4]) |
+| 79 | One-second tick is `> 1000` ms polled every 40 ms, so a "second" is about 1040 ms | `KitchenGame.as:145` | - | **Changed** (exact 25-frame seconds, 12.1) |
+| 80 | The tissue case raises "Sneeze" although a better-fitting "Sneeze Hands" string exists and is never used | `KitchenGame.as:1173-1185` | no | **Kept** (`rules.js` `SNEEZE_HANDS_NOTE = false`; `true` switches to "Sneeze Hands") |
+| 81 | "Points Awarded", "Points Deducted" and "Total Points" strings exist but no page shows them | `KitchenGame.as:1173-1177` | - | **Changed** (a fourth outro page, "Points This Level", uses them) |
+| 82 | `validLocations` built but unused | `KitchenGame.as:1204-1232` | - | n/a |
 
 ### 10.4 Level data
 
@@ -1744,6 +1771,50 @@ See 5.13 for details. Summary: shared `FoodItem` state across levels (**Planned*
 | 60 | L2 `plaster_singular_obj` at (8,43) runs past the world edge | `levels/alpha_level2.xml` | **Kept** |
 | 61 | `microbeType="17"` on L5-L10 goals is decoration | level XML | **Kept** (ignored) |
 | 62 | Documentation says L1 goalType 3; XML says 0 | `doc:280`; `levels/alpha_level1.xml:2` | 0 is right (3.20) |
+| 83 | Patty's physics box: two bounds surveys disagree (`swf-inventory.json` `boundsFrame1` 203.32 x 150.39, `reference/analysis/levels.json:1699-1706` 187.89 x 141.53); with the larger box L4's first Patty is pushed off her spawn cell on step 2 and hovers 60 px above the bread stick for the whole level | 4.4; 12.6; captures `050-level4-opening`, `051-level4-moving` | settled by the captures | **Fixed** in data: 187.89 x 141.53 (`tools/convert-levels.mjs` `BOX_OVERRIDES`; the level 4 trace re-recorded; `levels.spec` checks she stays on her cell; [LV §5]). Slarg (90.57 vs 90.37 wide) stays open (12.6) |
+| 84 | Wide microbe boxes reach into tiles: L4 Patty (4,11) into the loaf end (4,14), L5 Slurm (5,39) into the spot (6,40), L6 Slarg (3,43) into the skin (7,43)-(7,44) | frame-1 art bounds (4.4) | - | **Kept** (the physics pushes them out as in Flash; `levels.spec` lists the known cases, [LV §5]) |
+| 85 | The exit portal (103.6 x 163.8 on a 100 x 150 slot) sinks 13.8 px into the floor and 3.6 px into the next column; in L8 it touches the salt pot at (0,33) | level XML; `portal_exit_icon` bounds | - | **Kept** (not solid; tiles drawn over it as in the SWF) |
+| 86 | Briefing text and goal disagree: L6 "wash away all the bad microbes" (the goal is 3 of 4), L10 "until you kill the super infection" (the goal is 6 detonations) | `level_intros` pages; `levels/alpha_level6.xml`, `alpha_level10.xml` | no | **Kept** as written ([LV §2]) |
+
+### 10.5 Port bugs found in the area reviews (not in the original)
+
+Each area was reviewed after it was built; these were bugs in the port, fixed and covered by tests. Details, sources and the tests that pin them are in the logs:
+
+- **Engine** ([PD] "Engine and platform"): quick taps lost between polls (also 10.1 #20); touch controls not returning after a key press; tap targets under 44 CSS px on phones; the picture moving under the pause card; keyboard focus leaving dialogs.
+- **Levels** ([LV §7]): the first briefing drawn over tiles the original had not built yet; play and the clock starting 800 ms late; a window blur letting the first briefing start the level unattended; reduced motion stopping the briefing autoplay; the game-over prompt only true with focus; the whiteout drawn under the HUD; off-screen bomb badges stacking; blinks ignoring reduced motion.
+- **Flow** ([FL §12]): the same run seed after every page load (F7) and practice seeds tied to the saved journey (F7b); a tied best score shown as new (F10); a held Enter starting a game from the splash; the first shrink skippable from its first tick; Space and Tab dead in flow menus; mouse hover and keyboard focus disagreeing on the avatar choice; no touch exit from the cutscene; ending buttons, the language chooser's Cancel and Level select cards off screen at 130% text; Level select showing a letter "P" and the Slurm picture for levels 4 and 7; an age field collected against 11.2.
+- **Game show** ([GS G10, G11]): Enter, Space or gamepad A on Resume also answering the board or moving the talkie; the mouse lighting one answer while Enter picked another.
+- **Kitchen** ([KD] "Review fixes"): fonts and colours not the SWFs'; intro lines and reminders placed off the original text fields; gamepad stuck on intro and outro pages; stale prompts after a device switch while paused; Restart skipping the intro; reduced motion read only at level start; fridge shelves under 44 CSS px on small phones; a touch-to-keyboard switch eating the first Enter.
+
+### 10.6 Whole-game review (2026-09-26): port bugs and changes
+
+A review of the finished game (phone and desktop, every language, throttled network, offline, memory) found these; each is fixed and pinned by a test (`web/tests/robustness.spec.mjs`, `memory.spec.mjs`, `review.spec.mjs`, plus the specs named). Data defects in the original are in 10.2 (#87).
+
+| Finding | Fix | Test |
+|---|---|---|
+| A failed download was cached for the whole session: one blip on mobile data at boot left every screen on placeholder art; a level file that failed once showed "Level not found" on every retry; a failed atlas page drew placeholders until the page was reloaded | No loader keeps a failure (`core/assets.js` memo drops rejected jobs; `sprites.loadAtlas`, `loadIndex` forget failures, `ensureIndex` asks twice); a network error is retried once after 400 ms (an HTTP error is not). The level error card says "Could not download this level" with Try again and Back (a 404 still says "Level not found"); offline it says so and waits instead of drawing placeholders; a level whose pictures failed while online plays with a "Some pictures did not download. Tap to try again." button | `robustness` (index.json, a level file, an atlas page each failing twice, then working) |
+| Decoded atlas memory only grew: about 383 MB by the ending (NOTES 8.4 planned `close()`, never built) | One atlas store (`sprites.js`; `kitchen/art.js` and `flow/art.js` now draw from it, `core/assets.js` lost its own image cache); `sprites.release()` closes page bitmaps and keeps the compressed bytes; the flow releases what the next screen does not use at every scene change (8.4) | `memory` (a whole journey: peak 127 MB, budget 150 MB; released art draws again) |
+| Offline beyond level 1: later levels played with placeholder shapes | The worker fetches the rest of the game in the background once play has begun (8.4, `sw.js` "cache-rest"); install requests bypass the HTTP cache (`cache: 'reload'`) | `pwa` (levels 2 and 5 offline, no placeholder drawn) |
+| The cutscene's avatar choice and nickname form took the same presses used to hurry the host along: mashing Enter picked Amy and submitted the default name unseen, and a tap on the talkie box picked Harry | Nothing is focused when the choice appears; the first arrow or confirm highlights a child, picks are ignored for 0.5 s, and the form ignores submits for 0.6 s; the name is not selected (caret at the end); the children's buttons stop above the talkie box (y 330) | `flow`, `flow-fixes`, `journey` (updated to wait for the choice) |
+| No full screen in a phone browser (the toolbar never hides on a page that does not scroll) | Full screen buttons on the splash cabinet and the platform, game show and kitchen pause cards (where supported and not installed); a touch New Game or Continue asks for full screen; landscape is locked after it; iPhone Safari (no element full screen) gets a one-time "Add to Home Screen" tip (`ui/fullscreen.js`) | `review` (c) |
+| The host echoed the English answer ("you chose Disagree") under localised board labels | The echo uses the label the board showed | `review` (a) |
+| With blind rounds off the host said two near-identical lines before the first shrink | `flow.cutscene.closing` is now "All right, {name}! Let's get started." (11.9 #14 stays an English line David can override); "Step right this way..." carries the shrink | `flow` |
+| Yoghurt goal read "Make 3 yogurt" | "Turn the milk into yogurt" / "Turn {n} glasses of milk into yogurt", as the briefings say | `review` (f) |
+| Switching blind rounds in Settings during a quiz broke the round order (a "Step right this way" with no shrink, or a shrink with none) | The step after a quiz is fixed when the quiz is launched; the setting takes effect from the next quiz | `review` (b) |
+| On a phone, level 5 starts with the player behind the HUD ePhone | The ePhone fades to 35% while the player or a live target is under it | `review` (d) |
+| The Throw button showed in every level, inert in seven | Dimmed and aria-disabled while there is nothing to throw, with the ammo count on a badge when there is (kept in place, so the layout and bots are unchanged) | `review` (d) |
+| The d-pad and Jump flickered to 25% whenever a target passed behind them | The held controls (left, right, Jump) no longer fade; the camera, Throw, pause and phone buttons still do | `level1` (occlusion check updated) |
+| The briefing turned pages every 5 s whatever their length and started the level by itself | Autoplay waits the greater of 5 s and 0.45 s a word, times the text scale; it stops for the rest of the briefing once the child turns a page; it never turns the last page, so the level (and its clock) starts only with the child's press. This changes Flash's behaviour (its 5 s autoplay started the level) for younger readers; the blur rule already said an unattended briefing never starts the level | `levels-ui` (e), (f) |
+| A vertical swipe over a Settings slider set it instead of scrolling | Sliders let vertical pans through (`touch-action: pan-y`); a touch sets a value only on a sideways drag or a tap | `review` (e) |
+| Restart, Quit and Level select on the platform and kitchen pause cards acted at once, next to Resume | They ask first ("Restart this level?" / "Leave this level?", No focused; Escape or B answers No); in the kitchen Restart asks in play and Quit in play and the tutorial (the intro pages lose nothing) | `level1`, `integration`, `kitchen-controls`, `review` |
+| A touch player could not cancel a key capture in Settings | Change reads Cancel while it waits; a tap on it or anywhere outside the row stops it; the Controls tab explains the keys to a touch player | `review` (e) |
+| Language chooser tags were invalid (bg for both Belgian options, cz, dk, gk, po, sp), and the page's lang followed the quiz language while every menu stayed English | Tags from the BCP 47 table (nl-BE, fr-BE, cs, da, el, pt, es, ...); the page stays en-GB while the UI is English; the quiz language's tag goes on the talkie announcements of quiz text and on the answer buttons | `review` (f), (a) |
+| The artifact build carried source provenance naming the original's brand (atlas JSON `swf` fields, comments citing the 2009 source paths) | `tools/build-artifact.mjs` drops the atlas provenance fields and whole-line JS comments, and fails if a brand string is left in any file | the build itself |
+| Dead code shipped: `flow/stub.js`, unused exports (`loadSound`, `loadImage`, `loadAtlas` in `core/assets.js`, `availableLanguages`, `Tweens`, `frameOf`, `AtlasClip`, `navDepth`, `ANSWER_DUNNO`, `fitText`, `LOC_TARGET`, `createGame`), `app.__platform`, the unused `portal` synth | Removed | `content` (b), full suite |
+| New Game waited for level 1's art after the cutscene | Level 1's avatar-independent atlases are downloaded (not decoded) while the cutscene plays | `review` (g) |
+
+Not done, with reasons: registering the area scenes lazily and storing rig poses more compactly (the boot and cutscene waits on a slow 3G link; a larger restructuring of the scene registry and the atlas format, left for a later pass); an in-game "New version ready" prompt for an installed app (it needs two builds to test; the worker still updates once every tab is closed, and the artifact never registers a worker).
+
 
 ---
 
@@ -1804,7 +1875,7 @@ See 5.13 for details. Summary: shared `FoodItem` state across levels (**Planned*
 5. **L8/L9 Lucy-milk order dependence**: a walking Lucy can dive without making yoghurt; players and bots must push her; losing Lucys in L9 (6 for 3) is survivable, in L8 less forgiving if pushed wrongly.
 6. **Kitchen from scratch**: no Unity version, all art vector-only (scene, avatars, foods, cling film), random item draws, sneezes on timers, tiny original tap targets (23-69 px) that need a new location-based input layer.
 7. **Frame-script and clip-size approximations**: `midAnimation` gates run on a fixed-phase 25 fps clock and microbes use frame-1 bounds, while Flash read live `_width` in `safeToMove`, ground tests and hitTests: subtle differences in AI turning, photo hits and pickups.
-8. **Box size uncertainty**: Patty 203.32 x 150.39 vs 187.89 x 141.53, Slarg 90.57 vs 90.37 wide; affects L4 collisions and speed caps; pending Ruffle.
+8. **Box size uncertainty**: Patty settled at 187.89 x 141.53 by the captures (10.4 #83); Slarg 90.57 vs 90.37 wide is still open (a 0.2 px difference in L6 only).
 9. **Translations are partial**: platformer intros, kitchen text, host responses and all new UI are English-only; 10 languages will be mixed unless new translations are commissioned; the brand line needs native checks.
 10. **Full-journey E2E length and flakiness**: cutscene, 10 levels, 4 kitchen levels and 21 questions (42 with blind on), under mobile emulation and desktop, through real inputs only.
 11. **Game show animation fidelity vs size**: emotions are 18 nested 125-frame clips on their own clocks; decimation must keep them readable.
@@ -1855,7 +1926,7 @@ Goal: a deterministic fixed-timestep JS engine that feels like the Flash origina
 | Logic and physics step | UPDATE and RENDER alternate whenever anything moved, which is always in practice (`PlatformGame.as:613-616,1015-1020,1163`) | one UPDATE per 30 ms; physics `dt` is the constant 0.03 s, so the game's speed is tied to the step rate | `STEP_MS = 30`, `TICKS_PER_STEP = 2` (`web/js/platformer/constants.js:12-13`); everything in steps: gravity 2.7 px/step^2, run 3.645 px/step^2, walk 10 px/step |
 | Timeline (frame scripts: `midAnimation`, `shoot`, loops, fades) | 25 fps display frames, independent of the interval | 40 ms per frame | global frame clock derived from the tick count: `frame = floor(tick * 15 / 40) = floor(tick * 3 / 8)`, i.e. `floor(step * 3 / 4)` at step boundaries: **3 frames every 4 steps**, fixed phase 0 (`FRAME_MS = 40`, `constants.js:14`). Gates keep their length in milliseconds |
 | Level timer | `if (getTimer() - secondsTimer >= 1000)` polled per UPDATE, `secondsTimer` reset to the poll time; starts when the briefing ends | each "second" is the first 30 ms multiple >= 1000, about 1020 ms; 181 decrements (179..0, then "-1") = about 184.6 s | `LEVEL_TIME_STEPS = 6000` (exactly 180.0 s, `constants.js:15`); display `ceil(stepsLeft * 30 / 1000)`, shows 180 at the start, game over at 0; pauses during hit-stop, pause and the re-opened briefing |
-| Antibiotic fuse | `getTimer() >= bombTimer + 2000` after `abs(dy) <= 2`, polled per UPDATE while on screen | about 2010 ms | `BOMB_FUSE_STEPS = ceil(2000 / 30) = 67` (`constants.js:16`), counted only while on screen |
+| Antibiotic fuse | `getTimer() >= bombTimer + 2000` after `abs(dy) <= 2`, polled per UPDATE while on screen | about 2010 ms | `BOMB_FUSE_STEPS = ceil(2000 / 30) = 67` (`constants.js:16`), counted every step once it has settled, on or off screen (11.9 #7); the blast still kills only on-screen bacteria |
 | Hurt / invulnerability | upper and lower `hurt` animations, 12 frames | 480 ms | frame clock (12 frames = 16 steps) |
 | Jump start gate | lower `jump_start` `midAnimation` frames 136-139 | 160 ms | frame clock (4 frames, 5-6 steps by phase) |
 | Throw delay | Harry `shoot_soap` 280 -> 283; Amy fires on frame 4, busy 18 frames | 120 ms (Harry); 160 ms, 720 ms busy (Amy) | frame clock |
@@ -1866,7 +1937,7 @@ Goal: a deterministic fixed-timestep JS engine that feels like the Flash origina
 | Wash away / dive | alpha -5 per non-think UPDATE, y -15 per UPDATE (wash) | about 24 UPDATEs (720 ms) | steps |
 | Milk tickle | clip frames 20-49 | 1.2 s | frame clock |
 | Whiteout | `onEnterFrame` alpha -10 | 10 frames = 400 ms | render only (frame clock) |
-| Intro pages | 40 ms polling interval, `waitTime = 5000` | about 5.0-5.04 s per page, stacked intervals when clicked | cosmetic scene timer: 5 s **after the text is fully shown** (deliberate) |
+| Intro pages | 40 ms polling interval, `waitTime = 5000` | about 5.0-5.04 s per page, stacked intervals when clicked | cosmetic scene timer, **after the text is fully shown**: the greater of 5 s and 0.45 s a word, times the text scale; off for the rest of the briefing once the child turns a page, and never turns the last page (the level starts only with the child's press; 10.6) |
 | Talkie typewriter | `onEnterFrame`, 1 character per frame | 25 characters per second | 40 ms per character on the frame clock; tap completes |
 | Game show `main` | `setInterval(main, 40)` | 25 Hz | event-driven sequence on the frame clock |
 | Shrinking zone | 149 frames at 25 fps (authored 24) | about 5.96 s | 149 frames |
@@ -1929,7 +2000,7 @@ The Ruffle survey ([R]) settled several points (below). Ruffle ran at about half
 - Flash Player's own `setInterval(15)` cadence in a 25 fps movie (Ruffle: median 64 calls/s, consistent with 15 ms).
 - Per-level speed caps (21.16 / 23.98 / 25 px/step), run acceleration and the 99.8 px jump apex.
 - Frame-script ordering within a tick (`midAnimation` and `shoot` gates; the port pins durations with unit tests).
-- Patty and Slarg box sizes; microbes' live `_width` during walk animations. The two figures come from two bounds methods: `swf-inventory.json` `boundsFrame1` (203.32 x 150.39, 90.57 x 225.48; nested clips followed to their frame-1 playheads, masks not applied, `tools/analyse-swfs.mjs:760-766`) and `levels.json` (187.89 x 141.53, 90.37 wide; "union of frame-1 child bounds, mask layers excluded", `tools/analyse-levels.mjs:728`). The box is sized straight after `attachMovie` and before the microbe constructor's `gotoAndPlay("idle")` (`attachMovie` at `PlatformGame.as:419`, `createBoxParticle` at `:427`, `new GoodMicrobe` at `:432`), so frame 1 is the right frame; which method matches Flash's `_width` needs a runtime read of `clip._width`.
+- Slarg's box size (Patty's is settled at 187.89 x 141.53 by captures `050` and `051`, 10.4 #83); microbes' live `_width` during walk animations. The two figures come from two bounds methods: `swf-inventory.json` `boundsFrame1` (203.32 x 150.39, 90.57 x 225.48; nested clips followed to their frame-1 playheads, masks not applied, `tools/analyse-swfs.mjs:760-766`) and `levels.json` (187.89 x 141.53, 90.37 wide; "union of frame-1 child bounds, mask layers excluded", `tools/analyse-levels.mjs:728`). The box is sized straight after `attachMovie` and before the microbe constructor's `gotoAndPlay("idle")` (`attachMovie` at `PlatformGame.as:419`, `createBoxParticle` at `:427`, `new GoodMicrobe` at `:432`), so frame 1 is the right frame; which method matches Flash's `_width` needs a runtime read of `clip._width`.
 - Settled from the SWF frame scripts (section 3.13): Harry's `take_photo` `midAnimation` span is 15 frames and Amy's 7 ([PD] was right, [P §3.6]'s 34 ignores the frame-144 and frame-163 jumps).
 - The game-show avatar mapping when Amy is chosen (inferred: Harry animated as the player; not confirmed by the captures, `502`). The shrinking zone does use the chosen child.
 - Settled by Ruffle: the `showRoundText` busy path (a second click on the last intro line, 6.4); the ending click does nothing (2.1); the talkie arrow shows while typing (6.4); the time-out summary replays the intro and shows "-1" (2.6); shared `FoodItem` state across twins and levels (5.13); the shrink uses the chosen child (2.5); the platform clock runs 181 ticks (188.7 s measured, including the first tick and slow polling).
@@ -1990,8 +2061,25 @@ A completeness check of this file against the primary sources, done on 2026-09-2
 
 Remaining items that need a person or a decision (beyond 11.3, which stands):
 
-1. Patty and Slarg box sizes (row 19): a runtime read of `clip._width` after `attachMovie` in Ruffle or Flash decides 203.32 versus 187.89 (Patty) and 90.57 versus 90.37 (Slarg); it changes L4 collisions only.
+1. Slarg's box size (row 19): a runtime read of `clip._width` after `attachMovie` in Ruffle or Flash decides 90.57 versus 90.37. Patty's is settled (187.89 x 141.53, 10.4 #83).
 2. `lowTime` at 10 s versus the red clock at 20 s (row 42): pick one threshold for both.
 3. Sounds for the events listed under 8.5 ("Events with no sound assigned yet").
 4. Amy's looping photo pose (row 16): keep (faithful, cosmetic) or return her to `move` when `midAnimation` clears.
-5. The two places where this file overrides the engine log (header: the +3 bullet bonus and the L4/L7 portraits) still need `web/NOTES-platformer-decisions.md` and `web/js/platformer/game.js` updated to match.
+5. Done: the +3 bullet bonus and the L4/L7 portraits are built (10.1 #18, #19) and the engine log says so.
+
+---
+
+## 14. Area decision logs
+
+The game was built in four areas plus the art pipeline, each keeping a working log of how it applied this file: decisions with their sources, bugs fixed, port bugs found in review, and the tests that pin them. This file stays the single entry point: every original bug those logs fixed is in section 10 (cited as below), and the settled design is folded into the sections named. Open the logs for implementation detail, test names and review history.
+
+| Log | Area and code | Cited as | Holds | Folded into |
+|---|---|---|---|---|
+| `web/NOTES-platformer-decisions.md` | Platform engine and level 1 (`web/js/platformer/`, `web/js/core/`) | [PD] | module layout, timing, bugs fixed 1-17, feel changes, faithful quirks (Amy and Harry differ, the avatar's live width, depth order), HUD and briefing, engine review (input device, pausing, tap targets, rendering cost, offline cache) | 3, 10.1, 12 |
+| `web/NOTES-levels-decisions.md` | Platform levels 2-10 (`web/js/platformer/`, `web/tests/bots/`, `web/tests/traces/`) | [LV §n] | decisions 11.9 #5-#10 as built, the antibiotic re-kill fix, art and music per level, juice, planner bot and traces (the re-recording rule), data quirks (Patty's box), review fixes | 4, 10.1, 10.4 |
+| `web/NOTES-flow-decisions.md` | Journey, splash, cutscene, shrinking zone, summary, ending, Level select, Settings (`web/js/flow/`, `web/js/scenes/splash.js`; contract `web/js/flow/contract.md`) | [FL Fn], [FL §n] | journey and scores (F1-F11), each screen's port, accessibility and input, timing conversions, review fixes | 2, 10.2, 11.1 |
+| `web/NOTES-gameshow-decisions.md` | Game show, talkie and studio (`web/js/gameshow/`) | [GS Gn] | behaviour kept from the original, bugs fixed G1-G11, port decisions (language, labels, verdict timing, blind half, input) | 6, 10.2 |
+| `web/NOTES-kitchen-decisions.md` | Kitchen game (`web/js/kitchen/`) | [KD] | module layout, contract, timing, fixes, kept behaviour, input and presentation changes, review fixes | 5, 10.3 |
+| `web/NOTES-art-decisions.md` | Art pipeline and atlases (`tools/swf-sheet/`, `tools/build-atlas.cjs`, `web/data/atlas/`) | [ART §n] | sizes and load sets, cut-out rigs, symbol names and spaces, every screen's art, branding removals, the nested-clip timing model, coverage audit | 8, 11.2 |
+
+Cross-area requests (changes one area needed in another's files) were filed in `web/requests/*.md`; each item there now records how it was resolved when the areas were joined.

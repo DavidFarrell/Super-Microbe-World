@@ -5,23 +5,22 @@
 // Units are Flash stage pixels (800 x 450). Every call is safe while an atlas is missing: draw()
 // returns false. Scenes wait for their set on a dark stage with drawLoading() and paint their
 // placeholder only when a load failed (loadSet resolved false).
-import { loadJson } from '../core/assets.js';
-import { sprites } from '../platformer/sprites.js';
+import { sprites, drawable } from '../platformer/sprites.js';
 
 // Atlases are loaded through sprites.js (memoised per atlas id), so every area shares one copy
 // of each sheet; this module only adds rig drawing, tracks and timelines on top.
-const BASE = 'data/atlas/';
 const symbols = sprites.symbols;   // symbol -> { sym, images, atlas }
 
 // Loads one atlas by id. Resolves to true when its symbols are ready.
 export async function loadAtlas(id) {
-  await sprites.loadIndex(BASE);
+  await sprites.ensureIndex();
   return sprites.loadAtlas(id);
 }
 
-// Loads every atlas of a named set ("splash", "cutscene", "shrink", "summary", ...).
+// Loads every atlas of a named set ("splash", "cutscene", "shrink", "summary", ...). A failed
+// atlas is not remembered (sprites.loadAtlas), so calling this again retries it.
 export async function loadSet(name) {
-  const index = await sprites.loadIndex(BASE);
+  const index = await sprites.ensureIndex();
   const ids = (index && index.sets && index.sets[name]) || [];
   const ok = await Promise.all(ids.map(id => sprites.loadAtlas(id)));
   return ok.length > 0 && ok.every(Boolean);
@@ -30,18 +29,10 @@ export async function loadSet(name) {
 // Loads an atlas outside the shared cache and returns { draw, has, symbol, close } (for one-off use such
 // as level-select thumbnails from a large sheet: the bitmaps are freed as soon as it is drawn).
 export async function loadPrivate(id) {
-  const index = await sprites.loadIndex(BASE);
-  const a = index && index.atlases && index.atlases[id];
-  if (!a) return null;
   try {
-    const file = typeof a === 'string' ? a : a.json;
-    const data = await loadJson(BASE + file);
-    const dir = BASE + file.slice(0, file.lastIndexOf('/') + 1);
-    const images = await Promise.all((data.images || []).map(async src => {
-      const res = await fetch(dir + src);
-      if (!res.ok) throw new Error(String(res.status));
-      return createImageBitmap(await res.blob());
-    }));
+    const got = await sprites.loadPrivate(id);
+    if (!got) return null;
+    const { data, images } = got;
     const own = new Map(Object.entries(data.symbols || {}).map(([n, sym]) => [n, { sym, images, atlas: id }]));
     return {
       draw: (ctx, name, frame = 1, m = null, opts) => drawEntry(ctx, own.get(name), frame, m, opts),
@@ -56,13 +47,6 @@ export async function loadPrivate(id) {
 
 export const has = name => symbols.has(name);
 export const symbol = name => (symbols.has(name) ? symbols.get(name).sym : null);
-
-// 1-based frame number of a label plus an offset.
-export function frameOf(name, label, offset = 0) {
-  const s = symbol(name);
-  const start = s && s.labels && s.labels[label];
-  return (start || 1) + offset;
-}
 
 // Per-frame matrix of a named child recorded by the render job ([a, b, c, d, tx, ty] or null).
 export function track(name, key, frame = 1) {
@@ -86,7 +70,7 @@ export const multiply = (p, c) => [
 function drawRect(ctx, images, r, scale) {
   const [img, x, y, w, h, ox, oy] = r, k = 1 / scale;
   const page = images[img];
-  if (page) ctx.drawImage(page, x, y, w, h, -ox * k, -oy * k, w * k, h * k);
+  if (drawable(page)) ctx.drawImage(page, x, y, w, h, -ox * k, -oy * k, w * k, h * k);
 }
 
 // Draws Flash frame `frame` (1-based) of a symbol with its registration point at the current
@@ -123,58 +107,6 @@ function drawEntry(ctx, e, frame, m, { alpha = 1 } = {}) {
   }
   ctx.restore();
   return drawn;
-}
-
-// A Flash timeline driven by the atlas's labels and decoded frame scripts, advanced one 25 fps
-// frame per tick() call (scenes call it when their frame clock moves on).
-export class AtlasClip {
-  constructor(name, label = null) {
-    this.name = name;
-    this.frame = 1;
-    this.playing = true;
-    this.vars = {};
-    if (label) this.gotoAndPlay(label);
-  }
-
-  get sym() { return symbol(this.name); }
-  get frameCount() { const s = this.sym; return s ? s.frameCount || s.frames.length : 1; }
-
-  gotoAndPlay(label) { this._goto(label, true); }
-  gotoAndStop(label) { this._goto(label, false); }
-
-  _goto(label, play) {
-    const s = this.sym;
-    const f = typeof label === 'number' ? label : s && s.labels ? s.labels[label] : undefined;
-    this.playing = play;
-    this.label = typeof label === 'string' ? label : this.label;
-    if (f == null) return;
-    this.frame = f;
-    this._run(f);
-  }
-
-  tick() {
-    if (!this.playing) return;
-    const n = this.frameCount;
-    this.frame = this.frame >= n ? 1 : this.frame + 1;
-    this._run(this.frame);
-  }
-
-  _run(frame) {
-    const s = this.sym;
-    const ops = s && s.scripts && s.scripts[frame];
-    if (!ops) return;
-    for (const op of ops) {
-      if (op[0] === 'stop') this.playing = false;
-      else if (op[0] === 'play') this.playing = true;
-      else if (op[0] === 'set') this.vars[op[1]] = op[2];
-      else if (op[0] === 'gotoAndPlay' || op[0] === 'gotoAndStop') {
-        const f = typeof op[1] === 'number' ? op[1] : s.labels && s.labels[op[1]];
-        if (f != null) { this.frame = f; this.playing = op[0] === 'gotoAndPlay'; }
-      }
-    }
-  }
-
-  draw(ctx, m = null, opts) { return draw(ctx, this.name, this.frame, m, opts); }
 }
 
 // Waiting for art: the studio's dark blue with a small spinning ring (after a short grace, so a

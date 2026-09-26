@@ -25,6 +25,7 @@ import * as art from '../flow/art.js';
 import { drawLoading } from '../flow/art.js';
 import { ensureStyle, glossy, pushNav, tickNav, clearNav, confirmDialog, focusInitial } from '../flow/ui.js';
 import { openLanguageChooser } from '../flow/language.js';
+import { canFullscreen, enterFullscreen, toggleFullscreen, isFullscreen, onFullscreenChange, wantsHomeScreenHint, dismissHomeScreenHint, FULLSCREEN_ICON, EXIT_FULLSCREEN_ICON } from '../ui/fullscreen.js';
 
 const LAST = 170;          // frame 170: stop()
 const MENU_FROM = 150;     // New Game appears (NewGame alpha 0 -> 1 over 150-170)
@@ -49,6 +50,11 @@ const CSS = `
 .sp-lang:hover { background: rgba(255, 255, 255, 0.12); }
 .sp-lang span { position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font: 800 calc(13px * var(--text-scale, 1)) var(--ui-font); background: rgba(20,14,50,0.8); padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
 .sp-skip { position: absolute; inset: 0; background: transparent; border: 0; cursor: pointer; }
+.sp-fs { position: absolute; left: 688px; top: 374px; padding: 0; width: max(48px, calc(46px / var(--stage-scale, 1))); display: grid; place-items: center; }
+.sp-fs svg { width: 26px; height: 26px; }
+.sp-tip { position: absolute; left: 96px; top: 8px; max-width: 420px; padding: 8px 40px 8px 14px; border-radius: 14px; background: rgba(20,14,50,0.88); color: #fff; border: 2px solid rgba(255,255,255,0.5);
+  font: 700 calc(15px * var(--text-scale, 1))/1.3 var(--body-font); text-align: left; cursor: pointer; }
+.sp-tip b { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 20px; }
 .sp-skip:focus { outline: none; }
 `;
 
@@ -84,6 +90,7 @@ let seenOnce = false;      // the tuning plays in full once per page load
 export function splashScene(app) {
   let ticks = 0, frame = 1, ready = false, failed = false, destroyed = false, waiting = 0, skipWhenReady = false;
   let menu = null, skipLayer = null, langBtn = null, popNav = null, chooserOpen = false, musicOn = false;
+  let fsBtn = null, unFs = null, tipEl = null;
   let newBtn = null, newState = 'up', newGlow = 0, menuAge = 0, awake = false, initialFocus = null;
   let reduced = !!settings.get('reducedMotion');
   const bubbles = new Particles(120);
@@ -112,7 +119,10 @@ export function splashScene(app) {
     const hasSave = flow.hasSave();
     // New Game: a transparent real button over the 2009 art, which the canvas draws.
     newBtn = el('button', { type: 'button', class: 'sp-new', id: 'btn-new-game' }, el('span', { class: 'sr-only' }, t('flow.menu.newGame')));
-    newBtn.addEventListener('click', () => { audio.play('tap'); newGame(); });
+    // A touch player's New Game or Continue also asks for full screen (a phone browser's toolbar
+    // never hides by itself on a page that does not scroll; ui/fullscreen.js).
+    const touchFullscreen = () => { if (input.lastDevice === 'touch' && canFullscreen()) enterFullscreen(); };
+    newBtn.addEventListener('click', () => { audio.play('tap'); touchFullscreen(); newGame(); });
     const setState = st => () => { newState = st; };
     newBtn.addEventListener('pointerenter', () => { if (newState !== 'down') newState = 'over'; if (input.lastDevice !== 'touch') audio.play('hover', { volume: 0.6 }); });
     newBtn.addEventListener('pointerleave', () => { newState = document.activeElement === newBtn ? 'over' : 'up'; });
@@ -120,7 +130,7 @@ export function splashScene(app) {
     newBtn.addEventListener('pointerup', setState('over'));
     newBtn.addEventListener('focus', setState('over'));
     newBtn.addEventListener('blur', setState('up'));
-    const cont = hasSave ? glossy(t('flow.menu.continue'), () => flow.continueGame(), { id: 'btn-continue', class: 'small' }) : null;
+    const cont = hasSave ? glossy(t('flow.menu.continue'), () => { touchFullscreen(); flow.continueGame(); }, { id: 'btn-continue', class: 'small' }) : null;
     const row = el('div', { class: 'sp-row' },
       cont,
       glossy(t('flow.menu.levelSelect'), () => flow.openLevelSelect(), { id: 'btn-level-select', class: 'small alt' }),
@@ -131,6 +141,26 @@ export function splashScene(app) {
       el('span', {}, languageName()));
     langBtn.addEventListener('click', () => { audio.play('tap'); chooseLanguage(false); });
     root.append(menu, langBtn);
+    // Full screen, on the cabinet below the speaker (where supported and not installed).
+    if (canFullscreen()) {
+      fsBtn = glossy('', () => toggleFullscreen(), { id: 'btn-fullscreen', class: 'alt small sp-fs passthrough' });
+      const label = () => {
+        const on = isFullscreen();
+        fsBtn.innerHTML = on ? EXIT_FULLSCREEN_ICON : FULLSCREEN_ICON;
+        fsBtn.setAttribute('aria-label', t(on ? 'flow.menu.exitFullscreen' : 'flow.menu.fullscreen'));
+        fsBtn.title = fsBtn.getAttribute('aria-label');
+      };
+      label();
+      if (unFs) unFs();
+      unFs = onFullscreenChange(label);
+      root.append(fsBtn);
+    } else if (wantsHomeScreenHint() && !tipEl) {
+      // iPhone Safari: no element full screen; a one-time tip, dismissed with a tap.
+      tipEl = el('button', { type: 'button', class: 'sp-tip', id: 'splash-home-tip' }, t('flow.menu.homeScreenTip'), el('b', { 'aria-hidden': 'true' }, '×'));
+      tipEl.setAttribute('aria-label', t('flow.menu.homeScreenTip') + ' ' + t('flow.menu.dismiss'));
+      tipEl.addEventListener('click', () => { dismissHomeScreenHint(); tipEl.remove(); tipEl = null; });
+      root.append(tipEl);
+    }
     menuAge = 0;
     awake = false;
     initialFocus = cont || newBtn;
@@ -144,6 +174,7 @@ export function splashScene(app) {
     awake = true;
     if (menu) menu.classList.remove('passthrough');
     if (langBtn) langBtn.classList.remove('passthrough');
+    if (fsBtn) fsBtn.classList.remove('passthrough');
     // Keep a focus the player already moved with the arrows; otherwise focus the first choice.
     if (!root.contains(document.activeElement) && initialFocus && initialFocus.isConnected) focusInitial(root, initialFocus);
   }
@@ -163,7 +194,7 @@ export function splashScene(app) {
       await loadLanguage(code);
       if (destroyed) return;
       // Rebuild the menu in the new language.
-      if (menu) { menu.remove(); langBtn.remove(); menu = null; newBtn = null; }
+      if (menu) { menu.remove(); langBtn.remove(); if (fsBtn) fsBtn.remove(); menu = null; newBtn = null; fsBtn = null; }
     } else if (code && firstRun) {
       settings.set('language', code);
     }
@@ -338,14 +369,19 @@ export function splashScene(app) {
         skipLayer.addEventListener('click', skip);
         root.append(skipLayer);
       }
-      art.loadSet('splash').then(ok => { ready = ok; failed = !ok; });
+      art.loadSet('splash').then(ok => {
+        ready = ok; failed = !ok;
+        // Then the likeliest next screen's art (downloaded, not decoded; flow.js).
+        if (!destroyed && app.flow && app.flow.prefetchMenu) app.flow.prefetchMenu();
+      });
       window.__test && window.__test.register('splash', () => ({
-        frame, ready, failed, menu: !!menu, awake, chooser: chooserOpen,
+        frame, ready, failed, menu: !!menu, awake, chooser: chooserOpen, fullscreenButton: !!(fsBtn && fsBtn.isConnected),
         buttons: menu ? [...menu.querySelectorAll('button')].map(b => b.id) : [],
       }));
     },
     exit() {
       destroyed = true;
+      if (unFs) { unFs(); unFs = null; }
       if (popNav) popNav();
       clearNav();
       audio.stopMusic();

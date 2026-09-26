@@ -10,10 +10,14 @@
 // atlas yet show the text on the phone's blank screen.
 //
 // Controls: tap anywhere, Space / jump or Enter shows the whole page, then the next one; Esc /
-// Backspace skips; the original's 5 s autoplay is kept (counted once the text is fully shown).
-// Autoplay is suspended while the player is away (suspendAutoplay(), from the scene's onHidden)
-// and comes back with their next key, tap or button press, so an unattended briefing never
-// starts the level on its own.
+// Backspace skips. The original's autoplay (5 s a page) is kept for a child who just watches,
+// counted once the text is fully shown and given longer for a long page or a larger text size
+// (the greater of 5 s and 0.45 s a word, times the text scale). It stops for the rest of the
+// briefing once the child turns a page themselves (they are reading at their own pace), and it
+// never turns the last page: the level (and its clock) starts only with the child's Play press.
+// Autoplay is also suspended while the player is away (suspendAutoplay(), from the scene's
+// onHidden) and comes back with their next key, tap or button press, so an unattended briefing
+// never starts the level on its own.
 //
 // Closing: the original shrank the phone and started the level in the same call
 // (PlatformGame.as:545-549), so the level runs while the phone rotates away; onShrinkStart fires
@@ -24,11 +28,13 @@ import { t, has } from '../core/i18n.js';
 import { tp, device } from '../ui/prompts.js';
 import { ease, clamp } from '../core/tween.js';
 import { sprites } from './sprites.js';
+import { settings } from '../core/settings.js';
 import { PHONE_RECT } from './hud.js';
 
 const TICK_MS = 15;
 const FRAME_MS = 40;                          // 25 fps
-const AUTOPLAY_TICKS = Math.round(5000 / TICK_MS);
+const AUTOPLAY_MIN_MS = 5000;                 // the original's waitTime
+const AUTOPLAY_MS_PER_WORD = 450;
 const REVEAL_PER_TICK = 1.3;                  // typewriter speed, characters per 15 ms
 const ROOT = [-1.8, 4.15];
 // The level_intros text fields are Arial (body regular 10 px, titles 16 px, white, left-aligned;
@@ -71,8 +77,9 @@ export const INTRO_PAGES = {
 };
 // Frames that hold a small looping inset animation while their page waits (the timeline stops
 // on the page frame but its nested clips keep playing; the frames up to the next stop show that
-// motion). [first, last] per page frame, from the level_intros scripts.
-const PAGE_LOOPS = { 80: [80, 89], 110: [110, 119], 120: [120, 129], 130: [130, 139], 140: [140, 149], 150: [150, 159], 160: [160, 169], 170: [170, 179] };
+// motion). [first, last] per page frame, from the level_intros scripts. Level 1's last page (the
+// portal) needs the level-1 intro pages rendered with the nested-clip age model (NOTES-art-decisions.md 7).
+const PAGE_LOOPS = { 30: [30, 39], 80: [80, 89], 110: [110, 119], 120: [120, 129], 130: [130, 139], 140: [140, 149], 150: [150, 159], 160: [160, 169], 170: [170, 179] };
 // A text box for levels without page art: most of the big screen.
 const GENERIC_BODY = { rect: [0, 0, 164, 94], m: [0, 1.5961, -1.5961, 0, 168, 16] };
 
@@ -104,6 +111,7 @@ export class IntroPhone {
     this.onShrinkStart = onShrinkStart;
     this.onDone = onDone;
     this.autoplay = true;    // false while the player is away (suspendAutoplay)
+    this.manual = false;     // the child turned a page: no more autoplay in this briefing
     this.reducedMotion = reducedMotion;
     const keys = introKeys(title);
     const layout = INTRO_PAGES[title];
@@ -150,7 +158,7 @@ export class IntroPhone {
   // grow animation it just finishes the animation. auto: called by the 5 s autoplay; any other
   // call is the player's, which also turns autoplay back on.
   advance(auto = false) {
-    if (!auto) this.resumeAutoplay();
+    if (!auto) { this.resumeAutoplay(); if (this.phase === 'page') this.manual = true; }
     if (this.phase === 'grow') { this.age = 9999; return; }
     if (this.phase !== 'page') return;
     if (this.revealed < this.text.length) { this.revealed = this.text.length; this.revealedAt = this.pageAge; return; }
@@ -233,7 +241,7 @@ export class IntroPhone {
     const focused = document.activeElement && document.activeElement.tagName === 'BUTTON' && this.root.contains(document.activeElement);
     if (input.pressed('jump') || (input.pressed('confirm') && !focused)) this.advance();
     else if (input.pressed('back') || input.pressed('pause') || (this.briefing && input.pressed('phone'))) this.skip();
-    else if (this.autoplayOn && this.pageAge - this.revealedAt >= AUTOPLAY_TICKS) this.advance(true);
+    else if (this.autoplayOn && this.pageAge - this.revealedAt >= this.autoplayTicks()) this.advance(true);
     // A key press the briefing does not use (a focused button's Enter, arrows) still means the
     // player is back.
     if (!this.autoplay && (input.pressed('confirm') || input.pressed('left') || input.pressed('right'))) this.resumeAutoplay();
@@ -241,7 +249,14 @@ export class IntroPhone {
 
   // The 5 s autoplay is running on this page (the first briefing only, once the text is shown).
   get autoplayOn() {
-    return !this.briefing && this.autoplay && this.revealedAt >= 0;
+    return !this.briefing && this.autoplay && !this.manual && this.revealedAt >= 0 && this.page < this.pages.length - 1;
+  }
+
+  // Ticks the autoplay waits on this page once its text is shown.
+  autoplayTicks() {
+    const words = String(this.text || '').split(/\s+/).filter(Boolean).length;
+    const scale = Math.max(1, Number(settings.get('textScale')) || 1);
+    return Math.round(Math.max(AUTOPLAY_MIN_MS, AUTOPLAY_MS_PER_WORD * words) * scale / TICK_MS);
   }
 
   // Current e_phone frame (1-based) and how far the phone is towards its large state (0..1).
@@ -354,7 +369,7 @@ export class IntroPhone {
     ctx.fillText(hint, 400, 436.5, 760);
     // Autoplay progress: a thin bar under the dots.
     if (this.autoplayOn) {
-      const p = clamp((this.pageAge - this.revealedAt) / AUTOPLAY_TICKS, 0, 1);
+      const p = clamp((this.pageAge - this.revealedAt) / this.autoplayTicks(), 0, 1);
       ctx.globalAlpha = 0.6;
       ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fillRect(360, 407, 90, 2.5);
       ctx.fillStyle = '#5fd4ff'; ctx.fillRect(360, 407, 90 * p, 2.5);

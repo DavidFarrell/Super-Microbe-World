@@ -4,7 +4,8 @@ Scope: levels 2 to 10 of the hoverboard platform game (`web/js/platformer/`), on
 engine documented in `web/NOTES-platformer-decisions.md` ("PD" below). Sources are cited as in
 `web/NOTES.md` 1.2 (`PlatformGame.as` is `reference/Junior_Game/src/ebug/junior/PlatformGame.as`).
 The resolved decisions of `web/NOTES.md` 11.9 are applied as written and are not reopened here.
-To be merged into `web/NOTES.md` (sections 3, 4 and 10).
+Merged into `web/NOTES.md` (sections 4, 10.1 and 10.4, cited there as [LV §n]), which is the entry
+point.
 
 ## 1. Resolved decisions as built (NOTES.md 11.9)
 
@@ -43,8 +44,8 @@ The ePhone picture is exposed to tests as `probe('platform').hud.picture` / `.mo
   (`AREA_MUSIC` in `web/js/core/music.js`).
 - **Briefing text** for every level lives in `web/data/lang/en/levels.json` (`intro.levelN.i`, the
   original wording with the spelling fixes of NOTES.md 7.4 and device-aware key placeholders).
-  They supersede the identical copies in `web/data/lang/en.json` (namespace files are merged after
-  it); removing those copies is requested in `web/requests/levels.md`. Known text/goal mismatches
+  The identical copies that `web/data/lang/en.json` used to hold were removed when the areas were
+  joined (`web/requests/levels.md` #1). Known text/goal mismatches
   (L6 "wash away all the bad microbes" for 3 of 4; L10 "until you kill the super infection" for 6
   detonations) are kept as written.
 - **Level-complete card** (standalone play only): the goal counter is labelled for the goal type
@@ -160,8 +161,8 @@ traces are unaffected except through hit-stop (whole logic steps, PD "Feel impro
   `BOX_OVERRIDES` in `tools/convert-levels.mjs`) changes; the clip bounds that `hitTest`, the
   photo range and the on-screen test read (`web/js/platformer/data/clips.js`, Flash's live
   `_width`) are a separate question the captures do not answer and stay as they were. Only level 4
-  places Patty; its trace is re-recorded (section 4). Settling NOTES.md is requested in
-  `web/requests/levels.md` item 4.
+  places Patty; its trace is re-recorded (section 4). `web/NOTES.md` records it as settled (4.4,
+  10.4 #83).
 - **Wide microbe boxes reach into tiles** (frame-1 art bounds, NOTES.md 4.4): level 4 Patty at
   (4,11) into the loaf end at (4,14) (37.9 px; she is not pushed out because the cheese below
   pushes back, see above); level 5 Slurm at (5,39) into the small spot at (6,40); level 6 Slarg
@@ -185,7 +186,7 @@ traces are unaffected except through hit-stop (whole logic steps, PD "Feel impro
   so her runs differ in the throwing levels (5, 6, 7); `record-traces.mjs --avatar=amy --check`
   completes all ten levels with her too (checked, page and headless agree), without writing traces.
 - `web/NOTES-platformer-decisions.md` "Follow-ups" (bots for levels 4-10, art for the other levels)
-  are done by this work; that file is outside this area and is left as it is.
+  are done by this work, and that file now says so.
 
 ## 7. Review fixes (briefing, cards, level 10 hints, Patty)
 
@@ -194,11 +195,11 @@ traces are unaffected except through hit-stop (whole logic steps, PD "Feel impro
 | L4 Patty hovers in mid-air | Patty's physics box 187.89 x 141.53 (section 5) | captures 050, 051; `levels.json:1699-1706` | `tools/convert-levels.mjs` `BOX_OVERRIDES`, `web/data/levels/alpha_level4.json`, `tile_definitions.json`, L4 trace | headless run (Patty stays at (550, 200) for 300 steps), `levels.spec` (a) L4 and (c) |
 | Briefing drawn over the tiles | While the first briefing is up the level is drawn without its tiles (background, entities, player and HUD only), as the original, which duplicated tile clips only in RENDER_WORLD. The re-opened briefing (port only) keeps them. | `PlatformGame.as:540-551` (INIT_DIALOGUE), `1090-1107` (RENDER_WORLD); captures 035, 044, 048, 049, 087, 105, 106, 109, 180 | `render.js` `draw(..., { tiles })`, `platformScene.js` `render()` | `levels-ui` (e): `tilesDrawn` 0 under the first briefing, > 0 once play starts and in the re-opened briefing |
 | Play started 800 ms late | The first briefing starts play (and the clock) when the phone starts shrinking; the shrinking phone is drawn over the running level. A re-opened briefing still resumes when the phone has gone. Opening the briefing again, restarting or pausing during the shrink is handled (the old phone is dropped; paused, it waits). | `PlatformGame.as:545-549`; capture 182 | `intro.js` `onShrinkStart`, `platformScene.js` `showIntro()`, `update()` | `levels-ui` (e): `ui` 'play' while `intro.phase` is 'shrink', `stepCount` advances under it; `level1.spec` (P during the shrink) |
-| Milk glass white on the L8/L9 pages | Atlas is outside this area: requested (`web/requests/levels.md` item 3). | captures 105, 106, 109 | - | - |
+| Milk glass white on the L8/L9 pages | Rendered when the areas were joined: the level 8 and 9 pages come from a `level_intros_r3` render job that pins the page's `milk_image/glass` to its `yogurt` frame, as the clip's own frame-1 script does (`web/requests/levels.md` #3; `web/NOTES-art-decisions.md` section 5). | captures 105, 106, 109 | `tools/swf-sheet/jobs/levels.json`, `tools/atlas/levels.json`, `web/data/atlas/intro-r3.*` | by eye against capture 105; `levels.spec` (c) and (d) |
 | Whiteout under the HUD | The whiteout is drawn by `Hud.draw()` over the timer, score, hearts and held antibiotic; the ePhone and the banner stay above it (the phone's depth after `swapDepths(this.getNextHighestDepth())` cannot be read from the sources). Particles and popups are drawn before the HUD, so they sit under the white for its first frames too. | NOTES.md 3.24 (whiteout depth 194; score 89, hearts 111-119, held 123, timer 125); `PlatformGame.as:542` | `render.js` (fill removed), `hud.js` `draw({ whiteout })` | `levels-ui` (h): white pixels over the score, a heart and the timer at the first whiteout frame |
 | Tick boxes capped at `required` | Every counted goal event ticks the next box, up to the six boxes, so an overshoot ticks a grey box as in the original. | `PlatformGame.as:918-925` | `hud.js` `drawStatus()` and the fallback phone | code review (overshoot is rare: two kills in one step in L5/L6) |
-| Blur during the briefing started the level unattended | `onHidden()` during the first briefing suspends its autoplay (the pause card is for play only, `main.js:37-40`); the player's next key (jump, confirm, arrows, back) or tap turns it back on and restarts the 5 s count. No `document.hasFocus()` test at play start (headless browsers report no focus). | review run t4 | `platformScene.js` `onHidden()`, `intro.js` `suspendAutoplay()` / `resumeAutoplay()` | `levels-ui` (e): 2500 ticks after a blur: still page 0, step 0, 180 s; Space then autoplay reaches play |
-| Reduced motion: no autoplay, hint dimmed | `revealedAt` is set wherever the page is shown at once, so the autoplay, the full-opacity hint and the progress bar work the same with reduced motion. | review run t8 | `intro.js` `advance()`, `update()` | `levels-ui` (f): play reached after 670 ticks |
+| Blur during the briefing started the level unattended | `onHidden()` during the first briefing suspends its autoplay (the pause card is for play only, `main.js:37-40`); the player's next key (jump, confirm, arrows, back) or tap turns it back on and restarts the 5 s count. No `document.hasFocus()` test at play start (headless browsers report no focus). | review run t4 | `platformScene.js` `onHidden()`, `intro.js` `suspendAutoplay()` / `resumeAutoplay()` | `levels-ui` (e): 2500 ticks after a blur: still page 0, step 0, 180 s; Space then autoplay reaches play. Since the whole-game review (NOTES 10.6) a key that turns a page ends the autoplay for the rest of the briefing, and the autoplay never turns the last page, so `levels-ui` (e) now presses through to play. |
+| Reduced motion: no autoplay, hint dimmed | `revealedAt` is set wherever the page is shown at once, so the autoplay, the full-opacity hint and the progress bar work the same with reduced motion. | review run t8 | `intro.js` `advance()`, `update()` | `levels-ui` (f): play reached after 670 ticks. Since the whole-game review (NOTES 10.6) the autoplay stops on the last page, and `levels-ui` (f) checks that only a press starts the level. |
 | Game-over prompt only true with focus | Enter on the game-over or level-complete card presses its main button when no card button has focus (a focused button takes Enter natively, so nothing is pressed twice); a click or tap anywhere off the buttons retries, as the original's "click to try again" page; the prompt is re-worded when the input device changes. | original summary page ("click to try again"); review run t15 | `platformScene.js` `onGameOver()`, `confirmCard()`, `update()` | `levels-ui` (g) |
 | Briefing hint hard to read | The hint is drawn at 17 stage px on a dark pill, at 85 % opacity while the text types and 92.5-100 % (a gentle pulse) after. | review screenshots | `intro.js` `drawChrome()` | screenshot `levels-ui-briefing.png` |
 | Off-screen bomb badges stacked | See section 3 "Bombs": art-rectangle test, 50 px spread per side. | review run t10 | `render.js` `drawBombHints()`, `spreadInBand()` | `levels-ui` (h): up to 3 badges on one side, at least 45 px apart |

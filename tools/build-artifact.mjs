@@ -4,7 +4,11 @@
 //   - keeps only the <title>, <style> and body content of web/index.html,
 //   - drops the manifest/icon links (main.js then skips service-worker registration),
 //   - adds a 16px minimum side gutter around the stage,
-//   - copies every runtime file into the output folder and writes files.json (the publish map).
+//   - copies every runtime file into the output folder and writes files.json (the publish map),
+//   - keeps third-party branding out of the hosted files (GOAL_PROMPT, NOTES 11.2): whole-line
+//     // comments are dropped from the copied JavaScript (they cite the 2009 source paths), the
+//     atlas JSON loses its per-symbol provenance fields (source, swf, symbol, charId: the
+//     runtime never reads them), and the build fails if "e-Bug" / "ebug" is left in any file.
 // Usage: node tools/build-artifact.mjs <outDir>
 import fs from 'node:fs';
 import path from 'node:path';
@@ -34,7 +38,9 @@ const files = {};
     if (e.isDirectory()) { walk(abs); continue; }
     if (SKIP.some(r => r.test(rel))) continue;
     fs.mkdirSync(path.dirname(path.join(out, rel)), { recursive: true });
-    fs.copyFileSync(abs, path.join(out, rel));
+    if (rel.endsWith('.js')) fs.writeFileSync(path.join(out, rel), stripLineComments(fs.readFileSync(abs, 'utf8')));
+    else if (/^data\/atlas\/.+\.json$/.test(rel)) fs.writeFileSync(path.join(out, rel), JSON.stringify(stripProvenance(JSON.parse(fs.readFileSync(abs, 'utf8')))));
+    else fs.copyFileSync(abs, path.join(out, rel));
     files[rel] = rel;
   }
 })(WEB);
@@ -57,7 +63,25 @@ if (fs.existsSync(path.join(langDir, 'manifest.json'))) {
   fs.writeFileSync(path.join(langDir, 'manifest.json'), JSON.stringify(manifest));
 }
 fs.writeFileSync(path.join(out, 'files.json'), JSON.stringify(files, null, 1));
+// No third-party brand name in any hosted text file ("debug" and the like are fine).
+const BRAND = /(?<![a-z])e-?bug/i;
+const branded = ['index.html', ...Object.keys(files)].filter(f => /\.(js|json|html|css|txt|webmanifest)$/.test(f) && BRAND.test(fs.readFileSync(path.join(out, f), 'utf8')));
+if (branded.length) { console.error(`artifact build: brand name left in ${branded.join(', ')}`); process.exit(1); }
 const n = Object.keys(files).length;
 const bytes = Object.keys(files).reduce((s, f) => s + fs.statSync(path.join(out, f)).size, 0);
 console.log(`artifact build: ${n} files + index.html, ${(bytes / 1048576).toFixed(2)} MB -> ${out}`);
 if (n > 250) console.warn('WARNING: more than 250 files; an artifact publish takes at most 255.');
+
+// Drops whole-line // comments (a line whose first non-blank characters are //). Code and
+// trailing comments are untouched, so nothing inside a string can be cut.
+function stripLineComments(src) {
+  return src.split('\n').filter(line => !/^\s*\/\//.test(line)).join('\n');
+}
+
+// Atlas sheets name the SWF each symbol was rendered from; the game never reads it.
+function stripProvenance(atlas) {
+  for (const sym of Object.values((atlas && atlas.symbols) || {})) {
+    if (sym && typeof sym === 'object' && !Array.isArray(sym)) for (const k of ['source', 'swf', 'symbol', 'charId']) delete sym[k];
+  }
+  return atlas;
+}

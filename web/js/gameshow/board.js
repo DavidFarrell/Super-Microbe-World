@@ -76,7 +76,8 @@ export class Board {
   }
 
   // question: { text, score }, n: 1-based number, total, labels: three button labels.
-  show(question, n, total, labels) {
+  // lang: BCP 47 tag of the quiz language, put on the answer buttons (their labels are quiz text).
+  show(question, n, total, labels, lang = null) {
     this.question = { ...question, n, total };
     this.labels = labels;
     this.visible = true;
@@ -90,7 +91,10 @@ export class Board {
     this.layout = this.computeLayout();
     this.root.hidden = false;
     this.root.setAttribute('aria-label', t('gameshow.questionAria', { n, total, text: question.text }));
-    this.buttons.forEach((b, i) => { b.setAttribute('aria-label', labels[i]); b.textContent = ''; b.append(el('span', { class: 'sr-only' }, labels[i])); b.disabled = false; });
+    this.buttons.forEach((b, i) => {
+      b.setAttribute('aria-label', labels[i]); b.textContent = ''; b.append(el('span', { class: 'sr-only' }, labels[i])); b.disabled = false;
+      if (lang) b.lang = lang; else b.removeAttribute('lang');
+    });
     audio.play('gsBoard');
     if (this.app.announce) this.app.announce(t('gameshow.questionAria', { n, total, text: question.text }));
   }

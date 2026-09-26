@@ -2,8 +2,9 @@
 
 Scope: the kitchen game of round 4 ("Food Hygiene"), scene `kitchen` in `web/js/kitchen/`, ported
 from `reference/Junior_Game/src/ebug/junior/fridge/KitchenGame.as` and `FoodItem.as` following
-`web/NOTES.md` section 5 (cited as "NOTES 5.x") and the resolved decisions in NOTES 11.9. To be
-merged into `web/NOTES.md`. Everything not listed here behaves as the original did.
+`web/NOTES.md` section 5 (cited as "NOTES 5.x") and the resolved decisions in NOTES 11.9. Merged
+into `web/NOTES.md` (5.13 and 10.3, cited there as [KD]), which is the entry point. Everything not
+listed here behaves as the original did.
 
 ## Module layout
 
@@ -131,14 +132,22 @@ and `web/tests/kitchen-controls.spec.mjs`.
   pick it up (the places light up), then tap a place; or drag the item onto a place (mouse or
   finger; a drop elsewhere puts it back). Keyboard: Tab / Shift+Tab and the arrow keys move
   between targets (spatially), Enter or Space picks up and puts away (Enter on a place puts the
-  item there directly), T tissues, C cling film, H wash hands (also 1, 2, 3), Backspace puts a
+  item there directly), T tissues, C cling film, H wash hands (also 1, 2, 3; all three remappable
+  in Settings as the tissues, cling film and wash actions), Backspace puts a
   lifted item back, Esc pauses. Gamepad: d-pad to choose, A to pick up and put away (and for the
   intro, outro and pause buttons), B tissues (or, with an item lifted, puts it back), X cling
   film, Y wash hands, Start pause. A control legend shows on keyboard and gamepad devices; it
-  names the pause and move keys as remapped in Settings (`keyFor`, "Arrows" while the arrows are
-  first), while Tab, Enter, T, C and H stay literal because `controls.js` reads them directly. The
-  HUD bubbles name the key or button too: "Tissue! (T)" / "Tissue! (B)", "Wash (H)" / "Wash (Y)",
-  and just "Tissue!" / "Wash" on touch. Touch: a pause button.
+  names the pause, move and tool keys as bound in Settings (`keyFor`, "Arrows" while the arrows
+  are first), while Tab and Enter stay literal because `controls.js` reads them directly. The
+  tool keys are the `tissues`, `clingfilm` and `wash` actions (`core/settings.js` `DEFAULT_KEYS`,
+  defaults T / C / H and 1 / 2 / 3; added when the areas were joined, `web/requests/kitchen.md`
+  #2): `controls.js` still queues the raw key events per tick (runs stay deterministic) and maps a
+  code to its tool through the live bindings; during play a key bound to a tool takes that tool
+  even if it is also Enter, Space or Backspace (the player's own choice wins), elsewhere the fixed
+  meaning applies. In Settings the tools share a group with the arrows, confirm, back and pause, so
+  one key is never bound to two of them. The HUD bubbles name the key or button too: "Tissue! (T)" /
+  "Tissue! (B)", "Wash (H)" / "Wash (Y)", and just "Tissue!" / "Wash" on touch. Touch: a pause
+  button.
 - A sneeze drops a lifted item (the player needs their hands); picking up is ignored during a
   sneeze and while washing.
 - Intro screens: the 2009 texts (NOTES 5.11) as the SWFs set them: white Verdana Bold 20 (23 for
@@ -156,7 +165,8 @@ and `web/tests/kitchen-controls.spec.mjs`.
   ("Next", "Start" on the last screen) stands where the original's "Click" button was. The
   sentences that name a control use the input in use: touch reads the 2009 wording with "tap";
   keyboard (which also covers the mouse) keeps "click" and adds the key, e.g. "click on the tissues
-  (or press T)", "Click on the cling film (or press C)", "Click the button (or press Enter)";
+  (or press T)", "Click on the cling film (or press C)", "Click the button (or press Enter)", with
+  the tool keys filled from the bindings (`{key_tissues}`, `{key_clingfilm}`);
   gamepad names the buttons, e.g. "press B for the tissues", "Press A when ready to start"
   (`kitchen.intro.N.K.keyboard` / `.gamepad` variants of intro 0.8, 0.ready, 1.8, 1.9 and 2.5; the
   rest of the 2009 wording is unchanged). Level 0's tutorial keeps the original logic (the drawer

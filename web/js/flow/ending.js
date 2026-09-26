@@ -17,6 +17,7 @@ import { AREA_MUSIC } from '../core/music.js';
 import { createTalkie } from '../gameshow/talkie.js';
 import { Studio } from '../gameshow/studio.js';
 import { loadAtlases, atlasSet } from '../gameshow/art.js';
+import { drawLoading } from './art.js';
 import { registerGameshowSounds } from '../gameshow/sound.js';
 import { avatarName, otherAvatar } from './flow.js';
 import { ensureStyle, glossy, pushNav, tickNav, clearNav } from './ui.js';
@@ -172,6 +173,8 @@ export function endingScene(app) {
       confetti.update();
     },
     render(ctx) {
+      // Waiting for the studio's art: a small loading ring, not the studio's placeholder drawing.
+      if (phase === 'loading') { drawLoading(ctx, ticks, '#000'); return; }
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 800, 450);
       if (!studio) return;
       studio.draw(ctx, { reducedMotion: reduced() });

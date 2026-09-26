@@ -8,9 +8,11 @@
 // NOTES 5.9 says (with the 11.9 fixes), exact frame-clock timing of seconds and sneezes, drag and
 // drop with mouse and touch, tap-target sizes on small phones, and pause.
 //
-// The expected results come from this file's own reading of the rules (NOTES 5.3 and 5.9), not
-// from web/js/kitchen/rules.js, so the game is checked against the spec.
+// The expected results come from this file's own reading of the rules (NOTES 5.3 and 5.9) and the
+// food table in ./bots/kitchen-bot.mjs (the bot and its drivers live there, shared with the full
+// journey), not from web/js/kitchen/rules.js, so the game is checked against the spec.
 import { drawLevelFood } from '../js/kitchen/rules.js';
+import { TY, FOOD, HOME, isBad, homeOf, tap, centreOf, touchDriver, keyboardDriver, playLevelCorrectly } from './bots/kitchen-bot.mjs';
 import { Rng } from '../js/core/rng.js';
 
 const PHONE = { viewport: { width: 915, height: 412 }, deviceScaleFactor: 2.625, isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36' };
@@ -27,20 +29,9 @@ const assert = (cond, msg) => { if (!cond) throw new Error(msg); };
 // ---------------------------------------------------------------------------------------------
 // The rules as NOTES 5.3 / 5.9 state them (with decisions 11.9 #13 and the 5.13 fixes).
 // ---------------------------------------------------------------------------------------------
-const TY = { FRUIT: 0, VEG: 1, CUP: 4, CHEESE: 5, DOOR: 6, RAW: 7, COOKED: 9 };
-const FOOD = {
-  mouldy_bread: [TY.CUP, 'mouldy'], burst_yogurt: [TY.DOOR, 'burst'], carrots: [TY.VEG], tomatoes: [TY.VEG], orange: [TY.FRUIT],
-  bananas: [TY.FRUIT], mouldy_orange: [TY.FRUIT, 'mouldy'], yogurt: [TY.DOOR], cheese: [TY.CHEESE], orange_juice: [TY.DOOR],
-  red_apple: [TY.FRUIT], raw_lamb: [TY.RAW], raw_chicken: [TY.RAW], raw_sausages: [TY.RAW], raw_steak: [TY.RAW],
-  cooked_steak: [TY.COOKED], cooked_lamb: [TY.COOKED], cooked_chicken: [TY.COOKED], green_apple: [TY.FRUIT], pear: [TY.FRUIT],
-  milk: [TY.DOOR], soup: [TY.CUP], broccoli: [TY.VEG], bread: [TY.CUP], spring_onion: [TY.VEG],
-};
-const HOME = { [TY.FRUIT]: 'bowl', [TY.VEG]: 'fridgeDrawer', [TY.CUP]: 'cupboard', [TY.CHEESE]: 'fridgeUpper', [TY.DOOR]: 'fridgeDoor', [TY.RAW]: 'fridgeLower', [TY.COOKED]: 'fridgeMid' };
 const REMINDER = { [TY.FRUIT]: 'fruitLocation', [TY.VEG]: 'vegetablesLocation', [TY.CUP]: 'cupboardItemsLocation', [TY.CHEESE]: 'cheeseLocation', [TY.DOOR]: 'liquidsLocation', [TY.RAW]: 'rawMeatLocation', [TY.COOKED]: 'cookedMeatLocation' };
 const LOCS = ['cupboard', 'bowl', 'fridgeUpper', 'fridgeMid', 'fridgeLower', 'fridgeDrawer', 'fridgeDoor', 'bin'];
 const ROW_TYPES = [TY.FRUIT, TY.VEG, TY.CUP, TY.CHEESE, TY.RAW, TY.COOKED, TY.DOOR];
-const isBad = asset => FOOD[asset].length > 1;
-const homeOf = asset => (isBad(asset) ? 'bin' : HOME[FOOD[asset][0]]);
 
 // One placement: 'correct' | 'incorrect' | 'neutral', and the reminder it raises.
 function expectVerdict({ asset, loc, clingfilm }) {
@@ -103,128 +94,6 @@ async function chainLevels(page, { avatar, from = 0, to = 3, score = 0, seeds = 
 
 async function waitLevel(page, level) {
   await page.waitForFunction(l => { const p = window.__test.probe('kitchen'); return p && p.ready && p.level === l && p.mode === 'intro'; }, level, { timeout: 20000 });
-}
-
-async function tap(cdp, x, y) {
-  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y, id: 1 }] });
-  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-}
-
-async function centreOf(page, sel) {
-  const b = await page.locator(sel).boundingBox();
-  assert(b, `${sel} is not visible`);
-  return { x: b.x + b.width / 2, y: b.y + b.height / 2, w: b.width, h: b.height };
-}
-
-// Input drivers: the same bot plays through taps or the keyboard.
-function touchDriver(page, cdp) {
-  return {
-    name: 'touch',
-    async target(id) { const c = await centreOf(page, `#kz-${id}`); await tap(cdp, c.x, c.y); await step(page, 2); },
-    async next() { const c = await centreOf(page, '#kz-next'); await tap(cdp, c.x, c.y); await step(page, 2); },
-    async tissues() { await this.target('tissues'); },
-    async clingfilm() { await this.target('clingfilm'); },
-    async wash() { await this.target('sink'); },
-  };
-}
-
-function keyboardDriver(page) {
-  const press = async k => { await page.keyboard.press(k); await step(page, 1); };
-  const focusOn = async id => {
-    let p = await probe(page);
-    for (let i = 0; i < 16 && p.focus !== id; i++) { await press('Tab'); p = await probe(page); }
-    assert(p.focus === id, `could not Tab to ${id} (focus ${p.focus})`);
-  };
-  let n = 0;
-  return {
-    name: 'keyboard',
-    // Alternates the two keyboard styles: lift the item (Enter), Tab to the place, Space to put it
-    // away; or Tab straight to the place and Enter.
-    async target(id) {
-      const p = await probe(page);
-      if (p.mode === 'play' && p.current && (n++ % 2 === 0) && !p.held) {
-        await focusOn('item');
-        await press('Enter');
-        assert((await probe(page)).held, 'Enter on the item did not pick it up');
-        await focusOn(id);
-        await press('Space');
-      } else {
-        await focusOn(id);
-        await press('Enter');
-      }
-      await step(page, 1);
-    },
-    async next() { await press('Enter'); await step(page, 1); },
-    async tissues() { await press('KeyT'); },
-    async clingfilm() { await press('KeyC'); },
-    async wash() { await press('KeyH'); },
-  };
-}
-
-// Plays one level to the end of its outro with every item put away correctly. Returns what the
-// bot saw.
-async function playLevelCorrectly(page, drv, level, { waitForSneeze = level > 0 } = {}) {
-  const seen = { sneezes: 0, tissues: 0, washes: 0, wrongPage: false, clingfilms: 0, startTime: null };
-  let p = await probe(page);
-  // Intro screens (and the level 0 tutorial: one wrong answer, then the drawer).
-  for (let i = 0; i < 20 && p.mode === 'intro'; i++) {
-    if (p.intro && p.intro.page === 'right') { await drv.next(); p = await probe(page); break; }
-    await drv.next();
-    p = await probe(page);
-    if (p.mode === 'tutorial') {
-      if (!seen.wrongPage) {
-        await drv.target('bin');
-        p = await probe(page);
-        assert(p.mode === 'intro' && p.intro.page === 'wrong', `tutorial: the bin should be wrong (mode ${p.mode}, page ${p.intro && p.intro.page})`);
-        seen.wrongPage = true;
-        continue;
-      }
-      await drv.target('fridgeDrawer');
-      p = await probe(page);
-      assert(p.mode === 'intro' && p.intro.page === 'right', 'tutorial: the drawer should be right');
-    }
-  }
-  assert(p.mode === 'play', `level ${level} did not start (mode ${p.mode})`);
-  seen.startTime = p.timeLeft;
-  let idle = 0;
-  for (let guard = 0; guard < 4000 && p.mode === 'play'; guard++) {
-    if (p.state === 'sneeze') {
-      seen.sneezes++;
-      await drv.tissues();
-      p = await probe(page);
-      assert(p.state === 'wait' && p.hands.sneeze, `tissues did not catch the sneeze (state ${p.state})`);
-      seen.tissues++;
-      continue;
-    }
-    if (p.state === 'wash' || p.state === 'end') { await step(page, 4); p = await probe(page); continue; }
-    if (p.hands.sneeze || p.hands.meat) {
-      await drv.wash();
-      seen.washes++;
-      p = await probe(page);
-      assert(p.state === 'wash', `the sink did not start washing (state ${p.state})`);
-      continue;
-    }
-    if (!p.current) { await step(page, 2); p = await probe(page); continue; }
-    // Idle (up to 40 s) so each sneezing level shows at least one sneeze.
-    if (waitForSneeze && seen.sneezes === 0 && idle < 40 * 67) { await step(page, 20); idle += 20; p = await probe(page); continue; }
-    const type = FOOD[p.current.asset][0];
-    if ((type === TY.RAW || type === TY.COOKED) && !p.current.clingfilm) {
-      await drv.clingfilm();
-      seen.clingfilms++;
-      p = await probe(page);
-      continue;
-    }
-    const before = p.placements.length;
-    await drv.target(homeOf(p.current.asset));
-    p = await probe(page);
-    if (p.placements.length === before && p.state === 'wait') throw new Error(`placing ${p.current && p.current.asset} did nothing`);
-  }
-  assert(p.mode === 'play' || p.mode === 'outro', `unexpected mode ${p.mode}`);
-  // The outro follows at the next one-second tick.
-  const n = await page.evaluate(() => window.__test.stepUntil(t => t.probe('kitchen').mode === 'outro', 200));
-  assert(n >= 0, 'no outro after the level ended');
-  p = await probe(page);
-  return { seen, probe: p };
 }
 
 async function readOutroRows(page) {

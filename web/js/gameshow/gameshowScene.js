@@ -31,10 +31,11 @@
 // and sparkles (correct), a gentle shake (wrong) or a soft chime (don't know), score popups,
 // eased LCD counters, board zoom-in and staggered buttons, music ducked on the board.
 import { el, button, focusFirst, focusNavigator, trapFocus } from '../ui/dom.js';
+import { canFullscreen, fullscreenButton } from '../ui/fullscreen.js';
 import { loadJson } from '../core/assets.js';
 import { audio } from '../core/audio.js';
 import { settings } from '../core/settings.js';
-import { t, language } from '../core/i18n.js';
+import { t, language, langTag } from '../core/i18n.js';
 import { AREA_MUSIC } from '../core/music.js';
 import { Particles, Popups, Shake, haptic } from '../core/fx.js';
 import { gameRng } from '../core/rng.js';
@@ -154,7 +155,7 @@ export function gameshowScene(app) {
     studio.react('host', 'excited');
     const lines = normaliseIntro(quizCode, blind ? blindIntro(roundNo, roundData.intro.blind) : roundData.intro.normal);
     mark('intro');
-    talkie.say(lines.length ? lines : [''], () => ask(0));
+    talkie.say(lines.length ? lines : [''], () => ask(0), { lang: langTag(quizCode) });
   }
 
   function ask(i) {
@@ -171,7 +172,7 @@ export function gameshowScene(app) {
     phase = 'board';
     const q = questions[qi];
     talkie.hide();
-    board.show({ text: q.text, score: q.score }, qi + 1, questions.length, labels);
+    board.show({ text: q.text, score: q.score }, qi + 1, questions.length, labels, langTag(quizCode));
     audio.musicLevel(0.55);
     mark(`board ${qi}`);
   }
@@ -194,7 +195,10 @@ export function gameshowScene(app) {
     phase = 'response';
     const a = answers[answers.length - 1];
     const q = questions[qi];
-    let text = t('gameshow.youChose', { name: playerName, choice: t(`gameshow.choice.${a.choice}`) });
+    // The host echoes the label the board showed (the quiz language's own words), so a French
+    // player who tapped "Pas d'accord" does not hear "Disagree"; English reads as before.
+    const shown = labels[a.choice];
+    let text = t('gameshow.youChose', { name: playerName, choice: shown ? `${shown}.` : t(`gameshow.choice.${a.choice}`) });
     talkie.show();
     if (blind) {
       // Blind round: no verdict, the host looks serious and the player makes a random face
@@ -400,7 +404,8 @@ export function gameshowScene(app) {
       el('div', { class: 'gs-row' },
         button(t('gameshow.resume'), resume, { class: 'primary', id: 'gs-resume' }),
         button(t('gameshow.settings'), openSettingsOverlay, { id: 'gs-settings' }),
-        button(t('gameshow.quit'), quit, { id: 'gs-quit' }))));
+        button(t('gameshow.quit'), quit, { id: 'gs-quit' })),
+      canFullscreen() ? el('div', { class: 'gs-row' }, fullscreenButton(button, { id: 'gs-fullscreen' })) : null));
     mark('pause');
   }
 

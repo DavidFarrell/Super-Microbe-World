@@ -8,11 +8,21 @@
 // loop by hand). Events: { type: 'tap', id } | { type: 'dragStart' } | { type: 'drop', x, y }
 // | { type: 'key', code, shift }.
 import { el } from '../ui/dom.js';
+import { settings } from '../core/settings.js';
 import { TARGETS, inside } from './layout.js';
 
-// Keys the kitchen handles itself (the engine's action map has no tissues / cling film / wash
-// actions, and Space and ArrowUp share the "jump" action).
-const KEYS = new Set(['Enter', 'NumpadEnter', 'Space', 'Tab', 'KeyT', 'KeyC', 'KeyH', 'Digit1', 'Digit2', 'Digit3', 'Numpad1', 'Numpad2', 'Numpad3', 'Backspace']);
+// Keys the kitchen reads itself, by code, so they are queued and handled per tick: the fixed
+// Enter / Space / Tab / Backspace (Space and ArrowUp share the engine's "jump" action, Tab is
+// "phone"), plus whatever keys the tissues, cling film and wash actions are bound to in Settings
+// (defaults T / C / H and 1 / 2 / 3, core/settings.js DEFAULT_KEYS).
+const FIXED_KEYS = new Set(['Enter', 'NumpadEnter', 'Space', 'Tab', 'Backspace']);
+export const TOOL_ACTIONS = { tissues: 'tissues', clingfilm: 'clingfilm', wash: 'sink' };   // action -> target
+export function toolForCode(code) {
+  const keys = settings.get('keys') || {};
+  for (const [action, target] of Object.entries(TOOL_ACTIONS)) if ((keys[action] || []).includes(code)) return target;
+  return null;
+}
+const isKitchenKey = code => FIXED_KEYS.has(code) || toolForCode(code) != null;
 const DRAG_START = 10; // stage px of movement before a press on the item becomes a drag
 
 export class KitchenControls {
@@ -37,7 +47,7 @@ export class KitchenControls {
       const tgt = e.target;
       if (tgt && (tgt.tagName === 'INPUT' || tgt.tagName === 'TEXTAREA' || tgt.isContentEditable)) return;
       if (e.ctrlKey || e.metaKey || e.altKey) return;
-      if (!KEYS.has(e.code)) return;
+      if (!isKitchenKey(e.code)) return;
       e.preventDefault();
       this.queue.push({ type: 'key', code: e.code, shift: e.shiftKey });
     };

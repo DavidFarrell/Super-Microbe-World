@@ -119,10 +119,17 @@ export const tests = [
       assert(await active(page) === 'btn-settings', `Tab went to ${await active(page)}`);
       await page.keyboard.press('Tab');
       assert(await active(page) === 'btn-language', `Tab went to ${await active(page)}`);
+      // Full screen, where the browser offers it (Chromium does), comes last.
+      const fsButton = (await probe(page, 'splash')).fullscreenButton;
+      if (fsButton) {
+        await page.keyboard.press('Tab');
+        assert(await active(page) === 'btn-fullscreen', `Tab went to ${await active(page)}`);
+      }
       await page.keyboard.press('Tab');
       assert(await active(page) === 'btn-new-game', `Tab did not wrap: ${await active(page)}`);
       await page.keyboard.press('Shift+Tab');
-      assert(await active(page) === 'btn-language', `Shift+Tab went to ${await active(page)}`);
+      assert(await active(page) === (fsButton ? 'btn-fullscreen' : 'btn-language'), `Shift+Tab went to ${await active(page)}`);
+      if (fsButton) await page.keyboard.press('Shift+Tab');
       await page.keyboard.press('Shift+Tab');
       await page.keyboard.press('Shift+Tab');
       assert(await active(page) === 'btn-level-select', `Shift+Tab went to ${await active(page)}`);
@@ -250,17 +257,34 @@ export const tests = [
       await d.page.keyboard.press('Enter');
       await until(d.page, t => t.scene === 'cutscene' && t.probe('cutscene') && t.probe('cutscene').phase === 'intro', 'the cutscene');
       for (let i = 0; i < 40 && (await probe(d.page, 'cutscene')).phase === 'intro'; i++) { await d.page.keyboard.press('Enter'); await step(d.page, 4); }
-      assert(await active(d.page) === 'choose-amy', `focus at the choice: ${await active(d.page)}`);
+      // The Enter presses that hurried the host along cannot pick a child: the first one after the
+      // choice appears only highlights Amy, and a confirm on her does nothing until the choice
+      // has been up for half a second.
+      assert(await active(d.page) !== 'choose-amy', `focus at the choice: ${await active(d.page)}`);
+      await d.page.keyboard.press('Enter'); await step(d.page, 2);
+      c = await probe(d.page, 'cutscene');
+      assert(c.phase === 'choose' && !c.chosen && await active(d.page) === 'choose-amy', `first Enter: ${c.phase} ${c.chosen} ${await active(d.page)}`);
+      await d.page.keyboard.press('Enter'); await step(d.page, 2);
+      c = await probe(d.page, 'cutscene');
+      assert(c.phase === 'choose' && !c.chosen && !c.awake, `an Enter before the choice woke picked ${c.chosen}`);
       const h = await d.page.locator('#choose-harry').boundingBox();
       await d.page.mouse.move(h.x + h.width / 2, h.y + h.height / 2);
       await step(d.page, 2);
       c = await probe(d.page, 'cutscene');
       assert(c.hover === 'harry' && await active(d.page) === 'choose-harry', `hover ${c.hover}, focus ${await active(d.page)}`);
+      await until(d.page, t => t.probe('cutscene').awake, 'the choice to take picks', { max: 60 });
       await d.page.keyboard.press('Enter');
       await step(d.page, 2);
       assert((await probe(d.page, 'cutscene')).chosen === 'harry', 'Enter did not choose the hovered child');
       for (let i = 0; i < 40 && (await probe(d.page, 'cutscene')).phase === 'chosen'; i++) { await d.page.keyboard.press('Enter'); await step(d.page, 4); }
       assert((await probe(d.page, 'cutscene')).phase === 'form', 'no form');
+      // The name is not selected (a stray key cannot wipe it), and Enter does not submit the
+      // form until it has been up for a moment.
+      const sel = await d.page.evaluate(() => { const n = document.getElementById('form-nickname'); return [n.selectionStart, n.selectionEnd, n.value.length]; });
+      assert(sel[0] === sel[2] && sel[1] === sel[2], `nickname selection ${sel}`);
+      await d.page.keyboard.press('Enter'); await step(d.page, 2);
+      assert((await probe(d.page, 'cutscene')).phase === 'form', 'an Enter as the form appeared submitted it');
+      await until(d.page, t => t.probe('cutscene').awake, 'the form to take a submit', { max: 60 });
       // Form: arrows from Submit reach the nickname; Space on Submit submits.
       await d.page.keyboard.press('Tab');
       assert(await active(d.page) === 'form-submit', `Tab went to ${await active(d.page)}`);
@@ -326,6 +350,7 @@ export const tests = [
       await tapEl(f.page, cdp2, '#btn-new-game');
       await until(f.page, t => t.scene === 'cutscene' && t.probe('cutscene') && t.probe('cutscene').phase === 'intro' && !t.transitioning, 'the cutscene');
       for (let i = 0; i < 40 && (await probe(f.page, 'cutscene')).phase === 'intro'; i++) { await tapStage(f.page, cdp2); await step(f.page, 4); }
+      await until(f.page, t => t.probe('cutscene').awake, 'the choice to take picks', { max: 60 });
       await tapEl(f.page, cdp2, '#choose-amy');
       for (let i = 0; i < 40 && (await probe(f.page, 'cutscene')).phase === 'chosen'; i++) { await tapStage(f.page, cdp2); await step(f.page, 4); }
       const nick = await f.page.locator('#form-nickname').boundingBox();

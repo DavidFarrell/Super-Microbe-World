@@ -10,8 +10,9 @@ import { Clip, drawFrame, hasArt, track, mul, frameOfTick } from './art.js';
 import { BALOO, roundRect, fitLine, textWidth } from './text.js';
 import { MAX_SCORE } from './rules.js';
 
-// Labels with no art in the atlas yet fall back (checked at play time, so new art is used as soon
-// as it lands): 'condifent' and 'curious' were left out of the rig render.
+// A label with no art in the atlas falls back (checked at play time). 'condifent' and 'curious'
+// are in the rig render now (tools/swf-sheet/jobs/gameshow.json), so these only guard against an
+// atlas built without them; 'confident' is the label GameShow.as:227 asks for (NOTES 10.2 #43).
 const KID_FALLBACKS = { condifent: 'cautious', curious: 'neutral', confident: 'condifent' };
 const SCORE_KEYS = { amy: 'amy_score', harry: 'harry_score' };
 // LCD face of the score clip (gs_score, 73 x 32.5 in its own units), in score-clip space.

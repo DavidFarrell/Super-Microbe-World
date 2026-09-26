@@ -28,7 +28,7 @@
     "normal": [
      "Muito bem, és um surfista nato!",
      "Agora, vamos ver o que aprendeste.",
-     "Za prawidłową odpowiedź otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik.",
+     "Ganhas 10 pontos por cada resposta certa. Se estiver errada o outro jogador é que ganha.",
      "Por isso, se NÃO SOUBERES a resposta, é melhor responderes que não sabes!",
      "Estás pronto?",
      "Aqui vão."
@@ -124,7 +124,7 @@
     ],
     "normal": [
      "Agora, vamos ver o que aprendeste.",
-     "Za prawidłową odpowiedź otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik.",
+     "Ganhas 10 pontos por cada resposta certa. Se estiver errada o outro jogador é que ganha.",
      "Por isso, se NÃO SOUBERES a resposta, é melhor responderes que não sabes!",
      "Estás pronto?",
      "Aqui vão."
@@ -322,7 +322,7 @@
      ]
     },
     {
-     "text": "Como é uma pergunta cega, só saberás o resultado no final.",
+     "text": "É seguro guardar latas abertas no frigorífico.",
      "score": 10,
      "value": 1,
      "answers": [

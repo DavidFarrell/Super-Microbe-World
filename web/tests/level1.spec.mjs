@@ -148,13 +148,17 @@ function targetRects(p) {
     .filter(r => r.x < 800 && r.x + r.w > 0);
 }
 
-// Every control over a target must be faded (class 'occluding'), so the target stays visible.
+// Every control over a target must be faded (class 'occluding'), so the target stays visible,
+// apart from the d-pad and Jump, which the thumb holds and which never fade (they must not
+// flicker while pressed).
+const HELD = ['touch-left', 'touch-right', 'touch-jump'];
 async function checkOcclusion(page, p, stats) {
   const { rects } = await controlRects(page);
   const faded = await page.evaluate(() => [...document.querySelectorAll('.touch-btn.occluding')].map(n => n.id));
+  for (const id of HELD) assert(!faded.includes(id), `step ${p.stepCount}: the held control ${id} faded`);
   for (const t of targetRects(p)) {
     for (const [id, r] of Object.entries(rects)) {
-      if (!overlap(r, t)) continue;
+      if (HELD.includes(id) || !overlap(r, t)) continue;
       stats.covered++;
       stats.byType[t.type] = (stats.byType[t.type] || 0) + 1;
       assert(faded.includes(id), `step ${p.stepCount}: ${id} covers ${t.type} #${t.id} but is not faded (faded: ${faded.join(',') || 'none'})`);
@@ -463,6 +467,11 @@ export const tests = [
       assert(b.flyers === a.flyers && b.hud.ticksShown === a.hud.ticksShown && b.fx.popups === a.fx.popups && b.fx.particles === a.fx.particles && b.time === a.time,
         `paused picture changed: ${JSON.stringify({ a: [a.flyers, a.hud.ticksShown, a.fx, a.time], b: [b.flyers, b.hud.ticksShown, b.fx, b.time] })}`);
       await page.locator('#pf-restart').click();
+      await step(page, 1);
+      // Restart asks first (No focused); Yes restarts.
+      assert(await page.evaluate(() => document.activeElement && document.activeElement.id) === 'fl-confirm-no', 'Restart did not ask first with No focused');
+      assert((await probe(page)).ui === 'paused', 'the level left the pause before the answer');
+      await page.locator('#fl-confirm-yes').click();
       await step(page, 1);
       const c = await probe(page);
       assert(c.ui === 'play' && c.stepCount <= 1, `Restart did not restart (ui ${c.ui}, step ${c.stepCount})`);

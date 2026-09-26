@@ -202,6 +202,17 @@ export const tests = [
       await padPress(page, PAD.RIGHT);
       assert(await page.evaluate(() => document.activeElement && document.activeElement.id) === 'kz-restart', 'the d-pad did not reach Restart');
       await padPress(page, PAD.A);
+      // Restarting a level in play asks first, with No focused: B answers No and the card is back.
+      assert(await page.locator('#fl-confirm-yes').count() === 1, 'Restart from play did not ask first');
+      assert(await page.evaluate(() => document.activeElement && document.activeElement.id) === 'fl-confirm-no', 'No is not focused on the question');
+      await padPress(page, PAD.B);
+      p = await probe(page);
+      assert(p.mode === 'paused' && await page.locator('#fl-confirm-yes').count() === 0, `B on the question: mode ${p.mode}`);
+      assert(await page.evaluate(() => document.activeElement && document.activeElement.id) === 'kz-restart', 'focus did not return to Restart');
+      await padPress(page, PAD.A);
+      await padPress(page, PAD.RIGHT);
+      assert(await page.evaluate(() => document.activeElement && document.activeElement.id) === 'fl-confirm-yes', 'the d-pad did not reach Yes');
+      await padPress(page, PAD.A);
       p = await probe(page);
       assert(p.mode === 'play' && !p.held && p.placements.length === 0 && p.timeLeft === 60, `A on Restart: mode ${p.mode}, held ${p.held}, time ${p.timeLeft}`);
       await page.screenshot({ path: `${ctx.shots}/kitchen-controls-gamepad-play.png` });
@@ -294,6 +305,8 @@ export const tests = [
       await step(page, 200);
       await tapAt(page, cdp, '#touch-pause');
       await tapAt(page, cdp, '#kz-restart');
+      assert((await probe(page)).mode === 'paused', 'Restart from play did not ask first');
+      await tapAt(page, cdp, '#fl-confirm-yes');
       p = await probe(page);
       assert(p.mode === 'play' && p.timeLeft === 60 && p.placements.length === 0, `restart from play: ${p.mode} ${p.timeLeft}`);
       // Reduced motion on while the level runs: read every tick, no particles after a placement.

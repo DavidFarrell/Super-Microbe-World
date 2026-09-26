@@ -88,6 +88,7 @@ export function createTalkie(app, opts = {}) {
   let lastBlip = -1;
   let completeAt = -1;       // tick when the page finished typing (the arrow's blink starts there)
   let destroyed = false;
+  let sayLang = null;        // language of the statements on screen, for announcements
 
   // DOM tap zone (the original's big_invisible_button): transparent, under the scene's own UI.
   const zone = el('div', {
@@ -159,7 +160,7 @@ export function createTalkie(app, opts = {}) {
     lastBlip = -1;
     completeAt = -1;
     const p = pages[i];
-    if (p && p.text && app.announce) app.announce(p.text.replace(/\n/g, ' '));
+    if (p && p.text && app.announce) app.announce(p.text.replace(/\n/g, ' '), sayLang);
   }
 
   function startLine(i) {
@@ -187,7 +188,9 @@ export function createTalkie(app, opts = {}) {
   }
 
   const api = {
-    say(list, cb = null) {
+    // opts.lang: BCP 47 tag of the statements when they are not in the UI language (quiz text).
+    say(list, cb = null, { lang = null } = {}) {
+      sayLang = lang;
       statements = (Array.isArray(list) ? list : [list]).map(s => (s == null ? '' : String(s)));
       onDone = cb;
       if (!visible) { visible = true; visibleAge = 0; }

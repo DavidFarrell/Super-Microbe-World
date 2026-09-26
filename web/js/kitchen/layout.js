@@ -82,7 +82,6 @@ export const TARGETS = [
   { id: 'bin', kind: 'loc', loc: LOC.BIN, hit: R(702, 262, 98, 188), glow: R(708, 268, 88, 132) },
 ];
 export const TARGET = Object.fromEntries(TARGETS.map(t => [t.id, t]));
-export const LOC_TARGET = Object.fromEntries(TARGETS.filter(t => t.kind === 'loc').map(t => [t.loc, t]));
 // Keyboard cycle order (Tab): the item, the counter tools left to right, then the destinations.
 export const TAB_ORDER = ['item', 'tissues', 'clingfilm', 'sink', 'bowl', 'cupboard', 'fridgeUpper', 'fridgeMid', 'fridgeLower', 'fridgeDrawer', 'fridgeDoor', 'bin'];
 export const DEST_ORDER = TAB_ORDER.filter(id => TARGET[id].kind === 'loc');

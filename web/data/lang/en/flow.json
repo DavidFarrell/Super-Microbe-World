@@ -3,7 +3,6 @@
   "flow.ui.cancel": "Cancel",
   "flow.ui.yes": "Yes",
   "flow.ui.no": "No",
-
   "flow.splash.tuning": "Tuning",
   "flow.splash.skip": "Skip the introduction",
   "flow.menu.label": "Main menu",
@@ -11,15 +10,17 @@
   "flow.menu.continue": "Continue",
   "flow.menu.levelSelect": "Level select",
   "flow.menu.settings": "Settings",
+  "flow.menu.fullscreen": "Full screen",
+  "flow.menu.exitFullscreen": "Leave full screen",
+  "flow.menu.homeScreenTip": "Tip: tap Share, then Add to Home Screen, to play full screen.",
+  "flow.menu.dismiss": "Dismiss",
   "flow.menu.language": "Language: {name}. Change language",
   "flow.menu.ready": "Super Microbe World. Main menu.",
   "flow.menu.newGameTitle": "Start a new game?",
   "flow.menu.newGameText": "Your saved game will be replaced. Levels you have unlocked stay unlocked.",
   "flow.menu.newGameYes": "Start again",
-
   "flow.lang.title": "Language",
   "flow.lang.note": "The game show questions and the host's welcome are in every language. Everything else is in English for now.",
-
   "flow.cutscene.playAs": "Play as {name}",
   "flow.cutscene.chooseHint": "Tap Amy or Harry",
   "flow.cutscene.chooseHintKeys": "Click Amy or Harry, or pick with {key_left} {key_right} and press {key_confirm}",
@@ -27,16 +28,14 @@
   "flow.cutscene.chose": "You chose {name}.",
   "flow.cutscene.privacy": "You don't have to fill this in. Your nickname stays on this device and is only used by the host. You can clear it in Settings.",
   "flow.cutscene.submit": "Submit",
-  "flow.cutscene.closing": "All right, {name}! Let's shrink you down and explore the weird world of microbes!",
+  "flow.cutscene.closing": "All right, {name}! Let's get started.",
   "flow.cutscene.quitTitle": "Leave the game show?",
   "flow.cutscene.quitText": "You will go back to the main menu.",
   "flow.cutscene.quitYes": "Main menu",
   "flow.cutscene.quitLabel": "Main menu",
-
   "flow.shrink.skip": "{Press_confirm} to skip",
   "flow.shrink.skipLabel": "Skip the shrinking zone",
   "flow.shrink.announce": "The shrinking zone. You are being shrunk to the size of a microbe!",
-
   "flow.summary.died": "You Died!",
   "flow.summary.outOfTime": "You ran out of time.",
   "flow.summary.clickToTryAgain": "{Press_confirm} to try again",
@@ -53,7 +52,6 @@
   "flow.summary.best": "best",
   "flow.summary.newBest": "New best score!",
   "flow.summary.unlocked": "The next level is open in Level select.",
-
   "flow.ending.win": "Well done! You beat {cpu}. Thank you for playing.",
   "flow.ending.lose": "At the end of the game, I'm sorry to say you lost. Thank you for playing.",
   "flow.ending.draw": "It's a draw! You and {cpu} have exactly the same score. Well done, both of you! Thank you for playing.",
@@ -71,7 +69,6 @@
   "flow.ending.playAgain": "Play again",
   "flow.ending.levelSelect": "Level select",
   "flow.ending.menu": "Main menu",
-
   "flow.levels.title": "Level select",
   "flow.levels.level": "Level {n}",
   "flow.levels.kitchen": "Kitchen {n}",
@@ -83,7 +80,6 @@
   "flow.levels.lockedShort": "Locked",
   "flow.levels.playAs": "Play as",
   "flow.levels.playingAs": "Playing as {name}.",
-
   "flow.settings.title": "Settings",
   "flow.settings.tab.sound": "Sound",
   "flow.settings.tab.game": "Game",
@@ -122,6 +118,7 @@
   "flow.settings.change": "Change",
   "flow.settings.changeLabel": "Change the key for {action}",
   "flow.settings.pressKey": "Press a key...",
+  "flow.settings.touchKeysNote": "These are the keys for a keyboard. With touch you play with the on-screen buttons; their see-through setting is Touch buttons, under Display.",
   "flow.settings.cancelled": "No change.",
   "flow.settings.noKey": "none",
   "flow.settings.remapped": "{key} now does {action}.",
@@ -142,7 +139,6 @@
   "flow.settings.resetYes": "Reset everything",
   "flow.settings.progressReset": "Progress reset.",
   "flow.settings.privacy": "Everything is saved only in this browser. Nothing is sent anywhere.",
-
   "flow.action.left": "Move left",
   "flow.action.right": "Move right",
   "flow.action.up": "Up (menus)",
@@ -156,5 +152,8 @@
   "flow.action.back": "Back",
   "flow.action.answer1": "Answer: Agree",
   "flow.action.answer2": "Answer: Don't Know",
-  "flow.action.answer3": "Answer: Disagree"
+  "flow.action.answer3": "Answer: Disagree",
+  "flow.action.tissues": "Kitchen: tissues",
+  "flow.action.clingfilm": "Kitchen: cling film",
+  "flow.action.wash": "Kitchen: wash hands"
 }

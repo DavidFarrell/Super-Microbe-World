@@ -274,8 +274,9 @@ export const tests = [
             assert(b.layout.labels.length === 3 && b.layout.labels.every(l => l.text.trim() && l.fits), `${where}: a button label is empty or too wide: ${JSON.stringify(b.layout.labels)}`);
             boards++;
           });
-          // The host read every normal intro line (normalised: English "Ready ?" -> "Ready?",
-          // the Polish points line in por_por replaced) and every question.
+          // The host read every normal intro line and every question. The data carries the
+          // corrected "Ready?" and the Portuguese points line (tools/convert-text.mjs); the checks
+          // below catch a regression in either.
           const intro = out.statements.filter(s => s.phase === 'intro').map(s => s.text);
           const wantIntro = normaliseIntro(code, rd.intro.normal);
           assert(intro.length === wantIntro.length && intro.every((s, i) => s === wantIntro[i] && s.trim()), `${code} round ${round}: intro lines ${JSON.stringify(intro)}`);

@@ -438,12 +438,12 @@
    "out": "web/data/atlas/intro-r3",
    "symbols": [
     {
-     "sheet": "introductionToMicrobes_platformer/level_intros_all",
+     "sheet": "introductionToMicrobes_platformer/level_intros_r3",
      "name": "level_intros_level8",
      "frames": "190-220"
     },
     {
-     "sheet": "introductionToMicrobes_platformer/level_intros_all",
+     "sheet": "introductionToMicrobes_platformer/level_intros_r3",
      "name": "level_intros_level9",
      "frames": "221-240"
     }

@@ -1,8 +1,11 @@
 // Platform levels: the briefing, the cards and the level-10 hints, as reviewed.
 //   (e) the first briefing: the level is shown without its tiles, a window blur stops the
-//       autoplay (the level never starts unattended), the player's next key brings it back, and
-//       play (with the clock) starts as the phone starts shrinking, the tiles with it.
-//   (f) reduced motion: the briefing still autoplays through to play.
+//       autoplay (the level never starts unattended); once the player turns a page themselves
+//       the autoplay stays off (they read at their own pace), and play (with the clock) starts
+//       as the phone starts shrinking after their last press, the tiles with it.
+//   (f) reduced motion: the briefing still autoplays, page by page, but never turns its last
+//       page: play waits for the player's press. A long page waits longer than 5 s, and longer
+//       still at a larger text size.
 //   (g) game-over card: Enter retries whatever has focus; on touch the prompt says "Tap", turns
 //       into "Press Enter" after a key press, and a tap off the buttons retries.
 //   (h) level 10: the antibiotic whiteout covers the score and hearts; off-screen bombs on one
@@ -55,11 +58,23 @@ export const tests = [
       assert(ran < 0 && p.ui === 'intro', `the briefing started the level unattended (ui ${p.ui} after ${ran} ticks)`);
       assert(p.stepCount === 0 && p.secondsLeft === 180, `the level ran while the briefing waited (step ${p.stepCount}, ${p.secondsLeft} s)`);
       assert(p.intro.page === 0 && p.intro.autoplay === false, `the briefing moved on (page ${p.intro.page}, autoplay ${p.intro.autoplay})`);
-      // Back: one key press (Space shows the whole page or the next one), then autoplay again.
+      // Back: a key press (Space shows the whole page or the next one). The player is now
+      // turning pages themselves, so the autoplay stays off: the briefing waits on its page.
       await page.keyboard.press('Space');
       await step(page, 2);
-      const shrink = await page.evaluate(() => window.__test.stepUntil(t => { const q = t.probe('platform'); return q.intro && q.intro.phase === 'shrink'; }, 1500, 1));
-      assert(shrink >= 0, 'the briefing did not autoplay to its end after the key press');
+      p = await probe(page);
+      assert(p.intro.autoplay === false, 'the autoplay came back after the player turned a page');
+      const page0 = p.intro.page;
+      await step(page, 1200);
+      p = await probe(page);
+      assert(p.ui === 'intro' && p.intro.page === page0 && p.stepCount === 0, `the briefing moved on by itself after a manual page turn (page ${p.intro.page}, ui ${p.ui})`);
+      // Each press turns a page; the press on the last page starts the level.
+      let shrink = -1;
+      for (let i = 0; i < 30 && shrink < 0; i++) {
+        await page.keyboard.press('Space');
+        shrink = await page.evaluate(() => window.__test.stepUntil(t => { const q = t.probe('platform'); return q.intro && q.intro.phase === 'shrink'; }, 6, 1));
+      }
+      assert(shrink >= 0, 'the key presses did not reach the end of the briefing');
       p = await probe(page);
       assert(p.ui === 'play', `play did not start as the phone started shrinking (ui ${p.ui})`);
       await step(page, 20);
@@ -80,8 +95,8 @@ export const tests = [
     },
   },
   {
-    name: '(f) reduced motion: the briefing autoplays through to play',
-    timeoutMs: 60000,
+    name: '(f) reduced motion: the briefing autoplays page by page, but only the player starts the level; long pages wait longer',
+    timeoutMs: 90000,
     async run(ctx) {
       const { context, page, errors } = await open(ctx, { ...DESKTOP, reducedMotion: 'reduce' }, 'level=alpha_level2');
       const p0 = await probe(page);
@@ -89,9 +104,37 @@ export const tests = [
       await step(page, 20);
       const p1 = await probe(page);
       assert(p1.ui === 'intro' && p1.intro.autoplay, `autoplay is not running with reduced motion (${JSON.stringify(p1.intro)})`);
-      const used = await stepUntilUi(page, ['play'], 1500, 5);
-      assert(used >= 0, 'with reduced motion the briefing never reached play');
-      ctx.log(`play after ${used + 20} ticks`);
+      // Autoplay turns every page but the last, each after max(5 s, 0.45 s a word).
+      const turns = [];
+      let last = p1.intro.page, t0 = 20, ticks = 20;
+      for (let guard = 0; guard < 400; guard++) {
+        await step(page, 10); ticks += 10;
+        const q = await probe(page);
+        if (q.ui !== 'intro') throw new Error(`the briefing left by itself (ui ${q.ui})`);
+        if (q.intro.page !== last) { turns.push({ page: last, ticks: ticks - t0 }); last = q.intro.page; t0 = ticks; }
+        if (q.intro.page === q.intro.pages - 1) break;
+      }
+      let q = await probe(page);
+      assert(q.intro.page === q.intro.pages - 1, `autoplay did not reach the last page (page ${q.intro.page} of ${q.intro.pages})`);
+      for (const tr of turns) assert(tr.ticks >= Math.round(5000 / 15) - 10, `page ${tr.page} turned after ${tr.ticks} ticks, under 5 s`);
+      await step(page, 1500);
+      q = await probe(page);
+      assert(q.ui === 'intro' && !q.intro.autoplay && q.stepCount === 0, `the last page started the level unattended (ui ${q.ui}, step ${q.stepCount})`);
+      await page.keyboard.press('Space');
+      const used = await stepUntilUi(page, ['play'], 200, 1);
+      assert(used >= 0, 'the press on the last page did not start the level');
+      // Pace: 0.45 s a word, times the text scale (the level 2 briefing, first page).
+      const pace = await page.evaluate(async () => {
+        const { IntroPhone } = await import('./js/platformer/intro.js');
+        const { settings } = await import('./js/core/settings.js');
+        const fake = { text: new Array(20).fill('word').join(' ') };
+        const at = scale => { settings.set('textScale', scale); return IntroPhone.prototype.autoplayTicks.call(fake); };
+        const out = { short: IntroPhone.prototype.autoplayTicks.call({ text: 'a few words' }), long: at(1), large: at(1.3) };
+        settings.set('textScale', 1);
+        return out;
+      });
+      assert(pace.short === Math.round(5000 / 15) && pace.long === Math.round(9000 / 15) && pace.large === Math.round(11700 / 15), `autoplay pace ${JSON.stringify(pace)}`);
+      ctx.log(`autoplay turns (ticks): ${turns.map(tr => tr.ticks).join(', ')}; play after the press; pace ${JSON.stringify(pace)}`);
       assert(errors.length === 0, `console errors:\n${errors.join('\n')}`);
       await context.close();
     },

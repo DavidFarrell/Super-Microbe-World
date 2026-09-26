@@ -12,7 +12,7 @@ import { settings } from '../core/settings.js';
 import { t } from '../core/i18n.js';
 import { loadJson } from '../core/assets.js';
 import { AREA_MUSIC } from '../core/music.js';
-import { goalText, goalImage, goalPortrait } from '../platformer/hud.js';
+import { goalText, goalImage, goalPortrait, composePortrait, PORTRAITS } from '../platformer/hud.js';
 import { sprites } from '../platformer/sprites.js';
 import { BAD_MICROBE_TYPES } from '../platformer/constants.js';
 import * as art from './art.js';
@@ -22,14 +22,8 @@ import { ensureStyle, glossy, pushNav, tickNav, clearNav } from './ui.js';
 const THUMB_W = 128, THUMB_H = 72, THUMB_SCALE = 2;   // CSS stage px; canvas at 2x
 const thumbs = new Map();                              // id -> canvas (kept for the session)
 const thumbPics = new Map();                           // id -> goal picture drawn (for the probe)
-// Patty (level 4) and Iggy (level 7) portraits, composed as platformer/hud.js composes them for
-// the ePhone (its portraitCanvas is private: web/requests/flow.md #8): each microbe's idle frame
-// on black with a soft white glow, 151 x 168.5 status units; layout entries are
-// [centre x, centre y, scale, flip].
-const PORTRAITS = {
-  patty: { symbol: 'patty_icon', layout: [[75.5, 86, 0.82, false]] },
-  iggy: { symbol: 'iggy_icon', layout: [[48, 56, 1.3, false], [104, 50, 1.2, true], [112, 108, 1.35, true], [40, 116, 1.25, false], [76, 86, 1.45, false]] },
-};
+// Patty (level 4) and Iggy (level 7) portraits: platformer/hud.js composePortrait(), the HUD's own
+// composition, fed from whichever copy of the microbe sheet is at hand (see portraitPicture).
 const portraits = new Map();                           // name -> canvas (302 x 337, 2x)
 const AREA_COLOURS = { kitchen: ['#ffd27a', '#e08a2c'], skin: ['#f6c1a6', '#c9765a'], body: ['#f08a8a', '#9c2f3f'] };
 
@@ -88,6 +82,7 @@ function placeholder(canvas, colours, label) {
 async function portraitPicture(name) {
   if (portraits.has(name)) return portraits.get(name);
   const p = PORTRAITS[name];
+  if (!p) return null;
   const idx = await sprites.loadIndex();
   const atlasId = idx && idx.symbols && idx.symbols[p.symbol];
   const shared = art.has(p.symbol);
@@ -97,27 +92,8 @@ async function portraitPicture(name) {
     const sym = source.symbol(p.symbol);
     if (!sym) return null;
     const idle = (sym.labels && sym.labels.idle) || 1;
-    const fr = (sym.frames || [])[idle - 1];
-    const s0 = sym.scale || 1;
-    const b = fr ? { x: -fr[5] / s0, y: -fr[6] / s0, w: fr[3] / s0, h: fr[4] / s0 } : { x: 0, y: 0, w: 50, h: 50 };
-    const K = 2, W = 302, H = 337;
-    const pic = document.createElement('canvas');
-    pic.width = W; pic.height = H;
-    const ag = pic.getContext('2d');
-    ag.setTransform(K, 0, 0, K, 0, 0);
-    for (const [cx, cy, sc, flip] of p.layout) {
-      const rx = cx - (flip ? -(b.x + b.w / 2) : b.x + b.w / 2) * sc, ry = cy - (b.y + b.h / 2) * sc;
-      source.draw(ag, p.symbol, idle, [flip ? -sc : sc, 0, 0, sc, rx, ry]);
-    }
-    const out = document.createElement('canvas');
-    out.width = W; out.height = H;
-    const g = out.getContext('2d');
-    g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
-    g.shadowColor = 'rgba(255, 255, 255, 0.85)'; g.shadowBlur = 7;
-    g.drawImage(pic, 0, 0);
-    g.shadowBlur = 0;
-    g.drawImage(pic, 0, 0);
-    portraits.set(name, out);
+    const out = composePortrait(name, sym, (ctx, x, y, sc, flip) => source.draw(ctx, p.symbol, idle, [flip ? -sc : sc, 0, 0, sc, x, y]));
+    if (out) portraits.set(name, out);
     return out;
   } finally { source.close(); }
 }

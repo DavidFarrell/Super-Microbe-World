@@ -1,8 +1,9 @@
 # Game show area: decisions and fixes
 
 Working log for `web/js/gameshow/` (scene `gameshow`, the shared talkie, studio and art helpers).
-`web/NOTES.md` sections 6, 8.2a, 8.6, 10.2 and 11.9 are the specification; this file records how
-the port applies them, with sources. Source paths are relative to `reference/Junior_Game/src/ebug/`.
+`web/NOTES.md` sections 6, 8.2a, 8.6, 10.2 and 11.9 are the specification and the entry point
+(its section 10.2 lists these fixes, cited as [GS Gn]); this file records how the port applies
+them, with sources. Source paths are relative to `reference/Junior_Game/src/ebug/`.
 
 ## Files
 
@@ -59,20 +60,20 @@ the port applies them, with sources. Source paths are relative to `reference/Jun
 | G1 | No host feedback and no CPU turn after the last question of a sighted round (build A calls `nextRound()` at once). In the blind half the last answer's reply ("<name>, you chose X." and the blind notice) is built but never shown: the talkie goes straight to "Step right this way..." (capture 031) | Every question, including the last, gets its reply: in a sighted round the verdict and the CPU turn (build B, `doc:1911-1915`); in the blind half the echo and the blind notice, then "Step right this way..." (NOTES 11.1 #1: "Every question, including the last, gets host feedback") | `GameShow.as:278-298`; `reference/captures/index.md` 031; NOTES 10.2 #41, 11.1 #1 |
 | G2 | Player always Harry on the right podium, CPU always "Amy" | The chosen child is the player on their own podium; the other child is the CPU, named after that child (or the flow's `cpuName`) | `GameShow.as:52,85-104`; NOTES 10.2 #39 |
 | G3 | The last intro line needs a second click (`showRoundText` leaves `busy = true`) | One press moves on to question 1 | `GameShow.as:147-166`; NOTES 10.2 #42 |
-| G4 | Blind reaction asks for `"confident"`, which does not exist | Plays `condifent` (falls back to `cautious` until the atlas has those frames, see `web/requests/gameshow.md` #1) | `GameShow.as:227`; NOTES 10.2 #43 |
+| G4 | Blind reaction asks for `"confident"`, which does not exist | Plays `condifent`; its poses (and `curious`) are in the `gameshow-cast` atlas since the areas were joined (`web/requests/gameshow.md` #1); the fallback to `cautious` only guards an atlas built without them | `GameShow.as:227`; NOTES 10.2 #43 |
 | G5 | Talkie "next" arrow shows 0.4 s after every line starts, while still typing | The arrow blinks only once the page is complete | `Talkie.as:40-59`; NOTES 10.2 #52a |
 | G6 | Talkie placeholder text "df" visible at a transition | Never shown (text is drawn from the statement only) | `Talkie.as:44`; NOTES 10.2 #52 |
 | G7 | Blind intro promises "a great bonus later" (never implemented) | The sentence is dropped by position (round 1 line 3, round 2 line 2; same slots in all 11 languages) | `levels/alpha_gameshow_round1.xml:10`; NOTES 11.9 #2 |
-| G8 | Live `en_en` intro has "Ready ?" (rounds 1 and 2) | English intro lines lose the space before `?` and `!` ("Ready?", as capture 056 shows). English only: French "Prêt ?" and "Allons-y !" are correct French spacing and stay (`rules.js` `normaliseIntro()`) | `web/data/quiz/en.json` `rounds[0].intro.normal[4]`, `rounds[1].intro.normal[3]`; NOTES 6.8 |
-| G9 | Known 2009 data defect: the `por_por` sighted intro of rounds 1 and 2 has the Polish points line ("Za prawidłową odpowiedź otrzymasz 10 punktów, ...") | Replaced by the Portuguese translator's own points line from rounds 3 to 5 without "Lembra-te que" ("Remember"): "Ganhas 10 pontos por cada resposta certa. Se estiver errada o outro jogador é que ganha.", which says the same as the English line. A counted override matched on the exact text in `por_por` only (`pl_pl` keeps it), so it stops applying once the data is fixed (`web/requests/gameshow.md` #3) | `Assets/Resources/TextFiles/quiz/por_por_gameshow_round1.xml`, `_round2.xml`; `web/data/quiz/por_por.json` `rounds[0].intro.normal[2]`, `rounds[1].intro.normal[1]` |
+| G8 | Live `en_en` intro has "Ready ?" (rounds 1 and 2) | "Ready?", as capture 056 shows: corrected in the data by `tools/convert-text.mjs` (a counted correction, exactly 2); `rules.js` `normaliseIntro()` keeps an English-only guard that drops any space before `?` or `!` (French "Prêt ?" and "Allons-y !" are correct French spacing and stay) | `web/data/quiz/en.json` `rounds[0].intro.normal[4]`, `rounds[1].intro.normal[3]`; NOTES 6.8, 10.2 #66 |
+| G9 | Known 2009 data defect: the `por_por` sighted intro of rounds 1 and 2 has the Polish points line ("Za prawidłową odpowiedź otrzymasz 10 punktów, ...") | Replaced by the Portuguese translator's own points line from rounds 3 to 5 without "Lembra-te que" ("Remember"): "Ganhas 10 pontos por cada resposta certa. Se estiver errada o outro jogador é que ganha.", which says the same as the English line. Corrected in the data by `tools/convert-text.mjs` as a counted per-language correction (exactly 2 replacements, or the tool fails; `pl_pl` keeps its sentence), which replaced the play-time override (`web/requests/gameshow.md` #3; NOTES 10.2 #65) | `Assets/Resources/TextFiles/quiz/por_por_gameshow_round1.xml`, `_round2.xml`; `web/data/quiz/por_por.json` `rounds[0].intro.normal[2]`, `rounds[1].intro.normal[1]` |
 | G10 | (port bug, review) Enter or Space on the pause menu's Resume button also reached the game on the next tick: on the board it submitted the highlighted answer, in the talkie it completed or advanced the line. A gamepad A on Resume leaked the same way within the tick | `resume()` calls `input.clearAll()` (as `flow/settings.js` `close()` does), and `update()` returns early on the tick the menu resumed (a gamepad A clicks Resume from `focusNavigator()` inside the tick, after `pressedSet` is built) | `js/core/input.js:52-59,117-135`; `js/ui/dom.js:52`; spec "pause: Enter, Space or gamepad A on Resume ..." |
 | G11 | (port bug, review) The mouse lit one answer while the keyboard selection lit another, and Enter picked the keyboard one (Enter on a focused answer clicks it natively) | A mouse entering an answer selects and focuses it, and a keyboard move clears the hover light, so the one lit button is the one Enter picks. Each answer the mouse enters plays the `gsSelect` blip, as an arrow press does (the flow's menus likewise play `hover` on every focus move) | `js/gameshow/board.js` `pointerenter`, `select()` |
 
 ## Port decisions
 
 1. **Language**: quiz text from `web/data/quiz/<code>.json`, code = `params.lang` (tests), else
-   `settings.get('language')` (the flow's choice; i18n's `language()` stays `en` without UI
-   tables, `web/requests/flow.md` #1), else English; a missing file falls back to `en.json`. Host
+   `settings.get('language')` (the flow's choice, also i18n's active language), else English; a
+   missing file falls back to `en.json`. Host
    lines, board heading and points are English UI strings (NOTES 7.1: English only in 2009 too).
 2. **Button labels**: the most common label at each position across the language's questions
    (the `ui.*` rule of NOTES 7.2). The original never displayed per-question labels (6.3), and one
@@ -109,7 +110,7 @@ the port applies them, with sources. Source paths are relative to `reference/Jun
     `gsSelect`, `gsDigit`, plus the core `typeBlip` and `tap`; music track `gameshow` (C major,
     126 bpm), ducked on the board and under the pause menu.
 11. **Result**: `{ playerScore, cpuScore, answers: [{ q, choice, value, score, blind, cpu }],
-    round, blind, lang }` (the contract's fields plus extras).
+    round, blind, lang }`, as `web/js/flow/contract.md` documents it.
 12. **Blind rounds setting**: the flow owns the `blindRounds` setting and always passes `blind`
     (`js/flow/flow.js` `playQuiz()`; `js/flow/contract.md`), so a flow launch is never second-guessed
     by the scene (reading the setting there would run the blind half twice). Only when the scene

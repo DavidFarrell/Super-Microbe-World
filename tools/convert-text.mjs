@@ -5,6 +5,9 @@
 // Answer values: 1 correct, -1 wrong, 0 neutral ("don't know"). The original parser read answers by
 // position, so the <lable>/<statment> typos are accepted here too.
 // Branding: "e-Bug" becomes "Super Microbe World" (NOTES.md 11.9 #11); every replacement is counted.
+// Per-language corrections of known 2009 data defects (CORRECTIONS below): each replaces one exact
+// sentence and must match exactly the expected number of times, or the conversion fails, so a
+// correction can never silently stop applying or spread (NOTES.md 10.2 #65, #66, #87).
 // Also updates web/data/lang/manifest.json with the language list.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -37,6 +40,50 @@ const brand = s => s.replace(/e-?Bug/gi, () => { brandReplacements++; return 'Su
 const text = s => brand(decode(s));
 const all = (xml, tags) => [...xml.matchAll(new RegExp(`<(${tags})\\b[^>]*>([\\s\\S]*?)</\\1>`, 'g'))].map(m => m[2]);
 const one = (xml, tags) => all(xml, tags)[0];
+
+// Documented per-language corrections: { language code: [{ from, to, count, why }] }, applied to
+// every converted string of that language (intro lines, questions, labels) after branding.
+const CORRECTIONS = {
+  // por_por_gameshow_round1.xml and _round2.xml carry the Polish points line in the sighted
+  // intro (rounds[0].intro.normal[2], rounds[1].intro.normal[1]). Replaced by the Portuguese
+  // translator's own points line from rounds 3 to 5 without "Lembra-te que" ("Remember"), which
+  // says the same as the English line. pl_pl has the sentence legitimately and is untouched.
+  por_por: [{
+    from: 'Za prawidłową odpowiedź otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik.',
+    to: 'Ganhas 10 pontos por cada resposta certa. Se estiver errada o outro jogador é que ganha.',
+    count: 2, why: 'Polish points line in the Portuguese round 1 and 2 intros',
+  }, {
+    // por_por_gameshow_round4.xml question id 2 (round 4 question 3) holds the blind-round
+    // notice ("As this is a blind question, you'll only find out the result at the end.") where
+    // the question should be; its answer values are those of the English "It is safe to put
+    // opened tins in the fridge." (disagree is right). Replaced by a Portuguese rendering of
+    // that question in the translator's register ("frigorífico", as in questions 2 and 5);
+    // a native-speaker check is a follow-up, as for the brand line (NOTES.md 10.2 #87, 11.9 #11).
+    from: 'Como é uma pergunta cega, só saberás o resultado no final.',
+    to: 'É seguro guardar latas abertas no frigorífico.',
+    count: 1, why: 'blind notice in place of the opened-tins question, round 4 question 3',
+  }],
+  // en_en_gameshow_round1.xml and _round2.xml: "Ready ?" (rounds 3 to 5 have "Ready?"; NOTES.md
+  // 6.8). French "Prêt ?" is correct French spacing and is not touched.
+  en: [{ from: 'Ready ?', to: 'Ready?', count: 2, why: 'space before the question mark in the English round 1 and 2 intros' }],
+};
+
+function correct(code, data) {
+  for (const c of CORRECTIONS[code] || []) {
+    let n = 0;
+    const fix = s => (s === c.from ? (n++, c.to) : s);
+    data.intro = data.intro.map(fix);
+    for (const r of data.rounds) {
+      r.name = fix(r.name);
+      r.intro.blind = r.intro.blind.map(fix);
+      r.intro.normal = r.intro.normal.map(fix);
+      for (const q of r.questions) { q.text = fix(q.text); for (const a of q.answers) a.label = fix(a.label); }
+    }
+    if (n !== c.count) throw new Error(`${code}: correction "${c.why}" matched ${n} time(s), expected ${c.count}`);
+    corrections.push(`${code}: ${c.why} (${n})`);
+  }
+}
+const corrections = [];
 
 function readXml(file) {
   return fs.readFileSync(file, 'utf8').replace(/^﻿/, '');
@@ -75,6 +122,7 @@ for (const [xmlCode, code, name] of LANGS) {
   const convFile = path.join(SRC, 'conversations', `${xmlCode}_introductions.xml`);
   const intro = fs.existsSync(convFile) ? all(readXml(convFile), 'statement|statment').map(text) : [];
   const data = { code, source: `${xmlCode}_gameshow_round1-5.xml + ${xmlCode}_introductions.xml (live 2009 build)`, name, intro, rounds };
+  correct(code, data);
   for (const r of rounds) for (const q of r.questions) {
     if (q.answers.length !== 3) throw new Error(`${code} round ${r.round}: question has ${q.answers.length} answers`);
   }
@@ -90,3 +138,4 @@ fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
 
 console.log(summary.join('\n'));
 console.log(`brand replacements: ${brandReplacements}`);
+console.log(`corrections: ${corrections.join('; ') || 'none'}`);

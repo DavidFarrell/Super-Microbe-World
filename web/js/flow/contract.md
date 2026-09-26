@@ -11,9 +11,9 @@ Scenes never decide what comes next on their own when a callback is given; witho
 | `splash` | `web/js/scenes/splash.js` (flow) | `{}` (`?lang=<code>` applies a language and skips the first-run chooser) | `app.flow.newGame()` / `continueGame()` / level select / settings |
 | `cutscene` | `web/js/flow/` | `{ onComplete }` | `onComplete({ avatar: 'harry'\|'amy', nickname })` (no age or e-mail is collected, NOTES 11.2) |
 | `shrink` | `web/js/flow/` | `{ avatar, round, skippable, onComplete }` (`skippable` false for the player's first shrink, NOTES 2.5; default true when opened directly) | `onComplete({ focus: { x, y } })` (stage point of the shrunk child; the flow centres the iris into the level on it) |
-| `platform` | `web/js/platformer/` | `{ level, avatar, score, intro, seed, onComplete(result), onGameOver(result), onQuit() }` | `result = { level, score, next, reason }`; `score` in is the running hoverboard total, `result.score` the new total |
-| `kitchen` | `web/js/kitchen/` | `{ level: 0..3, avatar, score, seed, onComplete(result), onQuit() }` | `result = { level, score, report: [{ item, ok, reason }] }`; `score` in is the running kitchen total, `result.score` the new total |
-| `gameshow` | `web/js/gameshow/` | `{ round: 1..5, avatar, nickname, cpuName, playerScore, cpuScore, blind, stepRight, seed, onComplete(result), onQuit() }` | `result = { playerScore, cpuScore, answers: [{ q, value }] }` |
+| `platform` | `web/js/platformer/` | `{ level, avatar, score, intro, seed, onComplete(result), onGameOver(result), onQuit() }` | `result = { level, score, next, reason }`; `score` in is the running hoverboard total, `result.score` the new total. The pause menu also offers Settings (`openSettings`, below) and Level select (`app.flow.openLevelSelect()`); the `platform` probe reports the `avatar` in play |
+| `kitchen` | `web/js/kitchen/` | `{ level: 0..3, avatar, score, seed, onComplete(result), onQuit() }` | `result = { level, score, points, report, rows, notes, awarded, deducted, reason, placed, items }`; `score` in is the running kitchen total, `result.score` the new total and `points` this level's; `report` has one entry per placement, `{ item, name, location, ok, reason, hygiene, clingfilm, points }` (`ok` is `null` for mouldy or burst food in the bin, which the original counted neither way) |
+| `gameshow` | `web/js/gameshow/` | `{ round: 1..5, avatar, nickname, cpuName, playerScore, cpuScore, blind, stepRight, seed, onComplete(result), onQuit() }` | `result = { playerScore, cpuScore, answers, round, blind, lang }`; one `answers` entry per question, `{ q, choice, value, score, blind, cpu: { choice, value } \| null }` (`choice` 0 Agree, 1 Don't Know, 2 Disagree; `value` 1 correct, 0 safe, -1 wrong; `score` the question's points, 10; `cpu` the CPU's turn, null in the blind half) |
 | `summary` | `web/js/flow/` | `{ kind: 'died'\|'time'\|'complete'\|'kitchen', result, lines?, title?, backdrop?, buttons?, onComplete(choice) }`; `backdrop` is a canvas (the flow copies `app.view.canvas` when the level ends, so the card sits over the frozen, dimmed level) | `onComplete('retry' \| 'next' \| 'levelSelect' \| 'menu' \| 'continue')` |
 | `ending` | `web/js/flow/` | `{ playerScore, cpuScore, hoverScore, kitchenScore, avatar, nickname }` | Play again / Level select / Main menu |
 | `levelSelect` | `web/js/flow/` | `{}` | starts a single level (platform or kitchen sub-level) standalone |
@@ -93,10 +93,17 @@ and Space activate the focused button, and a held key's auto-repeat never activa
 runs only while a flow screen or dialog is on top (for example the settings overlay over a
 pause menu); other areas' screens keep their own handling.
 
-Loading: the flow fetches the shrinking zone's sheet during the cutscene and the quiz, and the
-next level's (or the kitchen's) during the shrinking zone, through each area's own memoised
-loader. Flow scenes wait for their art on a dark stage with a small loading ring; the
-placeholder drawings appear only if a load fails.
+Loading: art for the next screen is fetched while the current one plays, once the current
+screen's own art is in. When the next screen is certain its sheets are loaded and decoded
+through each area's own memoised loader: the shrinking zone's during the cutscene and the quiz,
+the level's (or the kitchen's) during the shrinking zone, the summary card's during a level.
+When it is only likely they are downloaded but not decoded (`sprites.prefetchSet()`, so no
+texture memory is spent on a screen that may never come; the real load decodes from those
+bytes): the cutscene's (the game show studio and cast) on the splash, and during a level the
+round's next level or, after the last level of a round (or kitchen level 3), the game show's.
+Scenes wait for their art on a dark stage with a loading ring (splash, cutscene, shrinking
+zone, ending) or a loading bar (platform, game show, kitchen); the placeholder drawings appear
+only if a load fails.
 
 Tests: each area adds `web/tests/<area>*.spec.mjs` picked up by `web/tests/run.mjs`, and
 registers a `__test` probe named after the scene (`__test.probe('gameshow')` and so on) so the

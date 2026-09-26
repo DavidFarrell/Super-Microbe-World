@@ -3,48 +3,30 @@
 // sprites.js does not draw (formula in the header of tools/build-atlas.cjs). Units are Flash stage
 // pixels. Every call is safe while an atlas is missing: draw() returns false and the scene paints
 // a clean placeholder, so the game stays playable (and testable) without art.
-import { loadJson, loadImage } from '../core/assets.js';
+import { sprites, drawable } from '../platformer/sprites.js';
 
-const BASE = 'data/atlas/';
-const symbols = new Map();   // symbol -> { sym, images }
-const loads = new Map();     // atlas id -> Promise<boolean>
-
-export const loadIndex = () => loadJson(BASE + 'index.json').catch(() => null);
-
-function loadAtlas(index, id) {
-  if (!loads.has(id)) {
-    loads.set(id, (async () => {
-      const a = index && index.atlases && index.atlases[id];
-      if (!a) return false;
-      try {
-        const file = typeof a === 'string' ? a : a.json;
-        const data = await loadJson(BASE + file);
-        const dir = BASE + file.slice(0, file.lastIndexOf('/') + 1);
-        const images = await Promise.all((data.images || []).map(src => loadImage(dir + src)));
-        for (const [name, sym] of Object.entries(data.symbols || {})) symbols.set(name, { sym, images });
-        return true;
-      } catch {
-        return false;
-      }
-    })());
-  }
-  return loads.get(id);
-}
+// The atlases load through sprites.js, the one atlas store (memoised per atlas, failures not
+// kept, released between screens by the flow), so this module only draws.
+const symbols = sprites.symbols;   // symbol -> { sym, images, atlas }
 
 // The kitchen set minus the other child's avatar atlas (index.json "sets": kitchen,
 // kitchen-harry, kitchen-amy). Ids are read from the index, never hard-coded, so an art update
 // that moves symbols between atlases needs no code change. Resolves when every load settled.
-export async function loadKitchenArt(avatar, onProgress = () => {}) {
-  const index = await loadIndex();
-  if (!index) return false;
-  const sets = index.sets || {};
+export function kitchenAtlases(index, avatar) {
+  const sets = (index && index.sets) || {};
   const other = avatar === 'amy' ? 'harry' : 'amy';
   const skip = new Set(sets['kitchen-' + other] || []);
   const mine = new Set(sets['kitchen-' + avatar] || []);
-  const ids = [...new Set([...(sets.kitchen || []), ...mine])].filter(id => !skip.has(id) || mine.has(id));
+  return [...new Set([...(sets.kitchen || []), ...mine])].filter(id => !skip.has(id) || mine.has(id));
+}
+
+export async function loadKitchenArt(avatar, onProgress = () => {}) {
+  const index = await sprites.ensureIndex();
+  if (!index) return false;
+  const ids = kitchenAtlases(index, avatar);
   let done = 0;
   onProgress(0);
-  const ok = await Promise.all(ids.map(id => loadAtlas(index, id).then(r => { onProgress(++done / Math.max(1, ids.length)); return r; })));
+  const ok = await Promise.all(ids.map(id => sprites.loadAtlas(id).then(r => { onProgress(++done / Math.max(1, ids.length)); return r; })));
   return ok.every(Boolean);
 }
 
@@ -54,7 +36,7 @@ export const symbol = name => (symbols.has(name) ? symbols.get(name).sym : null)
 function drawRect(ctx, images, r, scale) {
   const [img, x, y, w, h, ox, oy] = r, k = 1 / scale;
   const page = images[img];
-  if (page) ctx.drawImage(page, x, y, w, h, -ox * k, -oy * k, w * k, h * k);
+  if (drawable(page)) ctx.drawImage(page, x, y, w, h, -ox * k, -oy * k, w * k, h * k);
 }
 
 // Draws Flash frame `frame` (1-based) of a symbol with its registration point at (x, y).

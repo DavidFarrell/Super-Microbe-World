@@ -1,9 +1,9 @@
 # Requests from the game show area
 
-Changes the game show area needs in files it does not own. Each entry: file, change, reason, and
-the workaround in place meanwhile.
+Changes the game show area needed in files it did not own. Each entry: file, change, reason, the
+workaround it used, and how it was resolved when the areas were joined (all items are done).
 
-## 1. Art (`tools/swf-sheet/jobs/gameshow.json`, then `web/data/atlas/gameshow-cast.*`): render `condifent`
+## [Done] 1. Art (`tools/swf-sheet/jobs/gameshow.json`, then `web/data/atlas/gameshow-cast.*`): render `condifent`
 
 - **Change**: add `"condifent"` (and, optionally, `"curious"`) to `entryLabels` of the `gs_harry`
   and `gs_amy` jobs and re-pack `gameshow-cast`. (The art notes left them out because the 2009
@@ -15,8 +15,9 @@ the workaround in place meanwhile.
 - **Workaround**: `web/js/gameshow/studio.js` falls back to `cautious` (and `curious` to
   `neutral`) while a label has no poses. The check runs at play time, so the new art is used as
   soon as it lands; nothing else needs to change.
+- **Resolution (integration, 2026-09-26)**: done. `condifent` and `curious` are in the `entryLabels` of the `gs_harry` and `gs_amy` jobs; both rigs were re-rendered (798 of 1124 frames each, 126 reachable frames per new label) and `gameshow-cast` re-packed (1.36 MB WebP, was 1.03 MB; `index.json` written atomically; `tools/atlas/coverage.mjs` passes). `verify-rig.mjs` gives 3.5-3.8/255 against Ruffle on the new frames, as the previously shipped render of the same rigs does on existing frames (3.5-3.8; the untouched host reads 2.5), so the re-render is no worse than the old one. The fallback in `studio.js` stays as a guard only. Tested by `integration.spec` (both labels play without a fallback and have poses).
 
-## 2. Flow area (`web/js/flow/contract.md`): result fields
+## [Done] 2. Flow area (`web/js/flow/contract.md`): result fields
 
 - **Change (documentation only)**: note that the game show's `result.answers` entries are
   `{ q, choice, value, score, blind, cpu: { choice, value } | null }` and that `result` also
@@ -24,8 +25,9 @@ the workaround in place meanwhile.
 - **Reason**: the contract lists `answers: [{ q, value }]`; the extra fields are additive and let a
   summary or the ending show how each question went.
 - **Workaround**: none needed (the listed fields are present).
+- **Resolution (integration, 2026-09-26)**: done. `contract.md` lists `result = { playerScore, cpuScore, answers, round, blind, lang }` with each `answers` entry `{ q, choice, value, score, blind, cpu: { choice, value } | null }` and their meanings.
 
-## 3. Text data (`tools/convert-text.mjs`, then `web/data/quiz/por_por.json`; owner of the quiz data): Portuguese points line
+## [Done] 3. Text data (`tools/convert-text.mjs`, then `web/data/quiz/por_por.json`; owner of the quiz data): Portuguese points line
 
 - **Change**: in the `por_por` conversion, replace the Polish sentence "Za prawidłową odpowiedź
   otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik." at
@@ -40,3 +42,4 @@ the workaround in place meanwhile.
 - **Workaround**: `web/js/gameshow/rules.js` `normaliseIntro()` makes both replacements at play
   time, matched on the exact text in `por_por` only, so it becomes a no-op once the data is fixed
   (`web/NOTES-gameshow-decisions.md` G8, G9).
+- **Resolution (integration, 2026-09-26)**: done. `tools/convert-text.mjs` has a documented `CORRECTIONS` table of counted per-language corrections (each must match exactly its expected count or the conversion fails): the Polish points line in `por_por` becomes "Ganhas 10 pontos por cada resposta certa. Se estiver errada o outro jogador é que ganha." (2 replacements, `rounds[0].intro.normal[2]`, `rounds[1].intro.normal[1]`), and English "Ready ?" becomes "Ready?" (2). The tool was first re-run unchanged (output identical to the committed data), then with the corrections: the diff is exactly those four lines. The play-time override in `rules.js` was removed; `normaliseIntro()` keeps only an English spacing guard. `gameshow.spec` (every round of every language) still checks both.

@@ -107,12 +107,14 @@ async function keyboardNewGame(ctx, shots = null) {
   if (shots) await page.screenshot({ path: path.join(shots, 'flow-cutscene-host.png') });
   await advanceWithKey(page, 'intro');
   assert((await probe(page, 'cutscene')).phase === 'choose', 'no avatar choice after the host lines');
+  assert(await page.evaluate(() => !document.activeElement || !document.activeElement.closest('.cs-kid')), 'a child is focused before any key was pressed');
   // Arrow keys move between the children; the focused one plays "happy".
   await page.keyboard.press('ArrowRight'); await step(page, 2);
   assert((await probe(page, 'cutscene')).hover === 'harry', 'ArrowRight did not move to Harry');
   await page.keyboard.press('ArrowLeft'); await step(page, 20);
   assert((await probe(page, 'cutscene')).hover === 'amy', 'ArrowLeft did not move to Amy');
   if (shots) await page.screenshot({ path: path.join(shots, 'flow-cutscene-choose.png') });
+  await until(page, t => t.probe('cutscene').awake, 'the choice to take picks', { max: 60 });
   await page.keyboard.press('Enter'); await step(page, 2);
   assert((await probe(page, 'cutscene')).chosen === 'amy', 'Enter did not choose Amy');
   await advanceWithKey(page, 'chosen');
@@ -129,6 +131,7 @@ async function keyboardNewGame(ctx, shots = null) {
   await page.keyboard.press('Shift+Tab');
   assert(await page.evaluate(() => document.activeElement.id) === 'form-nickname', 'Shift+Tab did not return to the nickname');
   if (shots) await page.screenshot({ path: path.join(shots, 'flow-cutscene-form.png') });
+  await until(page, t => t.probe('cutscene').awake, 'the form to take a submit', { max: 60 });
   await page.keyboard.press('Enter');
   await step(page, 2);
   const closing = await probe(page, 'cutscene');
@@ -188,7 +191,7 @@ export const tests = [
       assert(await page.evaluate(() => window.__test.lastDevice) === 'touch', 'not in touch mode');
       await advanceWithTap(page, cdp, 'intro');
       assert((await probe(page, 'cutscene')).phase === 'choose', 'no avatar choice');
-      await step(page, 6);
+      await until(page, t => t.probe('cutscene').awake, 'the choice to take picks', { max: 60 });
       await page.screenshot({ path: path.join(ctx.shots, 'flow-phone-choose.png') });
       await tapEl(page, cdp, '#choose-harry');
       await step(page, 2);
@@ -196,6 +199,7 @@ export const tests = [
       await advanceWithTap(page, cdp, 'chosen');
       assert((await probe(page, 'cutscene')).phase === 'form', 'no details form');
       await page.screenshot({ path: path.join(ctx.shots, 'flow-phone-form.png') });
+      await until(page, t => t.probe('cutscene').awake, 'the form to take a submit', { max: 60 });
       await tapEl(page, cdp, '#form-submit');          // defaults: nickname Harry, no age
       await step(page, 2);
       const c = await probe(page, 'cutscene');

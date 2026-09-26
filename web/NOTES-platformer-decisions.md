@@ -2,8 +2,10 @@
 
 Scope: the hoverboard platform game in `web/js/platformer/`, ported from the 2009 Flash source
 (`reference/Junior_Game/src/ebug/*.as`, `src/ebug/junior/*.as`) following
-`reference/analysis/flash-platformer.md` (cited below as "spec section N"). To be merged into
-`web/NOTES.md`. Everything not listed here is meant to behave as the original did.
+`reference/analysis/flash-platformer.md` (cited below as "spec section N"). Merged into
+`web/NOTES.md` (sections 3, 10.1 and 12, cited there as [PD]), which is the entry point and wins
+where the two differ. Levels 2 to 10 are in `web/NOTES-levels-decisions.md`. Everything not listed
+here is meant to behave as the original did.
 
 ## Module layout
 
@@ -137,7 +139,8 @@ and `index.json` (play order from `GameController.as:65-69` and the `next=` chai
   PHOTOGRAPH_GOOD also counts good deaths; KILL_ALL ignores `microbeType`; antibiotic kills do
   not count for KILL_ALL; every bad-microbe touch costs a life and kills the microbe only if it
   is idle or walking; 480 ms of no control and no damage after a hit; microbes see only anchor
-  cells; the Lucy/milk result depends on entity order; score persists across levels.
+  cells; the Lucy/milk result depends on entity order; score persists across levels. (Decision
+  11.9 #10 later turned the +3 bonus on: `web/NOTES-levels-decisions.md` section 1.)
 - **Amy and Harry are not identical.** Their SWFs have different upper-body frame scripts
   (`movies/amy.swf` sprite 208 vs `movies/harry.swf` sprite 193): Amy's throw fires on frame 4
   (160 ms, Harry frame 3) and keeps the upper body busy for 18 frames (720 ms, Harry 120 ms), so
@@ -184,17 +187,25 @@ and `index.json` (play order from `GameController.as:65-69` and the `next=` chai
   screen (`tracks.bigScreen`; level 1 stops at frames 1, 3, 6, 9, 14, 20 and 30, so the host,
   camera, Lucy and portal pictures match their pages) and shrinks back (frames 40-59). The text
   is drawn in the original text boxes (matrices read from sprite 1479) from
-  `web/data/lang/en.json`, with a typewriter reveal. Tap anywhere, Space / jump or Enter first
+  `web/data/lang/en/levels.json`, with a typewriter reveal. Tap anywhere, Space / jump or Enter first
   shows the whole page, then turns it; Esc skips; the 5 s autoplay is kept but counts from when
-  the text is fully shown (young readers need the time). The phone key or button, or tapping the
+  the text is fully shown (young readers need the time). Since the whole-game review (NOTES 10.6)
+  it waits the greater of 5 s and 0.45 s a word, times the text scale, stops once the child turns
+  a page, and never turns the last page, so the level starts only with the child's press. The phone key or button, or tapping the
   HUD phone, re-opens it and pauses. The original's stacked autoplay intervals (bug 23) do not
   exist here. Levels whose pages are not in the atlas yet show the text on the blank big screen.
   The page text is drawn in the original's regular-weight white Arial (titles bold Arial 16;
   `level_intros` DefineEditText 1200-1232), falling back to the platform's sans-serif where
-  Arial is missing, as Flash did for device fonts. The level and the HUD around the phone stay
-  at full brightness, as in the original (no dimmed backdrop). Port additions around the phone
-  use the game's UI font: the Skip / Back and Next buttons, page dots, the autoplay bar and the
-  control hint under the phone (outlined so it reads on any background). The small and large
+  Arial is missing, as Flash did for device fonts. There is no dimmed backdrop; while the first
+  briefing is up only the background, the level's entities and the HUD show around the phone (the
+  original had not built any tiles yet: `INIT_DIALOGUE` never reaches `RENDER_WORLD`,
+  `PlatformGame.as:540-551,1090-1107`); the re-opened briefing (port only) shows the whole level.
+  Play and the level clock start as the phone starts shrinking, as the original did
+  (`PlatformGame.as:545-549`), so the level runs under the phone as it turns away; a re-opened
+  briefing resumes once the phone has gone. The autoplay stops while the window is blurred or
+  hidden and restarts with the player's next key or tap. Port additions around the phone use the
+  game's UI font: the Skip / Back and Next buttons, page dots, the autoplay bar and the control
+  hint under the phone (on a dark pill so it reads on any background). The small and large
   ePhone art has the "e-Bug" wordmark removed (third-party branding, `GOAL_PROMPT.md:166`).
   Spelling slips in the original wording are corrected ("with out", "Bodys", "isnt'",
   "Pennicilium", "defenses" to British "defences"); the wording is otherwise unchanged.
@@ -290,10 +301,8 @@ and `index.json` (play order from `GameController.as:65-69` and the `next=` chai
   coarse-pointer devices, and `ImageBitmap.close()` on atlases the next level does not use. This
   needs the Ruffle sheet pipeline re-run, so it is left for the level work.
 
-- Level bots for levels 4 to 10: the reactive bot in `web/tests/bots/platform-bot.mjs` clears
-  levels 1 to 3; the others need path planning and the kill, yoghurt and antibiotic routines.
-- Art for the other levels (skin and body tiles, the other microbes, their goal pictures,
-  `kill_icon`, `antibiotic_pickup`, level_intros pages 40+): until then those symbols use the
-  debug shapes and the briefing shows text only.
-- Translations of `web/data/lang/en.json` (the Unity remake's texts cover the game show, not the
-  platformer intros).
+- **Done**: level bots for levels 4 to 10 (every level 1-10 is completed by the planner bot,
+  with recorded traces) and art for the other levels (every level draws its own atlas set). See
+  `web/NOTES-levels-decisions.md` sections 2 and 4.
+- Translations of the platform strings (`web/data/lang/en.json`, `en/platform.json`,
+  `en/levels.json`): the Unity remake's texts cover the game show, not the platformer intros.

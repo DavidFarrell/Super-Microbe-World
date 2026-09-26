@@ -3,7 +3,7 @@
 // ever asks "is jump down / was fire pressed this tick".
 import { settings } from './settings.js';
 
-export const ACTIONS = ['left', 'right', 'up', 'down', 'jump', 'fire', 'camera', 'phone', 'pause', 'confirm', 'back', 'answer1', 'answer2', 'answer3'];
+export const ACTIONS = ['left', 'right', 'up', 'down', 'jump', 'fire', 'camera', 'phone', 'pause', 'confirm', 'back', 'answer1', 'answer2', 'answer3', 'tissues', 'clingfilm', 'wash'];
 
 const GAMEPAD_BUTTONS = { 0: 'jump', 1: 'camera', 2: 'fire', 3: 'phone', 9: 'pause', 8: 'back', 12: 'up', 13: 'down', 14: 'left', 15: 'right' };
 const NO_SCROLL_CODES = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Tab']);

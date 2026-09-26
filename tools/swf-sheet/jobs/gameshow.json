@@ -103,9 +103,12 @@
     "idle",
     "neutral",
     "cautious",
+    "condifent",
     "happy",
-    "disappointed"
-   ]
+    "disappointed",
+    "curious"
+   ],
+   "why": "condifent is the blind-round reaction the port plays (GameShow.as:227 asks for the misspelt label as \"confident\"; NOTES 10.2 #43); curious is rendered too so every authored emotion exists"
   },
   {
    "swf": "movies/eBugGameShow.swf",
@@ -117,9 +120,12 @@
     "idle",
     "neutral",
     "cautious",
+    "condifent",
     "happy",
-    "disappointed"
-   ]
+    "disappointed",
+    "curious"
+   ],
+   "why": "condifent is the blind-round reaction the port plays (GameShow.as:227 asks for the misspelt label as \"confident\"; NOTES 10.2 #43); curious is rendered too so every authored emotion exists"
   },
   {
    "swf": "movies/eBugGameShow.swf",

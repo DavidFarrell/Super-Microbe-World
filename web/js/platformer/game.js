@@ -627,11 +627,4 @@ const round3 = v => Math.round(v * 1000) / 1000;
 const TYPE_NAMES = Object.fromEntries(Object.entries(T).map(([k, v]) => [v, k.toLowerCase()]));
 const typeName = t => TYPE_NAMES[t] || String(t);
 
-// Convenience for tests and tools: a game that has already left its intro.
-export function createGame(levelData, opts) {
-  const g = new PlatformGame(levelData, opts);
-  g.start();
-  return g;
-}
-
 export { PLAYER_STATE };

@@ -286,7 +286,9 @@
    "frames": "1-39",
    "omitText": true,
    "name": "level_intros_level1",
-   "track": []
+   "track": [],
+   "nested": "age",
+   "why": "nested clips play by their own age (the Flash model): the portal inset on the last page (frame 30) pulses while the page waits, as in Flash; the rest of level 1 keeps the pinned frame model (NOTES-art-decisions.md section 7)"
   },
   {
    "swf": "movies/new portal.swf",

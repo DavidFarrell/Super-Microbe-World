@@ -68,17 +68,6 @@ export function wrap(text, font, maxWidth) {
   return out;
 }
 
-// Largest font size (from `size` down to `min`) whose wrapped text fits maxLines lines of maxWidth.
-// fontFor(size) returns the CSS font string. Returns { size, lines, fits }.
-export function fitText(text, fontFor, maxWidth, { size, min, maxLines = Infinity, maxHeight = Infinity, lineHeight = 1.25 }) {
-  for (let s = size; s >= min; s -= 1) {
-    const lines = wrap(text, fontFor(s), maxWidth);
-    if (lines.length <= maxLines && lines.length * Math.round(s * lineHeight) <= maxHeight) return { size: s, lines, fits: true };
-  }
-  const lines = wrap(text, fontFor(min), maxWidth);
-  return { size: min, lines, fits: lines.length <= maxLines && lines.length * Math.round(min * lineHeight) <= maxHeight };
-}
-
 // Single-line fit: shrinks the size until the text is no wider than maxWidth.
 export function fitLine(text, fontFor, maxWidth, size, min) {
   const ctx = measurer();

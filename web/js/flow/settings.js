@@ -26,12 +26,16 @@ export const CLASSIC_KEYS = {
   jump: ['ArrowUp'], fire: ['Space'], camera: ['ControlLeft', 'ControlRight'],
   phone: ['KeyP', 'Tab'], pause: ['Escape'], confirm: ['Enter', 'NumpadEnter'], back: ['Backspace'],
   answer1: ['Digit1', 'Numpad1'], answer2: ['Digit2', 'Numpad2'], answer3: ['Digit3', 'Numpad3'],
+  tissues: ['KeyT', 'Digit1', 'Numpad1'], clingfilm: ['KeyC', 'Digit2', 'Numpad2'], wash: ['KeyH', 'Digit3', 'Numpad3'],
 };
-// Keys that may be shared between actions of different groups (menus vs play vs quiz).
+// Keys that may be shared between actions of different groups (menus vs play vs quiz vs kitchen).
+// The kitchen moves between places with the arrows (up, down, left, right), so its tools share a
+// group with them.
 const GROUPS = [
   ['left', 'right', 'jump', 'fire', 'camera', 'phone', 'pause'],
   ['up', 'down', 'left', 'right', 'confirm', 'back', 'pause'],
   ['answer1', 'answer2', 'answer3', 'confirm', 'back'],
+  ['tissues', 'clingfilm', 'wash', 'up', 'down', 'left', 'right', 'confirm', 'back', 'pause'],
 ];
 const TEXT_SIZES = [1, 1.15, 1.3];
 const TABS = ['sound', 'game', 'display', 'controls', 'data'];
@@ -47,7 +51,7 @@ const CSS = `
 .st-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 14px; padding: 9px 12px; border-radius: 12px; background: rgba(255,255,255,0.06); margin-bottom: 8px; min-height: 44px; }
 .st-row .lbl b { display: block; font: 800 calc(18px * var(--text-scale, 1))/1.15 var(--ui-font); color: #fff; }
 .st-row .lbl span { display: block; font-size: calc(13px * var(--text-scale, 1)); line-height: 1.3; opacity: 0.8; margin-top: 2px; }
-.st-slider { position: relative; width: 230px; height: max(44px, calc(46px / var(--stage-scale, 1))); border-radius: 22px; cursor: pointer; touch-action: none; }
+.st-slider { position: relative; width: 230px; height: max(44px, calc(46px / var(--stage-scale, 1))); border-radius: 22px; cursor: pointer; touch-action: pan-y; }
 .st-slider:focus-visible { outline: 4px solid #ffd23f; outline-offset: 2px; }
 .st-slider .track { position: absolute; left: 14px; right: 60px; top: 50%; margin-top: -4px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.2); }
 .st-slider .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: #5fd4ff; }
@@ -105,9 +109,35 @@ function slider({ id, label, get, set, min = 0, max = 1, step = 0.05, format = v
     const r = node.querySelector('.track').getBoundingClientRect();
     apply(min + ((e.clientX - r.left) / r.width) * (max - min));
   };
-  node.addEventListener('pointerdown', e => { e.preventDefault(); node.setPointerCapture(e.pointerId); node.focus({ preventScroll: true }); fromPointer(e); });
-  node.addEventListener('pointermove', e => { if (node.hasPointerCapture(e.pointerId)) fromPointer(e); });
-  node.addEventListener('pointerup', () => audio.play('tick'));
+  // Mouse and pen set the value at once. A finger may be scrolling the panel instead (the
+  // slider lets vertical pans through, touch-action: pan-y), so a touch sets nothing until it
+  // moves sideways more than it moves up or down (then it drags), or lifts with little movement
+  // (a tap sets the value there); a vertical swipe scrolls and leaves the value alone.
+  let touch = null;   // { id, x, y, drag }
+  node.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'touch') { touch = { id: e.pointerId, x: e.clientX, y: e.clientY, drag: false }; return; }
+    e.preventDefault(); node.setPointerCapture(e.pointerId); node.focus({ preventScroll: true }); fromPointer(e);
+  });
+  node.addEventListener('pointermove', e => {
+    if (touch && touch.id === e.pointerId) {
+      const dx = Math.abs(e.clientX - touch.x), dy = Math.abs(e.clientY - touch.y);
+      if (!touch.drag) {
+        if (dy > 8 && dy >= dx) { touch = null; return; }
+        if (dx > 8 && dx > dy) { touch.drag = true; try { node.setPointerCapture(e.pointerId); } catch { /* ended */ } node.focus({ preventScroll: true }); }
+      }
+      if (touch && touch.drag) fromPointer(e);
+      return;
+    }
+    if (node.hasPointerCapture(e.pointerId)) fromPointer(e);
+  });
+  node.addEventListener('pointerup', e => {
+    if (touch && touch.id === e.pointerId) {
+      if (!touch.drag && Math.abs(e.clientX - touch.x) <= 8 && Math.abs(e.clientY - touch.y) <= 8) { node.focus({ preventScroll: true }); fromPointer(e); }
+      touch = null;
+    }
+    audio.play('tick');
+  });
+  node.addEventListener('pointercancel', () => { touch = null; });
   show();
   node.refresh = show;
   return node;
@@ -202,6 +232,9 @@ function buildPanel(app, { onBack, overlay }) {
           glossy(t('flow.settings.resetKeys'), () => { settings.resetKeys(); setNote(t('flow.settings.resetKeysDone')); refreshKeys(); }, { id: 'settings-keys-reset', class: 'small alt' })),
         el('p', { class: 'st-note', id: 'settings-note', 'aria-live': 'polite' }, note),
       ];
+      // A touch player sees what these keys are for (a keyboard) and where their own controls'
+      // setting is (Display, Touch buttons).
+      if (input.lastDevice === 'touch') out.splice(0, 0, el('p', { class: 'st-note', id: 'settings-touch-note' }, t('flow.settings.touchKeysNote')));
       for (const action of ACTIONS) out.push(keyRow(action));
       return out;
     },
@@ -262,10 +295,24 @@ function buildPanel(app, { onBack, overlay }) {
 
   // Remapping: the next key press (any key, read in the capture phase so the game never sees it)
   // becomes the action's first key. Escape cancels, except when remapping pause or back.
+  // While it waits, the row's Change button reads Cancel (a second tap stops it), and a tap
+  // anywhere outside the row stops it too, so a touch player can always back out.
   function startCapture(action) {
-    if (capture) stopCapture();
+    if (capture) {
+      const same = capture.action === action;
+      stopCapture();
+      if (same) { setNote(t('flow.settings.cancelled')); return; }
+    }
     const box = root.querySelector(`#settings-keys-${action}`);
     box.replaceChildren(el('span', { class: 'st-capture' }, t('flow.settings.pressKey')));
+    const btn = root.querySelector(`#settings-remap-${action}`);
+    if (btn) btn.textContent = t('flow.ui.cancel');
+    const rowEl = root.querySelector(`#settings-row-${action}`);
+    const onDown = e => {
+      if (rowEl && rowEl.contains(e.target)) return;
+      stopCapture();
+      setNote(t('flow.settings.cancelled'));
+    };
     const onKey = e => {
       e.preventDefault();
       e.stopPropagation();
@@ -287,15 +334,19 @@ function buildPanel(app, { onBack, overlay }) {
       if (btn && input.lastDevice !== 'touch') btn.focus({ preventScroll: true });
     };
     // Stop the click that started the capture from also counting as a key.
-    capture = { action, onKey };
+    capture = { action, onKey, onDown };
     suspendMenuKeys(true);
     addEventListener('keydown', onKey, true);
+    addEventListener('pointerdown', onDown, true);
     input.clearAll();
   }
 
   function stopCapture() {
     if (!capture) return;
     removeEventListener('keydown', capture.onKey, true);
+    removeEventListener('pointerdown', capture.onDown, true);
+    const btn = root.querySelector(`#settings-remap-${capture.action}`);
+    if (btn) btn.textContent = t('flow.settings.change');
     suspendMenuKeys(false);
     capture = null;
     refreshKeys();

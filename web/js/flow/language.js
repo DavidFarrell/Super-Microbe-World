@@ -5,7 +5,7 @@
 // language; everything else is English until translations arrive, and the chooser says so.
 import { el } from '../ui/dom.js';
 import { settings } from '../core/settings.js';
-import { t } from '../core/i18n.js';
+import { t, langTag } from '../core/i18n.js';
 import { glossy, pushNav } from './ui.js';
 
 const CSS_ID = 'flow-language-style';
@@ -43,7 +43,7 @@ export async function openLanguageChooser(app, parent, { firstRun = false } = {}
     let pop = null;
     const done = code => { if (pop) pop(); dim.remove(); resolve(code); };
     const buttons = codes.map(code => glossy(names[code] || code, () => done(code), {
-      class: code === current ? '' : 'alt', id: `lang-${code}`, lang: code === 'en' ? 'en-GB' : code.slice(0, 2),
+      class: code === current ? '' : 'alt', id: `lang-${code}`, lang: langTag(code),
       role: 'radio', 'aria-checked': String(code === current),
     }));
     const globe = el('span', {});

@@ -12,6 +12,8 @@
 // (frame = floor(ticks * 3 / 8)); a second is 25 frames, the sneeze window 50 (NOTES 12.1). All
 // randomness (the food draw and the sneeze roll) comes from gameRng, so runs replay exactly.
 import { el, button, focusFirst, focusNavigator, trapFocus } from '../ui/dom.js';
+import { fullscreenButton } from '../ui/fullscreen.js';
+import { confirmDialog, tickNav, ensureStyle } from '../flow/ui.js';
 import { audio } from '../core/audio.js';
 import { AREA_MUSIC } from '../core/music.js';
 import { settings } from '../core/settings.js';
@@ -25,7 +27,7 @@ import { Clip, framesAt, loadKitchenArt } from './art.js';
 import { AVATAR_TIMELINE, SINK_TIMELINE } from './timeline.js';
 import { LOC, LOC_NAMES, TYPE, LEVELS, SNEEZE_CHANCE_START, drawLevelFood, makeItem, sneezeRoll, judge, hygieneNotes, scoreLevel, reportOf, correctLocations } from './rules.js';
 import { TARGET, TARGETS, TAB_ORDER, DEST_ORDER, SLOTS_BY_LOC, REST_POINTS, FOOD_BOX, CLOCK, AVATAR_POS, fitInBox, targetAt, neighbour, centre, inside } from './layout.js';
-import { KitchenControls } from './controls.js';
+import { KitchenControls, toolForCode } from './controls.js';
 import * as flowSettings from '../flow/settings.js';
 import { drawFood, drawBackground, drawCounter, drawSink, drawMark, drawGerms, drawHand, drawBubble, drawGlow, foodSize, roundRect } from './draw.js';
 import './sounds.js';
@@ -424,11 +426,12 @@ export function kitchenScene(app) {
     }
   }
 
-  // Key or button names for the HUD bubbles and the legend: T / H on a keyboard (controls.js reads
-  // them directly), the gamepad's B / Y (handleActions: camera = tissues, phone = wash).
+  // Key or button names for the HUD bubbles and the legend: the first key bound to the tissues,
+  // cling film and wash actions in Settings (T / C / H by default), or the gamepad's B / X / Y
+  // (handleActions: camera = tissues, fire = cling film, phone = wash).
   const toolKey = tool => (device() === 'gamepad'
     ? promptVars('gamepad')[tool === 'wash' ? 'key_phone' : tool === 'cling' ? 'key_fire' : 'key_camera']
-    : t(`kitchen.legend.${tool === 'wash' ? 'washKey' : tool === 'cling' ? 'clingKey' : 'tissuesKey'}`));
+    : keyFor(tool === 'wash' ? 'wash' : tool === 'cling' ? 'clingfilm' : 'tissues'));
 
   // HUD bubble texts: "Wash (H)" / "Wash (Y)" / "Wash", "Tissue! (T)" / "Tissue! (B)" / "Tissue!".
   const washLabel = () => (gstate === 'wash' ? t('kitchen.hud.washing')
@@ -436,7 +439,7 @@ export function kitchenScene(app) {
   const tissueLabel = () => (device() === 'touch' ? t('kitchen.hud.tissueTap') : t('kitchen.hud.tissueKey', { key: toolKey('tissues') }));
 
   // Control legend along the bottom of the counter (keyboard and gamepad; touch players tap the
-  // art). Pause and the move keys follow Settings; Tab, Enter, T, C and H are read directly.
+  // art). Pause, the move keys and the tool keys follow Settings; Tab and Enter are fixed.
   function buildLegend() {
     clearPage();
     const dev = device();
@@ -747,7 +750,11 @@ export function kitchenScene(app) {
     audio.play('hover', { volume: 0.7 });
   }
 
+  // A key bound to a tool in Settings takes that tool during play, even when it is also one of the
+  // fixed keys below (the player's own choice wins); outside play the fixed meaning applies.
   function handleKey(code, shift) {
+    const tool = toolForCode(code);
+    if (tool && mode === 'play') { activate(tool); return; }
     switch (code) {
       case 'Tab': cycleFocus(shift ? -1 : 1); break;
       case 'Enter': case 'NumpadEnter': case 'Space':
@@ -756,9 +763,6 @@ export function kitchenScene(app) {
         activate(focusId);
         keptFocus = false;
         break;
-      case 'KeyT': case 'Digit1': case 'Numpad1': if (mode === 'play') activate('tissues'); break;
-      case 'KeyC': case 'Digit2': case 'Numpad2': if (mode === 'play') activate('clingfilm'); break;
-      case 'KeyH': case 'Digit3': case 'Numpad3': if (mode === 'play') activate('sink'); break;
       case 'Backspace': if (held) toggleHeld(); break;
       default: break;
     }
@@ -970,10 +974,34 @@ export function kitchenScene(app) {
       el('div', { class: 'row' },
         button(t('pause.resume'), () => resume(), { class: 'primary', id: 'kz-resume' }),
         // No restart on the outro: the finished level's result would be thrown away.
-        pausedFrom === 'outro' ? null : button(t('pause.restart'), () => restart(), { id: 'kz-restart' }),
-        button(t('pause.quit'), () => quit(), { id: 'kz-quit' })),
-      el('div', { class: 'row' }, toggle, settingsButton()));
+        pausedFrom === 'outro' ? null : button(t('pause.restart'), () => (pausedFrom === 'play' ? confirmThen('restart', restart, 'kz-restart') : restart()), { id: 'kz-restart' }),
+        button(t('pause.quit'), () => (pausedFrom === 'play' || pausedFrom === 'tutorial' ? confirmThen('leave', quit, 'kz-quit') : quit()), { id: 'kz-quit' })),
+      el('div', { class: 'row' }, toggle, settingsButton(), fullscreenButton(button, { id: 'kz-fullscreen', class: 'kz-toggle' })));
     showOverlay(card);
+  }
+
+  // Restarting or leaving a level being played throws it away, so the card asks first (No is
+  // focused; Escape, Back or gamepad B answers No). The intro pages lose nothing and do not ask.
+  let confirming = false;
+  async function confirmThen(kind, action, fromId) {
+    if (confirming || mode !== 'paused') return;
+    confirming = true;
+    if (untrap) { untrap(); untrap = null; }
+    nav = null;
+    ensureStyle();
+    const restartKind = kind === 'restart';
+    const ok = await confirmDialog(app.ui, {
+      title: t(restartKind ? 'pause.confirmRestart' : 'pause.confirmLeave'), text: t('pause.confirmText'),
+      yes: t(restartKind ? 'pause.confirmRestartYes' : 'pause.confirmLeaveYes'), no: t('pause.confirmNo'), danger: true,
+    });
+    confirming = false;
+    if (destroyed || mode !== 'paused') return;
+    if (ok) { input.clearAll(); action(); return; }
+    if (overlay) {
+      nav = focusNavigator(overlay);
+      untrap = trapFocus(overlay);
+      if (device() !== 'touch') document.getElementById(fromId)?.focus({ preventScroll: true });
+    }
   }
 
   // The flow's settings overlay (web/js/flow/contract.md), when that module provides it.
@@ -1043,6 +1071,7 @@ export function kitchenScene(app) {
       // Settings > Reduced motion can change while the kitchen is open (pause > Settings).
       reduced = !!settings.get('reducedMotion');
       const settingsOpen = !!(app.flow && app.flow.overlayOpen);
+      if (confirming) { tickNav(); return; }   // a pause-card question is up (confirmThen)
       const before = mode;
       if (nav && !settingsOpen) nav();
       // A gamepad press that just worked a card button (Resume, Restart) must not also act on the

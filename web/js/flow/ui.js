@@ -79,8 +79,6 @@ export function pushNav(container, { onBack = null, initial = null } = {}) {
 
 export function clearNav() { stack.length = 0; }
 
-export const navDepth = () => stack.length;
-
 function items(container) {
   return [...container.querySelectorAll('button:not([disabled]), input:not([disabled]), [data-focusable]:not([disabled])')]
     .filter(n => n.offsetParent !== null && !n.closest('[inert]'));

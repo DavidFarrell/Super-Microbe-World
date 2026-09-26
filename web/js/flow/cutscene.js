@@ -12,13 +12,14 @@ import { el } from '../ui/dom.js';
 import { input } from '../core/input.js';
 import { audio } from '../core/audio.js';
 import { settings } from '../core/settings.js';
-import { t } from '../core/i18n.js';
+import { t, langTag } from '../core/i18n.js';
 import { tp } from '../ui/prompts.js';
 import { Particles, haptic } from '../core/fx.js';
 import { AREA_MUSIC } from '../core/music.js';
 import { createTalkie } from '../gameshow/talkie.js';
 import { Studio } from '../gameshow/studio.js';
 import { loadAtlases, atlasSet, drawFrame, hasArt } from '../gameshow/art.js';
+import { drawLoading } from './art.js';
 import { registerGameshowSounds } from '../gameshow/sound.js';
 import { loadQuizText, avatarName } from './flow.js';
 import { ensureStyle, glossy, pushNav, tickNav, clearNav, confirmDialog } from './ui.js';
@@ -26,10 +27,20 @@ import { ensureStyle, glossy, pushNav, tickNav, clearNav, confirmDialog } from '
 // Build A's and the live file's indices (CutSceneXMLParser: every <statement> in order).
 const LINE = { hello: 0, soon: 1, who: 2, tell: 4, nickname: 5, closingLive: 9 };
 const TALKIE_AT = { x: 15, y: 307.5 };
-const KID_RECTS = {   // amyButton / harryButton: a 50 x 50 square scaled 2.68 x 5.26 (sprite 846)
-  amy: { x: 437, y: 100, w: 134, h: 263 },
-  harry: { x: 584, y: 124, w: 134, h: 263 },
+// amyButton / harryButton: a 50 x 50 square scaled 2.68 x 5.26 (sprite 846), 263 high. The port
+// stops them at y 330, above the talkie box (y about 335-449), so the taps a child uses to hurry
+// the host's lines along cannot land on a child when the choice appears.
+const KID_RECTS = {
+  amy: { x: 437, y: 100, w: 134, h: 230 },
+  harry: { x: 584, y: 124, w: 134, h: 206 },
 };
+// The choice and the form ignore picks and submits for a moment after they appear, so the
+// presses and taps used to skip through the host's lines cannot settle them unseen (as the
+// splash menu, the summary card and the quiz board already do). Keyboard and gamepad: nothing is
+// focused when the choice appears; the first arrow or confirm press highlights a child, and a
+// confirm press on the highlighted child picks it.
+const CHOOSE_WAKE = 34;   // ticks (0.5 s)
+const FORM_WAKE = 40;     // ticks (0.6 s)
 const SUBMIT_AT = { x: 398.65, y: 275.95, w: 219, h: 79 };
 const ENGLISH_FALLBACK = ['Hello and welcome to the Super Microbe World Game Show!', 'Soon you will be visiting the weird world of the microbe.', 'But first, who do you want to play as?', '', 'Tell me a little about yourself:', 'Nickname', 'Age', 'email address', '', "Let's see what you know about microbes."];
 
@@ -66,14 +77,18 @@ export function cutsceneScene(app) {
   let params = {}, text = ENGLISH_FALLBACK, phase = 'loading', ticks = 0, ready = false, destroyed = false;
   let studio = null, talkie = null, popNav = null, layer = null, hover = null, chosen = null, form = null, quitBtn = null;
   let nickname = '', submitState = 1, dim = 0, dimTarget = 0, musicOn = false, fade = 0, hintEl = null;
+  let phaseAt = 0;   // tick the current phase began (the choice's and the form's wake)
+  let textLang = 'en';   // the introduction file's language (quiz language, English fallback)
+  const awake = () => (phase === 'choose' ? ticks - phaseAt >= CHOOSE_WAKE : phase === 'form' ? ticks - phaseAt >= FORM_WAKE : false);
   const particles = new Particles(300);
   const reduced = () => !!settings.get('reducedMotion');
   const line = i => (text[i] != null && text[i] !== '' ? text[i] : ENGLISH_FALLBACK[i]);
 
-  function say(lines, then) {
+  // quiz: the lines come from the quiz language's introduction file (announced in its language).
+  function say(lines, then, { quiz = true } = {}) {
     studio.react('host', 'excited');
     talkie.show();
-    talkie.say(lines, () => { if (!destroyed) then(); });
+    talkie.say(lines, () => { if (!destroyed) then(); }, { lang: quiz ? langTag(textLang) : null });
   }
 
   // --- 1. Host lines 0-2 --------------------------------------------------------------------
@@ -94,6 +109,7 @@ export function cutsceneScene(app) {
   // --- 2. Avatar choice ---------------------------------------------------------------------
   function chooseAvatar() {
     phase = 'choose';
+    phaseAt = ticks;
     studio.host.stopAt('stop');
     talkie.hide();
     dimTarget = 0.3;
@@ -105,9 +121,8 @@ export function cutsceneScene(app) {
         style: { left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px' } }, el('span', {}, avatarName(who)));
       // Hover and keyboard focus always point at the same child, so Enter picks the one that
       // is reacting (the original had only the hovered child react).
-      b.addEventListener('pointerenter', () => {
-        const other = document.getElementById(`choose-${who === 'amy' ? 'harry' : 'amy'}`);
-        if (other && document.activeElement === other) b.focus({ preventScroll: true });
+      b.addEventListener('pointerenter', e => {
+        if (e.pointerType === 'mouse') b.focus({ preventScroll: true });
         setHover(who);
       });
       b.addEventListener('pointerleave', () => { if (document.activeElement !== b) setHover(null); });
@@ -121,8 +136,26 @@ export function cutsceneScene(app) {
       hintEl, kid('amy'), kid('harry'));
     app.ui.append(layer);
     input.addEventListener('device', onDevice);
-    popNav = pushNav(layer, { initial: input.lastDevice === 'touch' ? false : '#choose-amy', onBack: askQuit });
+    popNav = pushNav(layer, { initial: false, onBack: askQuit });
     app.announce(line(LINE.who));
+  }
+
+  // Keyboard and gamepad at the choice, before a child is highlighted: an arrow highlights the
+  // child on that side (left Amy, right Harry), a confirm press highlights Amy (or the child
+  // under the mouse). Returns true when it handled the press (tickNav then skips this tick).
+  function highlightFirst() {
+    // Not on the tick the choice appeared: that press ended the host's line.
+    if (phase !== 'choose' || ticks <= phaseAt || input.lastDevice === 'touch') return false;
+    const kid = document.activeElement && document.activeElement.closest && document.activeElement.closest('.cs-kid');
+    if (kid) return false;
+    let who = null;
+    if (input.pressed('right')) who = 'harry';
+    else if (input.pressed('left') || input.pressed('up') || input.pressed('down')) who = 'amy';
+    else if (input.pressed('confirm') || input.pressed('jump')) who = hover || 'amy';
+    if (!who) return false;
+    document.getElementById(`choose-${who}`)?.focus({ preventScroll: true });
+    audio.play('hover');
+    return true;
   }
 
   function setHover(who) {
@@ -143,7 +176,7 @@ export function cutsceneScene(app) {
   }
 
   function choose(who) {
-    if (phase !== 'choose') return;
+    if (phase !== 'choose' || !awake()) return;
     chosen = who;
     phase = 'chosen';
     if (popNav) { popNav(); popNav = null; }
@@ -170,6 +203,7 @@ export function cutsceneScene(app) {
   // --- 3. Details form ------------------------------------------------------------------------
   function showForm() {
     phase = 'form';
+    phaseAt = ticks;
     talkie.hide();
     studio.host.stopAt('stop');
     const nick = el('input', { id: 'form-nickname', type: 'text', maxlength: '25', autocomplete: 'off', autocapitalize: 'words', spellcheck: 'false', enterkeyhint: 'done',
@@ -189,12 +223,13 @@ export function cutsceneScene(app) {
     form.addEventListener('submit', e => { e.preventDefault(); submitForm(); });
     app.ui.append(form);
     popNav = pushNav(form, { initial: false, onBack: askQuit });
-    if (input.lastDevice !== 'touch') { nick.focus({ preventScroll: true }); nick.select(); }
+    // The caret goes to the end of the name (not a selection), so a stray key cannot wipe it.
+    if (input.lastDevice !== 'touch') { nick.focus({ preventScroll: true }); nick.setSelectionRange(nick.value.length, nick.value.length); }
     app.announce(`${line(LINE.tell)} ${line(LINE.nickname)}`);
   }
 
   function submitForm() {
-    if (phase !== 'form') return;
+    if (phase !== 'form' || !awake()) return;
     const nick = document.getElementById('form-nickname');
     // Keep printable characters only; an empty nickname falls back to the avatar's name.
     nickname = String(nick ? nick.value : '').replace(/[\u0000-\u001f\u007f<>]/g, '').trim().slice(0, 25);
@@ -221,7 +256,7 @@ export function cutsceneScene(app) {
       if (quitBtn) { quitBtn.remove(); quitBtn = null; }
       if (typeof params.onComplete === 'function') params.onComplete({ avatar: chosen, nickname });
       else app.scenes.go('splash', {}, { style: 'fade' });
-    });
+    }, { quiz: blind });
   }
 
   let dialogOpen = false;
@@ -254,10 +289,10 @@ export function cutsceneScene(app) {
       studio.setScores(0, 0, { instant: true });
       talkie = createTalkie(app, { x: TALKIE_AT.x, y: TALKIE_AT.y, speaker: t('gameshow.host') });
       const artJob = loadAtlases(atlasSet('cutscene', ['gameshow-bg', 'gameshow-cast', 'cutscene']));
-      const textJob = loadQuizText().then(q => { if (q && Array.isArray(q.intro)) text = q.intro; }).catch(() => {});
+      const textJob = loadQuizText().then(q => { if (q && Array.isArray(q.intro)) { text = q.intro; textLang = q.code || 'en'; } }).catch(() => {});
       Promise.all([artJob, textJob]).then(([ok]) => { ready = !!ok; if (!destroyed && phase === 'loading') { studio.start(); start(); } });
       window.__test && window.__test.register('cutscene', () => ({
-        phase, ready, hover, chosen, nickname, hint: hintEl ? hintEl.textContent : null,
+        phase, ready, hover, chosen, nickname, hint: hintEl ? hintEl.textContent : null, awake: awake(),
         talkie: talkie ? talkie.state() : null,
         studio: studio ? studio.state() : null,
       }));
@@ -277,14 +312,16 @@ export function cutsceneScene(app) {
       fade = Math.min(1, fade + 0.06);
       studio.update();
       if (!dialogOpen) talkie.update();
-      tickNav();
+      if (!(phase === 'choose' && !dialogOpen && highlightFirst())) tickNav();
       dim += (dimTarget - dim) * (reduced() ? 1 : 0.15);
       particles.update();
       if (!dialogOpen && (phase === 'intro' || phase === 'chosen' || phase === 'closing') && (input.pressed('back') || input.pressed('pause'))) askQuit();
     },
     render(ctx) {
+      // Waiting for the studio's art: a small loading ring, never placeholder art (the splash
+      // downloads this art ahead, flow.js prefetchMenu).
+      if (phase === 'loading') { drawLoading(ctx, ticks, '#000'); return; }
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 800, 450);
-      if (phase === 'loading') return;
       if (phase === 'form') {
         if (!drawFrame(ctx, 'cut_details_form', 30)) { ctx.fillStyle = '#027ab3'; ctx.fillRect(0, 0, 800, 450); }
         if (!drawFrame(ctx, 'cut_submit_button', submitState, [1, 0, 0, 1, SUBMIT_AT.x, SUBMIT_AT.y])) {
