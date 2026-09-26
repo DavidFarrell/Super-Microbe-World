@@ -38,6 +38,24 @@ const files = {};
     files[rel] = rel;
   }
 })(WEB);
+// Merge each language's common + namespace string tables into one bundle, so a language is a
+// single request and the artifact stays well under the host's per-publish file limit.
+const langDir = path.join(out, 'data/lang');
+if (fs.existsSync(path.join(langDir, 'manifest.json'))) {
+  const manifest = JSON.parse(fs.readFileSync(path.join(langDir, 'manifest.json'), 'utf8'));
+  for (const code of manifest.languages) {
+    const merged = {};
+    for (const f of [`${code}.json`, ...manifest.namespaces.map(ns => `${code}/${ns}.json`)]) {
+      const p = path.join(langDir, f);
+      if (fs.existsSync(p)) { Object.assign(merged, JSON.parse(fs.readFileSync(p, 'utf8'))); fs.rmSync(p); delete files[`data/lang/${f}`]; }
+    }
+    fs.writeFileSync(path.join(langDir, `${code}.bundle.json`), JSON.stringify(merged));
+    files[`data/lang/${code}.bundle.json`] = `data/lang/${code}.bundle.json`;
+    fs.rmSync(path.join(langDir, code), { recursive: true, force: true });
+  }
+  manifest.bundled = true;
+  fs.writeFileSync(path.join(langDir, 'manifest.json'), JSON.stringify(manifest));
+}
 fs.writeFileSync(path.join(out, 'files.json'), JSON.stringify(files, null, 1));
 const n = Object.keys(files).length;
 const bytes = Object.keys(files).reduce((s, f) => s + fs.statSync(path.join(out, f)).size, 0);

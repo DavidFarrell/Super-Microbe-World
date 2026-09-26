@@ -1,0 +1,599 @@
+{
+ "mode": "kitchen",
+ "dsf": 1,
+ "avatar": "harry",
+ "when": "2026-09-26T15:09:26.605Z",
+ "captures": [
+  {
+   "file": "600-kitchen-l0-intro1.png",
+   "desc": "Kitchen level 0 intro screen 1 (dimmed kitchen, white text, blue Click button)",
+   "t": 2.79,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": true,
+   "hires": "600-kitchen-l0-intro1@2x.png"
+  },
+  {
+   "file": "601-kitchen-l0-intro2.png",
+   "desc": "Kitchen level 0 intro screen 2 (dimmed kitchen, white text, blue Click button)",
+   "t": 9.56,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "602-kitchen-l0-intro3.png",
+   "desc": "Kitchen level 0 intro screen 3 (dimmed kitchen, white text, blue Click button)",
+   "t": 10.85,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "603-kitchen-l0-intro4.png",
+   "desc": "Kitchen level 0 intro screen 4 (dimmed kitchen, white text, blue Click button)",
+   "t": 14.21,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "604-kitchen-l0-tutorial.png",
+   "desc": "Kitchen level 0 tutorial: undimmed kitchen, click where the spring onion goes",
+   "t": 16.65,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": true,
+   "hires": "604-kitchen-l0-tutorial@2x.png"
+  },
+  {
+   "file": "605-kitchen-l0-tutorial-wrong.png",
+   "desc": "Kitchen tutorial after a wrong place: \"Wrong!  Try again.\" with the two rules",
+   "t": 21.21,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "606-kitchen-l0-tutorial-right.png",
+   "desc": "Kitchen tutorial after the drawer: \"Excellent, well done.\" / \"Try to put away 10 things before the timer runs out.\"",
+   "t": 24.75,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "607-kitchen-l0-play.png",
+   "desc": "Kitchen level 0 play: first item (Broccoli) on the counter, clock top right",
+   "t": 27.61,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": true,
+   "hires": "607-kitchen-l0-play@2x.png"
+  },
+  {
+   "file": "608-kitchen-l0-placing.png",
+   "desc": "Kitchen level 0 after 3 placements (avatar animation for the last location, items in the fridge/bowl/cupboard)",
+   "t": 35.76,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "609-kitchen-l0-done.png",
+   "desc": "Kitchen level 0: every item placed (level ends at the next one-second tick)",
+   "t": 42.85,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "610-kitchen-l0-outro1.png",
+   "desc": "Kitchen level 0 outro page 1: \"Shopping Placed Correctly\" rows with x10 sums",
+   "t": 43.52,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": true,
+   "hires": "610-kitchen-l0-outro1@2x.png"
+  },
+  {
+   "file": "611-kitchen-l0-outro2.png",
+   "desc": "Kitchen level 0 outro page 2: \"Items Placed Incorrectly\" rows",
+   "t": 48.33,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "612-kitchen-l0-outro3.png",
+   "desc": "Kitchen level 0 outro page 3: \"Microbial Mistakes\" admonishments (4 slots)",
+   "t": 49.05,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "613-kitchen-l1-intro1.png",
+   "desc": "Kitchen level 1 intro screen 1 (dimmed kitchen, white text, blue Click button)",
+   "t": 49.73,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "614-kitchen-l1-intro2.png",
+   "desc": "Kitchen level 1 intro screen 2 (dimmed kitchen, white text, blue Click button)",
+   "t": 50.94,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "615-kitchen-l1-intro3.png",
+   "desc": "Kitchen level 1 intro screen 3 (dimmed kitchen, white text, blue Click button)",
+   "t": 52.02,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "616-kitchen-l1-intro4.png",
+   "desc": "Kitchen level 1 intro screen 4 (dimmed kitchen, white text, blue Click button)",
+   "t": 53.26,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "617-kitchen-l1-play.png",
+   "desc": "Kitchen level 1 play: first item (Carrots) on the counter, clock top right",
+   "t": 54.3,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "618-kitchen-l1-idle.png",
+   "desc": "Kitchen level 1 after 3 s idle (a sneeze may have started: avatar sneeze_Start / sneeze_mid)",
+   "t": 56.88,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "619-kitchen-l1-idle2.png",
+   "desc": "Kitchen level 1 after 5.5 s idle",
+   "t": 59.45,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "620-kitchen-l1-tissues.png",
+   "desc": "Kitchen level 1 after clicking the tissues (sneeze_tissue_end if a sneeze was running, otherwise nothing)",
+   "t": 60.03,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "621-kitchen-l1-wash.png",
+   "desc": "Kitchen level 1: sink clicked, wash_hands animation (36 frames)",
+   "t": 60.8,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "622-kitchen-l1-done.png",
+   "desc": "Kitchen level 1: every item placed (level ends at the next one-second tick)",
+   "t": 78.23,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "623-kitchen-l1-outro1.png",
+   "desc": "Kitchen level 1 outro page 1: \"Shopping Placed Correctly\" rows with x10 sums",
+   "t": 78.76,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "624-kitchen-l1-outro2.png",
+   "desc": "Kitchen level 1 outro page 2: \"Items Placed Incorrectly\" rows",
+   "t": 79.57,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "625-kitchen-l1-outro3.png",
+   "desc": "Kitchen level 1 outro page 3: \"Microbial Mistakes\" admonishments (4 slots)",
+   "t": 80.36,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "626-kitchen-l2-intro1.png",
+   "desc": "Kitchen level 2 intro screen 1 (dimmed kitchen, white text, blue Click button)",
+   "t": 81.1,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "627-kitchen-l2-intro2.png",
+   "desc": "Kitchen level 2 intro screen 2 (dimmed kitchen, white text, blue Click button)",
+   "t": 82.24,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "628-kitchen-l2-intro3.png",
+   "desc": "Kitchen level 2 intro screen 3 (dimmed kitchen, white text, blue Click button)",
+   "t": 83.5,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "629-kitchen-l2-intro4.png",
+   "desc": "Kitchen level 2 intro screen 4 (dimmed kitchen, white text, blue Click button)",
+   "t": 84.72,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "630-kitchen-l2-play.png",
+   "desc": "Kitchen level 2 play: first item (Bread) on the counter, clock top right",
+   "t": 85.8,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "631-kitchen-l2-clingfilm.png",
+   "desc": "Kitchen level 2: cling film applied to Cooked Chicken on the counter",
+   "t": 93.42,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "632-kitchen-l2-done.png",
+   "desc": "Kitchen level 2: every item placed (level ends at the next one-second tick)",
+   "t": 102.95,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "633-kitchen-l2-outro1.png",
+   "desc": "Kitchen level 2 outro page 1: \"Shopping Placed Correctly\" rows with x10 sums",
+   "t": 103.65,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "634-kitchen-l2-outro2.png",
+   "desc": "Kitchen level 2 outro page 2: \"Items Placed Incorrectly\" rows",
+   "t": 104.49,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "635-kitchen-l2-outro3.png",
+   "desc": "Kitchen level 2 outro page 3: \"Microbial Mistakes\" admonishments (4 slots)",
+   "t": 105.33,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "636-kitchen-l3-intro1.png",
+   "desc": "Kitchen level 3 intro screen 1 (dimmed kitchen, white text, blue Click button)",
+   "t": 106.04,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "637-kitchen-l3-intro2.png",
+   "desc": "Kitchen level 3 intro screen 2 (dimmed kitchen, white text, blue Click button)",
+   "t": 107.17,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "638-kitchen-l3-intro3.png",
+   "desc": "Kitchen level 3 intro screen 3 (dimmed kitchen, white text, blue Click button)",
+   "t": 108.38,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "639-kitchen-l3-play.png",
+   "desc": "Kitchen level 3 play: first item (Milk) on the counter, clock top right",
+   "t": 109.53,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "640-kitchen-l3-placing.png",
+   "desc": "Kitchen level 3 after 11 placements (avatar animation for the last location, items in the fridge/bowl/cupboard)",
+   "t": 125.06,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "641-kitchen-l3-done.png",
+   "desc": "Kitchen level 3: every item placed (level ends at the next one-second tick)",
+   "t": 139.73,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "642-kitchen-l3-outro1.png",
+   "desc": "Kitchen level 3 outro page 1: \"Shopping Placed Correctly\" rows with x10 sums",
+   "t": 140.29,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "643-kitchen-l3-outro2.png",
+   "desc": "Kitchen level 3 outro page 2: \"Items Placed Incorrectly\" rows",
+   "t": 141.06,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "644-kitchen-l3-outro3.png",
+   "desc": "Kitchen level 3 outro page 3: \"Microbial Mistakes\" admonishments (4 slots)",
+   "t": 141.85,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  }
+ ],
+ "timings": [
+  {
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "what": "kitchen level 0: play start to outro",
+   "seconds": 16.12
+  },
+  {
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "what": "kitchen level 1: play start to outro",
+   "seconds": 24.67
+  },
+  {
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "what": "kitchen level 2: play start to outro",
+   "seconds": 18.05
+  },
+  {
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "what": "kitchen level 3: play start to outro",
+   "seconds": 30.96
+  }
+ ],
+ "ruffleWarnings": [
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Arial\" (bold: true, italic: false)",
+   "count": 1,
+   "firstSeen": 0.77
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Noto Sans\" (bold: true, italic: false)",
+   "count": 1,
+   "firstSeen": 0.77
+  },
+  {
+   "message": "WARN core/src/avm1/runtime.rs:385 Avm1::pop: Stack underflow",
+   "count": 53,
+   "firstSeen": 0.77
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Arial\" (bold: false, italic: false)",
+   "count": 1,
+   "firstSeen": 0.79
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Verdana\" (bold: true, italic: false)",
+   "count": 1,
+   "firstSeen": 1.02
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Verdana\" (bold: false, italic: false)",
+   "count": 1,
+   "firstSeen": 1.02
+  }
+ ],
+ "platformerLoop": {
+  "samples": 0
+ },
+ "quirks": [],
+ "traces": [
+  {
+   "t": 1.42,
+   "msg": "Starting Level: 0"
+  },
+  {
+   "t": 1.42,
+   "msg": "23 - Broccoli"
+  },
+  {
+   "t": 1.42,
+   "msg": "20 - Milk"
+  },
+  {
+   "t": 1.43,
+   "msg": "7 - Yogurt",
+   "repeats": 2,
+   "until": 1.43
+  },
+  {
+   "t": 1.43,
+   "msg": "3 - Tomatoes"
+  },
+  {
+   "t": 1.43,
+   "msg": "23 - Broccoli"
+  },
+  {
+   "t": 1.43,
+   "msg": "20 - Milk"
+  },
+  {
+   "t": 1.43,
+   "msg": "23 - Broccoli"
+  },
+  {
+   "t": 1.43,
+   "msg": "1 - Burst Yogurt"
+  },
+  {
+   "t": 1.43,
+   "msg": "20 - Milk"
+  },
+  {
+   "t": 49.2,
+   "msg": "Starting Level: 1"
+  },
+  {
+   "t": 49.2,
+   "msg": "2 - Carrots"
+  },
+  {
+   "t": 49.2,
+   "msg": "20 - Milk",
+   "repeats": 2,
+   "until": 49.2
+  },
+  {
+   "t": 49.21,
+   "msg": "3 - Tomatoes",
+   "repeats": 2,
+   "until": 49.21
+  },
+  {
+   "t": 49.21,
+   "msg": "9 - Orange Juice"
+  },
+  {
+   "t": 49.21,
+   "msg": "24 - Bread"
+  },
+  {
+   "t": 49.21,
+   "msg": "18 - Apple"
+  },
+  {
+   "t": 49.21,
+   "msg": "1 - Burst Yogurt"
+  },
+  {
+   "t": 49.21,
+   "msg": "3 - Tomatoes"
+  },
+  {
+   "t": 80.52,
+   "msg": "Starting Level: 2"
+  },
+  {
+   "t": 80.52,
+   "msg": "24 - Bread",
+   "repeats": 2,
+   "until": 80.52
+  },
+  {
+   "t": 80.52,
+   "msg": "13 - Raw Sausages"
+  },
+  {
+   "t": 80.52,
+   "msg": "17 - Cooked Chicken"
+  },
+  {
+   "t": 80.52,
+   "msg": "16 - Cooked Lamb"
+  },
+  {
+   "t": 80.52,
+   "msg": "13 - Raw Sausages"
+  },
+  {
+   "t": 80.52,
+   "msg": "0 - Mouldy Bread"
+  },
+  {
+   "t": 80.52,
+   "msg": "7 - Yogurt"
+  },
+  {
+   "t": 80.52,
+   "msg": "14 - Raw Steak"
+  },
+  {
+   "t": 80.52,
+   "msg": "12 - Raw Chicken"
+  },
+  {
+   "t": 105.47,
+   "msg": "Starting Level: 3"
+  },
+  {
+   "t": 105.47,
+   "msg": "20 - Milk"
+  },
+  {
+   "t": 105.47,
+   "msg": "1 - Burst Yogurt"
+  },
+  {
+   "t": 105.48,
+   "msg": "13 - Raw Sausages"
+  },
+  {
+   "t": 105.48,
+   "msg": "14 - Raw Steak"
+  },
+  {
+   "t": 105.48,
+   "msg": "12 - Raw Chicken"
+  },
+  {
+   "t": 105.48,
+   "msg": "0 - Mouldy Bread"
+  },
+  {
+   "t": 105.48,
+   "msg": "16 - Cooked Lamb"
+  },
+  {
+   "t": 105.48,
+   "msg": "11 - Raw Lamb"
+  },
+  {
+   "t": 105.49,
+   "msg": "16 - Cooked Lamb"
+  },
+  {
+   "t": 105.49,
+   "msg": "5 - Bananas"
+  },
+  {
+   "t": 105.49,
+   "msg": "20 - Milk"
+  },
+  {
+   "t": 105.49,
+   "msg": "8 - cheese"
+  },
+  {
+   "t": 105.49,
+   "msg": "22 - Orange Juice"
+  },
+  {
+   "t": 105.49,
+   "msg": "20 - Milk"
+  },
+  {
+   "t": 105.49,
+   "msg": "17 - Cooked Chicken"
+  },
+  {
+   "t": 105.49,
+   "msg": "16 - Cooked Lamb"
+  },
+  {
+   "t": 105.49,
+   "msg": "22 - Orange Juice"
+  },
+  {
+   "t": 105.49,
+   "msg": "12 - Raw Chicken"
+  },
+  {
+   "t": 105.49,
+   "msg": "3 - Tomatoes"
+  },
+  {
+   "t": 105.49,
+   "msg": "21 - Soup"
+  },
+  {
+   "t": 141.99,
+   "msg": "Now Exiting Kitchen Game\nOverall Score: 430"
+  }
+ ]
+}

@@ -1,0 +1,657 @@
+{
+ "mode": "timeout",
+ "dsf": 1,
+ "avatar": "amy",
+ "when": "2026-09-26T15:02:39.765Z",
+ "captures": [
+  {
+   "file": "500-amy-form-typed.png",
+   "desc": "Variant (Amy): details form after clicking the nickname field, End, six Backspaces and typing \"Sam\"",
+   "t": 51.72,
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "hi": false
+  },
+  {
+   "file": "501-amy-r1-blind-intro1.png",
+   "desc": "Round 1 blind intro line 1/4: \"Welcome to the first BLIND QUESTION ROUND!\"",
+   "t": 66.69,
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "hi": false
+  },
+  {
+   "file": "502-amy-r1-blind-q1-response.png",
+   "desc": "Round 1 blind: response \"<nickname>, you chose Disagree.\" + \"Because this is a Blind question round, you'll find out how you did later.\" (host serious, player avatar random reaction)",
+   "t": 124.37,
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "hi": false
+  },
+  {
+   "file": "503-amy-r1-step-right.png",
+   "desc": "Host: \"Step right this way and prepare to enter the world of microbes!\"",
+   "t": 187.05,
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "hi": false
+  },
+  {
+   "file": "504-amy-r1-shrink-mid.png",
+   "desc": "Round 1: shrinking zone about 2.5 s after the click (the chosen child on the target under the shrink ray)",
+   "t": 192.36,
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "hi": false
+  },
+  {
+   "file": "505-amy-r1-shrink-late.png",
+   "desc": "Round 1: shrinking zone about 4.5 s after the click (the chosen child on the target under the shrink ray)",
+   "t": 194.36,
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "hi": false
+  },
+  {
+   "file": "506-amy-level1-intro-p1.png",
+   "desc": "Level 1 (alpha_level1.xml): ePhone intro page 1",
+   "t": 198.69,
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "hi": false
+  },
+  {
+   "file": "507-amy-level1-opening.png",
+   "desc": "Level 1: opening view after the intro (HUD: timer top centre, score top right, hearts, ePhone bottom right)",
+   "t": 234.33,
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "hi": false
+  },
+  {
+   "file": "508-amy-level1-idle-60s.png",
+   "desc": "Variant (Amy): level 1 after about 60 s idle (timer counting down)",
+   "t": 294.54,
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "hi": false
+  },
+  {
+   "file": "509-amy-timeout-summary.png",
+   "desc": "Variant (Amy): summary_page.swf after the 180 s clock ran out: \"You ran out of time.\" / \"click to try again\"",
+   "t": 424.49,
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "hi": true,
+   "hires": "509-amy-timeout-summary@2x.png"
+  },
+  {
+   "file": "510-amy-after-retry.png",
+   "desc": "Variant (Amy): after clicking the summary page: level 1 restarts (ePhone intro again)",
+   "t": 432.66,
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "hi": false
+  }
+ ],
+ "timings": [
+  {
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "what": "typewriter (timeout run): cutscene line 1, 57 chars, click to last text change",
+   "seconds": 4.53
+  },
+  {
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "what": "round 1 shrinking zone: click on \"Step right this way\" to showHoverboardOrKitchen trace",
+   "seconds": 5.35
+  },
+  {
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "what": "level 1 ePhone intro auto-advance gaps (s): 5.4, 6.2, 4.2, 4.4, 6.1, 5.7",
+   "seconds": 5.31
+  },
+  {
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "what": "level 1 ePhone shrink (large to small)",
+   "seconds": 0.36
+  },
+  {
+   "swf": "/reference/Junior_Game/movies/e-Bug Junior Game.swf",
+   "what": "level 1 idle: opening view to summary page (\"You ran out of time.\")",
+   "seconds": 188.74
+  }
+ ],
+ "ruffleWarnings": [
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Myriad Pro\" (bold: true, italic: false)",
+   "count": 1,
+   "firstSeen": 0.97
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Noto Sans\" (bold: true, italic: false)",
+   "count": 1,
+   "firstSeen": 0.98
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Arial\" (bold: true, italic: false)",
+   "count": 1,
+   "firstSeen": 0.98
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Arial\" (bold: false, italic: false)",
+   "count": 1,
+   "firstSeen": 0.98
+  },
+  {
+   "message": "WARN core/src/avm1/runtime.rs:385 Avm1::pop: Stack underflow",
+   "count": 170,
+   "firstSeen": 0.98
+  },
+  {
+   "message": "WARN core/src/avm1/activation.rs:1121 Cannot enumerate Undefined",
+   "count": 6,
+   "firstSeen": 1.01
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Verdana\" (bold: true, italic: false)",
+   "count": 1,
+   "firstSeen": 1.73
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Times New Roman\" (bold: false, italic: false)",
+   "count": 1,
+   "firstSeen": 2.02
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Verdana\" (bold: false, italic: false)",
+   "count": 1,
+   "firstSeen": 2.63
+  },
+  {
+   "message": "ERROR web/src/navigator.rs:477 Asynchronous error occurred: Could not fetch: \"Got JS error\"",
+   "count": 1,
+   "firstSeen": 59.46
+  },
+  {
+   "message": "ERROR core/src/library.rs:250 Tried to instantiate a non-registered character <symbol>",
+   "count": 8,
+   "firstSeen": 195.45,
+   "names": [
+    "undefined",
+    "colin_icon",
+    "super_slarg_icon"
+   ]
+  },
+  {
+   "message": "WARN core/src/avm1/globals/movie_clip.rs:808 Unable to attach '<symbol>'",
+   "count": 8,
+   "firstSeen": 195.45,
+   "names": [
+    "undefined",
+    "colin_icon",
+    "super_slarg_icon"
+   ]
+  },
+  {
+   "message": "WARN core/src/avm1/activation.rs:1492 GoToLabel: Frame label '\"steve_idle\"' not found",
+   "count": 4,
+   "firstSeen": 195.48,
+   "names": [
+    "steve_idle"
+   ]
+  }
+ ],
+ "platformerLoop": {
+  "samples": 13330,
+  "secondsRunning": 231,
+  "callsPerSecondMedian": 64,
+  "min": 11,
+  "max": 74
+ },
+ "quirks": [
+  {
+   "t": 101.32,
+   "name": "amy-r1-blind-intro4",
+   "attempt": 1
+  }
+ ],
+ "traces": [
+  {
+   "t": 2.03,
+   "msg": "an amy:avatar and it is + _level0.gameScreen.eBugGameShow.game_show.sz.harry / _level0.gameScreen.eBugGameShow.game_show.sz / _level0.gameScreen.eBugGameShow.game_show / _level0.gameScreen.eBugGameShow"
+  },
+  {
+   "t": 2.22,
+   "msg": "are loaded?",
+   "repeats": 6,
+   "until": 2.4
+  },
+  {
+   "t": 2.4,
+   "msg": "to intro!"
+  },
+  {
+   "t": 2.4,
+   "msg": "intro - start_intro"
+  },
+  {
+   "t": 2.4,
+   "msg": "next line: 0"
+  },
+  {
+   "t": 2.53,
+   "msg": "Root: Register Hoverboard"
+  },
+  {
+   "t": 2.54,
+   "msg": "an amy:avatar and it is + _level0.gameScreen.cutscene_introduction.shrinking_zone.harry / _level0.gameScreen.cutscene_introduction.shrinking_zone / _level0.gameScreen.cutscene_introduction / _level0.gameScreen"
+  },
+  {
+   "t": 2.98,
+   "msg": "Starting Level: 0"
+  },
+  {
+   "t": 2.98,
+   "msg": "3 - Tomatoes",
+   "repeats": 2,
+   "until": 2.98
+  },
+  {
+   "t": 2.98,
+   "msg": "2 - Carrots"
+  },
+  {
+   "t": 2.98,
+   "msg": "7 - Yogurt"
+  },
+  {
+   "t": 2.98,
+   "msg": "3 - Tomatoes"
+  },
+  {
+   "t": 2.98,
+   "msg": "23 - Broccoli",
+   "repeats": 3,
+   "until": 2.98
+  },
+  {
+   "t": 2.98,
+   "msg": "20 - Milk"
+  },
+  {
+   "t": 2.98,
+   "msg": "7 - Yogurt"
+  },
+  {
+   "t": 16.81,
+   "msg": "next line: 1"
+  },
+  {
+   "t": 32.46,
+   "msg": "next line: 2"
+  },
+  {
+   "t": 39.15,
+   "msg": "next line: 3"
+  },
+  {
+   "t": 39.15,
+   "msg": "intro - choose avatar"
+  },
+  {
+   "t": 41.08,
+   "msg": "button pressed: amyButton"
+  },
+  {
+   "t": 41.08,
+   "msg": "Amy"
+  },
+  {
+   "t": 41.08,
+   "msg": "intro - start_intro"
+  },
+  {
+   "t": 41.08,
+   "msg": "next line: 4"
+  },
+  {
+   "t": 41.23,
+   "msg": "an amy:avatar and it is + _level0.gameScreen.cutscene_introduction.shrinking_zone.harry / _level0.gameScreen.cutscene_introduction.shrinking_zone / _level0.gameScreen.cutscene_introduction / _level0.gameScreen"
+  },
+  {
+   "t": 48.41,
+   "msg": "next line: 5"
+  },
+  {
+   "t": 48.41,
+   "msg": "intro - get deets"
+  },
+  {
+   "t": 52.19,
+   "msg": "dont@have.one, false, Sam"
+  },
+  {
+   "t": 52.19,
+   "msg": "intro - start_intro"
+  },
+  {
+   "t": 52.2,
+   "msg": "next line: 8"
+  },
+  {
+   "t": 52.25,
+   "msg": "an amy:avatar and it is + _level0.gameScreen.cutscene_introduction.shrinking_zone.harry / _level0.gameScreen.cutscene_introduction.shrinking_zone / _level0.gameScreen.cutscene_introduction / _level0.gameScreen"
+  },
+  {
+   "t": 59.42,
+   "msg": "next line: 9"
+  },
+  {
+   "t": 194.86,
+   "msg": "end of amy: _level0.gameScreen.eBugGameShow.game_show.sz.amy.avatar, [avatar]"
+  },
+  {
+   "t": 194.86,
+   "msg": "my parent is: _level0.gameScreen.eBugGameShow.game_show.sz.amy"
+  },
+  {
+   "t": 194.86,
+   "msg": "my callback object: _level0.gameScreen.eBugGameShow.game_show.sz and my callback function forceReassignAvatar"
+  },
+  {
+   "t": 194.86,
+   "msg": "Just called: _level0.gameScreen.eBugGameShow.game_show.sz.forceReassignAvatar()"
+  },
+  {
+   "t": 194.86,
+   "msg": "root showHoverboard"
+  },
+  {
+   "t": 194.86,
+   "msg": "Round is: 0"
+  },
+  {
+   "t": 194.86,
+   "msg": "New Hoverboard round for: Sam, round 0,  alpha_level1.xml"
+  },
+  {
+   "t": 195.24,
+   "msg": "Init game - level == undefined"
+  },
+  {
+   "t": 195.42,
+   "msg": "loading map: found an entity(0) at: 1, 0"
+  },
+  {
+   "t": 195.42,
+   "msg": "loading map: found an entity(11) at: 1, 1"
+  },
+  {
+   "t": 195.43,
+   "msg": "loading map: found an entity(11) at: 5, 1"
+  },
+  {
+   "t": 195.43,
+   "msg": "loading map: found an entity(6) at: 5, 3"
+  },
+  {
+   "t": 195.43,
+   "msg": "loading map: found an entity(11) at: 6, 6"
+  },
+  {
+   "t": 195.45,
+   "msg": "bodylevel: true"
+  },
+  {
+   "t": 203.75,
+   "msg": "average FPS(397 / 10): 39 curr: 25"
+  },
+  {
+   "t": 213.01,
+   "msg": "average FPS(446 / 10): 44 curr: 75"
+  },
+  {
+   "t": 222.59,
+   "msg": "average FPS(392 / 10): 39 curr: 16"
+  },
+  {
+   "t": 232.11,
+   "msg": "average FPS(411 / 10): 41 curr: 37"
+  },
+  {
+   "t": 232.46,
+   "msg": "There were: 0",
+   "repeats": 293,
+   "until": 241.29
+  },
+  {
+   "t": 241.32,
+   "msg": "average FPS(599 / 10): 59 curr: 70"
+  },
+  {
+   "t": 241.32,
+   "msg": "There were: 0",
+   "repeats": 306,
+   "until": 250.46
+  },
+  {
+   "t": 250.49,
+   "msg": "average FPS(602 / 10): 60 curr: 66"
+  },
+  {
+   "t": 250.5,
+   "msg": "There were: 0",
+   "repeats": 302,
+   "until": 259.57
+  },
+  {
+   "t": 259.63,
+   "msg": "average FPS(596 / 10): 59 curr: 64"
+  },
+  {
+   "t": 259.63,
+   "msg": "There were: 0",
+   "repeats": 306,
+   "until": 268.73
+  },
+  {
+   "t": 268.79,
+   "msg": "average FPS(602 / 10): 60 curr: 67"
+  },
+  {
+   "t": 268.8,
+   "msg": "There were: 0",
+   "repeats": 307,
+   "until": 277.92
+  },
+  {
+   "t": 277.97,
+   "msg": "average FPS(606 / 10): 60 curr: 69"
+  },
+  {
+   "t": 277.97,
+   "msg": "There were: 0",
+   "repeats": 308,
+   "until": 287.18
+  },
+  {
+   "t": 287.23,
+   "msg": "average FPS(606 / 10): 60 curr: 71"
+  },
+  {
+   "t": 287.23,
+   "msg": "There were: 0",
+   "repeats": 291,
+   "until": 295.94
+  },
+  {
+   "t": 296.53,
+   "msg": "average FPS(574 / 10): 57 curr: 35"
+  },
+  {
+   "t": 296.53,
+   "msg": "There were: 0",
+   "repeats": 268,
+   "until": 306.07
+  },
+  {
+   "t": 306.09,
+   "msg": "average FPS(526 / 10): 52 curr: 68"
+  },
+  {
+   "t": 306.09,
+   "msg": "There were: 0",
+   "repeats": 263,
+   "until": 316.12
+  },
+  {
+   "t": 316.16,
+   "msg": "average FPS(517 / 10): 51 curr: 64"
+  },
+  {
+   "t": 316.16,
+   "msg": "There were: 0",
+   "repeats": 257,
+   "until": 325.77
+  },
+  {
+   "t": 325.82,
+   "msg": "average FPS(506 / 10): 50 curr: 63"
+  },
+  {
+   "t": 325.82,
+   "msg": "There were: 0",
+   "repeats": 289,
+   "until": 335.24
+  },
+  {
+   "t": 335.25,
+   "msg": "average FPS(568 / 10): 56 curr: 66"
+  },
+  {
+   "t": 335.27,
+   "msg": "There were: 0",
+   "repeats": 285,
+   "until": 344.32
+  },
+  {
+   "t": 344.34,
+   "msg": "average FPS(561 / 10): 56 curr: 69"
+  },
+  {
+   "t": 344.35,
+   "msg": "There were: 0",
+   "repeats": 284,
+   "until": 353.47
+  },
+  {
+   "t": 353.49,
+   "msg": "average FPS(559 / 10): 55 curr: 58"
+  },
+  {
+   "t": 353.49,
+   "msg": "There were: 0",
+   "repeats": 285,
+   "until": 362.55
+  },
+  {
+   "t": 362.57,
+   "msg": "average FPS(561 / 10): 56 curr: 53"
+  },
+  {
+   "t": 362.59,
+   "msg": "There were: 0",
+   "repeats": 296,
+   "until": 371.81
+  },
+  {
+   "t": 371.84,
+   "msg": "average FPS(584 / 10): 58 curr: 64"
+  },
+  {
+   "t": 371.84,
+   "msg": "There were: 0",
+   "repeats": 289,
+   "until": 381.12
+  },
+  {
+   "t": 381.13,
+   "msg": "average FPS(568 / 10): 56 curr: 56"
+  },
+  {
+   "t": 381.15,
+   "msg": "There were: 0",
+   "repeats": 272,
+   "until": 390.57
+  },
+  {
+   "t": 390.6,
+   "msg": "average FPS(536 / 10): 53 curr: 56"
+  },
+  {
+   "t": 390.6,
+   "msg": "There were: 0",
+   "repeats": 257,
+   "until": 400.04
+  },
+  {
+   "t": 400.1,
+   "msg": "average FPS(504 / 10): 50 curr: 61"
+  },
+  {
+   "t": 400.11,
+   "msg": "There were: 0",
+   "repeats": 244,
+   "until": 409.17
+  },
+  {
+   "t": 409.17,
+   "msg": "average FPS(479 / 10): 47 curr: 65"
+  },
+  {
+   "t": 409.22,
+   "msg": "There were: 0",
+   "repeats": 238,
+   "until": 418.4
+  },
+  {
+   "t": 418.45,
+   "msg": "average FPS(468 / 10): 46 curr: 64"
+  },
+  {
+   "t": 418.45,
+   "msg": "There were: 0",
+   "repeats": 55,
+   "until": 420.54
+  },
+  {
+   "t": 420.56,
+   "msg": "180"
+  },
+  {
+   "t": 420.56,
+   "msg": "undefined"
+  },
+  {
+   "t": 420.56,
+   "msg": "root endofHoverboard"
+  },
+  {
+   "t": 429.66,
+   "msg": "Init game - level == alpha_level1.xml"
+  },
+  {
+   "t": 429.86,
+   "msg": "loading map: found an entity(0) at: 1, 0"
+  },
+  {
+   "t": 429.86,
+   "msg": "loading map: found an entity(11) at: 1, 1"
+  },
+  {
+   "t": 429.86,
+   "msg": "loading map: found an entity(11) at: 5, 1"
+  },
+  {
+   "t": 429.86,
+   "msg": "loading map: found an entity(6) at: 5, 3"
+  },
+  {
+   "t": 429.86,
+   "msg": "loading map: found an entity(11) at: 6, 6"
+  },
+  {
+   "t": 429.87,
+   "msg": "bodylevel: true"
+  }
+ ]
+}

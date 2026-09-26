@@ -1,0 +1,913 @@
+{
+ "mode": "standalone",
+ "dsf": 1,
+ "avatar": "harry",
+ "when": "2026-09-26T13:49:41.897Z",
+ "captures": [
+  {
+   "file": "300-sa-splash-1s.png",
+   "desc": "splash.swf at 1 s: Splash TV: static, \"Tuning\" bars, studio fade-in, New Game button (frame 150 of sprite 58)",
+   "t": 1,
+   "swf": "/reference/Junior_Game/movies/splash.swf",
+   "hi": false
+  },
+  {
+   "file": "301-sa-splash-3s.png",
+   "desc": "splash.swf at 3 s: Splash TV: static, \"Tuning\" bars, studio fade-in, New Game button (frame 150 of sprite 58)",
+   "t": 3,
+   "swf": "/reference/Junior_Game/movies/splash.swf",
+   "hi": false
+  },
+  {
+   "file": "302-sa-splash-5s.png",
+   "desc": "splash.swf at 5 s: Splash TV: static, \"Tuning\" bars, studio fade-in, New Game button (frame 150 of sprite 58)",
+   "t": 5,
+   "swf": "/reference/Junior_Game/movies/splash.swf",
+   "hi": false
+  },
+  {
+   "file": "303-sa-splash-6_5s.png",
+   "desc": "splash.swf at 6.5 s: Splash TV: static, \"Tuning\" bars, studio fade-in, New Game button (frame 150 of sprite 58)",
+   "t": 6.5,
+   "swf": "/reference/Junior_Game/movies/splash.swf",
+   "hi": false
+  },
+  {
+   "file": "304-sa-splash-9s.png",
+   "desc": "splash.swf at 9 s: Splash TV: static, \"Tuning\" bars, studio fade-in, New Game button (frame 150 of sprite 58)",
+   "t": 9,
+   "swf": "/reference/Junior_Game/movies/splash.swf",
+   "hi": true,
+   "hires": "304-sa-splash-9s@2x.png"
+  },
+  {
+   "file": "305-sa-cutscene-introduction-2s.png",
+   "desc": "cutscene_introduction.swf at 2 s: Cutscene on its own: host line 0 typed, talkie waiting",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/cutscene_introduction.swf",
+   "hi": false
+  },
+  {
+   "file": "306-sa-cutscene-introduction-6s.png",
+   "desc": "cutscene_introduction.swf at 6 s: Cutscene on its own: host line 0 typed, talkie waiting",
+   "t": 6,
+   "swf": "/reference/Junior_Game/movies/cutscene_introduction.swf",
+   "hi": true,
+   "hires": "306-sa-cutscene-introduction-6s@2x.png"
+  },
+  {
+   "file": "307-sa-level-intros-1s.png",
+   "desc": "level_intros.swf at 1 s: ePhone intro pages library clip on its own",
+   "t": 1,
+   "swf": "/reference/Junior_Game/movies/level_intros.swf",
+   "hi": false
+  },
+  {
+   "file": "308-sa-level-intros-3s.png",
+   "desc": "level_intros.swf at 3 s: ePhone intro pages library clip on its own",
+   "t": 3.01,
+   "swf": "/reference/Junior_Game/movies/level_intros.swf",
+   "hi": false
+  },
+  {
+   "file": "309-sa-level-intros-7s.png",
+   "desc": "level_intros.swf at 7 s: ePhone intro pages library clip on its own",
+   "t": 7,
+   "swf": "/reference/Junior_Game/movies/level_intros.swf",
+   "hi": true,
+   "hires": "309-sa-level-intros-7s@2x.png"
+  },
+  {
+   "file": "310-sa-junior-game-assets-2s.png",
+   "desc": "junior_game_assets.swf at 2 s: Shared asset library (tiles and entity art exported for the platformer); stage 800x600",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/junior_game_assets.swf",
+   "hi": true,
+   "hires": "310-sa-junior-game-assets-2s@2x.png"
+  },
+  {
+   "file": "311-sa-ebug-level-editor-3s.png",
+   "desc": "EBug Level Editor.swf at 3 s: Level editor on its own; stage 1180x700; asks for a level through FileReference.browse",
+   "t": 3,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": false
+  },
+  {
+   "file": "312-sa-ebug-level-editor-8s.png",
+   "desc": "EBug Level Editor.swf at 8 s: Level editor on its own; stage 1180x700; asks for a level through FileReference.browse",
+   "t": 8,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": true,
+   "hires": "312-sa-ebug-level-editor-8s@2x.png"
+  },
+  {
+   "file": "313-sa-ebuggameshow-2s.png",
+   "desc": "eBugGameShow.swf at 2 s: Game show on its own: studio, talkie with the first blind intro line",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/eBugGameShow.swf",
+   "hi": false
+  },
+  {
+   "file": "314-sa-ebuggameshow-5s.png",
+   "desc": "eBugGameShow.swf at 5 s: Game show on its own: studio, talkie with the first blind intro line",
+   "t": 5,
+   "swf": "/reference/Junior_Game/movies/eBugGameShow.swf",
+   "hi": true,
+   "hires": "314-sa-ebuggameshow-5s@2x.png"
+  },
+  {
+   "file": "315-sa-kitchengame-3s.png",
+   "desc": "KitchenGame.swf at 3 s: Kitchen coordinator on its own: level 0 intro screen 1",
+   "t": 3,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": false
+  },
+  {
+   "file": "316-sa-kitchengame-6s.png",
+   "desc": "KitchenGame.swf at 6 s: Kitchen coordinator on its own: level 0 intro screen 1",
+   "t": 6,
+   "swf": "/reference/Junior_Game/movies/KitchenGame.swf",
+   "hi": true,
+   "hires": "316-sa-kitchengame-6s@2x.png"
+  },
+  {
+   "file": "317-sa-summary-page-1s.png",
+   "desc": "summary_page.swf at 1 s: Platform summary page on its own (static \"Things to remember\" texts)",
+   "t": 1,
+   "swf": "/reference/Junior_Game/movies/summary_page.swf",
+   "hi": false
+  },
+  {
+   "file": "318-sa-summary-page-3s.png",
+   "desc": "summary_page.swf at 3 s: Platform summary page on its own (static \"Things to remember\" texts)",
+   "t": 3,
+   "swf": "/reference/Junior_Game/movies/summary_page.swf",
+   "hi": false
+  },
+  {
+   "file": "319-sa-summary-page-6s.png",
+   "desc": "summary_page.swf at 6 s: Platform summary page on its own (static \"Things to remember\" texts)",
+   "t": 6,
+   "swf": "/reference/Junior_Game/movies/summary_page.swf",
+   "hi": true,
+   "hires": "319-sa-summary-page-6s@2x.png"
+  },
+  {
+   "file": "320-sa-harry-1s.png",
+   "desc": "harry.swf at 1 s: Platformer Harry on the hoverboard; stage 1000x600",
+   "t": 1,
+   "swf": "/reference/Junior_Game/movies/harry.swf",
+   "hi": false
+  },
+  {
+   "file": "321-sa-harry-3s.png",
+   "desc": "harry.swf at 3 s: Platformer Harry on the hoverboard; stage 1000x600",
+   "t": 3,
+   "swf": "/reference/Junior_Game/movies/harry.swf",
+   "hi": true,
+   "hires": "321-sa-harry-3s@2x.png"
+  },
+  {
+   "file": "322-sa-amy-1s.png",
+   "desc": "amy.swf at 1 s: Platformer Amy on the hoverboard; stage 550x400 shown letterboxed in 800x450",
+   "t": 1,
+   "swf": "/reference/Junior_Game/movies/amy.swf",
+   "hi": false
+  },
+  {
+   "file": "323-sa-amy-3s.png",
+   "desc": "amy.swf at 3 s: Platformer Amy on the hoverboard; stage 550x400 shown letterboxed in 800x450",
+   "t": 3,
+   "swf": "/reference/Junior_Game/movies/amy.swf",
+   "hi": true,
+   "hires": "323-sa-amy-3s@2x.png"
+  },
+  {
+   "file": "324-sa-introductiontomicrobes-mainmenu-2s.png",
+   "desc": "introductionToMicrobes_mainMenu.swf at 2 s: Main menu SWF (loaded but never shown by the junior game)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_mainMenu.swf",
+   "hi": true,
+   "hires": "324-sa-introductiontomicrobes-mainmenu-2s@2x.png"
+  },
+  {
+   "file": "325-sa-shrinking-harry-1s.png",
+   "desc": "shrinking_harry.swf at 1 s: Shrinking zone, Harry (clip stops on frame 1 until played)",
+   "t": 1,
+   "swf": "/reference/Junior_Game/movies/shrinking_harry.swf",
+   "hi": false
+  },
+  {
+   "file": "326-sa-shrinking-harry-3s.png",
+   "desc": "shrinking_harry.swf at 3 s: Shrinking zone, Harry (clip stops on frame 1 until played)",
+   "t": 3,
+   "swf": "/reference/Junior_Game/movies/shrinking_harry.swf",
+   "hi": true,
+   "hires": "326-sa-shrinking-harry-3s@2x.png"
+  },
+  {
+   "file": "327-sa-shrinking-amy-1s.png",
+   "desc": "shrinking_amy.swf at 1 s: Shrinking zone, Amy (clip stops on frame 1 until played)",
+   "t": 1,
+   "swf": "/reference/Junior_Game/movies/shrinking_amy.swf",
+   "hi": false
+  },
+  {
+   "file": "328-sa-shrinking-amy-3s.png",
+   "desc": "shrinking_amy.swf at 3 s: Shrinking zone, Amy (clip stops on frame 1 until played)",
+   "t": 3,
+   "swf": "/reference/Junior_Game/movies/shrinking_amy.swf",
+   "hi": true,
+   "hires": "328-sa-shrinking-amy-3s@2x.png"
+  },
+  {
+   "file": "329-sa-kitchen-game-main-2s.png",
+   "desc": "kitchen_game_main.swf at 2 s: Kitchen scene on its own (developer test buttons visible because nothing hides them)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/kitchen_game_main.swf",
+   "hi": true,
+   "hires": "329-sa-kitchen-game-main-2s@2x.png"
+  },
+  {
+   "file": "330-sa-kitchen-game-intro-level-0-2s.png",
+   "desc": "kitchen_game_intro_level_0.swf at 2 s: Kitchen intro level 0, screen 1",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/kitchen_game_intro_level_0.swf",
+   "hi": true,
+   "hires": "330-sa-kitchen-game-intro-level-0-2s@2x.png"
+  },
+  {
+   "file": "331-sa-kitchen-game-intro-level-1-2s.png",
+   "desc": "kitchen_game_intro_level_1.swf at 2 s: Kitchen intro level 1, screen 1",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/kitchen_game_intro_level_1.swf",
+   "hi": true,
+   "hires": "331-sa-kitchen-game-intro-level-1-2s@2x.png"
+  },
+  {
+   "file": "332-sa-kitchen-game-intro-level-2-2s.png",
+   "desc": "kitchen_game_intro_level_2.swf at 2 s: Kitchen intro level 2, screen 1",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/kitchen_game_intro_level_2.swf",
+   "hi": true,
+   "hires": "332-sa-kitchen-game-intro-level-2-2s@2x.png"
+  },
+  {
+   "file": "333-sa-kitchen-game-intro-level-3-2s.png",
+   "desc": "kitchen_game_intro_level_3.swf at 2 s: Kitchen intro level 3, screen 1",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/kitchen_game_intro_level_3.swf",
+   "hi": true,
+   "hires": "333-sa-kitchen-game-intro-level-3-2s@2x.png"
+  },
+  {
+   "file": "334-sa-kitchen-game-outro-2s.png",
+   "desc": "kitchen_game_outro.swf at 2 s: Kitchen outro pages on their own",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/kitchen_game_outro.swf",
+   "hi": true,
+   "hires": "334-sa-kitchen-game-outro-2s@2x.png"
+  },
+  {
+   "file": "335-sa-talkie-2s.png",
+   "desc": "talkie.swf at 2 s: Talkie dialogue box on its own",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/talkie.swf",
+   "hi": true,
+   "hires": "335-sa-talkie-2s@2x.png"
+  },
+  {
+   "file": "336-sa-introductiontomicrobes-platformer-2s.png",
+   "desc": "introductionToMicrobes_platformer.swf at 2 s: Platformer frame 1: placeholder HUD, stops until played",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": true,
+   "hires": "336-sa-introductiontomicrobes-platformer-2s@2x.png"
+  },
+  {
+   "file": "337-sa-gameover-2s.png",
+   "desc": "gameOver.swf at 2 s: gameOver.swf (not used by the junior game)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/gameOver.swf",
+   "hi": true,
+   "hires": "337-sa-gameover-2s@2x.png"
+  },
+  {
+   "file": "338-sa-game-show-2s.png",
+   "desc": "Game_Show.swf at 2 s: Game_Show.swf, an older game show build",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/Game_Show.swf",
+   "hi": true,
+   "hires": "338-sa-game-show-2s@2x.png"
+  },
+  {
+   "file": "339-sa-cut-scene-director-2s.png",
+   "desc": "cut_scene_director.swf at 2 s: cut_scene_director.swf (older cutscene)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/cut_scene_director.swf",
+   "hi": false
+  },
+  {
+   "file": "340-sa-cut-scene-director-5s.png",
+   "desc": "cut_scene_director.swf at 5 s: cut_scene_director.swf (older cutscene)",
+   "t": 5,
+   "swf": "/reference/Junior_Game/movies/cut_scene_director.swf",
+   "hi": true,
+   "hires": "340-sa-cut-scene-director-5s@2x.png"
+  },
+  {
+   "file": "341-sa-dialogue-tutorial-2s.png",
+   "desc": "dialogue_tutorial.swf at 2 s: dialogue_tutorial.swf (prototype)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/dialogue_tutorial.swf",
+   "hi": true,
+   "hires": "341-sa-dialogue-tutorial-2s@2x.png"
+  },
+  {
+   "file": "342-sa-introductiontomicrobes-2s.png",
+   "desc": "introductionToMicrobes.swf at 2 s: introductionToMicrobes.swf (2008 prototype shell)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes.swf",
+   "hi": true,
+   "hires": "342-sa-introductiontomicrobes-2s@2x.png"
+  },
+  {
+   "file": "343-sa-introductiontomicrobes-comicintroduction-2s.png",
+   "desc": "introductionToMicrobes_comicIntroduction.swf at 2 s: Comic introduction (prototype, not used by the junior game)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_comicIntroduction.swf",
+   "hi": true,
+   "hires": "343-sa-introductiontomicrobes-comicintroduction-2s@2x.png"
+  },
+  {
+   "file": "344-sa-introductiontomicrobes-exitquiz-2s.png",
+   "desc": "introductionToMicrobes_exitQuiz.swf at 2 s: Exit quiz (prototype, not used by the junior game)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_exitQuiz.swf",
+   "hi": true,
+   "hires": "344-sa-introductiontomicrobes-exitquiz-2s@2x.png"
+  },
+  {
+   "file": "345-sa-avatar-harry-fridge-2s.png",
+   "desc": "avatar_harry_Fridge.swf at 2 s: Kitchen avatar Harry source SWF",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/avatar_harry_Fridge.swf",
+   "hi": true,
+   "hires": "345-sa-avatar-harry-fridge-2s@2x.png"
+  },
+  {
+   "file": "346-sa-avatar-amy-fridge-2s.png",
+   "desc": "avatar_amy_Fridge.swf at 2 s: Kitchen avatar Amy source SWF",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/avatar_amy_Fridge.swf",
+   "hi": true,
+   "hires": "346-sa-avatar-amy-fridge-2s@2x.png"
+  },
+  {
+   "file": "347-sa-fridge-game-3s.png",
+   "desc": "fridge_game.swf at 3 s: fridge_game.swf, the older food game prototype",
+   "t": 3,
+   "swf": "/reference/Junior_Game/movies/fridge_game.swf",
+   "hi": true,
+   "hires": "347-sa-fridge-game-3s@2x.png"
+  },
+  {
+   "file": "348-sa-introductiontomicrobes-platformer9-2s.png",
+   "desc": "introductionToMicrobes_platformer9.swf at 2 s: Older platformer build (stage 800x750), frame 1",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer9.swf",
+   "hi": true,
+   "hires": "348-sa-introductiontomicrobes-platformer9-2s@2x.png"
+  },
+  {
+   "file": "349-sa-introductiontomicrobes-platformer-scene-1-2s.png",
+   "desc": "introductionToMicrobes_platformer_Scene 1.swf at 2 s: Platformer scene export (prototype), frame 1",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer_Scene 1.swf",
+   "hi": true,
+   "hires": "349-sa-introductiontomicrobes-platformer-scene-1-2s@2x.png"
+  },
+  {
+   "file": "350-sa-platformtest-2s.png",
+   "desc": "platformTest.swf at 2 s: platformTest.swf (physics prototype)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/platformTest.swf",
+   "hi": true,
+   "hires": "350-sa-platformtest-2s@2x.png"
+  },
+  {
+   "file": "351-sa-map-builder-2s.png",
+   "desc": "map_builder.swf at 2 s: map_builder.swf (early level builder, stage 1000x450)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/map_builder.swf",
+   "hi": true,
+   "hires": "351-sa-map-builder-2s@2x.png"
+  },
+  {
+   "file": "352-sa-shrinking-zone-harry-2s.png",
+   "desc": "Shrinking Zone_Harry.swf at 2 s: Shrinking Zone_Harry.swf, an older export of shrinking_harry",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/Shrinking Zone_Harry.swf",
+   "hi": true,
+   "hires": "352-sa-shrinking-zone-harry-2s@2x.png"
+  },
+  {
+   "file": "353-sa-antibiotic-pickup-2s.png",
+   "desc": "antibiotic_pickup.swf at 2 s: Antibiotic pickup art (stage 550x400)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/antibiotic_pickup.swf",
+   "hi": true,
+   "hires": "353-sa-antibiotic-pickup-2s@2x.png"
+  },
+  {
+   "file": "354-sa-animation-test-dummy-2s.png",
+   "desc": "animation_test_dummy.swf at 2 s: animation_test_dummy.swf (avatar animation test, stage 550x400)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/animation_test_dummy.swf",
+   "hi": true,
+   "hires": "354-sa-animation-test-dummy-2s@2x.png"
+  },
+  {
+   "file": "355-sa-ebug-food-sorting-game-2s.png",
+   "desc": "ebug_food_sorting_game.swf at 2 s: ebug_food_sorting_game.swf (empty shell)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/ebug_food_sorting_game.swf",
+   "hi": true,
+   "hires": "355-sa-ebug-food-sorting-game-2s@2x.png"
+  },
+  {
+   "file": "356-sa-microbes-motions-colin-motion-2s.png",
+   "desc": "Microbes_Motions/Colin_motion.swf at 2 s: Colin microbe motion art (stage 1000x600)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/Microbes_Motions/Colin_motion.swf",
+   "hi": true,
+   "hires": "356-sa-microbes-motions-colin-motion-2s@2x.png"
+  },
+  {
+   "file": "357-sa-microbes-motions-donna-motion-2s.png",
+   "desc": "Microbes_Motions/Donna_motion.swf at 2 s: Donna Dermatophyte motion art (stage 1000x600)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/Microbes_Motions/Donna_motion.swf",
+   "hi": true,
+   "hires": "357-sa-microbes-motions-donna-motion-2s@2x.png"
+  },
+  {
+   "file": "358-sa-microbes-motions-steve-motion-2s.png",
+   "desc": "Microbes_Motions/Steve_motion.swf at 2 s: Steve Staphylococcus motion art (stage 1000x600)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/Microbes_Motions/Steve_motion.swf",
+   "hi": true,
+   "hires": "358-sa-microbes-motions-steve-motion-2s@2x.png"
+  },
+  {
+   "file": "359-sa-sandy-art-liquid-soap-2s.png",
+   "desc": "Sandy Art/Liquid Soap.swf at 2 s: Liquid soap pickup art (stage 550x400)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/Sandy Art/Liquid Soap.swf",
+   "hi": true,
+   "hires": "359-sa-sandy-art-liquid-soap-2s@2x.png"
+  },
+  {
+   "file": "360-sa-sandy-art-white-blood-cell-pick-up-2s.png",
+   "desc": "Sandy Art/White Blood Cell Pick Up.swf at 2 s: White blood cell pickup art (stage 49x49)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/Sandy Art/White Blood Cell Pick Up.swf",
+   "hi": true,
+   "hires": "360-sa-sandy-art-white-blood-cell-pick-up-2s@2x.png"
+  },
+  {
+   "file": "361-sa-sandy-art-white-blood-cell-projectile-2s.png",
+   "desc": "Sandy Art/White Blood Cell Projectile.swf at 2 s: White blood cell projectile art (stage 550x400)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/Sandy Art/White Blood Cell Projectile.swf",
+   "hi": true,
+   "hires": "361-sa-sandy-art-white-blood-cell-projectile-2s@2x.png"
+  },
+  {
+   "file": "362-sa-sandy-art-milk-2s.png",
+   "desc": "Sandy Art/milk.swf at 2 s: Milk glass art, 20 frames (stage 150x200)",
+   "t": 2,
+   "swf": "/reference/Junior_Game/movies/Sandy Art/milk.swf",
+   "hi": true,
+   "hires": "362-sa-sandy-art-milk-2s@2x.png"
+  }
+ ],
+ "timings": [
+  {
+   "swf": "splash.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "cutscene_introduction.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "are loaded?",
+    "are loaded?",
+    "are loaded?",
+    "are loaded?",
+    "are loaded?",
+    "to intro!",
+    "intro - start_intro",
+    "next line: 0"
+   ]
+  },
+  {
+   "swf": "level_intros.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "junior_game_assets.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "EBug Level Editor.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "found soap",
+    "found white",
+    "loading map: found an entity(0) at: 1, 0",
+    "loading map: found an entity(11) at: 1, 1",
+    "loading map: found an entity(11) at: 5, 1",
+    "loading map: found an entity(6) at: 5, 3",
+    "loading map: found an entity(11) at: 6, 6"
+   ]
+  },
+  {
+   "swf": "eBugGameShow.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "an amy:avatar and it is + _level0.game_show.sz.harry / _level0.game_show.sz / _level0.game_show / _level0"
+   ]
+  },
+  {
+   "swf": "KitchenGame.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "Starting Level: 0",
+    "20 - Milk",
+    "3 - Tomatoes",
+    "7 - Yogurt",
+    "25 - Spring Onion",
+    "2 - Carrots",
+    "3 - Tomatoes",
+    "3 - Tomatoes",
+    "1 - Burst Yogurt",
+    "20 - Milk"
+   ]
+  },
+  {
+   "swf": "summary_page.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "harry.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "amy.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "introductionToMicrobes_mainMenu.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "shrinking_harry.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "an amy:avatar and it is + _level0 / undefined / undefined / undefined"
+   ]
+  },
+  {
+   "swf": "shrinking_amy.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "kitchen_game_main.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "kitchen_game_intro_level_0.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "kitchen_game_intro_level_1.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "kitchen_game_intro_level_2.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "kitchen_game_intro_level_3.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "kitchen_game_outro.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "talkie.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "introductionToMicrobes_platformer.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "gameOver.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "Game_Show.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "cut_scene_director.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "Hello",
+    "shrinking_zone",
+    "shrinking_zone",
+    "shrinking_zone",
+    "shrinking_zone",
+    "shrinking_zone",
+    "shrinking_zone",
+    "shrinking_zone",
+    "shrinking_zone",
+    "shrinking_zone"
+   ]
+  },
+  {
+   "swf": "dialogue_tutorial.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "introductionToMicrobes.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "gotoGameScreen:introductionToMicrobes_mainMenu.swf",
+    "Fading out: introductionToMicrobes_mainMenu.swf at: 100 - true",
+    "Fading out: introductionToMicrobes_mainMenu.swf at: 89.84375 - true",
+    "Fading out: introductionToMicrobes_mainMenu.swf at: 79.6875 - true",
+    "Fading out: introductionToMicrobes_mainMenu.swf at: 69.53125 - true",
+    "Fading out: introductionToMicrobes_mainMenu.swf at: 59.375 - true",
+    "Fading out: introductionToMicrobes_mainMenu.swf at: 49.21875 - true",
+    "Fading out: introductionToMicrobes_mainMenu.swf at: 39.0625 - true",
+    "Fading out: introductionToMicrobes_mainMenu.swf at: 28.90625 - true",
+    "Fading out: introductionToMicrobes_mainMenu.swf at: 18.75 - true"
+   ]
+  },
+  {
+   "swf": "introductionToMicrobes_comicIntroduction.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "created DD",
+    "Main",
+    "host_happy",
+    "hitrue - 100"
+   ]
+  },
+  {
+   "swf": "introductionToMicrobes_exitQuiz.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "created DD",
+    "Main",
+    "host_happy",
+    "hitrue - 100"
+   ]
+  },
+  {
+   "swf": "avatar_harry_Fridge.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "avatar_amy_Fridge.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "test: undefined"
+   ]
+  },
+  {
+   "swf": "fridge_game.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "introductionToMicrobes_platformer9.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "hi",
+    "test",
+    "hi2",
+    "30, 2, true",
+    "rows: 9",
+    "cols: 16(800,450,0)",
+    "level array: 9",
+    "changed max due to x: avatar",
+    "(24.5,9999999,0)",
+    "changed max due to yavatar"
+   ]
+  },
+  {
+   "swf": "introductionToMicrobes_platformer_Scene 1.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "platformTest.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "Finished loading hoverboard_holder(1921671) bytes",
+    "done",
+    "Init game - level == undefined",
+    "loading map: found an entity(0) at: 1, 0",
+    "loading map: found an entity(11) at: 1, 1",
+    "loading map: found an entity(11) at: 5, 1",
+    "loading map: found an entity(6) at: 5, 3",
+    "loading map: found an entity(11) at: 6, 6",
+    "bodylevel: true"
+   ]
+  },
+  {
+   "swf": "map_builder.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "Shrinking Zone_Harry.swf",
+   "what": "traces (first 10)",
+   "traces": [
+    "an amy:avatar and it is + _level0 / undefined / undefined / undefined"
+   ]
+  },
+  {
+   "swf": "antibiotic_pickup.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "animation_test_dummy.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "ebug_food_sorting_game.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "Microbes_Motions/Colin_motion.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "Microbes_Motions/Donna_motion.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "Microbes_Motions/Steve_motion.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "Sandy Art/Liquid Soap.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "Sandy Art/White Blood Cell Pick Up.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "Sandy Art/White Blood Cell Projectile.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  },
+  {
+   "swf": "Sandy Art/milk.swf",
+   "what": "traces (first 10)",
+   "traces": []
+  }
+ ],
+ "ruffleWarnings": [
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Verdana\" (bold: true, italic: false)",
+   "count": 11,
+   "firstSeen": 0.97
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Noto Sans\" (bold: true, italic: false)",
+   "count": 20,
+   "firstSeen": 0.98
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Arial\" (bold: false, italic: false)",
+   "count": 12,
+   "firstSeen": 1.1
+  },
+  {
+   "message": "WARN core/src/avm1/runtime.rs:385 Avm1::pop: Stack underflow",
+   "count": 321,
+   "firstSeen": 1.12
+  },
+  {
+   "message": "WARN core/src/avm1/activation.rs:1121 Cannot enumerate Undefined",
+   "count": 40,
+   "firstSeen": 1.21
+  },
+  {
+   "message": "ERROR core/src/loader.rs:1110 Error during LoadVars load of \"http://localhost/reference/Junior_Game/movies/\": HttpNotOk(\"Got Not Found\", 404, false, 0)",
+   "count": 1,
+   "firstSeen": 1.48
+  },
+  {
+   "message": "ERROR core/src/library.rs:250 Tried to instantiate a non-registered character <symbol>",
+   "count": 10,
+   "firstSeen": 1.61
+  },
+  {
+   "message": "WARN core/src/avm1/globals/movie_clip.rs:808 Unable to attach '<symbol>'",
+   "count": 10,
+   "firstSeen": 1.61
+  },
+  {
+   "message": "WARN core/src/avm1/activation.rs:1492 GoToLabel: Frame label '\"steve_idle\"' not found",
+   "count": 7,
+   "firstSeen": 1.62
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Times New Roman\" (bold: false, italic: false)",
+   "count": 8,
+   "firstSeen": 1.64
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Arial\" (bold: true, italic: false)",
+   "count": 2,
+   "firstSeen": 0.86
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Verdana\" (bold: false, italic: false)",
+   "count": 8,
+   "firstSeen": 1.27
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Myriad Pro\" (bold: true, italic: false)",
+   "count": 8,
+   "firstSeen": 1.27
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Times New Roman\" (bold: true, italic: false)",
+   "count": 1,
+   "firstSeen": 0.93
+  },
+  {
+   "message": "WARN core/src/avm1/activation.rs:1492 GoToLabel: Frame label '\"game\"' not found",
+   "count": 1,
+   "firstSeen": 1.03
+  },
+  {
+   "message": "WARN core/src/avm1/activation.rs:1492 GoToLabel: Frame label '\"idle\"' not found",
+   "count": 2,
+   "firstSeen": 4.07
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Myriad Pro\" (bold: false, italic: false)",
+   "count": 2,
+   "firstSeen": 1.17
+  },
+  {
+   "message": "ERROR core/src/loader.rs:1110 Error during LoadVars load of \"c:\\\\source\\\\ebug_code\\\\\\\\levels\\\\level1.xml\": FetchError(\"Got JS error\")",
+   "count": 1,
+   "firstSeen": 0.94
+  }
+ ],
+ "platformerLoop": {
+  "samples": 0
+ },
+ "quirks": [],
+ "note": "merged from two runs: all SWFs (300-347) and the extra art/prototype SWFs (348-362, --only)"
+}

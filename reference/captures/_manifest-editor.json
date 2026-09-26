@@ -1,0 +1,236 @@
+{
+ "mode": "editor",
+ "dsf": 1,
+ "avatar": "harry",
+ "when": "2026-09-26T15:06:43.836Z",
+ "captures": [
+  {
+   "file": "450-editor-alpha_level1.png",
+   "desc": "Level editor with alpha_level1.xml loaded: first 800 px of the level, tile palette bottom left",
+   "t": 4.41,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": true,
+   "hires": "450-editor-alpha_level1@2x.png"
+  },
+  {
+   "file": "451-editor-alpha_level2.png",
+   "desc": "Level editor with alpha_level2.xml loaded: first 800 px of the level, tile palette bottom left",
+   "t": 4.28,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": false
+  },
+  {
+   "file": "452-editor-alpha_level3.png",
+   "desc": "Level editor with alpha_level3.xml loaded: first 800 px of the level, tile palette bottom left",
+   "t": 4.32,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": false
+  },
+  {
+   "file": "453-editor-alpha_level4.png",
+   "desc": "Level editor with alpha_level4.xml loaded: first 800 px of the level, tile palette bottom left",
+   "t": 4.21,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": false
+  },
+  {
+   "file": "454-editor-alpha_level5.png",
+   "desc": "Level editor with alpha_level5.xml loaded: first 800 px of the level, tile palette bottom left",
+   "t": 4.31,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": false
+  },
+  {
+   "file": "455-editor-alpha_level6.png",
+   "desc": "Level editor with alpha_level6.xml loaded: first 800 px of the level, tile palette bottom left",
+   "t": 4.27,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": false
+  },
+  {
+   "file": "456-editor-alpha_level7.png",
+   "desc": "Level editor with alpha_level7.xml loaded: first 800 px of the level, tile palette bottom left",
+   "t": 4.25,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": false
+  },
+  {
+   "file": "457-editor-alpha_level8.png",
+   "desc": "Level editor with alpha_level8.xml loaded: first 800 px of the level, tile palette bottom left",
+   "t": 4.59,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": false
+  },
+  {
+   "file": "458-editor-alpha_level9.png",
+   "desc": "Level editor with alpha_level9.xml loaded: first 800 px of the level, tile palette bottom left",
+   "t": 4.23,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": false
+  },
+  {
+   "file": "459-editor-alpha_level10.png",
+   "desc": "Level editor with alpha_level10.xml loaded: first 800 px of the level, tile palette bottom left",
+   "t": 4.21,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": false
+  },
+  {
+   "file": "460-editor-alpha_level11.png",
+   "desc": "Level editor with alpha_level11.xml loaded: first 800 px of the level, tile palette bottom left",
+   "t": 4.26,
+   "swf": "/reference/Junior_Game/movies/EBug Level Editor.swf",
+   "hi": false
+  }
+ ],
+ "timings": [],
+ "ruffleWarnings": [
+  {
+   "message": "WARN core/src/avm1/runtime.rs:385 Avm1::pop: Stack underflow",
+   "count": 328,
+   "firstSeen": 1.11
+  },
+  {
+   "message": "WARN core/src/avm1/activation.rs:1121 Cannot enumerate Undefined",
+   "count": 253,
+   "firstSeen": 1.15
+  },
+  {
+   "message": "ERROR core/src/loader.rs:1110 Error during LoadVars load of \"http://localhost/reference/Junior_Game/movies/\": HttpNotOk(\"Got Not Found\", 404, false, 0)",
+   "count": 11,
+   "firstSeen": 1.32
+  },
+  {
+   "message": "ERROR core/src/library.rs:250 Tried to instantiate a non-registered character <symbol>",
+   "count": 22,
+   "firstSeen": 1.51,
+   "names": [
+    "undefined"
+   ]
+  },
+  {
+   "message": "WARN core/src/avm1/globals/movie_clip.rs:808 Unable to attach '<symbol>'",
+   "count": 22,
+   "firstSeen": 1.51,
+   "names": [
+    "undefined"
+   ]
+  },
+  {
+   "message": "WARN core/src/avm1/activation.rs:1492 GoToLabel: Frame label '\"steve_idle\"' not found",
+   "count": 23,
+   "firstSeen": 1.52,
+   "names": [
+    "steve_idle"
+   ]
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Times New Roman\" (bold: false, italic: false)",
+   "count": 11,
+   "firstSeen": 1.55
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Noto Sans\" (bold: true, italic: false)",
+   "count": 11,
+   "firstSeen": 1.64
+  }
+ ],
+ "platformerLoop": {
+  "samples": 0
+ },
+ "quirks": [],
+ "traces": [
+  {
+   "t": 1.09,
+   "msg": "found soap"
+  },
+  {
+   "t": 1.09,
+   "msg": "found white"
+  },
+  {
+   "t": 1.26,
+   "msg": "loading map: found an entity(0) at: 1, 2"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(21) at: 1, 3"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(21) at: 1, 4"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(18) at: 1, 5"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(9) at: 2, 2"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(9) at: 2, 3"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(9) at: 2, 4"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(9) at: 2, 5"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(9) at: 2, 6"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(9) at: 2, 7"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(9) at: 2, 8"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(9) at: 2, 9"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(21) at: 2, 10"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(21) at: 3, 7"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(21) at: 3, 9"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(19) at: 4, 9"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(6) at: 4, 10"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(14) at: 5, 2"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(17) at: 5, 3"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(17) at: 5, 4"
+  },
+  {
+   "t": 1.27,
+   "msg": "loading map: found an entity(18) at: 6, 17"
+  }
+ ]
+}

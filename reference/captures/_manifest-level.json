@@ -1,0 +1,209 @@
+{
+ "mode": "level",
+ "dsf": 1,
+ "avatar": "harry",
+ "when": "2026-09-26T15:04:22.913Z",
+ "captures": [
+  {
+   "file": "400-lv-alpha_level1-frame1.png",
+   "desc": "Platformer SWF alone with flashvar level=alpha_level1.xml: root frame 1 (placeholder HUD and ePhone, stopped)",
+   "t": 2.62,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "401-lv-alpha_level1-intro-p1.png",
+   "desc": "Platformer alone, alpha_level1.xml: ePhone intro page 1",
+   "t": 7.41,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "402-lv-alpha_level1-intro-p2.png",
+   "desc": "Platformer alone, alpha_level1.xml: ePhone intro page 2",
+   "t": 13.01,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "403-lv-alpha_level1-intro-p3.png",
+   "desc": "Platformer alone, alpha_level1.xml: ePhone intro page 3",
+   "t": 18,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "404-lv-alpha_level1-intro-p4.png",
+   "desc": "Platformer alone, alpha_level1.xml: ePhone intro page 4",
+   "t": 23.09,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "405-lv-alpha_level1-intro-p5.png",
+   "desc": "Platformer alone, alpha_level1.xml: ePhone intro page 5",
+   "t": 27.86,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "406-lv-alpha_level1-intro-p6.png",
+   "desc": "Platformer alone, alpha_level1.xml: ePhone intro page 6",
+   "t": 34.38,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "407-lv-alpha_level1-opening.png",
+   "desc": "Platformer alone, alpha_level1.xml: opening view (shared-library art merged by swf-shim.cjs)",
+   "t": 38.69,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "408-lv-alpha_level11-frame1.png",
+   "desc": "Platformer SWF alone with flashvar level=alpha_level11.xml: root frame 1 (placeholder HUD and ePhone, stopped)",
+   "t": 2.58,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "409-lv-alpha_level11-intro-p1.png",
+   "desc": "Platformer alone, alpha_level11.xml (level 1 pages: level_intros has no level11 label): ePhone intro page 1",
+   "t": 6.75,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": true,
+   "hires": "409-lv-alpha_level11-intro-p1@2x.png"
+  },
+  {
+   "file": "410-lv-alpha_level11-intro-p2.png",
+   "desc": "Platformer alone, alpha_level11.xml (level 1 pages: level_intros has no level11 label): ePhone intro page 2",
+   "t": 17.03,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "411-lv-alpha_level11-intro-p3.png",
+   "desc": "Platformer alone, alpha_level11.xml (level 1 pages: level_intros has no level11 label): ePhone intro page 3",
+   "t": 26.55,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "412-lv-alpha_level11-intro-p4.png",
+   "desc": "Platformer alone, alpha_level11.xml (level 1 pages: level_intros has no level11 label): ePhone intro page 4",
+   "t": 31.89,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "413-lv-alpha_level11-intro-p5.png",
+   "desc": "Platformer alone, alpha_level11.xml (level 1 pages: level_intros has no level11 label): ePhone intro page 5",
+   "t": 35.47,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "414-lv-alpha_level11-intro-p6.png",
+   "desc": "Platformer alone, alpha_level11.xml (level 1 pages: level_intros has no level11 label): ePhone intro page 6",
+   "t": 39.19,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": false
+  },
+  {
+   "file": "415-lv-alpha_level11-opening.png",
+   "desc": "Platformer alone, alpha_level11.xml: opening view (shared-library art merged by swf-shim.cjs)",
+   "t": 41.58,
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "hi": true,
+   "hires": "415-lv-alpha_level11-opening@2x.png"
+  }
+ ],
+ "timings": [
+  {
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "what": "alpha_level1.xml (alone): ePhone intro auto-advance gaps (s): 5.6, 5.0, 5.1, 4.8, 6.5",
+   "seconds": 5.39
+  },
+  {
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "what": "alpha_level1.xml: context-menu Play to end of phone intro",
+   "seconds": 34.76
+  },
+  {
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "what": "alpha_level11.xml (alone): ePhone intro auto-advance gaps (s): 10.3, 9.5, 5.3, 3.6, 3.7",
+   "seconds": 6.49
+  },
+  {
+   "swf": "/reference/Junior_Game/movies/introductionToMicrobes_platformer.swf",
+   "what": "alpha_level11.xml: context-menu Play to end of phone intro",
+   "seconds": 37.67
+  }
+ ],
+ "ruffleWarnings": [
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Arial\" (bold: false, italic: false)",
+   "count": 2,
+   "firstSeen": 1.1
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Myriad Pro\" (bold: true, italic: false)",
+   "count": 2,
+   "firstSeen": 1.16
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Noto Sans\" (bold: true, italic: false)",
+   "count": 2,
+   "firstSeen": 1.16
+  },
+  {
+   "message": "WARN core/src/avm1/runtime.rs:385 Avm1::pop: Stack underflow",
+   "count": 26,
+   "firstSeen": 1.22
+  },
+  {
+   "message": "WARN core/src/avm1/activation.rs:1121 Cannot enumerate Undefined",
+   "count": 2,
+   "firstSeen": 1.24
+  },
+  {
+   "message": "ERROR core/src/library.rs:250 Tried to instantiate a non-registered character <symbol>",
+   "count": 8,
+   "firstSeen": 3.62,
+   "names": [
+    "undefined",
+    "colin_icon",
+    "super_slarg_icon"
+   ]
+  },
+  {
+   "message": "WARN core/src/avm1/globals/movie_clip.rs:808 Unable to attach '<symbol>'",
+   "count": 8,
+   "firstSeen": 3.62,
+   "names": [
+    "undefined",
+    "colin_icon",
+    "super_slarg_icon"
+   ]
+  },
+  {
+   "message": "WARN core/src/avm1/activation.rs:1492 GoToLabel: Frame label '\"steve_idle\"' not found",
+   "count": 5,
+   "firstSeen": 3.68,
+   "names": [
+    "steve_idle"
+   ]
+  },
+  {
+   "message": "WARN core/src/library.rs:567 Unknown device font \"Arial\" (bold: true, italic: false)",
+   "count": 2,
+   "firstSeen": 37.55
+  }
+ ],
+ "platformerLoop": {
+  "samples": 0
+ },
+ "quirks": [],
+ "traces": []
+}

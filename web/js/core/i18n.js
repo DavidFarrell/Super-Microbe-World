@@ -18,6 +18,8 @@ let manifest = null;
 // Loads a language's common table plus every namespace file; missing files are skipped.
 async function loadTable(code) {
   manifest ||= await loadJson('data/lang/manifest.json').catch(() => ({ languages: ['en'], namespaces: [] }));
+  // Release builds (tools/build-artifact.mjs) merge each language into one bundle file.
+  if (manifest.bundled) return loadJson(`data/lang/${code}.bundle.json`).catch(() => null);
   const parts = await Promise.all([
     loadJson(`data/lang/${code}.json`).catch(() => null),
     ...manifest.namespaces.map(ns => loadJson(`data/lang/${code}/${ns}.json`).catch(() => null)),
