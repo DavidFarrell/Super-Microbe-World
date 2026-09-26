@@ -157,6 +157,7 @@ RENDER always returns to UPDATE (1163). So whenever anything moves, the pattern 
 
 In practice the screen is always dirty:
 - Walking microbes teleport, so their position never equals their previous position.
+- The player's perpetual horizontal creep (§2.2) keeps the screen dirty once the player has moved.
 - After the first dynamic `REMOVE`, `entities[k]` is `null`. `null.particle.position.equals(...)` is `undefined` in AS2, and `!undefined` is `true` (1017), so the screen is **permanently dirty** from then on.
 
 **Port recommendation**: run the logic step every 30 ms (or keep the literal 15 ms `main()` with the state alternation), and render every frame. The level timer is wall-clock (`getTimer()`), not tick-based.
