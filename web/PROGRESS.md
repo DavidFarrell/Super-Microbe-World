@@ -83,8 +83,8 @@ Living checklist for the remake (see `../GOAL_PROMPT.md` for the full brief and 
   - [x] Payload: 14.1 MB of runtime files in the artifact build (9.8 MB of it WebP art), inside the 15 MB budget; `tools/atlas/coverage.mjs` checks the art budget (not part of `npm test`)
 - [x] Fidelity gallery `web/screenshots/index.html`: 33 comparisons covering every screen, each next to its Ruffle capture (and the composed Flash screen where there is one) or marked as new in the remake, with the deliberate differences linked to NOTES; regenerate with `tools/build-gallery.mjs`
 - [x] `web/README.md` with the game, controls, play and test commands, asset pipeline, deployment, layout, credits and licence; root `README.md` points to the remake
-- [ ] Full game published at a clickable link. Both links work but still serve the level 1 vertical slice: on 2026-09-26 the Pages copy at https://gameologist.com/Super-Microbe-World/play/ had no game show, kitchen or flow code, and the artifact https://claude.ai/artifact/VGSd4HuhbJKFW77wswuRr3 holds 79 files from the slice. Redeploy with `tools/deploy-pages.sh` and republish the artifact from `tools/build-artifact.mjs` (170 files, 14.1 MB, within the artifact limits)
-- [ ] Final report (verified and how, differences from Flash and why, untested: iOS Safari, Firefox, real devices)
+- [x] Full game published at a clickable link (2026-09-26, build 858a86039072): Pages at https://gameologist.com/Super-Microbe-World/play/ (all 181 runtime files fetched back and byte-identical to the tested build) and the artifact https://claude.ai/artifact/VGSd4HuhbJKFW77wswuRr3 (version 2, 170 files plus the page). A browser boot against the live Pages site could not run here: the container's egress proxy re-signs TLS and Chromium rejects it, and verification is never disabled
+- [x] Final report (verified and how, differences from Flash and why, untested: iOS Safari, Firefox, real devices)
 
 ## Known limits
 - WebKit is not installed in the development container, so iOS Safari (audio unlock, memory, fullscreen) is untested; Firefox is untested too.
