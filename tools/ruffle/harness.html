@@ -6,7 +6,7 @@
   // Serves the original SWFs through Ruffle for reference captures (dev-only, never shipped).
   // Usage: /tools/ruffle/harness.html?swf=/reference/Junior_Game/movies/e-Bug%20Junior%20Game.swf&base=/reference/Junior_Game/movies/&vars=language=en_en
   window.RufflePlayer = window.RufflePlayer || {};
-  window.RufflePlayer.config = { autoplay: 'on', unmuteOverlay: 'hidden', splashScreen: false, letterbox: 'on', logLevel: 'warn', allowScriptAccess: true, publicPath: '/node_modules/@ruffle-rs/ruffle/' };
+  window.RufflePlayer.config = { autoplay: 'on', unmuteOverlay: 'hidden', splashScreen: false, letterbox: 'on', logLevel: new URLSearchParams(location.search).get('log') || 'warn', allowScriptAccess: true, publicPath: '/node_modules/@ruffle-rs/ruffle/' };
 </script>
 <script src="/node_modules/@ruffle-rs/ruffle/ruffle.js"></script>
 <script>

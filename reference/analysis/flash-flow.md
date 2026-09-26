@@ -37,7 +37,7 @@ Build A is therefore the canonical behaviour to port, with build B consulted for
 
 ### 1.1 Boot and preload
 
-1. The page embeds `movies/e-Bug Junior Game.swf` (section 5.3). Stage 800x450, 25 fps, SWF 8 (header of `movies/e-Bug Junior Game.swf`).
+1. The page embeds `movies/e-Bug Junior Game.swf` (section 7.2). Stage 800x450, 25 fps, SWF 8 (header of `movies/e-Bug Junior Game.swf`).
 2. Root frame 1 (label `init`) of the main SWF declares the hook functions that every sub-movie calls through `_root` (`newGame`, `startQuizShow`, `showHoverboardOrKitchen`, `getPlayer`, `setGameShow`, `registerHoverboard`, `endofHoverboard`, `endOfKitchen`, `restartHoverboardRound`, `submitPlayerData`), then `stop(); var gameController = new ebug.junior.GameController(this, this.gameScreen); gameController.init();` (`movies/e-Bug Junior Game.swf` root frame 1). Stage clips: `gameScreen` (empty container), `loader` (texts `loading_text` "Loading..." and `percentage_text` "xx%"), and a red `fps` text "FPS" which is **left visible** in this build (seen in Ruffle).
 3. `GameController.init()` (`src/ebug/junior/GameController.as:63-97`) records the round start levels (section 1.4), creates six empty holder clips, sets the loading text to `"loading..."` and asks `AssetLibrary` to load, in order: `junior_game_assets.swf`, `splash.swf`, `eBugGameShow.swf`, `introductionToMicrobes_mainMenu.swf`, `cutscene_introduction.swf`, `introductionToMicrobes_platformer.swf`, `harry.swf`, `amy.swf`, `summary_page.swf`, `KitchenGame.swf`.
 4. `AssetLibrary` (compiled only; main SWF sprite 103) loads the list **one file at a time** with a `MovieClipLoader` into new child clips of `gameScreen` named after the file without its extension. While loading it hides `gameScreen`, shows `"<loadingWord>: <name>"` (the word is `"Looding"`, a typo passed at `src/ebug/junior/GameController.as:60`) and `Math.ceil(assetsLoaded * (1 / n * 100)) + " %"`. Each loaded clip gets `_alpha = 0; _visible = false` in `onLoadComplete`. When all are loaded it calls `GameController.assetsLoaded()`.
@@ -246,7 +246,7 @@ After that, control passes by talkie callbacks: `nextRoundText` -> ... -> `askQu
 - Click (`buttonClick`, `:85-99`): if the text is still typing, reveal it all at once; if it is complete, call `obj[methodName]()` (or the plain function). So **first click completes, second click advances**.
 - Speaker name in the game show is always `"Gameshow Host"` (`src/ebug/junior/GameShow.as:150`).
 - `showRoundText()` (`:147-166`) shows `introText[BLIND or NOT_BLIND][statementCounter]` with callback `nextRoundText` (`:168-171`, `statementCounter++; busy = false`), and when the lines run out sets `STATE_ASK_QUESTION`.
-- As-built quirk: `showRoundText` sets `busy = true` unconditionally at its end (`:164`), including the call that switches to `STATE_ASK_QUESTION`, so by static reading `main` never calls `askQuestion`. In practice the game proceeds (the evaluation collected thousands of answers, and in Ruffle the show moves from the last intro line to "Question number 1"); the extra call comes from the talkie timeline reaching its `end` frame, whose script fires the callback again. Ruffle also shows the talkie's placeholder `"df"` for a moment at that transition. **Port**: after the last intro line, go straight to the first question.
+- As-built quirk: `showRoundText` sets `busy = true` unconditionally at its end (`:164`), including the call that switches to `STATE_ASK_QUESTION`, so by static reading `main` never calls `askQuestion`. In practice the game proceeds: the evaluation collected thousands of answers, and in Ruffle the standalone `eBugGameShow.swf` goes from the last blind intro line ("Lets go!") to "Question number 1" and the board. The extra call presumably comes from the talkie's own timeline, which `init()` sets playing (`src/ebug/general/Talkie.as:59`) and whose `end` frame script also fires the callback; the exact AVM1 path was not pinned down. Ruffle also showed the talkie's placeholder `"df"` at that transition. **Port**: after the last intro line, go straight to the first question.
 
 ### 2.5 Asking a question and the board
 
@@ -295,7 +295,7 @@ Stored in `roundAnswersSighted[questionId]`. Then `questionIndex++`; if more que
 
 ### 2.10 Character animations
 
-Host `gsh` (`movies/eBugGameShow.swf` sprite 894; same in the cutscene, sprite 758). Each labelled animation loops until another is requested; `midAnimation` is true while it plays:
+Host `gsh` (`movies/eBugGameShow.swf` sprite 894; same in the cutscene, sprite 758). Each labelled animation loops until another is requested (the host clip sets `midAnimation = true` at each label and `false` at its loop point):
 
 | Label | Frames | Used for |
 |---|---|---|
@@ -304,7 +304,7 @@ Host `gsh` (`movies/eBugGameShow.swf` sprite 894; same in the cutscene, sprite 7
 | `serious` | 171 to 296, loops | blind answers; player "don't know" |
 | `disappointed` | 345 to 470, loops | player wrong |
 
-Contestants Amy and Harry: the `upper` body clip (`movies/eBugGameShow.swf` sprites 479 and 732; cutscene sprites 240 and 599). Every animation returns to `idle` when done:
+Contestants: the `upper` body clip of Harry (`movies/eBugGameShow.swf` sprite 479; cutscene sprite 240) and Amy (sprite 732; cutscene sprite 599). Every animation returns to `idle` when done:
 
 | Label | Frames |
 |---|---|
@@ -321,7 +321,7 @@ Contestants Amy and Harry: the `upper` body clip (`movies/eBugGameShow.swf` spri
 
 ### 2.11 Which avatar is the player's (as built)
 
-The constructor picks the player's avatar and podium from `_root.getPlayer().avatarSex` (`src/ebug/junior/GameShow.as:52`, `:85-104`), but it runs during preload when there is no player yet (section 1.1). `undefined == Player.FEMALE` is false, so it always takes the male branch: player = Harry (right podium), CPU = Amy (middle podium), `cpuName = "Amy"`, `shrinkingZone.setUserAvatar(MALE)`. If the child chose Amy, the game show still animates Harry for the player's answers and names the CPU "Amy". The shrinking zone itself uses the real player at call time, so the right child is shrunk (section 4). **Port decision**: use the intended mapping (the other child is the CPU, named after that child) unless strict fidelity is wanted.
+The constructor picks the player's avatar and podium from `_root.getPlayer().avatarSex` (`src/ebug/junior/GameShow.as:52`, `:85-104`), but it runs during preload when there is no player yet (section 1.1). `undefined == Player.FEMALE` is false, so it always takes the male branch: player = Harry (right podium), CPU = Amy (middle podium), `cpuName = "Amy"`, `shrinkingZone.setUserAvatar(MALE)`. If the child chose Amy, the game show still animates Harry for the player's answers and names the CPU "Amy". The shrinking zone itself uses the real player at call time, so the right child is shrunk (section 4). This consequence is inferred from the code and the preload trace; the Ruffle harness could not drive the splash button, so it was not watched end to end. **Port decision**: use the intended mapping (the other child is the CPU, named after that child) unless strict fidelity is wanted.
 
 ## 3. Cutscene introduction
 
@@ -453,7 +453,7 @@ Category arrays (indices into the table, built by type in table order, `:1288-13
 
 ### 5.4 Screen layout (`movies/kitchen_game_main.swf`, stage coordinates)
 
-- Background kitchen with cupboard (top left of centre), fruit bowl on the counter, fridge (open, shelves, two drawers, door shelves on the right) and a bin at bottom right; `clock` text field at (669.95, 5.9), 110 x 35, `htmlText = "<font face=\"verdana\"><b>" + timeLeft + "</b></face>"` (sic) updated every 40 ms.
+- Picture (Ruffle): green wall cupboards top left (one door open showing shelves), a counter across the left half carrying a shopping bag and a tissue box (far left), cling film, a soap dispenser and the sink (centre) and a blue fruit bowl; an open fridge centre right (three shelves over two drawers, the open door with shelves on the right); a pedal bin bottom right; chequered floor. `clock` text field at (669.95, 5.9), 110 x 35 (placeholder "30"), `htmlText = "<font face=\"verdana\"><b>" + timeLeft + "</b></face>"` (sic) updated every 40 ms.
 - Counter clip `kitchen_counter` at (400.05, 219.05) with three click targets: `tissues` at (5.35, 210.75), `clingfilm` at (204.2, 211.25), `sink_area` at (273.6, 174.65) (counter origin plus child offsets).
 - Avatar clip attached at (65.5, 8.7) and placed behind the counter (`swapDepths`, `:1106-1114`); the animated part is `avatar.upper`.
 - Current item: `food_throw_area.foodContainer`, a 90 x 90 box at (120.3, 171.5); the item is attached inside it and shifted by `(container - content)` in both axes, i.e. bottom-right aligned (`:780-800`). The throw animations of `food_throw_area` exist but are unused ("since throwing is broken, going straight to store", `:640-642`).
@@ -544,15 +544,40 @@ Every placed item is checked per location, locations in id order 0 to 7, items i
 
 ### 5.10 Outro pages (`movies/kitchen_game_outro.swf`)
 
-Frames: `init` 1 (a `click_button` "Click", an unused local `strings` table), `achievements` 10, `missed` 20, `admonishments` 30. White panel, Verdana 20 black.
+Frames: `init` 1 (a `click_button` "Click", an unused local `strings` table), `achievements` 10, `missed` 20, `admonishments` 30. A grey rounded panel with a black border on an olive background, Verdana 20 black text, a blue "Click" button bottom centre (Ruffle).
 1. **Achievements** (`showOutroAchievements`, `:193-265`): title `text0` = "Shopping Placed Correctly" (static text says "Items Placed Correctly"); seven rows `textN  multiplierN  X ... = sumN` for N = 1..7: Fruit, Vegetables, Cupboard Items, Cheese, Raw Meat, Cooked Meat, Liquids; multiplier = correct count, sum = count x 10.
 2. **Missed** (`showOutroMissed`, `:267-312`): title "Items Placed Incorrectly"; same rows with incorrect counts and sums `"- " + count x 10`.
 3. **Admonishments** (`showAdmonishments`, `:314-351`): title "Microbial Mistakes" (overwrites the static "Things to remember"); `text1` to `text4` = the first four admonishments. **Only four slots exist**; any further ones are silently lost.
 4. Click: `nextLevel()` (next intro, or exit after level 3).
 
+Outro and admonishment strings (`outroStrings`, `src/ebug/junior/fridge/KitchenGame.as:1165-1192`; `translations.json` key `kitchen.outro.<camelCase key>`):
+
+| Key | Text | Used |
+|---|---|---|
+| Shopping Placed Correctly | Shopping Placed Correctly | page 1 title |
+| Fruit / Vegetables / Cupboard Items / Cheese / Raw Meat / Cooked Meat / Liquids | same as the key | row labels 1 to 7 on pages 1 and 2 |
+| Items Placed Incorrectly | Items Placed Incorrectly | page 2 title |
+| Microbial Mistakes | Microbial Mistakes | page 3 title |
+| Clingfilm | Raw and Cooked meat should be covered before putting away. | uncovered meat on a shelf |
+| Sneeze | If you don't cover your mouth when you sneeze, you can spread harmful microbes. | any sneeze-contaminated item |
+| Bad Food | If food is mouldy or off, you should throw it away. | mouldy item in bowl or cupboard |
+| Burst Container | If a liquid container is burst you should throw it away. | burst yogurt in the door |
+| Fruit Location | Fruit should be put in the fruit bowl. | reminder |
+| Vegetables Location | Vegetables should be put in the bottom drawer in the fridge. | reminder |
+| Cheese Location | Cheese should go in the top or middle shelf. | reminder |
+| Cooked Meat Location | Cooked Meat should go in the top or middle shelf - and have a shelf all on its own. | reminder |
+| Raw Meat Location | Raw Meat should go on the solid shelf above the drawers. | reminder |
+| Liquids Location | Liquids should be put in the fridge door. | reminder |
+| Cupboard Items Location | Things like cans and bread should be put in the cupboard. | reminder |
+| Points Awarded, Points Deducted, Total Points | same as the key | unused |
+| Sneeze Hands | Even if you use a tissue when you sneeze, you should wash your hands before handling food. | unused (the tissue case produces "Sneeze") |
+| Cooked Meat Shelf | Cooked meat should be covered and placed on its own shelf. | unused |
+| Raw Meat Shelf | Raw meat should have a solid shelf all to itself to prevent harmful microbes transferring to other food. | unused |
+| Raw Meat Hands | After you handle raw meat, you should wash your hands to prevent harmful microbes from spreading. | unused |
+
 ### 5.11 Intro screens (`movies/kitchen_game_intro_level_N.swf`)
 
-Each intro is a dark panel ("background") with centred white Verdana 20 bold text and a "Click" button. Frame 1 (`init`) fills a `strings` array and sets `finished = false`; `click_button` advances frame by frame; the last click sets `finished = true`, which `KitchenGame.introFinished` polls. Texts (the static placeholder texts inside the SWFs are overwritten at run time):
+Each intro shows a dimmed kitchen picture (`background`; in level 0 it includes Amy at the counter, whatever avatar was chosen) with centred white Verdana 20 bold text and a blue "Click" button (Ruffle). Frame 1 (`init`) fills a `strings` array and sets `finished = false`; `click_button` advances frame by frame; the last click sets `finished = true`, which `KitchenGame.introFinished` polls. Texts (the static placeholder texts inside the SWFs are overwritten at run time):
 
 - **Level 0** (`screen1` texts 0-1, `screen2` 2-3, `screen3` 4-6, `screen4` 7, then a tutorial): "In this mini-game, you have to put away the shopping." / "Sounds simple, doesn't it?" // "But be careful!" / "You need to put things in the right place." // "Here are the rules:" / "Vegetables go in the bottom drawer of the fridge." / "Drinks and Yogurt go in the fridge door." // "On the next screen, click on the correct place in the fridge to put away the spring onion." Then frame `spring_onion`: the kitchen picture with five `wrong_button`s and one `right_button` (the drawer, at (473.05, 215.9) in the intro's coordinates); wrong: "Wrong!  Try again." with the two rule lines, click returns to the tutorial; right: "Excellent, well done." / "Try to put away 10 things before the timer runs out." / "Click the button when you're ready to start the level..." and the click sets `finished`.
 - **Level 1**: "Level 2" / "This time, you also have to put away fruit, tins and bread." // "Remember, vegetables go in the bottom drawers in the fridge." / "Liquids like milk, yogurt and juice go in the fridge door." // "There are some new things this time." / "If you see fruit, put it in the fruit bowl." / "Tins and bread go in the cupboard." // "One more thing - if you start to sneeze, click on the tissues quick! Otherwise, you'll cover the food in harmful microbes." / "Click on the button when ready to start."
@@ -564,7 +589,7 @@ Note the numbering: code levels 0 to 3 are shown to the player as an untitled fi
 ### 5.12 Kitchen avatar and animations
 
 - `KitchenGame.swf` passes a fresh `new ebug.Player()`, not the real player. `avatarSex` is undefined, so `player.avatarSex == Player.FEMALE` is false and **Harry is always the kitchen avatar** (`:1105-1109`), and the kitchen score is added to this throwaway object (`:806`); `GameController.endOfKitchen` only traces it (`src/ebug/junior/GameController.as:273-281`). Port decision: use the chosen avatar; whether kitchen points count towards the final result is a design choice (as built they do not).
-- Avatar `upper` labels (`movies/kitchen_game_main.swf` sprite 169, Harry; sprite 612 the same for Amy): `stop` 1, `idle` 10 to 30 loop, `fridge` 47 to 60, `cupboard` 85 to 97, `bin` 130 to 142, `bowl` 165 to 177, `cling_film_start` 205 to 217 then `cling_film_mid` 235 to 255 loop, `cling_film_end` 285 to 297 (cling film animations unused), `sneeze_Start` 335 to 347 then `sneeze_mid` 360 to 379 loop, `sneeze_tissue_end` 390 to 406, `sneeze_food_end` 440 to 456, `window` 530 to 543 (unused), `wash_hands` 565 to 600. Each one-shot returns to `idle`.
+- Avatar `upper` labels (`movies/kitchen_game_main.swf` sprite 169 inside exported `harry`; sprite 612 inside exported `amy` has the same labels): `stop` 1, `idle` 10 to 30 loop, `fridge` 47 to 60, `cupboard` 85 to 97, `bin` 130 to 142, `bowl` 165 to 177, `cling_film_start` 205 to 217 then `cling_film_mid` 235 to 255 loop, `cling_film_end` 285 to 297 (cling film animations unused), `sneeze_Start` 335 to 347 then `sneeze_mid` 360 to 379 loop, `sneeze_tissue_end` 390 to 406, `sneeze_food_end` 440 to 456, `window` 530 to 543 (unused), `wash_hands` 565 to 600. Each one-shot returns to `idle`.
 - The SWF also contains developer test buttons (`clickme1` to `clickme12`, `animation_test`) that its frame 1 hides.
 
 ### 5.13 Level transitions
@@ -614,7 +639,7 @@ Sources: `levels/` holds only English (`alpha_gameshow_round1-5.xml`, `conversat
 
 The embedding page passed the language as a flashvar; root frame code did `new GameController(this, this["gameScreen"], language)` (`doc:418`, `doc:449`). `Translations(language)` filled `translationText[language]` through a `switch` on the code (`populateEnglish()`, `populateGreek()`, ... and a separate `SpanishTranslation` class, `doc:1963-1980`); strings were read with `Translations(_root.translations).getString(Translations.STRING_X)`; quiz and conversation XML were chosen by file prefix (`<lang>_gameshow_roundN.xml`, `next_round` pointing at the same language, `doc:41`, `doc:2012`).
 
-Build A has none of this: both wrappers `movies/e-Bug_Junior_Game.html` and `movies/e-Bug_Junior_Game2.html` embed `e-Bug Junior Game.swf` with **no flashvars** (they differ only in size, 1000 x 562 versus 800 x 450; `allowScriptAccess="sameDomain"`, black background, Flash 8 codebase; `e-Bug_Junior_Game.html:418-421`, `e-Bug_Junior_Game2.html:418-421`); the rest of each file is a comment listing the loader's text fields. `movies/params.txt` (`skin=0xFF0000&done=true`) is a 2008 test input for the unfinished avatar colour customisation (`src/ColourSwap.as:14-37` reads `_root.paramContainer`, which the junior game never creates), not a flashvar file. The site's launcher banner `movies/ad2.swf` reads flashvars `line1Text`, `line2Text` and `juniorURL` and opens `juniorURL` in a new window on click (root frame 1), but `movies/ad2.html` passes none.
+Build A has none of this: both wrappers `movies/e-Bug_Junior_Game.html` and `movies/e-Bug_Junior_Game2.html` embed `e-Bug Junior Game.swf` with **no flashvars** (they differ only in size, 1000 x 562 versus 800 x 450; `allowScriptAccess="sameDomain"`, black background, Flash 8 codebase; `movies/e-Bug_Junior_Game.html:418-421`, `movies/e-Bug_Junior_Game2.html:418-421`); the rest of each file is a comment listing the loader's text fields. `movies/params.txt` (`skin=0xFF0000&done=true`) is a 2008 test input for the unfinished avatar colour customisation (`src/ColourSwap.as:14-37` reads `_root.paramContainer`, which the junior game never creates), not a flashvar file. The site's launcher banner `movies/ad2.swf` reads flashvars `line1Text`, `line2Text` and `juniorURL` and opens `juniorURL` in a new window on click (root frame 1), but `movies/ad2.html` passes none.
 
 **Port**: select the language with a URL parameter (for example `?lang=cz_cz`, mirroring the flashvar) falling back to `en_en`.
 
@@ -643,7 +668,7 @@ Counts: `en_en` 246 keys, `cz_cz` 144, the other nine live languages 142 each, `
 
 ## 8. Bugs and inconsistencies
 
-1. **Round counter off by one**: `// should be round ==3 but round is being incremented inside hoverboard thing` then `if ( round == 2 )` (`src/ebug/junior/GameController.as:208-210`). `round` is incremented in `nextHoverboardRound` only from the second platform round (`:253`), so at the fourth shrink it is 2; the test works, and the comment's claim that it "should be 3" is wrong. The kitchen branch then does its own `round++` (`:211`) so round 5 picks `hoverboardLevels[4]`. The documentation repeats it (`doc:597-606`) and calls it "Round 3" meaning index 3 (`doc:662`). A port should use an explicit round table.
+1. **Round counter off by one**: `// should be round ==3 but round is being incremented inside hoverboard thing` then `if ( round == 2 )` (`src/ebug/junior/GameController.as:208-210`). `round` is incremented lazily inside `nextHoverboardRound`, after this test and only from the second platform round (`:253`), so the test compares against the previous round's index: at the fourth shrink it is 2, and the check works as the comment explains. The kitchen branch then does its own `round++` (`:211`) so round 5 picks `hoverboardLevels[4]`. The documentation repeats it (`doc:597-606`) and calls it "Round 3" meaning index 3 (`doc:662`). A port should use an explicit round table.
 2. `NULL_KITCHEN_GAME` in the level list is never read (`:68`); the kitchen is selected by the counter test alone.
 3. Game show constructed during preload: player avatar, podium and CPU name are fixed to the male branch (section 2.11; `src/ebug/junior/GameShow.as:52`, `:85-104`); `player.playerAnswers[level] = new Array()` on an undefined player (`:107-109`) never initialises the answer arrays, so all `player.playerAnswers[...][...][...] = ...` writes (`:234-269`) silently fail. Research data still works because it uses `roundAnswersBlind/Sighted`.
 4. `cpu.nickname` is always "Amy" (`src/ebug/Player.as:30-32`), used in the win line (`src/ebug/junior/GameShow.as:453`).

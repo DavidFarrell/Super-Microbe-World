@@ -177,6 +177,11 @@ function unionRect(a, b) {
   if (!a) return b; if (!b) return a;
   return { xMin: Math.min(a.xMin, b.xMin), xMax: Math.max(a.xMax, b.xMax), yMin: Math.min(a.yMin, b.yMin), yMax: Math.max(a.yMax, b.yMax) };
 }
+function matrixPx(m) {
+  if (!m) return { a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0 };
+  const r4 = (v) => Math.round(v * 10000) / 10000;
+  return { a: r4(fixed(m.scaleX, 65536)), b: r4(fixed(m.rotateSkew0, 65536)), c: r4(fixed(m.rotateSkew1, 65536)), d: r4(fixed(m.scaleY, 65536)), tx: round2(twipsToPx(m.translateX || 0)), ty: round2(twipsToPx(m.translateY || 0)) };
+}
 function rectPx(r) {
   if (!r) return null;
   return { x: round2(twipsToPx(r.xMin)), y: round2(twipsToPx(r.yMin)), w: round2(twipsToPx(r.xMax - r.xMin)), h: round2(twipsToPx(r.yMax - r.yMin)) };
@@ -359,6 +364,31 @@ function decompileAvm1(bytes) {
   }
   while (scopes.length > 1) { scopes.pop(); out.push('  '.repeat(scopes.length) + '}'); }
   return { lines: out, actionCount: ops.length, pool };
+}
+
+// Reduce a decompiled frame script to its unconditional timeline control, if
+// any: { type: 'stop' } or { type: 'goto', target, play }. Scripts with a
+// top-level `if` are treated as having no fixed control.
+function frameControl(lines) {
+  const top = []; let depth = 0;
+  for (const l of lines) {
+    if (depth === 0 && !/^function/.test(l)) top.push(l);
+    if (/\{\s*$/.test(l)) depth++;
+    if (/^\s*\}\s*$/.test(l)) depth = Math.max(0, depth - 1);
+  }
+  if (top.some((l) => /^if \(|^jump /.test(l))) return null;
+  let ctl = null;
+  for (const l of top) {
+    let m;
+    if (l === 'stop()') ctl = { type: 'stop' };
+    else if (l === 'play()') ctl = null;
+    else if ((m = l.match(/^(gotoAndPlay|gotoAndStop)\((.*)\)$/))) {
+      let tgt = m[2];
+      if (/^".*"$/.test(tgt)) tgt = JSON.parse(tgt); else if (/^\d+$/.test(tgt)) tgt = Number(tgt); else continue;
+      ctl = { type: 'goto', target: tgt, play: m[1] === 'gotoAndPlay' };
+    }
+  }
+  return ctl;
 }
 
 // Summarise a script: the decompiled statements joined on one line (capped),
@@ -632,14 +662,16 @@ function analyseSwf(file) {
   const timelineCache = new Map();
   function simulate(tags, frameCountHint) {
     const dl = new Map(); const frames = []; const labels = []; const scripts = []; const instanceNames = new Map();
-    const streamHeads = []; let streamBlocks = 0; const startSounds = []; let clipActionCount = 0;
+    const streamHeads = []; let streamBlocks = 0; const startSounds = []; let clipActionCount = 0; const control = new Map();
     const snapshot = () => [...dl.entries()].sort((a, b) => a[0] - b[0]).map(([depth, e]) => ({ depth, ...e }));
     for (const t of tags) {
       switch (t.type) {
         case TagType.PlaceObject: {
           const prev = t.isUpdate ? dl.get(t.depth) : undefined;
           const e = prev ? { ...prev } : { matrix: null };
+          if (t.characterId !== undefined && (!prev || prev.id !== t.characterId)) e.placedAt = frames.length + 1;
           if (t.characterId !== undefined) e.id = t.characterId;
+          if (t.ratio !== undefined) e.ratio = t.ratio;
           if (t.matrix) e.matrix = t.matrix;
           if (t.clipDepth !== undefined) e.clipDepth = t.clipDepth;
           if (t.name !== undefined) { e.name = t.name; if (e.id !== undefined && !instanceNames.has(t.name)) instanceNames.set(t.name, e.id); }
@@ -650,7 +682,12 @@ function analyseSwf(file) {
         case TagType.RemoveObject: dl.delete(t.depth); break;
         case TagType.ShowFrame: frames.push(snapshot()); break;
         case TagType.FrameLabel: labels.push({ frame: frames.length + 1, name: t.name, ...(t.isAnchor ? { anchor: true } : {}) }); break;
-        case TagType.DoAction: { const s = summariseScript(t.actions); scripts.push({ frame: frames.length + 1, summary: s.summary, actions: s.actionCount, ...(s.code.length > 1 || s.summary.length > 120 ? { code: s.code } : {}) }); break; }
+        case TagType.DoAction: {
+          const s = summariseScript(t.actions);
+          scripts.push({ frame: frames.length + 1, summary: s.summary, actions: s.actionCount, ...(s.code.length > 1 || s.summary.length > 120 ? { code: s.code } : {}) });
+          const c = frameControl(s.code); if (c) control.set(frames.length + 1, c);
+          break;
+        }
         case TagType.SoundStreamHead: streamHeads.push({ frame: frames.length + 1, format: SOUND_FORMATS[t.streamFormat] ?? t.streamFormat, rate: REAL_RATE[t.streamSoundRate] || t.streamSoundRate, stereo: t.streamSoundType === 1, samplesPerBlock: t.streamSampleCount, latencySeek: t.latencySeek }); break;
         case TagType.SoundStreamBlock: streamBlocks++; break;
         case TagType.StartSound: startSounds.push({ frame: frames.length + 1, soundId: t.soundId, stop: !!t.soundInfo?.syncStop, loops: t.soundInfo?.loopCount }); break;
@@ -658,32 +695,93 @@ function analyseSwf(file) {
       }
     }
     if (frames.length === 0 || (frameCountHint && frames.length < frameCountHint)) frames.push(snapshot());
-    return { frames, labels, scripts, instanceNames, streamHeads, streamBlocks, startSounds, clipActionCount };
+    return { frames, labels, scripts, instanceNames, streamHeads, streamBlocks, startSounds, clipActionCount, control };
   }
   function spriteTimeline(id) {
     if (!timelineCache.has(id)) { const c = chars.get(id); timelineCache.set(id, simulate(c.tag.tags, c.tag.frameCount)); }
     return timelineCache.get(id);
   }
 
+  // Where a sprite's own playhead is after `age` ticks, honouring unconditional
+  // frame scripts (stop(), gotoAndPlay/gotoAndStop to a label or number) but not
+  // code that drives the clip from outside. Used to animate nested clips when
+  // computing a parent's bounds on a given frame.
+  const seqMemo = new Map();
+  function playhead(id, age) {
+    const c = chars.get(id); const fc = Math.max(1, c.tag.frameCount); const tl = spriteTimeline(id);
+    let st = seqMemo.get(id);
+    if (!st) { st = { seq: [], f: 1, stopped: false, started: false }; seqMemo.set(id, st); }
+    const resolve = (target) => {
+      if (typeof target === 'number') return Math.min(Math.max(1, target), fc);
+      const l = tl.labels.find((x) => x.name === target) || tl.labels.find((x) => x.name.toLowerCase() === String(target).toLowerCase());
+      return l ? l.frame : null; // unknown label: Flash ignores the goto
+    };
+    const apply = () => {
+      for (let hop = 0; hop < 4; hop++) {
+        const ctl = tl.control.get(st.f);
+        if (!ctl) return;
+        if (ctl.type === 'stop') { st.stopped = true; return; }
+        const to = resolve(ctl.target);
+        if (to === null) { if (!ctl.play) st.stopped = true; return; }
+        if (!ctl.play) st.stopped = true;
+        if (to === st.f) return;
+        st.f = to;
+        if (!ctl.play) return;
+      }
+    };
+    while (st.seq.length < age) {
+      if (!st.started) { st.started = true; apply(); }
+      else if (!st.stopped) { st.f = st.f >= fc ? 1 : st.f + 1; apply(); }
+      st.seq.push(st.f);
+    }
+    return st.seq[age - 1];
+  }
+
   const boundsMemo = new Map();
-  function charBounds(id, mode, stack = new Set()) {
-    const k = `${id}:${mode}`;
+  // Bounds of character `id` when showing its own frame `frame` (1-based), with
+  // nested clips at the frame their own playheads would have reached.
+  function boundsAt(id, frame, stack = new Set()) {
+    const k = `${id}@${frame}`;
     if (boundsMemo.has(k)) return boundsMemo.get(k);
     const c = chars.get(id); let r = null;
     if (!c || stack.has(id)) return null;
     stack.add(id);
     if (c.kind === 'shape') r = c.tag.bounds;
-    else if (c.kind === 'morph') r = mode === 'first' ? c.tag.bounds : unionRect(c.tag.bounds, c.tag.morphBounds);
+    else if (c.kind === 'morph') r = c.tag.bounds;
     else if (c.kind === 'text' || c.kind === 'editText') r = c.tag.bounds;
     else if (c.kind === 'button') {
-      for (const rec of c.tag.records) if (mode === 'first' ? rec.stateUp : (rec.stateUp || rec.stateOver || rec.stateDown)) r = unionRect(r, transformRect(rec.matrix, charBounds(rec.characterId, mode, stack)));
+      for (const rec of c.tag.records) if (rec.stateUp) r = unionRect(r, transformRect(rec.matrix, boundsAt(rec.characterId, 1, stack)));
     } else if (c.kind === 'sprite') {
       const tl = spriteTimeline(id);
-      const fr = mode === 'first' ? tl.frames.slice(0, 1) : tl.frames;
-      for (const f of fr) for (const e of f) if (e.id !== undefined) r = unionRect(r, transformRect(e.matrix, charBounds(e.id, mode, stack)));
+      const snap = tl.frames[Math.min(frame, tl.frames.length) - 1] || [];
+      for (const e of snap) {
+        if (e.id === undefined) continue;
+        const ck = chars.get(e.id);
+        let childBounds;
+        if (ck && ck.kind === 'sprite') childBounds = boundsAt(e.id, playhead(e.id, Math.max(1, frame - (e.placedAt || 1) + 1)), stack);
+        else if (ck && ck.kind === 'morph' && e.ratio !== undefined) {
+          const t = e.ratio / 65535; const a = ck.tag.bounds; const z = ck.tag.morphBounds || a;
+          childBounds = { xMin: a.xMin + (z.xMin - a.xMin) * t, xMax: a.xMax + (z.xMax - a.xMax) * t, yMin: a.yMin + (z.yMin - a.yMin) * t, yMax: a.yMax + (z.yMax - a.yMax) * t };
+        } else childBounds = boundsAt(e.id, 1, stack);
+        r = unionRect(r, transformRect(e.matrix, childBounds));
+      }
     }
     stack.delete(id);
     boundsMemo.set(k, r);
+    return r;
+  }
+  // 'first' = frame 1 (what _width/_height report straight after attachMovie);
+  // 'all' = union over every frame of the symbol's own timeline.
+  function charBounds(id, mode) {
+    const c = chars.get(id);
+    if (!c) return null;
+    if (mode === 'first' || c.kind !== 'sprite') {
+      if (c.kind === 'morph' && mode !== 'first') return unionRect(c.tag.bounds, c.tag.morphBounds);
+      if (c.kind === 'button' && mode !== 'first') { let r = null; for (const rec of c.tag.records) if (rec.stateUp || rec.stateOver || rec.stateDown) r = unionRect(r, transformRect(rec.matrix, boundsAt(rec.characterId, 1))); return r; }
+      return boundsAt(id, 1);
+    }
+    let r = null; const n = spriteTimeline(id).frames.length;
+    for (let f = 1; f <= n; f++) r = unionRect(r, boundsAt(id, f));
     return r;
   }
 
@@ -792,7 +890,7 @@ function analyseSwf(file) {
     if (c.kind !== 'sprite' || exportNamesById.has(id)) continue;
     const tl = spriteTimeline(id);
     if (!tl.labels.length && c.tag.frameCount < 20) continue;
-    labelledInternal.push({ id, frameCount: c.tag.frameCount, labels: tl.labels.map((l) => ({ frame: l.frame, name: l.name })), usedBy: exportedAncestors(id), boundsFrame1: rectPx(charBounds(id, 'first')), boundsAllFrames: rectPx(charBounds(id, 'all')), vectorOnly: charUses(id).bitmaps.size === 0 });
+    labelledInternal.push({ id, frameCount: c.tag.frameCount, labels: tl.labels.map((l) => ({ frame: l.frame, name: l.name })), usedBy: exportedAncestors(id), boundsFrame1: rectPx(charBounds(id, 'first')), boundsAllFrames: rectPx(charBounds(id, 'all')), vectorOnly: charUses(id).bitmaps.size === 0, scripts: tl.scripts });
   }
 
   // Sounds (DefineSound) and streams
@@ -874,7 +972,7 @@ function analyseSwf(file) {
     as2Classes: classExports,
     rootTimeline: {
       frameCount: hdr.frameCount, showFrames: rootTl.frames.length, boundsFrame1: rectPx(rootBoundsFirst), ...describeTimeline(rootTl),
-      placedOnFrame1: (rootTl.frames[0] || []).filter((e) => e.id !== undefined).map((e) => ({ depth: e.depth, charId: e.id, kind: chars.get(e.id)?.kind, ...(e.name ? { name: e.name } : {}), ...(nameOf(e.id) ? { exportName: nameOf(e.id) } : {}), ...(chars.get(e.id)?.kind === 'sprite' ? { frameCount: chars.get(e.id).tag.frameCount } : {}), bounds: rectPx(transformRect(e.matrix, charBounds(e.id, 'first'))) })),
+      placedOnFrame1: (rootTl.frames[0] || []).filter((e) => e.id !== undefined).map((e) => ({ depth: e.depth, charId: e.id, kind: chars.get(e.id)?.kind, ...(e.name ? { name: e.name } : {}), ...(nameOf(e.id) ? { exportName: nameOf(e.id) } : {}), ...(chars.get(e.id)?.kind === 'sprite' ? { frameCount: chars.get(e.id).tag.frameCount } : {}), matrix: matrixPx(e.matrix), bounds: rectPx(transformRect(e.matrix, charBounds(e.id, 'first'))) })),
     },
     exportedSprites, otherExports, notableInternalSprites: labelledInternal,
     fonts: fonts.map((f) => ({ id: f.id, code: TAG_NAMES[rawCodeById.get(f.id)], name: f.fontName || fontNames.get(f.id) || null, glyphs: f.glyphs ? f.glyphs.length : undefined, bold: f.isBold, italic: f.isItalic })),
