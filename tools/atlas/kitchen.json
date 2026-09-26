@@ -1,0 +1,225 @@
+{
+ "index": "web/data/atlas/index.json",
+ "defaults": {
+  "pageSize": 4096,
+  "quality": 0.8,
+  "padding": 2,
+  "png": false
+ },
+ "atlases": [
+  {
+   "out": "web/data/atlas/kitchen",
+   "symbols": [
+    {
+     "sheet": "kitchen_game_main/kitchen_bg"
+    },
+    {
+     "sheet": "kitchen_game_main/kitchen_counter"
+    },
+    {
+     "sheet": "kitchen_game_main/kitchen_sink"
+    },
+    {
+     "sheet": "kitchen_game_main/food_yogurt"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_yogurt"
+    },
+    {
+     "sheet": "kitchen_game_main/food_tomatoes"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_tomatoes"
+    },
+    {
+     "sheet": "kitchen_game_main/food_mouldy_bread"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_mouldy_bread"
+    },
+    {
+     "sheet": "kitchen_game_main/food_burst_yogurt"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_burst_yogurt"
+    },
+    {
+     "sheet": "kitchen_game_main/food_carrots"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_carrots"
+    },
+    {
+     "sheet": "kitchen_game_main/food_orange"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_orange"
+    },
+    {
+     "sheet": "kitchen_game_main/food_bananas"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_bananas"
+    },
+    {
+     "sheet": "kitchen_game_main/food_mouldy_orange"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_mouldy_orange"
+    },
+    {
+     "sheet": "kitchen_game_main/food_cheese"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_cheese"
+    },
+    {
+     "sheet": "kitchen_game_main/food_orange_juice"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_orange_juice"
+    },
+    {
+     "sheet": "kitchen_game_main/food_red_apple"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_red_apple"
+    },
+    {
+     "sheet": "kitchen_game_main/food_raw_lamb"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_raw_lamb"
+    },
+    {
+     "sheet": "kitchen_game_main/food_cooked_lamb"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_cooked_lamb"
+    },
+    {
+     "sheet": "kitchen_game_main/food_green_apple"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_green_apple"
+    },
+    {
+     "sheet": "kitchen_game_main/food_pear"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_pear"
+    },
+    {
+     "sheet": "kitchen_game_main/food_milk"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_milk"
+    },
+    {
+     "sheet": "kitchen_game_main/food_soup"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_soup"
+    },
+    {
+     "sheet": "kitchen_game_main/food_raw_chicken"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_raw_chicken"
+    },
+    {
+     "sheet": "kitchen_game_main/food_broccoli"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_broccoli"
+    },
+    {
+     "sheet": "kitchen_game_main/food_cooked_chicken"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_cooked_chicken"
+    },
+    {
+     "sheet": "kitchen_game_main/food_raw_sausages"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_raw_sausages"
+    },
+    {
+     "sheet": "kitchen_game_main/food_raw_steak"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_raw_steak"
+    },
+    {
+     "sheet": "kitchen_game_main/food_cooked_steak"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_cooked_steak"
+    },
+    {
+     "sheet": "kitchen_game_main/food_spring_onion"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_spring_onion"
+    },
+    {
+     "sheet": "kitchen_game_main/food_bread"
+    },
+    {
+     "sheet": "kitchen_game_main/food_clingfilm_bread"
+    },
+    {
+     "sheet": "kitchen_game_intro_level_0/kitchen_intro0_bg"
+    },
+    {
+     "sheet": "kitchen_game_intro_level_1/kitchen_intro1_bg"
+    },
+    {
+     "sheet": "kitchen_game_intro_level_2/kitchen_intro2_bg"
+    },
+    {
+     "sheet": "kitchen_game_intro_level_3/kitchen_intro3_bg"
+    },
+    {
+     "sheet": "kitchen_game_intro_level_0/kitchen_intro0_screen"
+    },
+    {
+     "sheet": "kitchen_game_intro_level_0/kitchen_click_button"
+    },
+    {
+     "sheet": "kitchen_game_outro/kitchen_outro_bg"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/kitchen-harry",
+   "symbols": [
+    {
+     "sheet": "kitchen_game_main/kitchen_harry"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/kitchen-amy",
+   "symbols": [
+    {
+     "sheet": "avatar_amy_Fridge/kitchen_amy"
+    }
+   ]
+  }
+ ],
+ "sets": {
+  "kitchen": [
+   "kitchen",
+   "kitchen-harry",
+   "kitchen-amy"
+  ],
+  "kitchen-harry": [
+   "kitchen-harry"
+  ],
+  "kitchen-amy": [
+   "kitchen-amy"
+  ]
+ }
+}

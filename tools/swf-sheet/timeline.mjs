@@ -187,6 +187,8 @@ export class SwfLibrary {
     if (String(target).startsWith('root:')) {
       const name = target.slice(5);
       const list = displayListAt(this.root, 1);
+      // "root:#12" is the instance at depth 12 (for unnamed instances such as the splash TV).
+      if (/^#\d+$/.test(name)) { const inst = list.get(+name.slice(1)); if (inst) return { id: inst.charId, placement: inst }; }
       for (const inst of list.values()) if (inst.name === name) return { id: inst.charId, placement: inst };
       throw new Error(`${this.name}: no root instance named ${name}`);
     }
@@ -377,7 +379,7 @@ export class Snapshotter {
     }
     if (c.kind === 'text' || c.kind === 'edittext') return this.omitText ? null : { id: charId, bounds: c.bounds, reach: 0 };
     if (c.kind === 'sprite') return this.snapshot(charId, frame, ageOffset);
-    if (c.kind === 'button') return this.buttonSnapshot(charId);
+    if (c.kind === 'button') return this.buttonSnapshot(charId, ['up', 'over', 'down'][frame - 1] || 'up');
     return null; // bitmaps, fonts, sounds cannot be placed directly
   }
 
@@ -388,8 +390,10 @@ export class Snapshotter {
     this.stack.add(key0);
     const list = displayListAt(c.timeline, frame);
     const items = [];
+    // topDepths (set by a job's "depths"): only these depths of the top-level symbol are drawn.
+    const keepDepth = this.topDepths && spriteId === this.topDepths.id ? this.topDepths.test : null;
     for (const [depth, inst] of [...list].sort((a, b) => a[0] - b[0])) {
-      if (inst.name && this.hide.has(inst.name)) { items.push({ depth, missing: true, clipDepth: inst.clipDepth }); continue; }
+      if ((inst.name && this.hide.has(inst.name)) || (keepDepth && !keepDepth(depth))) { items.push({ depth, missing: true, clipDepth: inst.clipDepth }); continue; }
       const child = this.lib.chars.get(inst.charId);
       let n;
       if (child?.kind === 'sprite' && this.nested === 'age') n = this.aged(inst.charId, frame - inst.born + ageOffset);
@@ -423,10 +427,12 @@ export class Snapshotter {
     return node;
   }
 
-  buttonSnapshot(buttonId) {
+  // A button drawn in one state ('up' as placed on a timeline; a top-level button job renders
+  // frames 1, 2, 3 as up, over, down).
+  buttonSnapshot(buttonId, state = 'up') {
     const c = this.lib.chars.get(buttonId);
     const items = [];
-    for (const r of c.records.filter(r => r.up).sort((a, b) => a.depth - b.depth)) {
+    for (const r of c.records.filter(r => r[state]).sort((a, b) => a.depth - b.depth)) {
       const n = this.node(r.charId, 1);
       if (!n) continue;
       items.push({ depth: r.depth, inst: { matrix: r.matrix, cxform: r.cxform, filters: r.filters, blendMode: r.blendMode }, n });

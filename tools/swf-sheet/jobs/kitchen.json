@@ -1,0 +1,386 @@
+{
+ "scale": 2,
+ "margin": 4,
+ "nested": "age",
+ "jobs": [
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "kitchen_bg",
+   "name": "kitchen_bg"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "kitchen_fg",
+   "name": "kitchen_counter",
+   "hide": [
+    "sink_area"
+   ],
+   "track": [
+    "sink_area",
+    "tissues",
+    "clingfilm"
+   ]
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "sink_area",
+   "name": "kitchen_sink"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "yogurt",
+   "name": "food_yogurt"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_yogurt",
+   "name": "food_clingfilm_yogurt"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "tomatoes",
+   "name": "food_tomatoes"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_tomatoes",
+   "name": "food_clingfilm_tomatoes"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "mouldy_bread",
+   "name": "food_mouldy_bread"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_mouldy_bread",
+   "name": "food_clingfilm_mouldy_bread"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "burst_yogurt",
+   "name": "food_burst_yogurt"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_burst_yogurt",
+   "name": "food_clingfilm_burst_yogurt"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "carrots",
+   "name": "food_carrots"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_carrots",
+   "name": "food_clingfilm_carrots"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "orange",
+   "name": "food_orange"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_orange",
+   "name": "food_clingfilm_orange"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "bananas",
+   "name": "food_bananas"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_bananas",
+   "name": "food_clingfilm_bananas"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "mouldy_orange",
+   "name": "food_mouldy_orange"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_mouldy_orange",
+   "name": "food_clingfilm_mouldy_orange"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "cheese",
+   "name": "food_cheese"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_cheese",
+   "name": "food_clingfilm_cheese"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "orange_juice",
+   "name": "food_orange_juice"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_orange_juice",
+   "name": "food_clingfilm_orange_juice"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "red_apple",
+   "name": "food_red_apple"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_red_apple",
+   "name": "food_clingfilm_red_apple"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "raw_lamb",
+   "name": "food_raw_lamb"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_raw_lamb",
+   "name": "food_clingfilm_raw_lamb"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "cooked_lamb",
+   "name": "food_cooked_lamb"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_cooked_lamb",
+   "name": "food_clingfilm_cooked_lamb"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "green_apple",
+   "name": "food_green_apple"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_green_apple",
+   "name": "food_clingfilm_green_apple"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "pear",
+   "name": "food_pear"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_pear",
+   "name": "food_clingfilm_pear"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "milk",
+   "name": "food_milk"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_milk",
+   "name": "food_clingfilm_milk"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "soup",
+   "name": "food_soup"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_soup",
+   "name": "food_clingfilm_soup"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "raw_chicken",
+   "name": "food_raw_chicken"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_raw_chicken",
+   "name": "food_clingfilm_raw_chicken"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "broccoli",
+   "name": "food_broccoli"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_broccoli",
+   "name": "food_clingfilm_broccoli"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "cooked_chicken",
+   "name": "food_cooked_chicken"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_cooked_chicken",
+   "name": "food_clingfilm_cooked_chicken"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "raw_sausages",
+   "name": "food_raw_sausages"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_raw_sausages",
+   "name": "food_clingfilm_raw_sausages"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "raw_steak",
+   "name": "food_raw_steak"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_raw_steak",
+   "name": "food_clingfilm_raw_steak"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "cooked_steak",
+   "name": "food_cooked_steak"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_cooked_steak",
+   "name": "food_clingfilm_cooked_steak"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "spring_onion",
+   "name": "food_spring_onion"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_spring_onion",
+   "name": "food_clingfilm_spring_onion"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "bread",
+   "name": "food_bread"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "clingfilm_bread",
+   "name": "food_clingfilm_bread"
+  },
+  {
+   "swf": "movies/kitchen_game_main.swf",
+   "symbol": "harry/upper",
+   "name": "kitchen_harry",
+   "rig": true,
+   "entryLabels": [
+    "stop",
+    "idle",
+    "fridge",
+    "cupboard",
+    "bin",
+    "bowl",
+    "sneeze_Start",
+    "sneeze_tissue_end",
+    "sneeze_food_end",
+    "wash_hands"
+   ]
+  },
+  {
+   "swf": "movies/avatar_amy_Fridge.swf",
+   "symbol": "310/upper",
+   "name": "kitchen_amy",
+   "rig": true,
+   "entryLabels": [
+    "stop",
+    "idle",
+    "fridge",
+    "cupboard",
+    "bin",
+    "bowl",
+    "sneeze_Start",
+    "sneeze_tissue_end",
+    "sneeze_food_end",
+    "wash_hands"
+   ],
+   "why": "kitchen_game_main.swf amy/upper is unfinished (parts flicker on alternate frames; the shipped game only ever showed Harry here). The same wrapper (sprite 310, identical geometry) in avatar_amy_Fridge.swf is complete."
+  },
+  {
+   "swf": "movies/kitchen_game_intro_level_0.swf",
+   "symbol": "root:background",
+   "name": "kitchen_intro0_bg",
+   "scale": 1
+  },
+  {
+   "swf": "movies/kitchen_game_intro_level_1.swf",
+   "symbol": "root:background",
+   "name": "kitchen_intro1_bg",
+   "scale": 1
+  },
+  {
+   "swf": "movies/kitchen_game_intro_level_2.swf",
+   "symbol": "root:background",
+   "name": "kitchen_intro2_bg",
+   "scale": 1
+  },
+  {
+   "swf": "movies/kitchen_game_intro_level_3.swf",
+   "symbol": "root:background",
+   "name": "kitchen_intro3_bg",
+   "scale": 1
+  },
+  {
+   "swf": "movies/kitchen_game_intro_level_0.swf",
+   "symbol": "root",
+   "name": "kitchen_intro0_screen",
+   "omitText": true,
+   "hide": [
+    "background",
+    "click_button"
+   ],
+   "frames": "10",
+   "track": [
+    "click_button",
+    "wrong_button0",
+    "wrong_button1",
+    "wrong_button2",
+    "wrong_button3",
+    "wrong_button4",
+    "right_button"
+   ],
+   "cxTrack": [
+    "background"
+   ]
+  },
+  {
+   "swf": "movies/kitchen_game_intro_level_0.swf",
+   "symbol": 12,
+   "name": "kitchen_click_button",
+   "omitText": true
+  },
+  {
+   "swf": "movies/kitchen_game_outro.swf",
+   "symbol": "root",
+   "name": "kitchen_outro_bg",
+   "omitText": true,
+   "hide": [
+    "click_button"
+   ],
+   "frames": "10,100",
+   "track": [
+    "click_button"
+   ],
+   "cxTrack": [
+    "d1"
+   ]
+  }
+ ]
+}

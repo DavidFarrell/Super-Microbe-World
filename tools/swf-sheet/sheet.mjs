@@ -9,7 +9,8 @@
 // Jobs file: { "scale": 2, "jobs": [ { "swf": "movies/x.swf", "symbol": "lucy_icon" |
 //   1495 | "root:<instance>", "name": "out name", "scale": 2, "frames": "1-10,20",
 //   "omitText": false, "hide": ["instanceName"], "track": ["instanceName"], "ticks": 30,
-//   "margin": 4, "pageMax": 4096, "nested": "age" | "frame" } ] }. "nested" picks how nested clips
+//   "margin": 4, "pageMax": 4096, "nested": "age" | "frame", "rig": true } ] }. "rig": true renders a
+// cut-out rig instead of frames (see rig.mjs; also takes "entryLabels" and "atomic"). "nested" picks how nested clips
 // advance (see Snapshotter in timeline.mjs): "age" (default) is Flash's behaviour; "frame" is the
 // original model, pinned in jobs/level1.json so a forced rebuild reproduces the shipped sheets. SWF paths are relative to
 // reference/Junior_Game. A symbol is an export name, a character id, or an instance on the
@@ -48,7 +49,7 @@ export const SHEETS_DIR = path.join(REPO, 'tools/.cache/sheets');
 const PAGE_MAX = 4096; // default sheet size limit; "pageMax" per job (smaller sheets render faster)
 
 const libraries = new Map();
-function library(swfPath) {
+export function library(swfPath) {
   if (!libraries.has(swfPath)) libraries.set(swfPath, new SwfLibrary(fs.readFileSync(path.join(SOURCE_ROOT, swfPath)), swfPath));
   return libraries.get(swfPath);
 }
@@ -57,12 +58,12 @@ export function sheetDir(job) {
   return path.join(SHEETS_DIR, path.basename(job.swf, '.swf').replace(/[^\w.-]+/g, '_'), jobName(job));
 }
 
-function jobName(job) {
+export function jobName(job) {
   return job.name || String(job.symbol).replace(/^root:/, 'root_').replace(/[^\w.-]+/g, '_');
 }
 
 // "1-10,20" -> [1..10, 20]
-function parseFrames(spec, frameCount) {
+export function parseFrames(spec, frameCount) {
   if (!spec || spec === 'all') return Array.from({ length: frameCount }, (_, i) => i + 1);
   const out = [];
   for (const part of String(spec).split(',')) {
@@ -75,7 +76,7 @@ function parseFrames(spec, frameCount) {
 // Frame scripts of the symbol's own timeline, normalised for the engine:
 // ["set", name, value], ["gotoAndPlay", target], ["gotoAndStop", target], ["stop"], ["play"],
 // ["nextFrame"], ["prevFrame"], ["script"] (anything not decoded, e.g. a conditional).
-function normaliseScripts(timeline) {
+export function normaliseScripts(timeline) {
   const out = {};
   timeline.frames.forEach((f, i) => {
     const ops = [];
@@ -96,7 +97,7 @@ function normaliseScripts(timeline) {
 }
 
 // Shelf packing of cells (tallest first) into pages of at most PAGE_MAX square.
-function packCells(cells, gutter, PAGE_MAX) {
+export function packCells(cells, gutter, PAGE_MAX) {
   const order = [...cells].sort((a, b) => b.h - a.h || b.w - a.w);
   const pages = [];
   let page = null, x = 0, y = 0, rowH = 0;
@@ -124,8 +125,15 @@ export async function renderJob(job, capturer, { defaults = {}, force = false, l
   if (!char) throw new Error(`${job.swf}: character ${id} is not defined in this file`);
   const snap = new Snapshotter(lib, { omitText: job.omitText ?? defaults.omitText, hide: job.hide || [], nested: job.nested ?? defaults.nested ?? 'age' });
   const erased = eraseShapeRegions(lib, job.erase);
+  // "depths": [[min, max], ...] draws only those depth ranges of the top-level timeline (to split
+  // a scene such as the splash TV into layers); "excludeDepths": [d, ...] drops single depths.
+  if (job.depths || job.excludeDepths) {
+    const ranges = job.depths || [[0, 65535]], ex = new Set(job.excludeDepths || []);
+    snap.topDepths = { id, test: d => !ex.has(d) && ranges.some(([a, b]) => d >= a && d <= b) };
+  }
   const ticks = job.ticks || 0;
-  const frameCount = ticks || (char.kind === 'sprite' ? char.timeline.frameCount : 1);
+  // A button renders its up, over and down states as frames 1, 2 and 3.
+  const frameCount = ticks || (char.kind === 'sprite' ? char.timeline.frameCount : char.kind === 'button' ? 3 : 1);
   const frames = parseFrames(job.frames, frameCount);
   // Output frame i maps to symbol frame i, or in ticks mode to atFrame aged by i - 1 ticks.
   const nodeFor = f => ticks ? snap.node(id, job.atFrame || 1, placement?.ratio, f - 1) : snap.node(id, f, placement?.ratio);
@@ -155,6 +163,7 @@ export async function renderJob(job, capturer, { defaults = {}, force = false, l
   const pages = packCells([...cellsById.values()], 2, job.pageMax ?? defaults.pageMax ?? PAGE_MAX);
   const warnings = [];
   for (const [pi, page] of pages.entries()) {
+    if (!page.cells.length) continue; // a data-only job (tracks) draws nothing
     const items = page.cells.map(c => ({
       id: c.id, ratio: c.ratio,
       matrix: { ...base, tx: base.tx + (c.x + c.ox) * 20, ty: base.ty + (c.y + c.oy) * 20 },
@@ -179,7 +188,7 @@ export async function renderJob(job, capturer, { defaults = {}, force = false, l
   const meta = {
     symbol: job.symbol, name: jobName(job), swf: job.swf, charId: id, scale,
     frameCount, frames: undefined,
-    labels: char.kind === 'sprite' && !ticks ? char.timeline.labels : {},
+    labels: char.kind === 'sprite' && !ticks ? char.timeline.labels : char.kind === 'button' ? { up: 1, over: 2, down: 3 } : {},
     scripts: char.kind === 'sprite' && !ticks ? normaliseScripts(char.timeline) : {},
     mode: ticks ? 'ticks' : 'frames',
     placement: placement ? { depth: placement.depth, name: placement.name, matrix: placement.matrix } : null,
@@ -197,8 +206,49 @@ export async function renderJob(job, capturer, { defaults = {}, force = false, l
         const list = displayListAt(char.timeline, ticks ? (job.atFrame || 1) : i + 1);
         const inst = [...list.values()].find(v => v.name === name);
         if (!inst) return null;
-        const m = inst.matrix;
+        // In the same space as the rendered images: a placed symbol (root:x, a/b paths) has its
+        // placement applied to the tracks too.
+        const m = placement ? multiply(placement.matrix, inst.matrix) : inst.matrix;
         return [m.a, m.b, m.c, m.d, m.tx / 20, m.ty / 20].map(v => +v.toFixed(5));
+      });
+    }
+  }
+  // "trackDepths": [d, ...] records the matrix of whatever sits at those top-level depths as
+  // tracks["d<depth>"], for unnamed instances; "alphaTrack": [name or "d<depth>", ...] records
+  // the colour transform's alpha multiplier (0-1, null when absent) per frame in meta.alphas.
+  if (job.trackDepths?.length && char.kind === 'sprite') {
+    meta.tracks = meta.tracks || {};
+    for (const d of job.trackDepths) {
+      meta.tracks['d' + d] = Array.from({ length: frameCount }, (_, i) => {
+        const inst = displayListAt(char.timeline, ticks ? (job.atFrame || 1) : i + 1).get(d);
+        if (!inst) return null;
+        const m = placement ? multiply(placement.matrix, inst.matrix) : inst.matrix;
+        return [m.a, m.b, m.c, m.d, m.tx / 20, m.ty / 20].map(v => +v.toFixed(5));
+      });
+    }
+  }
+  if (job.alphaTrack?.length && char.kind === 'sprite') {
+    meta.alphas = {};
+    for (const key of job.alphaTrack) {
+      meta.alphas[key] = Array.from({ length: frameCount }, (_, i) => {
+        const list = displayListAt(char.timeline, i + 1);
+        const inst = key.startsWith('d') && /^d\d+$/.test(key) ? list.get(+key.slice(1)) : [...list.values()].find(v => v.name === key);
+        if (!inst) return null;
+        return inst.cxform ? +(Math.min(256, Math.max(0, inst.cxform.am)) / 256 + inst.cxform.aa / 255).toFixed(4) : 1;
+      });
+    }
+  }
+  // "cxTrack": [name or "d<depth>", ...] records the full colour transform per frame in
+  // meta.cxforms[key][i] = [rMult, gMult, bMult, aMult, rAdd, gAdd, bAdd, aAdd] (multipliers
+  // as fractions, additions in 0-255), or null when there is none (identity) or no instance.
+  if (job.cxTrack?.length && char.kind === 'sprite') {
+    meta.cxforms = {};
+    for (const key of job.cxTrack) {
+      meta.cxforms[key] = Array.from({ length: frameCount }, (_, i) => {
+        const list = displayListAt(char.timeline, i + 1);
+        const inst = /^d\d+$/.test(key) ? list.get(+key.slice(1)) : [...list.values()].find(v => v.name === key);
+        const cx = inst?.cxform;
+        return cx ? [cx.rm / 256, cx.gm / 256, cx.bm / 256, cx.am / 256, cx.ra, cx.ga, cx.ba, cx.aa].map(v => +v.toFixed(4)) : null;
       });
     }
   }
@@ -234,7 +284,7 @@ function groupTransform(ref, cur) {
   return g && [g.a, g.b, g.c, g.d, g.tx / 20, g.ty / 20].map(v => +v.toFixed(5));
 }
 
-function touchesEdge(img) {
+export function touchesEdge(img) {
   const { width: w, height: h, data } = img;
   for (let x = 0; x < w; x++) if (data[x * 4 + 3] || data[((h - 1) * w + x) * 4 + 3]) return true;
   for (let y = 0; y < h; y++) if (data[(y * w) * 4 + 3] || data[(y * w + w - 1) * 4 + 3]) return true;
@@ -262,7 +312,10 @@ async function main() {
   }
   const capturer = await new RuffleCapturer().open();
   try {
-    for (const job of jobs) await renderJob(job, capturer, { defaults, force });
+    for (const job of jobs) {
+      if (job.rig) { const { renderRig } = await import('./rig.mjs'); await renderRig(job, capturer, { defaults, force }); }
+      else await renderJob(job, capturer, { defaults, force });
+    }
   } finally {
     await capturer.close();
   }

@@ -40,10 +40,21 @@
 //                                   // "group" is the rigid transform of the whole layout of frame
 //                                   // "groupReference" onto each frame (the ePhone's grow/shrink)
 //       "groupReference": 30,       // optional, see tracks.group
+//       "alphas": { "NewGame": [0, 0.05, ...] },  // optional, per frame: alpha multiplier of a
+//                                   // hidden child's colour transform (null when absent)
+//       "cxforms": { "background": [[rm, gm, bm, am, ra, ga, ba, aa] | null, ...] },  // optional,
+//                                   // per frame colour transform of a child (Flash semantics:
+//                                   // c' = c * mult + add, add in 0-255)
 //       "mode": "ticks",            // optional: frames are ticks after placement of a one-frame
 //                                   // symbol animated by nested clips (labels/scripts then empty)
 //       "entryLabels": ["idle"],    // optional: frames were reduced to those reachable from these
-//       "frames": [ [image, x, y, w, h, originX, originY] | null, ... ]
+//       "frames": [ [image, x, y, w, h, originX, originY] | null, ... ],
+//       "mode": "rig",              // optional, cut-out rig (tools/swf-sheet/rig.mjs); then also:
+//       "rig": {
+//         "parts": [ [image, x, y, w, h, originX, originY, partScale], ... ],
+//         "poses": [ [part, a, b, c, d, tx, ty, part, a, ...], ... ],   // flat, back to front
+//         "frames": [ pose index | null, ... ]       // per Flash frame, like "frames"
+//       }                           // and "frames" holds whole images at the label starts only
 //     }
 //   }
 // }
@@ -56,6 +67,15 @@
 //   const [img, x, y, w, h, ox, oy] = sym.frames[f - 1]; const k = 1 / sym.scale;
 //   ctx.drawImage(images[img], x, y, w, h, px - ox * k, py - oy * k, w * k, h * k);
 // Mirroring (Flash _xscale = -100) is a scale(-1, 1) about the registration point.
+//
+// A rig symbol draws frame f as pose p = rig.frames[f - 1] (null: fall back to "frames"):
+//   const pose = sym.rig.poses[p];
+//   for (let i = 0; i < pose.length; i += 7) {
+//     const [img, x, y, w, h, ox, oy, s] = sym.rig.parts[pose[i]], k = 1 / s;
+//     ctx.save(); ctx.translate(px, py); ctx.transform(pose[i+1], pose[i+2], pose[i+3], pose[i+4], pose[i+5], pose[i+6]);
+//     ctx.drawImage(images[img], x, y, w, h, -ox * k, -oy * k, w * k, h * k); ctx.restore();
+//   }
+// Matrices are in Flash px in the symbol's space; partScale is atlas px per part-local Flash px.
 // ------------------------------------------------------------------------------------------------
 const { chromium } = require('playwright');
 const fs = require('fs');
@@ -161,20 +181,30 @@ function loadSheetSymbol(s) {
   const want = parseFrameSpec(s.frames, meta.frameCount);
   const reach = s.reachable || s.entryLabels ? reachableFrames(meta, s.entryLabels) : null;
   const cache = new Map();
+  // A rig's whole-character frames live in their own sheet folder (meta.fullSheet).
+  const frameDir = meta.mode === 'rig' ? path.join(dir, meta.fullSheet) : dir;
   const frames = meta.frames.map((f, i) => {
     if (!f.file || (want && !want.has(i + 1)) || (reach && !reach.has(i + 1))) return null;
     if (!cache.has(f.file)) {
-      const img = resample(png.decodePng(fs.readFileSync(path.join(dir, f.file))), r);
+      const img = resample(png.decodePng(fs.readFileSync(path.join(frameDir, f.file))), r);
       cache.set(f.file, img);
     }
     return { img: cache.get(f.file), originX: +(f.originX * r).toFixed(2), originY: +(f.originY * r).toFixed(2) };
   });
+  // Rig parts (see tools/swf-sheet/rig.mjs), resampled like frames.
+  const parts = meta.mode === 'rig' ? meta.rig.parts.map(p => ({
+    img: resample(png.decodePng(fs.readFileSync(path.join(dir, p.file))), r),
+    originX: +(p.originX * r).toFixed(2), originY: +(p.originY * r).toFixed(2), scale: +(p.scale * r).toFixed(4),
+  })) : null;
   const info = { source: 'swf', swf: meta.swf, symbol: meta.symbol, charId: meta.charId, scale: +(meta.scale * r).toFixed(4), frameCount: meta.frameCount, labels: meta.labels, scripts: meta.scripts };
   if (meta.tracks) info.tracks = meta.tracks;
+  if (meta.alphas) info.alphas = meta.alphas;
+  if (meta.cxforms) info.cxforms = meta.cxforms;
   if (meta.groupReference) info.groupReference = meta.groupReference;
   if (meta.mode === 'ticks') info.mode = 'ticks';
   if (s.entryLabels) info.entryLabels = s.entryLabels;
-  return { name: s.name || meta.name, info, frames, extrude: s.extrude || 0 };
+  if (parts) { info.mode = 'rig'; info.rigPoses = meta.rig.poses; info.rigFrames = meta.rig.frames; }
+  return { name: s.name || meta.name, info, frames, parts, extrude: s.extrude || 0 };
 }
 
 function loadPngSymbol(s) {
@@ -238,7 +268,7 @@ async function buildAtlas(m, encoder) {
 
   // Distinct images across all symbols (held poses and shared frames are stored once).
   const unique = new Map();
-  for (const s of symbols) for (const f of s.frames) {
+  for (const s of symbols) for (const f of [...s.frames, ...(s.parts || [])]) {
     if (!f) continue;
     const key = crypto.createHash('sha1').update(`${f.img.width}x${f.img.height}:${s.extrude}`).update(f.img.data).digest('hex');
     if (!unique.has(key)) unique.set(key, { img: f.img, extrude: s.extrude });
@@ -264,7 +294,7 @@ async function buildAtlas(m, encoder) {
     return pages;
   };
   // Smallest single page that holds everything (keeps pages dense), else several full pages.
-  const sizes = [256, 512, 1024, 1536, 2048].filter(v => v <= pageSize);
+  const sizes = [256, 512, 1024, 1536, 2048, 2560, 3072, 3584, 4096].filter(v => v <= pageSize);
   const candidates = sizes.flatMap(w => sizes.map(h => [w, h])).sort((a, b) => a[0] * a[1] - b[0] * b[1] || Math.abs(a[0] - a[1]) - Math.abs(b[0] - b[1]));
   let pages = null;
   for (const [w, h] of candidates) if ((pages = pack(w, h, 1))) break;
@@ -291,17 +321,24 @@ async function buildAtlas(m, encoder) {
 
   const json = { format: 'smw-atlas/1', images, symbols: {} };
   for (const s of symbols) {
+    const { rigPoses, rigFrames, ...info } = s.info;
     json.symbols[s.name] = {
-      ...s.info,
+      ...info,
       frames: s.frames.map(f => {
         if (!f) return null;
         const it = unique.get(f.key);
         return [it.page, it.x, it.y, it.img.width, it.img.height, f.originX, f.originY];
       }),
     };
+    if (s.parts) {
+      json.symbols[s.name].rig = {
+        parts: s.parts.map(f => { const it = unique.get(f.key); return [it.page, it.x, it.y, it.img.width, it.img.height, f.originX, f.originY, f.scale]; }),
+        poses: rigPoses, frames: rigFrames,
+      };
+    }
   }
   fs.writeFileSync(outBase + '.json', JSON.stringify(json));
-  const frameCount = symbols.reduce((n, s) => n + s.frames.filter(Boolean).length, 0);
+  const frameCount = symbols.reduce((n, s) => n + s.frames.filter(Boolean).length + (s.parts ? s.parts.length : 0), 0);
   const area = items.reduce((a, it) => a + it.img.width * it.img.height, 0);
   console.log(`${m.out}: ${symbols.length} symbols, ${frameCount} frames (${items.length} distinct), ${pages.length} page(s) ${images.map((_, p) => `${Math.ceil(pages[p].usedW / 4) * 4}x${Math.ceil(pages[p].usedH / 4) * 4}`).join(', ')}, fill ${(100 * area / pages.reduce((a, pg) => a + pg.usedW * pg.usedH, 0)).toFixed(0)}%, WebP ${(bytes / 1024).toFixed(0)} KB`);
   return { name: baseName, json: baseName + '.json', images, bytes, pixels: pages.reduce((a, pg) => a + Math.ceil(pg.usedW / 4) * 4 * Math.ceil(pg.usedH / 4) * 4, 0), symbols: symbols.map(s => s.name) };
@@ -348,10 +385,18 @@ function writeIndex(cfg, built) {
     index.atlases[b.name] = { json: b.json, images: b.images, bytes: b.bytes, pixels: b.pixels, symbols: b.symbols };
   }
   index.symbols = {};
-  for (const [name, a] of Object.entries(index.atlases)) for (const s of a.symbols) index.symbols[s] = name;
+  // Symbol names are global across atlases (the engine looks symbols up by name alone).
+  for (const [name, a] of Object.entries(index.atlases)) for (const s of a.symbols) {
+    if (index.symbols[s] && index.symbols[s] !== name) throw new Error(`symbol ${s} is in both ${index.symbols[s]} and ${name}; give one a scene prefix`);
+    index.symbols[s] = name;
+  }
   Object.assign(index.sets, cfg.sets || {});
+  for (const [set, names] of Object.entries(index.sets)) for (const a of names) if (!index.atlases[a]) console.warn(`  warning: set ${set} lists missing atlas ${a}`);
   index.totalBytes = Object.values(index.atlases).reduce((n, a) => n + a.bytes, 0);
-  fs.writeFileSync(file, JSON.stringify(index, null, 1));
+  // Written atomically (temp file in the same folder, then rename): the game reads it at boot.
+  const tmp = file + '.tmp-' + process.pid;
+  fs.writeFileSync(tmp, JSON.stringify(index, null, 1));
+  fs.renameSync(tmp, file);
   for (const [set, names] of Object.entries(index.sets)) {
     const bytes = names.reduce((n, a) => n + (index.atlases[a]?.bytes || 0), 0);
     const px = names.reduce((n, a) => n + (index.atlases[a]?.pixels || 0), 0);

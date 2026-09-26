@@ -1,0 +1,449 @@
+{
+ "scale": 2,
+ "margin": 4,
+ "nested": "age",
+ "jobs": [
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "lint_ball_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "plaster_multi_bridge_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "plaster_multi_end_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "plaster_multi_start_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "plaster_multi_mid_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "plaster_singular_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "scab_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "splinter_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "spot_large_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "spot_ooze_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "spot_small_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "wart_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "hair_base_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "hair_horiz_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "hair_horiz_end_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "hair_slope_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "hair_slope_end_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "hair_slope_start_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "hair_vert_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "skin_base_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "skin_surface_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "acid_pit_end_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "acid_pit_mid_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "acid_pit_start_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "bone_end_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "bone_mid_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "bone_start_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "bubble_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "cell_front_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "cell_side_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "corner_l_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "corner_r_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "flesh_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "flesh_gristle_1_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "flesh_gristle_2_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "flesh_gristle_3_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "flesh_gristle_4_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "flesh_gristle_5_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "flesh_gristle_6_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "floor_a_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "floor_b_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "platform_bridge_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "platform_end_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "platform_mid_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "platform_start_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "roof_a_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "roof_b_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "vertical_a_l_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "vertical_a_r_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "vertical_b_l_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "vertical_b_r_tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "villi_floor_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "villi_roof_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Chop_L_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Chop_Mid1_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Chop_Mid2_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Chop_Mid3_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Chop_R_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Sugar_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "loaf_mid_mould_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "loaf_mid_mould2_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "loaf_mid_mould3_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "toast_jam_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "toast_marm_obj"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "steve_icon",
+   "rig": true,
+   "entryLabels": [
+    "idle",
+    "slide",
+    "be_hit",
+    "be_photographed",
+    "be_killed",
+    "walk"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "patty_icon",
+   "rig": true,
+   "entryLabels": [
+    "idle",
+    "slide",
+    "be_hit",
+    "be_photographed",
+    "be_killed"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "slurm_icon",
+   "rig": true,
+   "entryLabels": [
+    "idle",
+    "walk",
+    "slide",
+    "be_hit",
+    "be_photographed",
+    "be_killed",
+    "be_washed_away"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "slarg_icon",
+   "rig": true,
+   "entryLabels": [
+    "idle",
+    "slide",
+    "be_hit",
+    "be_photographed",
+    "be_killed",
+    "be_washed_away"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "donna_icon",
+   "rig": true,
+   "entryLabels": [
+    "idle",
+    "walk",
+    "slide",
+    "be_hit",
+    "be_photographed",
+    "be_killed",
+    "be_washed_away"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "iggy_icon",
+   "rig": true,
+   "entryLabels": [
+    "idle",
+    "walk",
+    "slide",
+    "be_hit",
+    "be_photographed",
+    "be_killed",
+    "be_washed_away"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "superinfection_icon",
+   "rig": true,
+   "entryLabels": [
+    "idle_1",
+    "be_hit_1",
+    "idle_2",
+    "be_hit_2",
+    "idle_3",
+    "be_hit_3",
+    "idle_4",
+    "be_killed"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "sandy_icon",
+   "rig": true,
+   "entryLabels": [
+    "idle",
+    "slide",
+    "be_hit",
+    "be_photographed",
+    "be_killed"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "super_colin_icon",
+   "rig": true,
+   "entryLabels": [
+    "idle",
+    "walk",
+    "slide",
+    "be_hit",
+    "be_photographed",
+    "be_killed",
+    "be_washed_away"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "super_slurm_icon",
+   "rig": true,
+   "entryLabels": [
+    "idle",
+    "walk",
+    "slide",
+    "be_hit",
+    "be_photographed",
+    "be_killed",
+    "be_washed_away"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "milk_glass_icon"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "antibiotic_pickup"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "steve_image"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "slurm_image"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "milk_image"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "superinfection_image"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "sandy_image"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "slarg_image"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "kill_icon"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "antibiotic_icon"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "yog_icon"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "level_intros",
+   "name": "level_intros_all",
+   "frames": "40-421",
+   "omitText": true
+  }
+ ]
+}

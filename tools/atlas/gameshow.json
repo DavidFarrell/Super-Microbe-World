@@ -1,0 +1,96 @@
+{
+ "index": "web/data/atlas/index.json",
+ "defaults": {
+  "pageSize": 4096,
+  "quality": 0.8,
+  "padding": 2,
+  "png": false
+ },
+ "atlases": [
+  {
+   "out": "web/data/atlas/gameshow-bg",
+   "symbols": [
+    {
+     "sheet": "eBugGameShow/gs_set"
+    },
+    {
+     "sheet": "eBugGameShow/gs_podia"
+    },
+    {
+     "sheet": "eBugGameShow/gs_score"
+    },
+    {
+     "sheet": "eBugGameShow/gs_digit"
+    },
+    {
+     "sheet": "eBugGameShow/gs_talkie"
+    },
+    {
+     "sheet": "eBugGameShow/gs_question_board"
+    },
+    {
+     "sheet": "eBugGameShow/gs_button_agree"
+    },
+    {
+     "sheet": "eBugGameShow/gs_button_dont_know"
+    },
+    {
+     "sheet": "eBugGameShow/gs_button_disagree"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/gameshow-cast",
+   "symbols": [
+    {
+     "sheet": "eBugGameShow/gs_host"
+    },
+    {
+     "sheet": "eBugGameShow/gs_harry"
+    },
+    {
+     "sheet": "eBugGameShow/gs_amy"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/cutscene",
+   "symbols": [
+    {
+     "sheet": "cutscene_introduction/cut_details_form"
+    },
+    {
+     "sheet": "cutscene_introduction/cut_submit_button"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/shrink",
+   "symbols": [
+    {
+     "sheet": "eBugGameShow/gs_shrinking_zone"
+    },
+    {
+     "sheet": "shrinking_harry/shrink_harry"
+    },
+    {
+     "sheet": "shrinking_amy/shrink_amy"
+    }
+   ]
+  }
+ ],
+ "sets": {
+  "gameshow": [
+   "gameshow-bg",
+   "gameshow-cast"
+  ],
+  "cutscene": [
+   "gameshow-bg",
+   "gameshow-cast",
+   "cutscene"
+  ],
+  "shrink": [
+   "shrink"
+  ]
+ }
+}

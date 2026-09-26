@@ -1,0 +1,63 @@
+{
+ "index": "web/data/atlas/index.json",
+ "defaults": {
+  "pageSize": 4096,
+  "quality": 0.8,
+  "padding": 2,
+  "png": false
+ },
+ "atlases": [
+  {
+   "out": "web/data/atlas/splash",
+   "symbols": [
+    {
+     "sheet": "splash/splash_back"
+    },
+    {
+     "sheet": "splash/splash_studio"
+    },
+    {
+     "sheet": "splash/splash_casing"
+    },
+    {
+     "sheet": "splash/splash_shine"
+    },
+    {
+     "sheet": "splash/splash_glass"
+    },
+    {
+     "sheet": "splash/splash_tuning"
+    },
+    {
+     "sheet": "splash/splash_timeline"
+    },
+    {
+     "sheet": "splash/splash_new_game"
+    },
+    {
+     "sheet": "splash/splash_screen",
+     "resample": 0.5
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/summary",
+   "symbols": [
+    {
+     "sheet": "summary_page/summary_page_bg"
+    },
+    {
+     "sheet": "summary_page/summary_click_button"
+    }
+   ]
+  }
+ ],
+ "sets": {
+  "splash": [
+   "splash"
+  ],
+  "summary": [
+   "summary"
+  ]
+ }
+}

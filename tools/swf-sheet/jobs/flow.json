@@ -1,0 +1,153 @@
+{
+ "scale": 2,
+ "margin": 4,
+ "nested": "age",
+ "jobs": [
+  {
+   "swf": "movies/splash.swf",
+   "symbol": "root:#1",
+   "name": "splash_back",
+   "frames": "1",
+   "depths": [
+    [
+     0,
+     71
+    ]
+   ]
+  },
+  {
+   "swf": "movies/splash.swf",
+   "symbol": "root:#1",
+   "name": "splash_studio",
+   "frames": "120",
+   "depths": [
+    [
+     72,
+     398
+    ]
+   ],
+   "excludeDepths": [
+    390,
+    399
+   ],
+   "erase": [
+    {
+     "shape": 36,
+     "rect": [
+      129,
+      112,
+      388,
+      349
+     ],
+     "why": "e-Bug logo on the studio sign in the TV picture"
+    }
+   ]
+  },
+  {
+   "swf": "movies/splash.swf",
+   "symbol": "root:#1",
+   "name": "splash_casing",
+   "frames": "1",
+   "depths": [
+    [
+     485,
+     485
+    ]
+   ]
+  },
+  {
+   "swf": "movies/splash.swf",
+   "symbol": "root:#1",
+   "name": "splash_shine",
+   "frames": "120",
+   "depths": [
+    [
+     489,
+     489
+    ]
+   ]
+  },
+  {
+   "swf": "movies/splash.swf",
+   "symbol": "root:#1",
+   "name": "splash_screen",
+   "frames": "1-119",
+   "depths": [
+    [
+     486,
+     486
+    ]
+   ]
+  },
+  {
+   "swf": "movies/splash.swf",
+   "symbol": "root:#1",
+   "name": "splash_tuning",
+   "frames": "49-134",
+   "depths": [
+    [
+     490,
+     490
+    ]
+   ],
+   "omitText": true
+  },
+  {
+   "swf": "movies/splash.swf",
+   "symbol": "root:#1",
+   "name": "splash_glass",
+   "frames": "1,120",
+   "depths": [
+    [
+     496,
+     496
+    ]
+   ]
+  },
+  {
+   "swf": "movies/splash.swf",
+   "symbol": "root:#1",
+   "name": "splash_timeline",
+   "frames": "1",
+   "depths": [],
+   "trackDepths": [
+    390,
+    399,
+    486,
+    490,
+    496
+   ],
+   "alphaTrack": [
+    "d390"
+   ]
+  },
+  {
+   "swf": "movies/splash.swf",
+   "symbol": "button_new_game",
+   "name": "splash_new_game",
+   "omitText": true
+  },
+  {
+   "swf": "movies/summary_page.swf",
+   "symbol": "root",
+   "name": "summary_page_bg",
+   "frames": "1",
+   "omitText": true,
+   "hide": [
+    "click_button"
+   ],
+   "track": [
+    "click_button"
+   ],
+   "cxTrack": [
+    "d1"
+   ]
+  },
+  {
+   "swf": "movies/summary_page.swf",
+   "symbol": 16,
+   "name": "summary_click_button",
+   "omitText": true
+  }
+ ]
+}

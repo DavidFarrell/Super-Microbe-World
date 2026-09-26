@@ -1,0 +1,590 @@
+{
+ "index": "web/data/atlas/index.json",
+ "defaults": {
+  "pageSize": 4096,
+  "quality": 0.8,
+  "padding": 2,
+  "png": false
+ },
+ "atlases": [
+  {
+   "out": "web/data/atlas/tiles-skin",
+   "symbols": [
+    {
+     "sheet": "junior_game_assets/lint_ball_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/plaster_multi_bridge_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/plaster_multi_end_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/plaster_multi_start_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/plaster_multi_mid_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/plaster_singular_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/scab_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/splinter_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/spot_large_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/spot_ooze_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/spot_small_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/wart_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/hair_base_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/hair_horiz_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/hair_horiz_end_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/hair_slope_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/hair_slope_end_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/hair_slope_start_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/hair_vert_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/skin_base_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/skin_surface_tile",
+     "extrude": 2
+    }
+   ],
+   "quality": 1
+  },
+  {
+   "out": "web/data/atlas/tiles-body",
+   "symbols": [
+    {
+     "sheet": "junior_game_assets/acid_pit_end_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/acid_pit_mid_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/acid_pit_start_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/bone_end_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/bone_mid_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/bone_start_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/bubble_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/cell_front_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/cell_side_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/corner_l_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/corner_r_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/flesh_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/flesh_gristle_1_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/flesh_gristle_2_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/flesh_gristle_3_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/flesh_gristle_4_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/flesh_gristle_5_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/flesh_gristle_6_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/floor_a_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/floor_b_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/platform_bridge_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/platform_end_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/platform_mid_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/platform_start_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/roof_a_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/roof_b_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/vertical_a_l_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/vertical_a_r_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/vertical_b_l_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/vertical_b_r_tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/villi_floor_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/villi_roof_obj",
+     "extrude": 2
+    }
+   ],
+   "quality": 1
+  },
+  {
+   "out": "web/data/atlas/tiles-kitchen2",
+   "symbols": [
+    {
+     "sheet": "junior_game_assets/Chop_L_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Chop_Mid1_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Chop_Mid2_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Chop_Mid3_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Chop_R_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Sugar_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/loaf_mid_mould_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/loaf_mid_mould2_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/loaf_mid_mould3_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/toast_jam_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/toast_marm_obj",
+     "extrude": 2
+    }
+   ],
+   "quality": 1
+  },
+  {
+   "out": "web/data/atlas/microbe-steve",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/steve_icon"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/microbe-patty",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/patty_icon"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/microbe-slurm",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/slurm_icon"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/microbe-slarg",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/slarg_icon"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/microbe-donna",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/donna_icon"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/microbe-iggy",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/iggy_icon"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/microbe-superinfection",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/superinfection_icon"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/microbe-extras",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/sandy_icon"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/super_colin_icon"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/super_slurm_icon"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/entities2",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/milk_glass_icon"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/antibiotic_pickup"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/hud2",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/steve_image"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/slurm_image"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/milk_image"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/superinfection_image"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/sandy_image"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/slarg_image"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/kill_icon"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/antibiotic_icon"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/yog_icon"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/intro-r1",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/level_intros_all",
+     "name": "level_intros_level2",
+     "frames": "40-49"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/level_intros_all",
+     "name": "level_intros_level3",
+     "frames": "50-69"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/level_intros_all",
+     "name": "level_intros_level4",
+     "frames": "70-89"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/intro-r2",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/level_intros_all",
+     "name": "level_intros_level5",
+     "frames": "90-109"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/level_intros_all",
+     "name": "level_intros_level6",
+     "frames": "110-139"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/level_intros_all",
+     "name": "level_intros_level7",
+     "frames": "140-189"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/intro-r3",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/level_intros_all",
+     "name": "level_intros_level8",
+     "frames": "190-220"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/level_intros_all",
+     "name": "level_intros_level9",
+     "frames": "221-240"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/intro-r5",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/level_intros_all",
+     "name": "level_intros_level10",
+     "frames": "241-421"
+    }
+   ]
+  }
+ ],
+ "sets": {
+  "level2": [
+   "tiles-skin",
+   "microbe-lucy",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r1"
+  ],
+  "level3": [
+   "tiles-skin",
+   "microbe-steve",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r1"
+  ],
+  "level4": [
+   "tiles-kitchen",
+   "tiles-kitchen2",
+   "microbe-patty",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r1"
+  ],
+  "level5": [
+   "tiles-skin",
+   "microbe-steve",
+   "microbe-slurm",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r2"
+  ],
+  "level6": [
+   "tiles-skin",
+   "microbe-slurm",
+   "microbe-slarg",
+   "microbe-donna",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r2"
+  ],
+  "level7": [
+   "tiles-body",
+   "microbe-iggy",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r2"
+  ],
+  "level8": [
+   "tiles-kitchen",
+   "tiles-kitchen2",
+   "microbe-lucy",
+   "entities2",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r3"
+  ],
+  "level9": [
+   "tiles-kitchen",
+   "tiles-kitchen2",
+   "microbe-lucy",
+   "entities2",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r3"
+  ],
+  "level10": [
+   "tiles-body",
+   "microbe-lucy",
+   "microbe-slurm",
+   "microbe-iggy",
+   "microbe-superinfection",
+   "entities2",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r5"
+  ],
+  "level11": [
+   "tiles-body",
+   "microbe-steve",
+   "microbe-slurm",
+   "microbe-donna",
+   "microbe-iggy",
+   "entities2",
+   "entities",
+   "hud",
+   "hud2"
+  ],
+  "extras": [
+   "microbe-extras"
+  ],
+  "intro-level2": [
+   "intro-r1"
+  ],
+  "intro-level3": [
+   "intro-r1"
+  ],
+  "intro-level4": [
+   "intro-r1"
+  ],
+  "intro-level5": [
+   "intro-r2"
+  ],
+  "intro-level6": [
+   "intro-r2"
+  ],
+  "intro-level7": [
+   "intro-r2"
+  ],
+  "intro-level8": [
+   "intro-r3"
+  ],
+  "intro-level9": [
+   "intro-r3"
+  ],
+  "intro-level10": [
+   "intro-r5"
+  ]
+ }
+}
