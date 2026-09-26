@@ -15,8 +15,9 @@ import { settings, DEFAULT_KEYS } from '../core/settings.js';
 import { t, loadLanguage } from '../core/i18n.js';
 import { haptic } from '../core/fx.js';
 import { keyLabel } from '../ui/prompts.js';
-import { ensureStyle, glossy, pushNav, tickNav, clearNav, confirmDialog, moveFocus, adjustFocused, topNav, focusInitial } from './ui.js';
+import { ensureStyle, glossy, pushNav, tickNav, clearNav, confirmDialog, moveFocus, adjustFocused, topNav, focusInitial, suspendMenuKeys } from './ui.js';
 import { openLanguageChooser } from './language.js';
+import { restartScope } from './flow.js';
 
 // The 2009 keys (PlatformGame.as:1260-1311, PlayerEntity.as:566-636; NOTES 3.9): arrows move,
 // Up jumps, Space throws, Ctrl photographs.
@@ -46,14 +47,14 @@ const CSS = `
 .st-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 14px; padding: 9px 12px; border-radius: 12px; background: rgba(255,255,255,0.06); margin-bottom: 8px; min-height: 44px; }
 .st-row .lbl b { display: block; font: 800 calc(18px * var(--text-scale, 1))/1.15 var(--ui-font); color: #fff; }
 .st-row .lbl span { display: block; font-size: calc(13px * var(--text-scale, 1)); line-height: 1.3; opacity: 0.8; margin-top: 2px; }
-.st-slider { position: relative; width: 230px; height: 44px; border-radius: 22px; cursor: pointer; touch-action: none; }
+.st-slider { position: relative; width: 230px; height: max(44px, calc(46px / var(--stage-scale, 1))); border-radius: 22px; cursor: pointer; touch-action: none; }
 .st-slider:focus-visible { outline: 4px solid #ffd23f; outline-offset: 2px; }
-.st-slider .track { position: absolute; left: 14px; right: 60px; top: 19px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.2); }
+.st-slider .track { position: absolute; left: 14px; right: 60px; top: 50%; margin-top: -4px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.2); }
 .st-slider .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: #5fd4ff; }
 .st-slider .knob { position: absolute; top: -9px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%; background: #fff; border: 3px solid #0e3d6b; box-shadow: 0 2px 0 #0a2a4a; }
-.st-slider .val { position: absolute; right: 4px; top: 11px; width: 50px; text-align: right; font: 800 calc(16px * var(--text-scale, 1)) var(--ui-font); }
-.st-switch { position: relative; width: 78px; height: 44px; border-radius: 22px; border: 3px solid #0e3d6b; background: #4a4190; cursor: pointer; padding: 0; }
-.st-switch::after { content: ''; position: absolute; left: 4px; top: 4px; width: 30px; height: 30px; border-radius: 50%; background: #fff; transition: transform 0.15s ease; }
+.st-slider .val { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 50px; text-align: right; font: 800 calc(16px * var(--text-scale, 1)) var(--ui-font); }
+.st-switch { position: relative; width: 78px; height: max(44px, calc(46px / var(--stage-scale, 1))); border-radius: 999px; border: 3px solid #0e3d6b; background: #4a4190; cursor: pointer; padding: 0; }
+.st-switch::after { content: ''; position: absolute; left: 4px; top: 50%; margin-top: -15px; width: 30px; height: 30px; border-radius: 50%; background: #fff; transition: transform 0.15s ease; }
 .st-switch[aria-checked="true"] { background: #36c26b; }
 .st-switch[aria-checked="true"]::after { transform: translateX(34px); }
 .st-switch:focus-visible { outline: 4px solid #ffd23f; outline-offset: 2px; }
@@ -179,6 +180,7 @@ function buildPanel(app, { onBack, overlay }) {
     ],
     game: () => [
       row(t('flow.settings.blind'), t('flow.settings.blindDesc'), toggle({ id: 'settings-blind', label: t('flow.settings.blind'), get: () => !!settings.get('blindRounds'), set: v => settings.set('blindRounds', v) })),
+      row(t('flow.settings.restartRound'), t('flow.settings.restartRoundDesc'), toggle({ id: 'settings-restart-round', label: t('flow.settings.restartRound'), get: () => restartScope() === 'round', set: v => settings.set('restartScope', v ? 'round' : 'level') })),
       row(t('flow.settings.language'), t('flow.settings.languageDesc'), languageButton()),
     ],
     display: () => [
@@ -208,7 +210,7 @@ function buildPanel(app, { onBack, overlay }) {
         glossy(t('flow.settings.clearNickname'), async () => {
           const ok = await confirmDialog(root, { title: t('flow.settings.clearNicknameTitle'), text: t('flow.settings.clearNicknameText'), yes: t('flow.settings.clear'), no: t('flow.ui.cancel'), danger: true });
           if (ok) { app.flow.clearNickname(); app.announce(t('flow.settings.nicknameCleared')); showTab('data', '#settings-clear-nickname'); }
-        }, { id: 'settings-clear-nickname', class: 'small warn', disabled: !app.flow.profile.nickname && !(app.flow.state.run && app.flow.state.run.age != null) })),
+        }, { id: 'settings-clear-nickname', class: 'small warn', disabled: !app.flow.profile.nickname && !(app.flow.state.run && app.flow.state.run.nickname) })),
       row(t('flow.settings.resetProgress'), t('flow.settings.resetProgressDesc'),
         glossy(t('flow.settings.reset'), async () => {
           const ok = await confirmDialog(root, { title: t('flow.settings.resetTitle'), text: t('flow.settings.resetText'), yes: t('flow.settings.resetYes'), no: t('flow.ui.cancel'), danger: true });
@@ -286,6 +288,7 @@ function buildPanel(app, { onBack, overlay }) {
     };
     // Stop the click that started the capture from also counting as a key.
     capture = { action, onKey };
+    suspendMenuKeys(true);
     addEventListener('keydown', onKey, true);
     input.clearAll();
   }
@@ -293,6 +296,7 @@ function buildPanel(app, { onBack, overlay }) {
   function stopCapture() {
     if (!capture) return;
     removeEventListener('keydown', capture.onKey, true);
+    suspendMenuKeys(false);
     capture = null;
     refreshKeys();
   }
@@ -316,7 +320,7 @@ function buildPanel(app, { onBack, overlay }) {
     destroy: () => stopCapture(),
     probe: () => ({
       tab, capturing: capture ? capture.action : null, overlay: !!overlay,
-      keys: settings.get('keys'), blindRounds: !!settings.get('blindRounds'), textScale: settings.get('textScale'),
+      keys: settings.get('keys'), blindRounds: !!settings.get('blindRounds'), restartScope: restartScope(), textScale: settings.get('textScale'),
       master: settings.get('master'), music: settings.get('music'), sfx: settings.get('sfx'), muted: settings.get('muted'),
       reducedMotion: settings.isSet('reducedMotion') ? !!settings.get('reducedMotion') : 'auto',
       reducedShake: settings.isSet('reducedShake') ? !!settings.get('reducedShake') : 'auto',

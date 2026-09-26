@@ -40,7 +40,7 @@ const LABELS = { retry: 'flow.summary.tryAgain', next: 'flow.summary.next', leve
 
 export function summaryScene(app) {
   let params = {}, ticks = 0, ready = false, done = false, reduced = false, popNav = null;
-  let panelK = 0, rootEl = null, wake = null, artBtn = null, btnState = 1, countEl = null, countFrom = 0, countTo = 0, countK = 1;
+  let panelK = 0, rootEl = null, wake = null, artBtn = null, btnState = 1, countEl = null, countFrom = 0, countTo = 0, countK = 1, newBest = false;
   const particles = new Particles(300);
 
   function choose(choice) {
@@ -74,10 +74,12 @@ export function summaryScene(app) {
       countFrom = 0;
       countK = reduced ? 1 : 0;
       countEl = el('b', {}, String(reduced ? countTo : 0));
-      const isBest = r.best != null && countTo >= r.best && countTo > 0;
+      // A new best beats the previous one (a tie is not new); the first score is a best.
+      const isBest = countTo > 0 && (r.prevBest == null || countTo > r.prevBest);
       text.append(el('div', { class: 'sm-stats' },
         el('div', { class: 'sm-stat' }, countEl, t('flow.summary.points')),
         el('div', { class: 'sm-stat best' }, el('b', {}, String(r.best ?? countTo)), t('flow.summary.best'))));
+      newBest = isBest;
       if (isBest) text.append(el('div', { class: 'sm-new' }, t('flow.summary.newBest')));
       if (r.next) text.append(el('p', {}, t('flow.summary.unlocked')));
     }
@@ -108,7 +110,7 @@ export function summaryScene(app) {
       popNav = pushNav(root, { initial: first, onBack: buttons.includes('levelSelect') ? () => choose('levelSelect') : null });
     };
     app.announce(`${headingText()}. ${root.textContent}`);
-    window.__test && window.__test.register('summary', () => ({ kind, heading: headingText(), buttons: buttons.map(b => `summary-${b}`), ready, panel: panelK, awake: ticks >= WAKE }));
+    window.__test && window.__test.register('summary', () => ({ kind, heading: headingText(), buttons: buttons.map(b => `summary-${b}`), ready, panel: panelK, awake: ticks >= WAKE, newBest }));
   }
 
   function drawBackdrop(ctx) {

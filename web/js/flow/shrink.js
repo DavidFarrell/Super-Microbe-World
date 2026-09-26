@@ -5,7 +5,11 @@
 // 25 fps frame clock derived from the 15 ms ticks, so the length is exact and deterministic.
 // Juice (render only): the ray charges, a flickering beam and sparkles while the child shrinks
 // (frames 28-81 of the clip), a whoosh, a light shake and a pop of sparkles at the end.
-// Tap, click, Enter or Space skips (the Unity remake cut the clip; the port lets the player).
+// NOTES 2.5: the clip plays in full the first time (params.skippable false); after that a tap,
+// click, Enter, Space or Backspace skips it, but only once the "to skip" hint is up (WAKE ticks)
+// and never with a key or finger still held from the screen before.
+// The clip starts only when its art is in (the flow prefetches it during the cutscene and the
+// quiz); until then a small loading ring shows. The placeholder is only for a failed load.
 import { el } from '../ui/dom.js';
 import { input } from '../core/input.js';
 import { audio } from '../core/audio.js';
@@ -15,9 +19,12 @@ import { Particles, Shake, haptic } from '../core/fx.js';
 import { fxRng } from '../core/rng.js';
 import { tp } from '../ui/prompts.js';
 import * as art from './art.js';
+import { drawLoading } from './art.js';
 import { ensureStyle, clearNav } from './ui.js';
 
 const LAST = 150;
+const WAKE = 40;                      // ticks (0.6 s) before a skip counts; the hint appears then
+const SKIP_ACTIONS = ['confirm', 'jump', 'back'];
 const ZAP = [28, 82];                 // frames where the child shrinks (rig scale 0.22 -> 0.086)
 const MUZZLE = { x: 521, y: 191 };    // the ray's red nozzle in gs_shrinking_zone
 const KID_BIG = { x: 398, y: 268 };
@@ -34,7 +41,9 @@ audio.defineSynth('zapPop', (a, v) => {
 });
 
 export function shrinkScene(app) {
-  let params = {}, ticks = 0, frame = 1, ready = false, done = false, holding = 0, waiting = 0;
+  let params = {}, ticks = 0, frame = 1, ready = false, failed = false, done = false, holding = 0, waiting = 0;
+  let skippable = true, first = true;
+  const held = new Set();             // skip keys already down when the scene started
   const particles = new Particles(400);
   const shake = new Shake();
   let reduced = false, hint = null, skipBtn = null;
@@ -48,7 +57,13 @@ export function shrinkScene(app) {
     else app.scenes.go('splash', {}, { style: 'fade' });
   }
 
-  function skip() { if (!done) { audio.play('tap'); finish(); } }
+  const canSkip = () => skippable && (ready || failed) && ticks >= WAKE;
+  function skip() { if (!done && canSkip()) { audio.play('tap'); finish(); } }
+  // A fresh press of a skip key: not one held since before the scene began.
+  function skipPressed() {
+    for (const a of held) if (!input.isDown(a)) held.delete(a);
+    return SKIP_ACTIONS.some(a => input.pressed(a) && !held.has(a));
+  }
 
   function onFrame(f) {
     if (f === 2) audio.play('charge');
@@ -126,20 +141,27 @@ export function shrinkScene(app) {
       clearNav();
       app.touch.hide();
       reduced = !!settings.get('reducedMotion');
-      art.loadSet('shrink').then(ok => { ready = ok; });
-      skipBtn = el('button', { type: 'button', class: 'sp-skip', id: 'shrink-skip', 'aria-label': t('flow.shrink.skipLabel'),
-        style: { position: 'absolute', inset: '0', background: 'transparent', border: '0', cursor: 'pointer' } });
+      skippable = params.skippable == null ? true : !!params.skippable && params.skippable !== 'false';
+      art.loadSet('shrink').then(ok => { ready = ok; failed = !ok; });
+      // The skip area takes taps only once a skip can count (the 'passthrough' class lets
+      // earlier taps fall through to nothing).
+      skipBtn = el('button', { type: 'button', class: 'sp-skip passthrough', id: 'shrink-skip', 'aria-label': t('flow.shrink.skipLabel'), tabindex: '-1',
+        style: { position: 'absolute', inset: '0', background: 'transparent', border: '0', cursor: 'default' } });
       skipBtn.addEventListener('click', skip);
       hint = el('div', { class: 'fl-prompt', style: { right: '14px', bottom: '12px', opacity: '0', transition: 'opacity 0.4s', background: 'rgba(20,14,50,0.72)', padding: '5px 14px', borderRadius: '999px' } }, '');
       app.ui.append(skipBtn, hint);
       app.announce(t('flow.shrink.announce'));
-      window.__test && window.__test.register('shrink', () => ({ frame, ready, done, avatar: avatar(), round: params.round ?? null }));
+      window.__test && window.__test.register('shrink', () => ({ frame, ready, failed, done, avatar: avatar(), round: params.round ?? null, skippable, canSkip: canSkip(), ticks }));
     },
     exit() { window.__test && window.__test.unregister('shrink'); },
     update() {
       if (done) return;
-      // The clip waits for its art (at most about 3 s, then the placeholder plays).
-      if (!ready && ++waiting < 200) { if (input.pressed('confirm') || input.pressed('jump') || input.pressed('back')) skip(); return; }
+      // A key or finger still down on the first tick was pressed on the screen before (input is
+      // off during the fade, so it reads as a new press now): it must be let go first.
+      if (first) { first = false; for (const a of SKIP_ACTIONS) if (input.isDown(a)) held.add(a); }
+      // The clip waits for its art (a loading ring meanwhile); only a failed load plays the
+      // placeholder.
+      if (!ready && !failed) { waiting++; skipPressed(); return; }
       ticks++;
       const before = frame;
       frame = Math.min(LAST, 1 + art.framesAt(ticks));
@@ -155,11 +177,15 @@ export function shrinkScene(app) {
       }
       particles.update();
       shake.update();
-      if (hint && ticks === 40) { hint.textContent = tp('flow.shrink.skip'); hint.style.opacity = '0.9'; }
-      if (input.pressed('confirm') || input.pressed('jump') || input.pressed('back')) { skip(); return; }
+      if (skippable && ticks === WAKE) {
+        if (hint) { hint.textContent = tp('flow.shrink.skip'); hint.style.opacity = '0.9'; }
+        if (skipBtn) { skipBtn.classList.remove('passthrough'); skipBtn.style.cursor = 'pointer'; }
+      }
+      if (skipPressed() && canSkip()) { skip(); return; }
       if (frame >= LAST && ++holding >= 4) finish();
     },
     render(ctx) {
+      if (!ready && !failed) { drawLoading(ctx, waiting); return; }
       ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 450);
       ctx.save();
       ctx.translate(shake.x, shake.y);

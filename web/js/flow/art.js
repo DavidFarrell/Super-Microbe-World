@@ -3,7 +3,8 @@
 // including cut-out rigs (mode "rig": the game show cast and the shrinking avatars), which
 // web/js/platformer/sprites.js does not draw. The drawing follows tools/swf-sheet/atlas-draw.js.
 // Units are Flash stage pixels (800 x 450). Every call is safe while an atlas is missing: draw()
-// returns false and scenes paint a placeholder, so the game never waits on art to be playable.
+// returns false. Scenes wait for their set on a dark stage with drawLoading() and paint their
+// placeholder only when a load failed (loadSet resolved false).
 import { loadJson } from '../core/assets.js';
 import { sprites } from '../platformer/sprites.js';
 
@@ -26,7 +27,7 @@ export async function loadSet(name) {
   return ok.length > 0 && ok.every(Boolean);
 }
 
-// Loads an atlas outside the shared cache and returns { draw, has, close } (for one-off use such
+// Loads an atlas outside the shared cache and returns { draw, has, symbol, close } (for one-off use such
 // as level-select thumbnails from a large sheet: the bitmaps are freed as soon as it is drawn).
 export async function loadPrivate(id) {
   const index = await sprites.loadIndex(BASE);
@@ -45,6 +46,7 @@ export async function loadPrivate(id) {
     return {
       draw: (ctx, name, frame = 1, m = null, opts) => drawEntry(ctx, own.get(name), frame, m, opts),
       has: name => own.has(name),
+      symbol: name => (own.has(name) ? own.get(name).sym : null),
       close: () => { for (const img of images) { try { img.close(); } catch { /* ignore */ } } own.clear(); },
     };
   } catch {
@@ -173,6 +175,23 @@ export class AtlasClip {
   }
 
   draw(ctx, m = null, opts) { return draw(ctx, this.name, this.frame, m, opts); }
+}
+
+// Waiting for art: the studio's dark blue with a small spinning ring (after a short grace, so a
+// load that is nearly done shows nothing at all).
+export function drawLoading(ctx, age, colour = '#1b1640') {
+  ctx.fillStyle = colour; ctx.fillRect(0, 0, 800, 450);
+  if (age < 12) return;
+  const a = Math.min(1, (age - 12) / 20);
+  ctx.save();
+  ctx.globalAlpha = a;
+  ctx.lineWidth = 6; ctx.lineCap = 'round';
+  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+  ctx.beginPath(); ctx.arc(400, 225, 22, 0, Math.PI * 2); ctx.stroke();
+  ctx.strokeStyle = '#ffd23f';
+  const r0 = age * 0.12;
+  ctx.beginPath(); ctx.arc(400, 225, 22, r0, r0 + Math.PI * 0.6); ctx.stroke();
+  ctx.restore();
 }
 
 // Frame clock for scene timelines: the 2009 timelines ran at 25 fps (40 ms), the engine ticks

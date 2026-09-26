@@ -383,10 +383,20 @@ export class PlatformGame {
         this.fx.push({ type: 'yogurt', x: e.target.particle.position.x, y: e.target.particle.position.y });
         return out;
       }
-      default:
-        if (e.type === E.BE_HURT && e.target === player) this.fx.push({ type: 'hurt', x: player.particle.position.x, y: player.particle.position.y });
-        else if (e.type === E.BAD_MICROBE_WASH_AWAY) this.fx.push({ type: 'wash', x: e.target.particle.position.x, y: e.target.particle.position.y, entity: e.target });
-        return e.target ? e.target.act(e) : [];
+      default: {
+        const t = e.target;
+        if (e.type === E.BE_HURT && t === player) this.fx.push({ type: 'hurt', x: player.particle.position.x, y: player.particle.position.y });
+        else if (e.type === E.BAD_MICROBE_WASH_AWAY) this.fx.push({ type: 'wash', x: t.particle.position.x, y: t.particle.position.y, entity: t });
+        const milkBefore = t && t.type === T.MILK ? t.state : null;
+        const out = t ? t.act(e) : [];
+        // Cosmetic notifications for the scene (sounds, particles); never read by the simulation.
+        if (e.type === E.BE_HURT && t && t.type === T.SUPERINFECTION) {
+          this.fx.push({ type: 'superHit', x: t.particle.position.x, y: t.particle.position.y, lives: t.lives, entity: t });
+        } else if (e.type === E.MILK_GLASS_HIT && milkBefore !== t.state) {
+          this.fx.push({ type: 'milkHit', x: t.particle.position.x, y: t.particle.position.y, entity: t });
+        }
+        return out;
+      }
     }
   }
 
@@ -397,7 +407,11 @@ export class PlatformGame {
     for (let i = 0; i < this.entities.length; i++) {
       const x = this.entities[i];
       if (!x || x.isOnScreen !== true) continue;
-      if (ANTIBIOTIC_VICTIMS.includes(x.type)) victims.push(x);
+      // A bacterium that is already dying (BE_KILLED, its be_killed animation still playing for
+      // about a second) is not killed again. The original re-killed it and charged -10 or paid
+      // +15 once more for every explosion in that second (no state test, PlatformGame.as:829-857);
+      // with bombs now exploding off screen (NOTES 11.9 #7) two blasts a second apart are common.
+      if (ANTIBIOTIC_VICTIMS.includes(x.type)) { if (x.state !== S.BE_KILLED && !x.removed) victims.push(x); }
       else if (x.type === T.SUPERINFECTION) superRef = i;
     }
     let points = 0;
@@ -414,7 +428,7 @@ export class PlatformGame {
     // The original pushed goalevents.pop() even when it was empty (an undefined event, bug 7).
     for (const g of this.goals) { const ge = g.updateGoal(e); if (ge.length) out.push(ge.pop()); }
     this.whiteout = 100;
-    this.fx.push({ type: 'explode', x: e.target.particle.position.x, y: e.target.particle.position.y, victims: victims.length });
+    this.fx.push({ type: 'explode', x: e.target.particle.position.x, y: e.target.particle.position.y, victims: victims.length, entities: victims, onScreen: e.target.isOnScreen === true });
     return out;
   }
 

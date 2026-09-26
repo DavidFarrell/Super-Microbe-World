@@ -61,9 +61,10 @@ async function tapStage(page, cdp, sx = 400, sy = 200) {
   await tap(cdp, c.x + (sx / 800) * c.width, c.y + (sy / 450) * c.height);
 }
 
+// The splash menu wakes (takes taps, focuses its first choice) a moment after it appears.
 async function waitSplashMenu(page) {
   await until(page, t => t.probe('splash') && t.probe('splash').ready, 'the splash art');
-  return until(page, t => t.probe('splash') && t.probe('splash').menu, 'the splash menu', { max: 600 });
+  return until(page, t => t.probe('splash') && t.probe('splash').menu && t.probe('splash').awake, 'the splash menu', { max: 600 });
 }
 
 // Advances the talkie with a key until the cutscene leaves `phase`.
@@ -94,6 +95,7 @@ async function keyboardNewGame(ctx, shots = null) {
   await page.keyboard.press('Enter');          // skips the tuning to frame 150
   await until(page, t => t.probe('splash').menu, 'the splash menu', { max: 60 });
   assert((await probe(page, 'splash')).frame >= 150, 'Enter did not skip the tuning');
+  await until(page, t => t.probe('splash').awake, 'the splash menu to wake', { max: 30 });
   assert(await page.evaluate(() => document.activeElement && document.activeElement.id) === 'btn-new-game', 'New Game is not focused');
   if (shots) await page.screenshot({ path: path.join(shots, 'flow-splash.png') });
   await page.keyboard.press('Enter');
@@ -116,19 +118,32 @@ async function keyboardNewGame(ctx, shots = null) {
   await advanceWithKey(page, 'chosen');
   assert((await probe(page, 'cutscene')).phase === 'form', 'no details form');
   assert(await page.locator('input[type="email"], #form-email').count() === 0, 'the form asks for an e-mail address');
+  assert(await page.locator('#form-age').count() === 0, 'the form asks for an age (NOTES 11.2)');
   assert(!/competition/i.test(await page.locator('#cutscene-form').innerText()), 'the form mentions competitions');
   assert(await page.inputValue('#form-nickname') === 'Amy', 'the nickname is not pre-filled with the avatar name');
   await page.keyboard.press('Control+A');
   await page.keyboard.type('Sam');
+  // Tab reaches Submit and Shift+Tab comes back to the nickname (the flow's own Tab handling).
   await page.keyboard.press('Tab');
-  await page.keyboard.type('10');
+  assert(await page.evaluate(() => document.activeElement.id) === 'form-submit', 'Tab did not reach Submit');
+  await page.keyboard.press('Shift+Tab');
+  assert(await page.evaluate(() => document.activeElement.id) === 'form-nickname', 'Shift+Tab did not return to the nickname');
   if (shots) await page.screenshot({ path: path.join(shots, 'flow-cutscene-form.png') });
   await page.keyboard.press('Enter');
   await step(page, 2);
   const closing = await probe(page, 'cutscene');
-  assert(closing.phase === 'closing' && closing.nickname === 'Sam' && closing.age === 10, `form not submitted: ${JSON.stringify(closing)}`);
+  assert(closing.phase === 'closing' && closing.nickname === 'Sam' && !('age' in closing), `form not submitted: ${JSON.stringify(closing)}`);
   assert(/Sam/.test(closing.talkie.statement), 'the closing line does not use the nickname');
-  await advanceWithKey(page, 'closing');
+  // Round 1 (blind rounds off): "Step right this way ..." comes before the first shrink.
+  const said = new Set();
+  for (let i = 0; i < 40; i++) {
+    const p = await probe(page, 'cutscene');
+    if (!p || p.phase !== 'closing') break;
+    said.add(p.talkie.statement);
+    await page.keyboard.press('Enter');
+    await step(page, 4);
+  }
+  assert([...said].some(x => /^Step right this way/.test(x)), `no "Step right this way" before the shrink: ${[...said].join(' | ')}`);
   await until(page, t => t.scene === 'shrink' && !t.transitioning, 'the shrinking zone');
   const s = await probe(page, 'shrink');
   assert(s.avatar === 'amy' && s.round === 1, `shrinking zone for ${s.avatar}, round ${s.round}`);
@@ -137,7 +152,8 @@ async function keyboardNewGame(ctx, shots = null) {
   const f = await probe(page, 'flow');
   assert(ticks > 380, `the shrinking zone ended too early (${ticks} ticks)`);
   assert(f.lastLaunch.scene === 'platform' && f.lastLaunch.params.level === 'alpha_level1' && f.lastLaunch.params.avatar === 'amy', `level launch: ${JSON.stringify(f.lastLaunch)}`);
-  assert(f.run && f.run.step === 'action' && f.run.nickname === 'Sam' && f.run.age === 10, `saved run: ${JSON.stringify(f.run)}`);
+  assert(f.run && f.run.step === 'action' && f.run.nickname === 'Sam' && !('age' in f.run), `saved run: ${JSON.stringify(f.run)}`);
+  assert(f.shrinkSeen === true, 'the first shrink was not recorded as seen');
   await until(page, t => t.probe('platform') && t.probe('platform').ready, 'level 1 to load');
   return { context, page, errors };
 }
@@ -161,7 +177,7 @@ export const tests = [
       await until(page, t => t.probe('splash') && t.probe('splash').ready, 'the splash art');
       await step(page, 20);
       await tapStage(page, cdp);                       // a tap skips the tuning
-      await until(page, t => t.probe('splash').menu, 'the splash menu', { max: 60 });
+      await until(page, t => t.probe('splash').menu && t.probe('splash').awake, 'the splash menu', { max: 80 });
       // Tap targets at least 44 CSS px.
       for (const id of ['#btn-new-game', '#btn-level-select', '#btn-settings', '#btn-language']) {
         const b = await page.locator(id).boundingBox();
@@ -183,14 +199,19 @@ export const tests = [
       await tapEl(page, cdp, '#form-submit');          // defaults: nickname Harry, no age
       await step(page, 2);
       const c = await probe(page, 'cutscene');
-      assert(c.phase === 'closing' && c.nickname === 'Harry' && c.age === null, `form: ${JSON.stringify({ phase: c.phase, nickname: c.nickname, age: c.age })}`);
+      assert(c.phase === 'closing' && c.nickname === 'Harry', `form: ${JSON.stringify({ phase: c.phase, nickname: c.nickname })}`);
       await advanceWithTap(page, cdp, 'closing');
       await until(page, t => t.scene === 'shrink' && !t.transitioning, 'the shrinking zone');
       assert((await probe(page, 'shrink')).avatar === 'harry', 'the shrinking zone shows the wrong child');
       await step(page, 60);
+      const sh = await probe(page, 'shrink');
+      assert(sh.ready && sh.frame > 1, `the shrinking zone is not playing its art: ${JSON.stringify(sh)}`);
       await page.screenshot({ path: path.join(ctx.shots, 'flow-phone-shrink.png') });
-      await tapStage(page, cdp);                       // a tap skips the rest
-      await until(page, t => t.scene === 'platform', 'level 1', { max: 80 });
+      // The first shrink plays in full (NOTES 2.5): a tap does not skip it.
+      await tapStage(page, cdp);
+      await step(page, 10);
+      assert(await scene(page) === 'shrink' && !(await probe(page, 'shrink')).done, 'a tap skipped the first shrinking zone');
+      await until(page, t => t.scene === 'platform', 'level 1', { max: 900 });
       const f = await probe(page, 'flow');
       assert(f.lastLaunch.params.level === 'alpha_level1' && f.lastLaunch.params.avatar === 'harry', `level launch: ${JSON.stringify(f.lastLaunch)}`);
       await until(page, t => t.probe('platform') && t.probe('platform').ready, 'level 1 to load');

@@ -10,7 +10,10 @@ import { glossy, pushNav } from './ui.js';
 
 const CSS_ID = 'flow-language-style';
 const CSS = `
-.lc-box { width: 660px; padding: 20px 24px 18px; }
+.lc-box { width: 660px; padding: 20px 24px 18px; max-height: 430px; box-sizing: border-box; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; }
+.lc-head { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.lc-head h2 { flex: 1; }
+.lc-head.cancel h2 { text-align: left; }
 .lc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 12px; }
 .lc-grid .fl-btn { font-size: calc(17px * var(--text-scale, 1)); padding: 8px 10px 7px; }
 .lc-grid .fl-btn[aria-checked="true"] { outline: 3px solid #2b2150; outline-offset: 2px; }
@@ -46,10 +49,11 @@ export async function openLanguageChooser(app, parent, { firstRun = false } = {}
     const globe = el('span', {});
     globe.innerHTML = '<svg class="lc-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>';
     const box = el('div', { class: 'fl-dialog lc-box', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('flow.lang.title'), id: 'language-chooser' },
-      el('h2', {}, globe, t('flow.lang.title')),
+      // Cancel sits in the title row, so it stays in view at every text size.
+      el('div', { class: 'lc-head' + (firstRun ? '' : ' cancel') }, el('h2', {}, globe, t('flow.lang.title')),
+        firstRun ? null : glossy(t('flow.ui.cancel'), () => done(null), { class: 'alt small', id: 'lang-cancel' })),
       el('div', { class: 'lc-grid', role: 'radiogroup', 'aria-label': t('flow.lang.title') }, buttons),
-      el('p', { class: 'lc-note' }, t('flow.lang.note')),
-      firstRun ? null : el('div', { class: 'fl-row' }, glossy(t('flow.ui.cancel'), () => done(null), { class: 'alt small', id: 'lang-cancel' })));
+      el('p', { class: 'lc-note' }, t('flow.lang.note')));
     const dim = el('div', { class: 'fl-dim', style: { zIndex: '45' } }, box);
     parent.append(dim);
     pop = pushNav(box, { onBack: firstRun ? () => done(current) : () => done(null), initial: buttons[codes.indexOf(current)] || buttons[0] });

@@ -24,3 +24,19 @@ the workaround in place meanwhile.
 - **Reason**: the contract lists `answers: [{ q, value }]`; the extra fields are additive and let a
   summary or the ending show how each question went.
 - **Workaround**: none needed (the listed fields are present).
+
+## 3. Text data (`tools/convert-text.mjs`, then `web/data/quiz/por_por.json`; owner of the quiz data): Portuguese points line
+
+- **Change**: in the `por_por` conversion, replace the Polish sentence "Za prawidłową odpowiedź
+  otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik." at
+  `rounds[0].intro.normal[2]` and `rounds[1].intro.normal[1]` with a Portuguese line of the same
+  meaning, as a counted override (expect exactly 2 replacements, fail otherwise). Suggested text,
+  the translator's own rounds 3 to 5 line without "Lembra-te que": "Ganhas 10 pontos por cada
+  resposta certa. Se estiver errada o outro jogador é que ganha." Optionally also normalise the
+  English "Ready ?" to "Ready?" there (NOTES 6.8).
+- **Reason**: a 2009 data defect (`Assets/Resources/TextFiles/quiz/por_por_gameshow_round1.xml`
+  and `_round2.xml`): Portuguese players hear a Polish sentence. The educational content is
+  unchanged (same meaning as the English line). `pl_pl` has the same sentence legitimately.
+- **Workaround**: `web/js/gameshow/rules.js` `normaliseIntro()` makes both replacements at play
+  time, matched on the exact text in `por_por` only, so it becomes a no-op once the data is fixed
+  (`web/NOTES-gameshow-decisions.md` G8, G9).

@@ -10,7 +10,7 @@
 // half, the talkie's typing rules, text scaling, pause and quit, and 44 px tap targets.
 import fs from 'node:fs';
 import path from 'node:path';
-import { scorePlayerAnswer, scoreCpuAnswer, blindIntro } from '../js/gameshow/rules.js';
+import { scorePlayerAnswer, scoreCpuAnswer, blindIntro, normaliseIntro } from '../js/gameshow/rules.js';
 
 const PHONE = { viewport: { width: 915, height: 412 }, deviceScaleFactor: 2.625, isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36' };
 const DESKTOP = { viewport: { width: 1280, height: 720 } };
@@ -274,9 +274,13 @@ export const tests = [
             assert(b.layout.labels.length === 3 && b.layout.labels.every(l => l.text.trim() && l.fits), `${where}: a button label is empty or too wide: ${JSON.stringify(b.layout.labels)}`);
             boards++;
           });
-          // The host read every normal intro line and every question.
+          // The host read every normal intro line (normalised: English "Ready ?" -> "Ready?",
+          // the Polish points line in por_por replaced) and every question.
           const intro = out.statements.filter(s => s.phase === 'intro').map(s => s.text);
-          assert(intro.length === rd.intro.normal.length && intro.every((s, i) => s === rd.intro.normal[i] && s.trim()), `${code} round ${round}: intro lines ${JSON.stringify(intro)}`);
+          const wantIntro = normaliseIntro(code, rd.intro.normal);
+          assert(intro.length === wantIntro.length && intro.every((s, i) => s === wantIntro[i] && s.trim()), `${code} round ${round}: intro lines ${JSON.stringify(intro)}`);
+          if (code === 'en') assert(!intro.some(s => /\s[?!]/.test(s)), `en round ${round}: a space before ? or ! in ${JSON.stringify(intro)}`);
+          if (code === 'por_por') assert(!intro.some(s => /prawidłową|punktów/.test(s)) && (round > 2 || intro.some(s => /10 pontos/.test(s))), `por_por round ${round}: the points line is not Portuguese: ${JSON.stringify(intro)}`);
           const asks = out.statements.filter(s => s.phase === 'ask');
           assert(asks.length === rd.questions.length && asks.every((s, i) => s.text.includes(rd.questions[i].text) && s.lines.every(l => l !== undefined)), `${code} round ${round}: question lines missing`);
           assert(out.statements.every(s => s.pages >= 1), `${code} round ${round}: a host line had no pages`);
@@ -442,7 +446,15 @@ export const tests = [
         mode: 'keyboard',
         choose: pr => ({ index: buttonFor(pr, 1), how: 'digit' }),
         onEvent: async pr => {
-          if (pr.phase === 'cpu' && !shot) { shot = true; await page.screenshot({ path: path.join(ctx.shots, 'gameshow-verdict.png'), scale: 'css' }); }
+          if (pr.phase === 'response' && !shot) {
+            // The gallery shot: the player's verdict just landed (confetti, +10, happy faces).
+            shot = true;
+            for (let k = 0; k < 400 && (await probe(page)).pendingVerdict; k++) await step(page, 2);
+            await step(page, 18);
+            const v = await probe(page);
+            assert(!v.board.visible && v.studio.host === 'excited' && v.fx.popups > 0, `verdict moment: board ${v.board.visible}, host ${v.studio.host}, popups ${v.fx.popups}`);
+            await page.screenshot({ path: path.join(ctx.shots, 'gameshow-verdict.png'), scale: 'css' });
+          }
           if (pr.phase === 'board' && pr.questionIndex === 0) { await step(page, 40); await page.screenshot({ path: path.join(ctx.shots, 'gameshow-board.png'), scale: 'css' }); }
         },
       });
@@ -458,6 +470,198 @@ export const tests = [
       const next = await probe(page);
       assert(next.startScores.player === p.scores.player && next.startScores.cpu === p.scores.cpu, 'Next round did not carry the scores');
       assert(errors.length === 0, `console errors:\n${errors.join('\n')}`);
+      await context.close();
+    },
+  },
+  {
+    name: 'standalone with the blind-rounds setting on: the warm-up half first, then on to the scored questions',
+    timeoutMs: 90000,
+    async run(ctx) {
+      const { context, page, errors } = await ctx.openPage(DESKTOP);
+      // Setting off (or never set): the scored half, as the live 2009 build.
+      await page.goto(`${ctx.baseUrl}/index.html?scene=gameshow&round=2&avatar=harry&seed=4&manual=1`);
+      await page.waitForFunction(() => { const p = window.__test && window.__test.probe('gameshow'); return p && p.ready; }, null, { timeout: 20000 });
+      assert(!(await probe(page)).blind, 'blind with the setting unset');
+      // Setting on: the warm-up (blind) half.
+      await page.evaluate(() => window.__test.app.settings.set('blindRounds', true));
+      await page.evaluate(() => window.__test.go('gameshow', { round: 2, avatar: 'harry', seed: 4 }));
+      await page.waitForFunction(() => { const p = window.__test.probe('gameshow'); return p && p.ready; }, null, { timeout: 20000 });
+      let p = await probe(page);
+      assert(p.blind, 'standalone did not follow blindRounds = true');
+      const { probe: end } = await playRound(page, { mode: 'keyboard', choose: pr => ({ index: 0, how: 'digit' }) });
+      assert(end.answers.every(a => a.blind && a.cpu === null) && end.scores.player === 0 && end.scores.cpu === 0, 'the warm-up half scored');
+      await step(page, 10);
+      await page.waitForTimeout(400);
+      assert((await probe(page)).overlay === 'Warm-up done!', 'no warm-up results card');
+      await page.keyboard.press('Enter');
+      // The card's button starts a new scene through a transition: step the frozen loop while the
+      // new round loads.
+      for (let k = 0; k < 200; k++) {
+        p = await probe(page);
+        if (p && p.ready && !p.blind && p.phase === 'title') break;
+        await step(page, 4);
+        await page.waitForTimeout(20);
+      }
+      p = await probe(page);
+      assert(p.round === 2 && !p.blind, `the scored half did not follow (round ${p.round}, blind ${p.blind})`);
+      // A flow launch always wins over the setting: blind: false stays sighted.
+      await page.evaluate(() => window.__test.go('gameshow', { round: 2, avatar: 'harry', seed: 4, blind: false, onComplete: () => {} }));
+      await page.waitForFunction(() => { const p = window.__test.probe('gameshow'); return p && p.ready; }, null, { timeout: 20000 });
+      assert(!(await probe(page)).blind, 'blind: false from the flow was overridden by the setting');
+      await page.evaluate(() => window.__test.app.settings.set('blindRounds', null));
+      assert(errors.length === 0, `console errors:\n${errors.join('\n')}`);
+      await context.close();
+    },
+  },
+  {
+    name: 'pause: Enter, Space or gamepad A on Resume does not answer the board or advance the host',
+    timeoutMs: 90000,
+    async run(ctx) {
+      const { context, page, errors } = await openShow(ctx, DESKTOP, { round: 1, avatar: 'harry', nickname: 'Kit', seed: 3 });
+      const focusId = () => page.evaluate(() => document.activeElement && document.activeElement.id);
+      // Esc pauses (focus goes to Resume), then `key` presses the focused Resume natively.
+      const pauseResume = async key => {
+        await page.keyboard.press('Escape');
+        await step(page, 1);
+        assert((await probe(page)).paused, 'Esc did not pause');
+        assert((await focusId()) === 'gs-resume', `Resume is not focused (${await focusId()})`);
+        await page.keyboard.press(key);
+        await step(page, 1);
+        assert(!(await probe(page)).paused, `${key} on Resume did not resume`);
+      };
+      await step(page, 30);
+      await page.keyboard.press('Enter');
+      await step(page, 6);
+      let p = await probe(page);
+      assert(p.phase === 'intro' && !p.talkie.complete, `not typing the first intro line (phase ${p.phase})`);
+      // While a line types, resuming must not complete it.
+      const before = p.talkie;
+      for (const key of ['Enter', 'Space']) {
+        const was = (await probe(page)).talkie;
+        await pauseResume(key);
+        p = await probe(page);
+        assert(!p.talkie.complete && p.talkie.lineIndex === before.lineIndex && p.talkie.shown - was.shown <= 1, `${key} on Resume reached the talkie: shown ${was.shown} -> ${p.talkie.shown}, complete ${p.talkie.complete}`);
+      }
+      // A complete line: resuming must not advance it.
+      await page.keyboard.press('Enter');
+      await step(page, 1);
+      assert((await probe(page)).talkie.complete, 'Enter did not complete the line');
+      await pauseResume('Enter');
+      p = await probe(page);
+      assert(p.talkie.complete && p.talkie.lineIndex === before.lineIndex, `Enter on Resume advanced the host (line ${before.lineIndex} -> ${p.talkie.lineIndex})`);
+      // The board, with Don't Know selected: resuming must not answer.
+      for (let i = 0; i < 400 && (await probe(page)).phase !== 'board'; i++) { await page.keyboard.press('Enter'); await step(page, 2); }
+      await step(page, 30);
+      for (let k = 0; k < 2; k++) { await page.keyboard.press('ArrowDown'); await step(page, 2); }
+      p = await probe(page);
+      assert(p.phase === 'board' && p.board.accepting && p.board.selected === 1, `board not ready (phase ${p.phase}, selected ${p.board.selected})`);
+      for (const key of ['Enter', 'Space']) {
+        await pauseResume(key);
+        await step(page, 2);
+        p = await probe(page);
+        assert(p.phase === 'board' && p.board.locked === -1 && p.answers.length === 0, `${key} on Resume answered: phase ${p.phase}, locked ${p.board.locked}`);
+      }
+      // Gamepad A on the focused Resume clicks it from inside the tick (ui/dom.js focusNavigator).
+      await page.evaluate(() => {
+        window.__padA = false;
+        Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => [{ connected: true, axes: [0, 0], buttons: Array.from({ length: 17 }, (_, i) => ({ pressed: i === 0 && window.__padA, value: 0 })) }] });
+      });
+      await page.keyboard.press('Escape');
+      await step(page, 1);
+      assert((await probe(page)).paused && (await focusId()) === 'gs-resume', 'Esc did not pause (gamepad check)');
+      await page.evaluate(() => { window.__padA = true; });
+      await step(page, 1);
+      assert(!(await probe(page)).paused, 'gamepad A on Resume did not resume');
+      await step(page, 3);
+      await page.evaluate(() => { window.__padA = false; });
+      await step(page, 3);
+      p = await probe(page);
+      assert(p.phase === 'board' && p.board.locked === -1 && p.answers.length === 0, `gamepad A on Resume answered: phase ${p.phase}, locked ${p.board.locked}`);
+      await page.evaluate(() => Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => [] }));
+      // Play goes on as normal: Enter now picks the selected answer.
+      await page.keyboard.press('Enter');
+      await step(page, 1);
+      p = await probe(page);
+      assert(p.phase === 'lockin' && p.board.locked === 1, `Enter after resuming did not answer (phase ${p.phase}, locked ${p.board.locked})`);
+      assert(errors.length === 0, `console errors:\n${errors.join('\n')}`);
+      await context.close();
+    },
+  },
+  {
+    name: 'board and prompts: mouse hover selects (Enter picks the lit button); badges and hints follow key bindings and device; labels, name tags, reduced motion, blit cache',
+    timeoutMs: 90000,
+    async run(ctx) {
+      const long = 'Wolfeschlegelsteinhausenb';
+      const { context, page, errors } = await openShow(ctx, DESKTOP, { round: 1, avatar: 'amy', nickname: long, seed: 3 });
+      let p = await probe(page);
+      // Name tags: a 25-character nickname keeps 13 px or more and is cut with an ellipsis.
+      const tag = p.studio.tags.amy, other = p.studio.tags.harry;
+      assert(tag.size >= 13 && tag.width <= 112 && tag.truncated && tag.text.endsWith('…') && long.startsWith(tag.text.slice(0, -1)), `long name tag ${JSON.stringify(tag)}`);
+      assert(other.text === 'Harry' && other.size === 15 && !other.truncated, `short name tag ${JSON.stringify(other)}`);
+      // The title prompt follows the confirm binding and the device.
+      await step(page, 60);
+      const setDevice = d => page.evaluate(v => window.__test.app.input._setDevice(v), d);
+      p = await probe(page);
+      assert(p.titleHint === 'Press Enter to start', `keyboard title hint: ${p.titleHint}`);
+      await setDevice('gamepad');
+      assert((await probe(page)).titleHint === 'Press A to start', 'gamepad title hint');
+      await setDevice('touch');
+      assert((await probe(page)).titleHint === 'Tap to start', 'touch title hint');
+      await setDevice('keyboard');
+      for (let i = 0; i < 400 && (await probe(page)).phase !== 'board'; i++) { await page.keyboard.press('Enter'); await step(page, 2); }
+      await step(page, 40);
+      p = await probe(page);
+      assert(p.phase === 'board' && p.board.accepting, `no board (phase ${p.phase})`);
+      assert(p.board.hint === 'Press 1, 2 or 3, or use ↑ ↓ and Enter', `keyboard hint: ${p.board.hint}`);
+      assert(p.board.badges.join() === '1,2,3', `badges ${p.board.badges}`);
+      assert(p.board.layout.labels.every(l => l.size === 23 && l.fits), `labels ${JSON.stringify(p.board.layout.labels)}`);
+      const art = () => page.evaluate(async () => (await import('./js/gameshow/art.js')).blitCount());
+      assert((await art()) > 0, 'no pre-scaled copies while the studio shows');
+      // Mouse over Disagree selects it and focuses it; an arrow then moves both, and the hover
+      // light goes, so only one button is ever lit.
+      const focusId = () => page.evaluate(() => document.activeElement && document.activeElement.id);
+      const centre = async i => { const b = await page.locator(`#gs-answer-${i}`).boundingBox(); return [b.x + b.width / 2, b.y + b.height / 2]; };
+      await page.mouse.move(...(await centre(3)));
+      await step(page, 1);
+      p = await probe(page);
+      assert(p.board.selected === 2 && p.board.hover === 2 && (await focusId()) === 'gs-answer-3', `hover did not select: selected ${p.board.selected}, hover ${p.board.hover}, focus ${await focusId()}`);
+      await page.keyboard.press('ArrowUp');
+      await step(page, 2);
+      p = await probe(page);
+      assert(p.board.selected === 1 && p.board.hover === -1 && (await focusId()) === 'gs-answer-2', `arrow after hover: selected ${p.board.selected}, hover ${p.board.hover}, focus ${await focusId()}`);
+      const [x1, y1] = await centre(1);
+      await page.mouse.move(x1, y1, { steps: 5 });
+      await step(page, 1);
+      p = await probe(page);
+      assert(p.board.selected === 0 && (await focusId()) === 'gs-answer-1', `hover on Agree did not select it (selected ${p.board.selected})`);
+      // Remapped answer 1: the badge and the hint show the new key.
+      const keys = await page.evaluate(() => window.__test.app.settings.get('keys'));
+      await page.evaluate(k => window.__test.app.settings.set('keys', { ...k, answer1: ['KeyQ'] }), keys);
+      await step(page, 1);
+      p = await probe(page);
+      assert(p.board.badges.join() === 'Q,2,3' && p.board.hint.startsWith('Press Q, 2 or 3'), `after remapping: ${p.board.badges} / ${p.board.hint}`);
+      await page.screenshot({ path: path.join(ctx.shots, 'gameshow-board-hover.png'), scale: 'css' });
+      await page.keyboard.press('Enter');
+      await step(page, 1);
+      p = await probe(page);
+      assert(p.phase === 'lockin' && p.board.locked === 0, `Enter did not pick the lit answer: locked ${p.board.locked}`);
+      await page.evaluate(k => window.__test.app.settings.set('keys', k), keys);
+      // The pause card does not bounce in when the game's own reduced-motion setting is on.
+      await page.evaluate(() => window.__test.app.settings.set('reducedMotion', true));
+      const byFlow = await page.evaluate(() => document.documentElement.classList.contains('reduced-motion'));
+      if (!byFlow) await page.evaluate(() => document.documentElement.classList.add('reduced-motion'));
+      await page.keyboard.press('Escape');
+      await step(page, 1);
+      const anim = await page.evaluate(() => getComputedStyle(document.querySelector('.gs-card')).animationName);
+      assert(anim === 'none', `pause card animation with reduced motion on: ${anim}`);
+      await page.keyboard.press('Escape');
+      await step(page, 1);
+      await page.evaluate(() => window.__test.app.settings.set('reducedMotion', null));
+      // Leaving the show frees the pre-scaled copies.
+      await page.evaluate(() => window.__test.go('splash', {}));
+      assert((await art()) === 0, 'the pre-scaled copies were kept after the game show exited');
+      assert(errors.length === 0, `console errors:\n${errors.join('\n')}`);
+      ctx.log(`long tag "${tag.text}" at ${tag.size}px; reduced-motion class ${byFlow ? 'set by the flow' : 'added by the test'}`);
       await context.close();
     },
   },

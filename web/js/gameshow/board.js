@@ -8,6 +8,7 @@
 // right) move the selection and Enter or Space chooses it. Touch: tap a button.
 import { el } from '../ui/dom.js';
 import { t } from '../core/i18n.js';
+import { keyFor, tp } from '../ui/prompts.js';
 import { audio } from '../core/audio.js';
 import { drawFrame, hasArt, track } from './art.js';
 import { wrap, fitLine, VERDANA, BALOO, roundRect } from './text.js';
@@ -47,7 +48,12 @@ export class Board {
         type: 'button', class: 'gs-answer', id: `gs-answer-${i + 1}`, 'data-index': i,
         style: { left: `${x - BTN_OX}px`, top: `${y - BTN_OY}px`, width: `${BTN_W}px`, height: `${BTN_H}px` },
       });
-      node.addEventListener('pointerenter', () => { this.hover = i; });
+      // A mouse over an answer selects it (and focuses it, since Enter on a focused button
+      // clicks it natively), so the one highlighted button is always the one Enter picks.
+      node.addEventListener('pointerenter', e => {
+        if (e.pointerType === 'mouse' && this.locked < 0) this.select(i);
+        this.hover = i;
+      });
       node.addEventListener('pointerleave', () => { if (this.hover === i) this.hover = -1; if (this.pressed === i) this.pressed = -1; });
       node.addEventListener('pointerdown', () => { this.pressed = i; });
       node.addEventListener('pointerup', () => { this.pressed = -1; });
@@ -111,6 +117,7 @@ export class Board {
 
   select(i) {
     if (this.locked >= 0) return;
+    this.hover = -1;           // the keyboard moved on: the button under the mouse is no longer lit
     const next = (i + 3) % 3;
     if (next !== this.selected) audio.play('gsSelect');
     this.selected = next;
@@ -160,7 +167,9 @@ export class Board {
       if (lines.length * lh <= max) break;
     }
     if (size < 12) { size = 12; lh = 15; lines = wrap(q.text, `700 12px ${VERDANA}`, BODY.width); }
-    const labelFits = this.labels.map(l => fitLine(l, s => `800 ${s}px ${BALOO}`, BTN_W - 34, Math.round(27 * Math.min(scale, 1.3)), 14));
+    // Button labels: the original's static text, white Verdana Bold with no outline, 23 px (it
+    // measures 151 / 76.5 / 115 px wide in capture 021), shrunk for long translations.
+    const labelFits = this.labels.map(l => fitLine(l, s => `700 ${s}px ${VERDANA}`, BTN_W - 34, Math.round(23 * Math.min(scale, 1.3)), 14));
     return {
       heading, points, size, lineHeight: lh, lines: lines.map(l => l.text),
       bodyBottom: BODY.top + lines.length * lh, maxBottom: BODY.bottom,
@@ -208,16 +217,28 @@ export class Board {
     ctx.globalAlpha = reducedMotion ? a : Math.min(1, a * 1.4);
     // Buttons: pop in one after another, then react to hover, selection and the lock-in.
     for (let i = 0; i < 3; i++) this.drawButton(ctx, i, { device, reducedMotion, tick });
-    // How to answer, for the input in use.
+    // How to answer, for the input in use and the player's key bindings: white 17 px with a
+    // dark outline (at least 14 CSS px on a 667 px wide phone, well above 4.5:1 on the board).
     if (this.locked < 0) {
-      const hint = t(`gameshow.answerHint.${device === 'touch' ? 'touch' : device === 'gamepad' ? 'gamepad' : 'keyboard'}`);
-      ctx.globalAlpha *= Math.max(0, Math.min(1, (this.age - 30) / 20)) * 0.85;
-      ctx.font = `400 15px ${VERDANA}`;
+      const hint = this.hintText(device);
+      const f = fitLine(hint, z => `700 ${z}px ${VERDANA}`, 700, 17, 12);
+      ctx.globalAlpha *= Math.max(0, Math.min(1, (this.age - 30) / 20));
+      ctx.font = `700 ${f.size}px ${VERDANA}`;
       ctx.textAlign = 'center';
-      ctx.fillStyle = '#e6f5ff';
-      ctx.fillText(hint, 400, 443);
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = 'rgba(0, 32, 64, 0.85)';
+      ctx.strokeText(hint, 400, 444);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(hint, 400, 444);
     }
     ctx.restore();
+  }
+
+  hintText(device) {
+    if (device === 'touch') return t('gameshow.answerHint.touch');
+    if (device === 'gamepad') return t('gameshow.answerHint.gamepad');
+    return tp('gameshow.answerHint.keyboard', { key_answer1: keyFor('answer1'), key_answer2: keyFor('answer2'), key_answer3: keyFor('answer3'), key_up: keyFor('up'), key_down: keyFor('down') });
   }
 
   drawButton(ctx, i, { device, reducedMotion, tick }) {
@@ -263,28 +284,26 @@ export class Board {
       ctx.fill(); ctx.stroke();
     }
     const L = this.layout.labels[i];
-    ctx.font = `800 ${L.size}px ${BALOO}`;
+    ctx.font = `700 ${L.size}px ${VERDANA}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.lineJoin = 'round';
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = 'rgba(8, 60, 110, 0.55)';
-    ctx.strokeText(L.text, cx, cy + 1 + (frame === 3 ? 2 : 0));
     ctx.fillStyle = '#ffffff';
     ctx.fillText(L.text, cx, cy + 1 + (frame === 3 ? 2 : 0));
-    // Key badge for keyboard players.
-    if (device === 'keyboard' && !locked) {
-      const bx = r.x - 30, by = cy - 13;
+    // Key badge for keyboard players: the key bound to answer 1 / 2 / 3 (none when unbound).
+    const key = device === 'keyboard' && !locked ? keyFor(`answer${i + 1}`) : '?';
+    if (key !== '?') {
+      ctx.font = `800 17px ${BALOO}`;
+      const bw = Math.max(24, Math.ceil(ctx.measureText(key).width) + 12);
+      const bx = r.x - 6 - bw, by = cy - 13;
       ctx.fillStyle = 'rgba(8, 40, 80, 0.55)';
-      roundRect(ctx, bx, by, 24, 26, 6);
+      roundRect(ctx, bx, by, bw, 26, 6);
       ctx.fill();
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
       ctx.lineWidth = 1.5;
-      roundRect(ctx, bx, by, 24, 26, 6);
+      roundRect(ctx, bx, by, bw, 26, 6);
       ctx.stroke();
       ctx.fillStyle = '#ffffff';
-      ctx.font = `800 17px ${BALOO}`;
-      ctx.fillText(String(i + 1), bx + 12, by + 14);
+      ctx.fillText(key, bx + bw / 2, by + 14);
     }
     ctx.restore();
   }
@@ -299,9 +318,10 @@ export class Board {
 
   destroy() { this.root.remove(); }
 
-  state() {
+  state(device = 'keyboard') {
     return {
       visible: this.visible, alpha: this.alpha, accepting: this.accepting, selected: this.selected, locked: this.locked,
+      hover: this.hover, hint: this.hintText(device), badges: [1, 2, 3].map(n => keyFor(`answer${n}`)),
       layout: this.layout,
       buttons: this.buttons.map((b, i) => ({ id: b.id, label: this.labels[i], rect: this.buttonRect(i), disabled: b.disabled })),
     };

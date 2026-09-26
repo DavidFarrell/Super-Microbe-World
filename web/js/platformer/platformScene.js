@@ -24,7 +24,7 @@ import { Hud, goalText } from './hud.js';
 import { IntroPhone } from './intro.js';
 import { StepInput } from './controls.js';
 import { sprites } from './sprites.js';
-import { TICKS_PER_STEP, END, STAGE_W, STEP_MS, LEFT, S, T } from './constants.js';
+import { TICKS_PER_STEP, END, STAGE_W, STEP_MS, LEFT, S, T, G } from './constants.js';
 
 const TOUCH_PLAY = ['dpad', 'jump', 'fire', 'camera', 'pause', 'phone'];
 const HIT_STOP = { hurt: 4, kill: 3, photo: 2 };   // logic steps frozen for impact
@@ -34,6 +34,33 @@ const FLYER_TICKS = 38;                             // photo sparkle flying to t
 // On-screen controls that fade while a target is under them (see updateOcclusion).
 const TOUCH_BUTTON_IDS = ['touch-left', 'touch-right', 'touch-jump', 'touch-fire', 'touch-camera', 'touch-pause', 'touch-phone'];
 const PROJECTILE_TYPES = [T.BULLET, T.CAMERA_FLASH, T.ANTIBIOTIC_BOMB];
+
+// Sounds for the later levels' mechanics (the original had no sound at all).
+audio.defineSynth('antibioticBoom', (a, v) => {
+  a.tone({ type: 'sine', freq: 140, to: 40, dur: 0.45, vol: 0.22 * v });
+  a.noise({ dur: 0.5, vol: 0.2 * v, freq: 1600, to: 180, type: 'lowpass' });
+  [1320, 1760, 2349].forEach((f, i) => a.tone({ type: 'triangle', freq: f, dur: 0.16, vol: 0.05 * v, delay: 0.12 + i * 0.06 }));
+});
+audio.defineSynth('superHit', (a, v) => {
+  a.tone({ type: 'sawtooth', freq: 110, to: 55, dur: 0.4, vol: 0.12 * v });
+  a.tone({ type: 'square', freq: 220, to: 90, dur: 0.25, vol: 0.06 * v, delay: 0.05 });
+  a.noise({ dur: 0.25, vol: 0.1 * v, freq: 600, type: 'lowpass' });
+});
+audio.defineSynth('superDefeated', (a, v) => {
+  a.tone({ type: 'sawtooth', freq: 160, to: 40, dur: 0.7, vol: 0.12 * v });
+  a.noise({ dur: 0.6, vol: 0.14 * v, freq: 900, to: 120, type: 'lowpass' });
+  [523, 659, 784, 1047].forEach((f, i) => a.tone({ type: 'triangle', freq: f, dur: 0.18, vol: 0.09 * v, delay: 0.45 + i * 0.09 }));
+});
+audio.defineSynth('milkSplash', (a, v) => {
+  a.tone({ type: 'sine', freq: 520, to: 1300, dur: 0.12, vol: 0.12 * v });
+  a.noise({ dur: 0.2, vol: 0.08 * v, freq: 2500, to: 700 });
+});
+
+// The level-complete card's goal counter label for each goal type.
+function goalLabel(type) {
+  const key = type === G.KILL_ALL ? 'kill' : type === G.YOGURT ? 'yogurt' : type === G.ANTIBIOTIC ? 'antibiotic' : 'photo';
+  return t(`platform.goalLabel.${key}`);
+}
 
 // Tile id ranges in tile_definitions.xml (flash-platformer.md section 6.2), for the area music.
 const areaOf = id => (id <= 38 ? 'kitchen' : id <= 69 ? 'body' : id <= 92 ? 'skin' : null);
@@ -52,6 +79,10 @@ const STYLE = `
 .pf-stat span { font: 400 14px/1.2 var(--body-font); opacity: 0.85; }
 .pf-stat.score b { color: #ffd84a; }
 .pf-toggle { font-size: 16px; min-height: max(44px, calc(46px / var(--stage-scale, 1))); padding: 8px 18px 6px; }
+.pf-cam-badge { position: absolute; right: -6px; top: -6px; width: 40px; height: 22px; border-radius: 11px; background: #1b1640; border: 2px solid #fff; display: grid; place-items: center; pointer-events: none; animation: pf-badge-in 0.3s cubic-bezier(.2,1.6,.4,1) both; }
+.pf-cam-badge svg { width: 30px; height: 14px; }
+@keyframes pf-badge-in { from { transform: scale(0.2); } to { transform: scale(1); } }
+html.reduced-motion .pf-cam-badge { animation: none; }
 .pf-intro { position: absolute; inset: 0; }
 .pf-intro-tap { position: absolute; inset: 0; cursor: pointer; }
 .pf-intro-next { position: absolute; right: 12px; bottom: 6px; }
@@ -312,7 +343,7 @@ export function platformScene(app) {
       el('h2', {}, roundOver ? t('complete.round') : t('complete.title', { n })),
       el('div', { class: 'pf-stats' },
         stat('score', scoreEl, t('complete.score')),
-        g ? stat('goal', el('b', {}, `${Math.min(g.achieved, g.required)}/${g.required}`), t('complete.photos')) : null,
+        g ? stat('goal', el('b', {}, `${Math.min(g.achieved, g.required)}/${g.required}`), goalLabel(g.goalType)) : null,
         stat('time', el('b', {}, `${Math.floor(secsUsed / 60)}:${String(secsUsed % 60).padStart(2, '0')}`), t('complete.time')),
         stat('lives', el('b', {}, '♥'.repeat(Math.max(0, game.player.lives)) || '0'), t('complete.lives'))),
       el('div', { class: 'row' },
@@ -465,8 +496,50 @@ export function platformScene(app) {
           app.announce(t('hud.portalOpen'));
           break;
         }
-        case 'yogurt': audio.play('yogurt'); particles.emit(f.x + 75, f.y + 60, { count: 24, colors: ['#ffd0e0', '#ffffff'], shape: 'star', speed: 3, life: 40, size: 6, gravity: 0.02 }); break;
-        case 'explode': audio.play('whoosh'); shake.add(0.7); haptic([40, 30, 60]); break;
+        case 'yogurt':
+          audio.play('yogurt');
+          particles.emit(f.x + 75, f.y + 60, { count: 24, colors: ['#ffd0e0', '#ffffff'], shape: 'star', speed: 3, life: 40, size: 6, gravity: 0.02 });
+          particles.emit(f.x + 75, f.y + 40, { count: 14, colors: ['#ffe6ef', '#ffffff', '#fff4a8'], shape: 'bubble', speed: 2, spread: 1.2, angle: -Math.PI / 2, life: 46, size: 6, gravity: -0.04 });
+          popups.add(t('platform.yogurt'), f.x + 75, f.y - 10, { color: '#ffe6ef', size: 24 });
+          if (f.entity) renderer.hitFlash(f.entity, 8);
+          shake.add(0.15);
+          haptic([20, 30, 20]);
+          break;
+        case 'milkHit':
+          audio.play('milkSplash');
+          particles.emit(f.x + 75, f.y + 20, { count: 16, colors: ['#ffffff', '#f4f6ff', '#dfe8ff'], shape: 'bubble', speed: 3, spread: 1.4, angle: -Math.PI / 2, life: 34, size: 5, gravity: 0.12 });
+          break;
+        case 'explode': {
+          // The antibiotic: a burst of capsule shards and sparkles where it went off (if in view),
+          // the original's whiteout, and a flash on every microbe it kills.
+          audio.play('antibioticBoom');
+          if (f.onScreen) {
+            particles.emit(f.x + 19, f.y + 8, { count: 26, colors: ['#ff3b4e', '#ffffff', '#ffd6dc'], shape: 'square', speed: 5.5, life: 36, size: 5, gravity: 0.12, drag: 0.94 });
+            particles.emit(f.x + 19, f.y + 8, { count: 22, colors: ['#ffffff', '#fff4a8', '#bff4ff'], shape: 'star', speed: 4, life: 44, size: 6, gravity: 0 });
+          }
+          for (const v of f.entities || []) {
+            renderer.hitFlash(v, 10);
+            const b = v.artBounds ? v.artBounds() : { x: 0, y: 0, w: 40, h: 60 };
+            particles.emit(v.particle.position.x + b.x + b.w / 2, v.particle.position.y + b.y + b.h / 2, { count: 10, colors: ['#ffffff', '#ffd6dc'], shape: 'star', speed: 2.5, life: 26, size: 4, gravity: 0 });
+          }
+          shake.add(0.7);
+          haptic([40, 30, 60]);
+          break;
+        }
+        case 'superHit': {
+          const e = f.entity;
+          const b = e && e.artBounds ? e.artBounds() : { x: 0, y: 0, w: 400, h: 190 };
+          const cx = f.x + b.x + b.w / 2, cy = f.y + b.y + b.h / 2;
+          audio.play(f.lives > 0 ? 'superHit' : 'superDefeated');
+          if (e) renderer.hitFlash(e, 12);
+          particles.emit(cx, cy, { count: f.lives > 0 ? 24 : 60, colors: ['#b04070', '#ff8fd0', '#ffffff', '#6a1a8a'], shape: f.lives > 0 ? 'bubble' : 'star', speed: f.lives > 0 ? 4 : 6, life: f.lives > 0 ? 34 : 60, size: f.lives > 0 ? 6 : 7, gravity: 0.03 });
+          const camX = game.camera.x;
+          if (f.lives > 0) popups.add('-1', clamp(cx, camX + 90, camX + 710), Math.max(70, f.y + b.y - 6), { color: '#ffd0f0', size: 26 });
+          if (f.lives <= 0) { hud.showBanner(t('platform.superDefeated')); app.announce(t('platform.superDefeated')); }
+          hitStop = Math.max(hitStop, HIT_STOP.kill);
+          shake.add(f.lives > 0 ? 0.35 : 0.8);
+          break;
+        }
         case 'playerKilled': shake.add(0.6); break;
         default: break;
       }
@@ -549,6 +622,24 @@ export function platformScene(app) {
     }
   }
 
+  // While an antibiotic is carried the camera button throws it (PlayerEntity.as:193-197): the
+  // touch camera button wears a capsule badge and says so to screen readers.
+  let camBadge = null, camLabel = null;
+  function syncCameraBadge(on) {
+    const btn = document.getElementById('touch-camera');
+    if (!btn) return;
+    if (on && !camBadge) {
+      camLabel = btn.getAttribute('aria-label');
+      camBadge = el('span', { class: 'pf-cam-badge', 'aria-hidden': 'true' });
+      camBadge.innerHTML = '<svg viewBox="0 0 30 14"><rect x="1" y="1" width="28" height="12" rx="6" fill="#fff"/><path d="M7 1h8v12H7a6 6 0 0 1 0-12z" fill="#e8283c"/><rect x="1" y="1" width="28" height="12" rx="6" fill="none" stroke="#1b1640" stroke-width="1.2"/></svg>';
+      btn.append(camBadge);
+      btn.setAttribute('aria-label', t('platform.throwAntibiotic'));
+    } else if (!on && camBadge) {
+      camBadge.remove(); camBadge = null;
+      if (camLabel != null) btn.setAttribute('aria-label', camLabel);
+    }
+  }
+
   function startMusicWhenUnlocked() {
     if (musicOn || !audio.unlocked || !audio.ctx || audio.ctx.state !== 'running') return;
     musicOn = true;
@@ -572,6 +663,7 @@ export function platformScene(app) {
       settings.removeEventListener('change', onSettingChange);
       mode = 'exited';
       updateOcclusion();
+      syncCameraBadge(false);
       clearOverlay();
       if (intro) intro.destroy();
       if (hud) hud.destroy();
@@ -625,12 +717,13 @@ export function platformScene(app) {
         if (!reducedMotion && tick % 4 === 0 && tick < 100000) screenFx.emit(80 + (tick * 37) % 640, -10, { count: 2, colors: ['#ffd84a', '#ff8a5c', '#5fd4ff', '#6fe0a8', '#ffffff'], shape: 'square', speed: 1.2, spread: 1, angle: Math.PI / 2, life: 150, size: 6, gravity: 0.03, drag: 0.99 });
       }
       updateOcclusion();
+      syncCameraBadge(!!game.player.has_antibiotic && (mode === 'play' || mode === 'paused' || mode === 'briefing'));
       flash = Math.max(0, flash - 0.04);
       // Paused or briefing: the picture under the card or phone is frozen (particles, popups,
       // shake, sparkles in flight and HUD counters wait); only the HUD's layout follows the device.
       if (mode === 'paused' || mode === 'briefing') { hud.updateLayout(dev); return; }
       time += 0.015;
-      if (renderer) renderer.update();
+      if (renderer) { renderer.touchLayout = hud.touchMix > 0.5; renderer.update(); }
       hud.update(game, dev);
       updateFlyers();
       particles.update();
@@ -721,7 +814,7 @@ export function platformScene(app) {
       fx: { particles: particles.items.length, popups: popups.items.length, shake: shake.trauma },
       occluding: [...occluding].sort(), reducedMotion: !!reducedMotion,
       intro: intro ? { phase: intro.phase, page: intro.page, pages: intro.pages.length, text: intro.text, briefing: intro.briefing } : null,
-      hud: hud ? { ticksShown: hud.ticksShown, touchLayout: hud.touchMix > 0.5, phone: hud.phoneRect() } : null,
+      hud: hud ? { ticksShown: hud.ticksShown, touchLayout: hud.touchMix > 0.5, phone: hud.phoneRect(), ...hud.goalPicture() } : null,
       music: musicOn,
     };
   }

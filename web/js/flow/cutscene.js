@@ -2,8 +2,10 @@
 // choose_avatar 20, get_details 30; NOTES 2.4). The host greets the player in the talkie (lines
 // 0-2 of the introduction file), the player picks Amy or Harry (hover: that child plays "happy",
 // the other "disappointed"; the room behind the podiums darkens), the host says line 4, the
-// details form asks for a nickname and an optional age (no e-mail and no competitions line: a
-// privacy line instead, NOTES 11.2), and a closing line leads on (decision 11.9 #14).
+// details form asks for a nickname only (no age, no e-mail and no competitions line: a privacy
+// line instead, NOTES 11.2), and a closing line leads on (decision 11.9 #14). With blind rounds
+// off a shrinking zone follows, so the host then says "Step right this way ..." (NOTES 2.3,
+// build B). A small Main menu button (top left) lets a touch player leave at any point.
 // Text: web/data/quiz/<lang>.json "intro" (the 10 live statements, line 0 already rebranded);
 // the talkie, studio and cast are the game show area's (js/gameshow/talkie.js, studio.js).
 import { el } from '../ui/dom.js';
@@ -11,6 +13,7 @@ import { input } from '../core/input.js';
 import { audio } from '../core/audio.js';
 import { settings } from '../core/settings.js';
 import { t } from '../core/i18n.js';
+import { tp } from '../ui/prompts.js';
 import { Particles, haptic } from '../core/fx.js';
 import { AREA_MUSIC } from '../core/music.js';
 import { createTalkie } from '../gameshow/talkie.js';
@@ -18,10 +21,10 @@ import { Studio } from '../gameshow/studio.js';
 import { loadAtlases, atlasSet, drawFrame, hasArt } from '../gameshow/art.js';
 import { registerGameshowSounds } from '../gameshow/sound.js';
 import { loadQuizText, avatarName } from './flow.js';
-import { ensureStyle, pushNav, tickNav, clearNav, confirmDialog } from './ui.js';
+import { ensureStyle, glossy, pushNav, tickNav, clearNav, confirmDialog } from './ui.js';
 
 // Build A's and the live file's indices (CutSceneXMLParser: every <statement> in order).
-const LINE = { hello: 0, soon: 1, who: 2, tell: 4, nickname: 5, age: 6, closingLive: 9 };
+const LINE = { hello: 0, soon: 1, who: 2, tell: 4, nickname: 5, closingLive: 9 };
 const TALKIE_AT = { x: 15, y: 307.5 };
 const KID_RECTS = {   // amyButton / harryButton: a 50 x 50 square scaled 2.68 x 5.26 (sprite 846)
   amy: { x: 437, y: 100, w: 134, h: 263 },
@@ -38,13 +41,17 @@ const CSS = `
 .cs-kid:hover span, .cs-kid:focus-visible span, .cs-kid.hot span { opacity: 1; transform: translate(-50%, -100%) scale(1); }
 .cs-hint { position: absolute; left: 20px; right: 20px; bottom: 16px; text-align: center; color: #fff; font: 800 calc(22px * var(--text-scale, 1)) var(--ui-font); text-shadow: 0 2px 4px rgba(0,0,0,0.7); pointer-events: none; }
 .cs-form { position: absolute; inset: 0; }
-.cs-form label { position: absolute; left: 92.5px; color: #fff; font: bold calc(26px * var(--text-scale, 1))/36px Verdana, "DejaVu Sans", sans-serif; text-shadow: 0 2px 3px rgba(0, 30, 70, 0.45); }
-.cs-form label small { font-size: 0.62em; font-weight: normal; opacity: 0.9; margin-left: 6px; }
-.cs-form input { position: absolute; left: 396px; height: 38px; box-sizing: border-box; border: 2px solid #111; background: #fff; color: #000; padding: 0 8px;
+.cs-form { --in-h: max(38px, calc(46px / var(--stage-scale, 1))); }
+.cs-form label { position: absolute; left: 92.5px; max-width: 290px; color: #fff; font: bold min(calc(26px * var(--text-scale, 1)), 30px)/1.2 Verdana, "DejaVu Sans", sans-serif; text-shadow: 0 2px 3px rgba(0, 30, 70, 0.45);
+  top: 57px; transform: translateY(-50%); overflow-wrap: anywhere; }
+.cs-form input { position: absolute; left: 396px; height: var(--in-h); top: calc(57px - var(--in-h) / 2); box-sizing: border-box; border: 2px solid #111; background: #fff; color: #000; padding: 0 8px;
   font: calc(24px * var(--text-scale, 1)) Verdana, "DejaVu Sans", sans-serif; border-radius: 3px; -webkit-user-select: text; user-select: text; touch-action: manipulation; }
 .cs-form input:focus-visible, .cs-form input:focus { outline: 4px solid #ffd23f; outline-offset: 2px; }
-.cs-privacy { position: absolute; left: 86px; top: 176px; width: 604px; min-height: 56px; margin: 0; padding: 9px 14px; box-sizing: content-box; color: #fff; background: #0b5f94; border: 2px solid rgba(255,255,255,0.55); border-radius: 12px;
-  font: calc(15px * var(--text-scale, 1))/1.4 Verdana, "DejaVu Sans", sans-serif; }
+.cs-privacy { position: absolute; left: 86px; top: 102px; width: 636px; min-height: 138px; margin: 0; padding: 12px 16px 12px 70px; box-sizing: border-box; color: #fff; background: #0b5f94; border: 2px solid rgba(255,255,255,0.55); border-radius: 12px;
+  font: calc(15px * var(--text-scale, 1))/1.4 Verdana, "DejaVu Sans", sans-serif; display: flex; align-items: center; max-height: 164px; overflow: hidden; }
+.cs-privacy svg { position: absolute; left: 18px; top: 50%; width: 36px; height: 36px; margin-top: -18px; }
+.cs-quit { position: absolute; left: 8px; top: 8px; padding: 0; width: max(48px, calc(46px / var(--stage-scale, 1))); z-index: 5; display: grid; place-items: center; }
+.cs-quit svg { width: 26px; height: 26px; }
 .cs-submit { position: absolute; border: 0; background: transparent; color: #fff; cursor: pointer; border-radius: 14px;
   font: bold calc(26px * var(--text-scale, 1)) Verdana, "DejaVu Sans", sans-serif; text-shadow: 0 2px 2px rgba(0, 40, 90, 0.5); }
 .cs-submit:focus-visible { outline: 4px solid #ffd23f; outline-offset: 3px; }
@@ -57,8 +64,8 @@ audio.defineSynth('csChoose', (a, v) => {
 
 export function cutsceneScene(app) {
   let params = {}, text = ENGLISH_FALLBACK, phase = 'loading', ticks = 0, ready = false, destroyed = false;
-  let studio = null, talkie = null, popNav = null, layer = null, hover = null, chosen = null, form = null;
-  let nickname = '', age = null, submitState = 1, dim = 0, dimTarget = 0, musicOn = false, fade = 0;
+  let studio = null, talkie = null, popNav = null, layer = null, hover = null, chosen = null, form = null, quitBtn = null;
+  let nickname = '', submitState = 1, dim = 0, dimTarget = 0, musicOn = false, fade = 0, hintEl = null;
   const particles = new Particles(300);
   const reduced = () => !!settings.get('reducedMotion');
   const line = i => (text[i] != null && text[i] !== '' ? text[i] : ENGLISH_FALLBACK[i]);
@@ -72,8 +79,17 @@ export function cutsceneScene(app) {
   // --- 1. Host lines 0-2 --------------------------------------------------------------------
   function start() {
     phase = 'intro';
+    // Touch has no Escape key: a small Main menu button, top left (inside the safe area).
+    quitBtn = glossy('', () => askQuit(), { id: 'cutscene-quit', class: 'alt small cs-quit', 'aria-label': t('flow.cutscene.quitLabel'), title: t('flow.cutscene.quitLabel') });
+    quitBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 9.8V20h13V9.8"/><path d="M10 20v-5h4v5"/></svg>';
+    app.ui.append(quitBtn);
     say([line(LINE.hello), line(LINE.soon), line(LINE.who)], chooseAvatar);
   }
+
+  // The avatar hint names the controls of the device in use, and changes with it.
+  const hintText = () => (input.lastDevice === 'touch' ? t('flow.cutscene.chooseHint')
+    : input.lastDevice === 'gamepad' ? tp('flow.cutscene.chooseHintPad') : tp('flow.cutscene.chooseHintKeys'));
+  const onDevice = () => { if (hintEl) hintEl.textContent = hintText(); };
 
   // --- 2. Avatar choice ---------------------------------------------------------------------
   function chooseAvatar() {
@@ -87,16 +103,24 @@ export function cutsceneScene(app) {
       const r = KID_RECTS[who];
       const b = el('button', { type: 'button', class: 'cs-kid', id: `choose-${who}`, 'aria-label': t('flow.cutscene.playAs', { name: avatarName(who) }),
         style: { left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px' } }, el('span', {}, avatarName(who)));
-      b.addEventListener('pointerenter', () => setHover(who));
+      // Hover and keyboard focus always point at the same child, so Enter picks the one that
+      // is reacting (the original had only the hovered child react).
+      b.addEventListener('pointerenter', () => {
+        const other = document.getElementById(`choose-${who === 'amy' ? 'harry' : 'amy'}`);
+        if (other && document.activeElement === other) b.focus({ preventScroll: true });
+        setHover(who);
+      });
       b.addEventListener('pointerleave', () => { if (document.activeElement !== b) setHover(null); });
       b.addEventListener('focus', () => setHover(who));
       b.addEventListener('blur', () => setHover(null));
       b.addEventListener('click', () => choose(who));
       return b;
     };
+    hintEl = el('div', { class: 'cs-hint', id: 'cutscene-hint' }, hintText());
     layer = el('div', { class: 'fl-layer', id: 'cutscene-choose', role: 'group', 'aria-label': line(LINE.who) },
-      el('div', { class: 'cs-hint' }, t('flow.cutscene.chooseHint')), kid('amy'), kid('harry'));
+      hintEl, kid('amy'), kid('harry'));
     app.ui.append(layer);
+    input.addEventListener('device', onDevice);
     popNav = pushNav(layer, { initial: input.lastDevice === 'touch' ? false : '#choose-amy', onBack: askQuit });
     app.announce(line(LINE.who));
   }
@@ -123,6 +147,8 @@ export function cutsceneScene(app) {
     chosen = who;
     phase = 'chosen';
     if (popNav) { popNav(); popNav = null; }
+    input.removeEventListener('device', onDevice);
+    hintEl = null;
     layer.remove(); layer = null;
     studio.react(who, 'happy');
     studio.react(who === 'amy' ? 'harry' : 'amy', 'idle');
@@ -146,21 +172,19 @@ export function cutsceneScene(app) {
     phase = 'form';
     talkie.hide();
     studio.host.stopAt('stop');
-    const nick = el('input', { id: 'form-nickname', type: 'text', maxlength: '25', autocomplete: 'off', autocapitalize: 'words', spellcheck: 'false', enterkeyhint: 'next',
-      'aria-describedby': 'form-privacy', style: { top: '39px', width: '314px' } });
+    const nick = el('input', { id: 'form-nickname', type: 'text', maxlength: '25', autocomplete: 'off', autocapitalize: 'words', spellcheck: 'false', enterkeyhint: 'done',
+      'aria-describedby': 'form-privacy', style: { width: '314px' } });
     nick.value = nickname;
-    const ageIn = el('input', { id: 'form-age', type: 'text', inputmode: 'numeric', pattern: '[0-9]*', maxlength: '3', autocomplete: 'off', enterkeyhint: 'done',
-      'aria-describedby': 'form-privacy', style: { top: '111px', width: '62px' } });
-    ageIn.addEventListener('input', () => { ageIn.value = ageIn.value.replace(/\D+/g, '').slice(0, 3); });
+    const lock = el('span', {});
+    lock.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     const submit = el('button', { type: 'submit', class: 'cs-submit', id: 'form-submit',
       style: { left: SUBMIT_AT.x + 'px', top: SUBMIT_AT.y + 'px', width: SUBMIT_AT.w + 'px', height: SUBMIT_AT.h + 'px' } }, t('flow.cutscene.submit'));
     for (const [ev, s] of [['pointerenter', 2], ['pointerleave', 1], ['pointerdown', 3], ['focus', 2], ['blur', 1]]) submit.addEventListener(ev, () => { submitState = s; });
+    // The age and e-mail boxes baked into the form art sit under the privacy panel.
     form = el('form', { class: 'cs-form', id: 'cutscene-form', autocomplete: 'off', novalidate: true, 'aria-label': line(LINE.tell) },
-      el('label', { for: 'form-nickname', style: { top: '40px' } }, line(LINE.nickname)),
+      el('label', { for: 'form-nickname' }, line(LINE.nickname)),
       nick,
-      el('label', { for: 'form-age', style: { top: '112px' } }, line(LINE.age), el('small', {}, t('flow.cutscene.optional'))),
-      ageIn,
-      el('p', { class: 'cs-privacy', id: 'form-privacy' }, t('flow.cutscene.privacy')),
+      el('p', { class: 'cs-privacy', id: 'form-privacy' }, lock.firstChild, t('flow.cutscene.privacy')),
       submit);
     form.addEventListener('submit', e => { e.preventDefault(); submitForm(); });
     app.ui.append(form);
@@ -172,11 +196,8 @@ export function cutsceneScene(app) {
   function submitForm() {
     if (phase !== 'form') return;
     const nick = document.getElementById('form-nickname');
-    const ageIn = document.getElementById('form-age');
     // Keep printable characters only; an empty nickname falls back to the avatar's name.
     nickname = String(nick ? nick.value : '').replace(/[\u0000-\u001f\u007f<>]/g, '').trim().slice(0, 25);
-    const n = parseInt(ageIn ? ageIn.value : '', 10);
-    age = Number.isInteger(n) && n > 0 && n < 120 ? n : null;
     audio.play('tap');
     if (popNav) { popNav(); popNav = null; }
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
@@ -189,12 +210,16 @@ export function cutsceneScene(app) {
     phase = 'closing';
     const name = nickname || avatarName(chosen);
     const blind = !!settings.get('blindRounds');
-    // Blind rounds on: the quiz comes next, so the live closing line fits (in every language).
-    // Off (default): a level comes next, so a new neutral line (decision 11.9 #14; English).
-    const last = blind ? line(LINE.closingLive) : t('flow.cutscene.closing', { name });
-    say([last], () => {
+    // Blind rounds on: the quiz comes next, so the live closing line fits (in every language),
+    // and the blind half ends with "Step right this way ...". Off (default): the shrinking zone
+    // comes next, so a new neutral line (decision 11.9 #14; English), then "Step right this way
+    // ...", which precedes every shrink (NOTES 2.3 port flow; build B: splash, cutscene, "Step
+    // right this way", shrink, platform round 1).
+    const lines = blind ? [line(LINE.closingLive)] : [t('flow.cutscene.closing', { name }), t('gameshow.stepRightThisWay')];
+    say(lines, () => {
       phase = 'done';
-      if (typeof params.onComplete === 'function') params.onComplete({ avatar: chosen, nickname, age });
+      if (quitBtn) { quitBtn.remove(); quitBtn = null; }
+      if (typeof params.onComplete === 'function') params.onComplete({ avatar: chosen, nickname });
       else app.scenes.go('splash', {}, { style: 'fade' });
     });
   }
@@ -232,7 +257,7 @@ export function cutsceneScene(app) {
       const textJob = loadQuizText().then(q => { if (q && Array.isArray(q.intro)) text = q.intro; }).catch(() => {});
       Promise.all([artJob, textJob]).then(([ok]) => { ready = !!ok; if (!destroyed && phase === 'loading') { studio.start(); start(); } });
       window.__test && window.__test.register('cutscene', () => ({
-        phase, ready, hover, chosen, nickname, age,
+        phase, ready, hover, chosen, nickname, hint: hintEl ? hintEl.textContent : null,
         talkie: talkie ? talkie.state() : null,
         studio: studio ? studio.state() : null,
       }));
@@ -240,6 +265,7 @@ export function cutsceneScene(app) {
     exit() {
       destroyed = true;
       if (popNav) popNav();
+      input.removeEventListener('device', onDevice);
       if (talkie) talkie.destroy();
       audio.stopMusic();
       window.__test && window.__test.unregister('cutscene');

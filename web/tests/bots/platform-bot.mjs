@@ -6,6 +6,14 @@
 // Strategy: pick a target (the nearest unfinished goal microbe, then the open portal), ride
 // towards it, jump when blocked or when the target is above, double jump near the apex, and
 // photograph / throw when the target is in reach. Deterministic: no randomness, no timers.
+//
+// This reactive bot is enough for level 1 (web/tests/level1.spec.mjs drives it with the keyboard
+// and with on-screen taps). Every level 1-10 is completed by the planning bot, PlannerBot, in
+// ./planner.mjs (look-ahead on a shadow copy of the simulation), re-exported here; its winning
+// runs are recorded by ./record-traces.mjs into web/tests/traces/ and replayed by
+// web/tests/levels.spec.mjs.
+export { PlannerBot, runPlannerHeadless } from './planner.mjs';
+
 const TILE = 50;
 const LUCY = 11, MILK = 20, PORTAL = 6, ANTIBIOTIC_PICKUP = 21, SUPERINFECTION = 23;
 const GOOD = [3, 4, 11, 12, 13, 14];

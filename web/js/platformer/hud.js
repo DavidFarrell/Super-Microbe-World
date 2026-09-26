@@ -52,6 +52,57 @@ function goalMode(goal) {
   return 'camera_icon';
 }
 
+// Goal pictures the original lacked (NOTES.md 11.9 #9): level 4 (photograph Patty) had no
+// branch in CREATE_GUI and showed an empty screen, and every KILL_ALL level showed Slurm, even
+// level 7, where Iggy is the only bad microbe (PlatformGame.as:337-358). Both are built here
+// from the microbe's own idle frame, in the style of the shipped pictures (microbes on black
+// with a soft white glow, 151 x 168.5 status units). Layout entries are [centre x, centre y,
+// scale, flip] in status units.
+const PORTRAITS = {
+  patty: { symbol: 'patty_icon', layout: [[75.5, 86, 0.82, false]] },
+  iggy: { symbol: 'iggy_icon', layout: [[48, 56, 1.3, false], [104, 50, 1.2, true], [112, 108, 1.35, true], [40, 116, 1.25, false], [76, 86, 1.45, false]] },
+};
+const portraitCache = new Map();
+
+// The portrait for a goal, or null to keep the original picture. badTypes: the type ids of
+// the level's bad microbes.
+export function goalPortrait(goal, badTypes = []) {
+  if (!goal) return null;
+  if (goal.goalType === G.PHOTOGRAPH_SPECIFIC && goal.microbeType === T.PATTY) return 'patty';
+  if (goal.goalType === G.KILL_ALL && badTypes.length && badTypes.every(t => t === T.IGGY)) return 'iggy';
+  return null;
+}
+
+// Composes a portrait once (at the atlases' 2x) and caches it; null until its art is loaded.
+function portraitCanvas(name) {
+  if (portraitCache.has(name)) return portraitCache.get(name);
+  const p = PORTRAITS[name];
+  const sym = p && sprites.symbol(p.symbol);
+  if (!sym || !sprites.hasSymbol('status_background')) return null;
+  const K = 2, W = 302, H = 337;
+  const make = () => (typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(W, H) : Object.assign(document.createElement('canvas'), { width: W, height: H }));
+  // The idle frame's bounds about the registration point (its label-start image).
+  const fr = (sym.frames || [])[(sym.labels && sym.labels.idle ? sym.labels.idle : 1) - 1];
+  const s0 = sym.scale || 1;
+  const b = fr ? { x: -fr[5] / s0, y: -fr[6] / s0, w: fr[3] / s0, h: fr[4] / s0 } : { x: 0, y: 0, w: 50, h: 50 };
+  const art = make(), ag = art.getContext('2d');
+  ag.setTransform(K, 0, 0, K, 0, 0);
+  for (const [cx, cy, s, flip] of p.layout) {
+    const rx = cx - (flip ? -(b.x + b.w / 2) : b.x + b.w / 2) * s, ry = cy - (b.y + b.h / 2) * s;
+    sprites.drawSymbol(ag, p.symbol, 'idle', 0, rx, ry, { flipX: flip, scaleX: s, scaleY: s, pivotX: rx, pivotY: ry });
+  }
+  const out = make(), g = out.getContext('2d');
+  g.fillStyle = '#000';
+  g.fillRect(0, 0, W, H);
+  g.shadowColor = 'rgba(255, 255, 255, 0.85)';
+  g.shadowBlur = 7;
+  g.drawImage(art, 0, 0);
+  g.shadowBlur = 0;
+  g.drawImage(art, 0, 0);
+  portraitCache.set(name, out);
+  return out;
+}
+
 // Goal as a sentence, e.g. "Photograph 3 Lucy".
 export function goalText(goal) {
   const n = goal.required;
@@ -97,6 +148,8 @@ export class Hud {
     this.lives = game.player.lives;
     this.heartAnim = [0, 0, 0];     // ticks since each heart was lost (0 = not lost)
     this.goal = game.goalsView[0] || null;
+    const bad = [...new Set(game.entities.filter(e => e && e.isBad && e.type !== T.SUPERINFECTION).map(e => e.type))];
+    this.portrait = goalPortrait(this.goal, bad);
     this.ticksShown = game.goalTicks;
     this.heldTicks = 0;             // ticks still flying towards the phone (sparkle trails)
     this.tickPop = [0, 0, 0, 0, 0, 0];
@@ -115,13 +168,21 @@ export class Hud {
     return [Math.floor(v / 1000) % 10, Math.floor(v / 100) % 10, Math.floor(v / 10) % 10, v % 10];
   }
 
+  // What the ePhone status screen shows (for the test probe): picture and mode icon.
+  goalPicture() {
+    return {
+      picture: this.portalOpen ? 'exit_status' : this.portrait ? `portrait:${this.portrait}` : goalImage(this.goal),
+      mode: goalMode(this.goal),
+    };
+  }
+
   // A photo's sparkle trail is on its way: its tick box fills when it lands (landTick()).
   holdTick() { this.heldTicks++; }
   landTick() {
     this.heldTicks = Math.max(0, this.heldTicks - 1);
   }
 
-  showBanner(text, ticks = 170) { this.banner = { text, age: 0, ticks }; }
+  showBanner(text, ticks = 170) { this.banner = { text, age: 0, ticks }; this.bannerY = null; }
 
   // Per engine tick while the game is paused: only the layout follows the input device.
   updateLayout(device) {
@@ -169,6 +230,9 @@ export class Hud {
     if (this.flip > 0 && this.flip < 1) this.flip = Math.min(1, this.flip + 0.045);
     if (this.ring > 0) this.ring = this.ring >= 60 ? 0 : this.ring + 1;
     if (this.banner && ++this.banner.age > this.banner.ticks) this.banner = null;
+    // The banner moves down out of the way while the player rides along the top of the screen.
+    const want = game.player.particle.position.y < 150 ? 250 : 78;
+    this.bannerY = this.bannerY == null ? want : this.bannerY + (want - this.bannerY) * 0.15;
 
     if (game.secondsLeft !== this.secs) { this.secs = game.secondsLeft; if (this.secs <= 20) this.timerPulse = 1; }
     this.timerPulse = Math.max(0, this.timerPulse - 0.04);
@@ -360,7 +424,9 @@ export class Hud {
     const sx = f > 0 && f < 1 ? Math.abs(Math.cos(f * Math.PI)) : 1;
     ctx.translate(75.35, 0); ctx.scale(sx, 1); ctx.translate(-75.35, 0);
     const img = showExit ? 'exit_status' : goalImage(this.goal);
-    if (!sprites.drawFrame(ctx, img, 1)) sprites.drawFrame(ctx, 'status_background', 1);
+    const portrait = !showExit && this.portrait ? portraitCanvas(this.portrait) : null;
+    if (portrait) ctx.drawImage(portrait, 0, 0, portrait.width, portrait.height, 0, 0, portrait.width / 2, portrait.height / 2);
+    else if (!sprites.drawFrame(ctx, img, 1)) sprites.drawFrame(ctx, 'status_background', 1);
     if (showExit && f < 1) { ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = (1 - f) * 1.6; sprites.drawFrame(ctx, 'exit_status', 1); }
     ctx.restore();
     const mode = goalMode(this.goal);
@@ -396,7 +462,7 @@ export class Hud {
     ctx.save();
     ctx.font = '800 24px Baloo, "Trebuchet MS", sans-serif';
     const w = ctx.measureText(b.text).width + 44;
-    ctx.translate(400, 78);
+    ctx.translate(400, this.bannerY ?? 78);
     ctx.scale(0.6 + 0.4 * k, 0.6 + 0.4 * k);
     ctx.globalAlpha = clamp(k, 0, 1);
     ctx.fillStyle = 'rgba(27, 22, 64, 0.86)';

@@ -146,6 +146,7 @@ function blitCached(ctx, name, frame, r, e) {
 
 // Frees the pre-scaled copies (a scene that no longer shows the studio can call this).
 export function releaseBlits() { blits.clear(); }
+export const blitCount = () => blits.size;
 
 // Does this label have any drawable pose or frame (a rig render may leave labels out)?
 export function labelHasArt(name, label) {

@@ -9,8 +9,8 @@ Scenes never decide what comes next on their own when a callback is given; witho
 | Scene | Owner folder | Params in | Callback(s) out |
 |---|---|---|---|
 | `splash` | `web/js/scenes/splash.js` (flow) | `{}` (`?lang=<code>` applies a language and skips the first-run chooser) | `app.flow.newGame()` / `continueGame()` / level select / settings |
-| `cutscene` | `web/js/flow/` | `{ onComplete }` | `onComplete({ avatar: 'harry'\|'amy', nickname, age })` (`age` is a number or `null`) |
-| `shrink` | `web/js/flow/` | `{ avatar, round, onComplete }` | `onComplete({ focus: { x, y } })` (stage point of the shrunk child; the flow centres the iris into the level on it) |
+| `cutscene` | `web/js/flow/` | `{ onComplete }` | `onComplete({ avatar: 'harry'\|'amy', nickname })` (no age or e-mail is collected, NOTES 11.2) |
+| `shrink` | `web/js/flow/` | `{ avatar, round, skippable, onComplete }` (`skippable` false for the player's first shrink, NOTES 2.5; default true when opened directly) | `onComplete({ focus: { x, y } })` (stage point of the shrunk child; the flow centres the iris into the level on it) |
 | `platform` | `web/js/platformer/` | `{ level, avatar, score, intro, seed, onComplete(result), onGameOver(result), onQuit() }` | `result = { level, score, next, reason }`; `score` in is the running hoverboard total, `result.score` the new total |
 | `kitchen` | `web/js/kitchen/` | `{ level: 0..3, avatar, score, seed, onComplete(result), onQuit() }` | `result = { level, score, report: [{ item, ok, reason }] }`; `score` in is the running kitchen total, `result.score` the new total |
 | `gameshow` | `web/js/gameshow/` | `{ round: 1..5, avatar, nickname, cpuName, playerScore, cpuScore, blind, stepRight, seed, onComplete(result), onQuit() }` | `result = { playerScore, cpuScore, answers: [{ q, value }] }` |
@@ -47,8 +47,17 @@ splash -> cutscene -> for round r = 1..5:
  -> ending
 ```
 
+- "Step right this way and prepare to enter the world of microbes!" precedes every shrink: for
+  round 1 with blind rounds off the cutscene says it after its closing line; otherwise the game
+  show says it (`blind: true`, or `stepRight: true`).
 - A failed platform level (lives or time) shows `summary` over the frozen, dimmed level and then
-  restarts **the same level** with the score kept (decision 11.9 #5).
+  restarts **the same level** with the score kept (decision 11.9 #5). With the setting
+  `restartScope: 'round'` (Settings, Game: "Restart the whole round") it restarts the round's
+  first level with its briefing, as Flash did (NOTES 11.1 #2). The retry straight after the
+  summary card skips the briefing (`intro: '0'`); a level resumed with Continue shows it.
+- Seeds: a new journey draws a fresh run seed (`?seed=<n>` fixes it) and every journey step
+  derives its `seed` from it. A level played from Level select gets a fresh seed of its own
+  (`?seed=<n>` makes it reproducible), never the saved journey's.
 - Progress is saved at the start of every step (`smw:progress`); Continue on the splash resumes
   the step the player was on. Level select plays one level alone, with no shrink or quiz, and
   records a best score.
@@ -61,7 +70,8 @@ splash -> cutscene -> for round r = 1..5:
 - `openSettings(app, { onClose })` from `web/js/flow/settings.js` opens the settings as an
   overlay over any scene (for pause menus). While it is open the host scene must not act on
   input (check `app.flow.overlayOpen`); `onClose()` runs when it closes.
-- Settings keys owned by the flow: `blindRounds` (default `false`). Text size: `textScale`
+- Settings keys owned by the flow: `blindRounds` (default `false`), `restartScope` (`'level'`
+  default, `'round'`). Text size: `textScale`
   (1, 1.15, 1.3); the flow mirrors it to the CSS variable `--text-scale` on `:root`, so area CSS
   can use `calc(16px * var(--text-scale, 1))`.
 - `?lang=<code>` (original codes: `en`, `bg_fl`, `cz_cz`, ...) selects the language like the
@@ -76,6 +86,17 @@ Art: atlases in `web/data/atlas/` (see `web/data/atlas/index.json`); draw with
 `web/js/platformer/sprites.js`, or `web/js/flow/art.js` for cut-out rigs (`mode: "rig"`, the
 game show cast and the shrinking avatars). While an atlas is missing, scenes draw clean
 placeholders so they stay testable.
+
+Keyboard in flow menus (`web/js/flow/ui.js`): arrows and the d-pad move the focus spatially,
+Tab / Shift+Tab move it in document order within the top screen or dialog (wrapping), Enter
+and Space activate the focused button, and a held key's auto-repeat never activates one. This
+runs only while a flow screen or dialog is on top (for example the settings overlay over a
+pause menu); other areas' screens keep their own handling.
+
+Loading: the flow fetches the shrinking zone's sheet during the cutscene and the quiz, and the
+next level's (or the kitchen's) during the shrinking zone, through each area's own memoised
+loader. Flow scenes wait for their art on a dark stage with a small loading ring; the
+placeholder drawings appear only if a load fails.
 
 Tests: each area adds `web/tests/<area>*.spec.mjs` picked up by `web/tests/run.mjs`, and
 registers a `__test` probe named after the scene (`__test.probe('gameshow')` and so on) so the

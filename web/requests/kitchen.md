@@ -6,8 +6,10 @@ kitchen works around each one meanwhile.
 ## 1. `web/precache.json` / `web/sw.js`: include the new kitchen modules
 
 - **Change**: re-run `tools/build-precache.mjs` so the offline precache lists the new files
-  `web/js/kitchen/{rules,layout,timeline,art,draw,controls,sounds,kitchenScene}.js` and the
-  updated `web/data/lang/en/kitchen.json` (the kitchen area was told not to run it).
+  `web/js/kitchen/{rules,layout,timeline,art,draw,controls,sounds,kitchenScene}.js`, the
+  updated `web/data/lang/en/kitchen.json` and the kitchen atlases
+  `web/data/atlas/{kitchen,kitchen-harry,kitchen-amy}{.json,-0.webp}` (none of them is in
+  `web/precache.json` as of 16:50; the kitchen area was told not to run the tool).
 - **Reason**: without them the kitchen scene cannot load offline.
 - **Workaround**: none needed online.
 

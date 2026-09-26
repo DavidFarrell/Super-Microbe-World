@@ -7,7 +7,7 @@
 // Harry at the right one (harry_score). Whoever the player chose is the player; the other child
 // is the CPU opponent (NOTES 6.1, 10.2 #39; the original always made Harry the player).
 import { Clip, drawFrame, hasArt, track, mul, frameOfTick } from './art.js';
-import { BALOO, roundRect, fitLine } from './text.js';
+import { BALOO, roundRect, fitLine, textWidth } from './text.js';
 import { MAX_SCORE } from './rules.js';
 
 // Labels with no art in the atlas yet fall back (checked at play time, so new art is used as soon
@@ -17,6 +17,22 @@ const SCORE_KEYS = { amy: 'amy_score', harry: 'harry_score' };
 // LCD face of the score clip (gs_score, 73 x 32.5 in its own units), in score-clip space.
 const LCD = { w: 73, h: 32.5 };
 const DIGITS = ['thousands', 'hundreds', 'tens', 'units'];
+// Name tags: 15 px, shrinking to 13 px (11 CSS px or more on a 667 px wide phone), then cut with
+// an ellipsis. 112 px of text keeps two long tags (their centres are 136 px apart) apart; the
+// talkie and the results card show the whole name.
+const TAG = { maxWidth: 112, size: 15, min: 13 };
+const tagFont = s => `800 ${s}px ${BALOO}`;
+export function tagFit(name) {
+  const f = fitLine(name, tagFont, TAG.maxWidth, TAG.size, TAG.min);
+  if (f.fits) return { ...f, text: name };
+  const chars = [...name];
+  for (let n = chars.length - 1; n > 0; n--) {
+    const text = chars.slice(0, n).join('').trimEnd() + '\u2026';
+    const w = textWidth(text, tagFont(TAG.min));
+    if (w <= TAG.maxWidth) return { size: TAG.min, width: w, fits: true, text, truncated: true };
+  }
+  return { size: TAG.min, width: textWidth('\u2026', tagFont(TAG.min)), fits: true, text: '\u2026', truncated: true };
+}
 // Fallback placements while the atlas is missing (from gs_podia tracks).
 const FALLBACK_SCORE_M = { amy: [0.78131, 0.09801, 0, 0.78123, 465.33, 274], harry: [0.94544, 0.1187, 0, 0.94624, 596.14, 289.45] };
 const FALLBACK_DIGIT_X = [7.6, 22.5, 37.4, 52.3];
@@ -150,7 +166,7 @@ export class Studio {
     const lcdTop = m[1] * (LCD.w / 2) + m[5];
     this._tagFits ||= new Map();
     let f = this._tagFits.get(name);
-    if (!f) { f = fitLine(name, s => `800 ${s}px ${BALOO}`, 100, 15, 10); this._tagFits.set(name, f); }
+    if (!f) { f = tagFit(name); this._tagFits.set(name, f); }
     const w = Math.max(48, f.width + 22), h = 21;
     const pop = reducedMotion ? 0 : this.tagPop[who];
     ctx.save();
@@ -169,7 +185,7 @@ export class Studio {
     ctx.font = `800 ${f.size}px ${BALOO}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(name, 0, 1.5);
+    ctx.fillText(f.text, 0, 1.5);
     ctx.restore();
   }
 
@@ -224,6 +240,10 @@ export class Studio {
       host: this.host.label, harry: this.kids.harry.label, amy: this.kids.amy.label,
       hostFrame: this.host.frame, harryFrame: this.kids.harry.frame, amyFrame: this.kids.amy.frame,
       scores: { harry: { ...this.scores.harry }, amy: { ...this.scores.amy } },
+      tags: Object.fromEntries(Object.entries(this.names).map(([who, n]) => {
+        const f = n ? tagFit(n) : null;
+        return [who, f && { text: f.text, size: f.size, width: f.width, truncated: !!f.truncated }];
+      })),
     };
   }
 }

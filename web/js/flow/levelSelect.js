@@ -2,8 +2,9 @@
 // the four kitchen levels, each playable on its own (briefing, level, results card; no shrink,
 // no quiz) once unlocked. Level 1 is always open; a level opens when the journey reaches it or
 // when the level before it is completed here. Thumbnails are drawn from the level data and the
-// tile art (the level's first screen), with the goal microbe's phone portrait; the kitchen
-// levels use their 2009 intro pictures. Cards are real buttons: arrows / d-pad / Tab move,
+// tile art (the level's first screen), with the goal's ePhone picture (the same one the HUD
+// shows, including the Patty and Iggy portraits of decision 11.9 #9); the kitchen levels use
+// their 2009 intro pictures. Cards are real buttons: arrows / d-pad / Tab move,
 // Enter or tap plays; the Harry / Amy switch picks who plays.
 import { el } from '../ui/dom.js';
 import { audio } from '../core/audio.js';
@@ -11,15 +12,25 @@ import { settings } from '../core/settings.js';
 import { t } from '../core/i18n.js';
 import { loadJson } from '../core/assets.js';
 import { AREA_MUSIC } from '../core/music.js';
-import { goalText } from '../platformer/hud.js';
+import { goalText, goalImage, goalPortrait } from '../platformer/hud.js';
 import { sprites } from '../platformer/sprites.js';
+import { BAD_MICROBE_TYPES } from '../platformer/constants.js';
 import * as art from './art.js';
 import { avatarName, AVATARS } from './flow.js';
 import { ensureStyle, glossy, pushNav, tickNav, clearNav } from './ui.js';
 
 const THUMB_W = 128, THUMB_H = 72, THUMB_SCALE = 2;   // CSS stage px; canvas at 2x
 const thumbs = new Map();                              // id -> canvas (kept for the session)
-const PORTRAIT = { 11: 'lucy_image', 12: 'sandy_image', 14: 'steve_image', 16: 'slarg_image', 17: 'slurm_image' };
+const thumbPics = new Map();                           // id -> goal picture drawn (for the probe)
+// Patty (level 4) and Iggy (level 7) portraits, composed as platformer/hud.js composes them for
+// the ePhone (its portraitCanvas is private: web/requests/flow.md #8): each microbe's idle frame
+// on black with a soft white glow, 151 x 168.5 status units; layout entries are
+// [centre x, centre y, scale, flip].
+const PORTRAITS = {
+  patty: { symbol: 'patty_icon', layout: [[75.5, 86, 0.82, false]] },
+  iggy: { symbol: 'iggy_icon', layout: [[48, 56, 1.3, false], [104, 50, 1.2, true], [112, 108, 1.35, true], [40, 116, 1.25, false], [76, 86, 1.45, false]] },
+};
+const portraits = new Map();                           // name -> canvas (302 x 337, 2x)
 const AREA_COLOURS = { kitchen: ['#ffd27a', '#e08a2c'], skin: ['#f6c1a6', '#c9765a'], body: ['#f08a8a', '#9c2f3f'] };
 
 const CSS = `
@@ -29,17 +40,24 @@ const CSS = `
 .ls-avatar { display: flex; gap: 6px; background: rgba(255,255,255,0.08); padding: 4px; border-radius: 14px; }
 .ls-avatar .fl-btn { padding: 6px 14px 5px; font-size: calc(16px * var(--text-scale, 1)); }
 .ls-avatar .fl-btn[aria-pressed="false"] { filter: grayscale(0.6) brightness(0.8); }
-.ls-grid { position: absolute; left: 14px; right: 14px; top: 68px; bottom: 6px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-auto-rows: 118px; gap: 8px 9px; }
-.ls-card { position: relative; display: grid; grid-template-rows: ${THUMB_H}px auto; padding: 5px; min-width: 0; border-radius: 12px; border: 3px solid #0e3d6b; cursor: pointer; text-align: left;
+.ls-grid { position: absolute; left: 8px; right: 8px; top: 64px; bottom: 0; padding: 4px 6px 8px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  /* Card height: borders 6 + padding 8 + thumbnail 72 + gap 2 + title and goal lines (29.15 px at 100%), so rows grow with
+     the text size and the grid scrolls when they no longer fit (text size 130%). */
+  grid-auto-rows: minmax(calc(89px + 29.5px * var(--text-scale, 1)), auto); align-content: start; gap: 7px 9px; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; scrollbar-width: thin; }
+.ls-card { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: ${THUMB_H}px auto; padding: 4px; min-width: 0; border-radius: 12px; border: 3px solid #0e3d6b; cursor: pointer; text-align: left;
   background: linear-gradient(180deg, #fffdf6, #efe3c4); box-shadow: 0 4px 0 #0a2a4a; color: #1b1640; font-family: var(--body-font); min-height: 48px; }
 .ls-card:hover { transform: translateY(-2px); }
 .ls-card:active { transform: translateY(2px); box-shadow: 0 1px 0 #0a2a4a; }
 .ls-card:focus-visible { outline: 4px solid #ffd23f; outline-offset: 2px; }
-.ls-card canvas { width: ${THUMB_W}px; height: ${THUMB_H}px; border-radius: 7px; display: block; justify-self: center; background: #ff9900; }
-.ls-card b { font: 800 calc(15px * var(--text-scale, 1))/1.1 var(--ui-font); display: block; margin-top: 3px; }
+.ls-card canvas { width: ${THUMB_W}px; max-width: 100%; height: auto; aspect-ratio: ${THUMB_W} / ${THUMB_H}; border-radius: 7px; display: block; justify-self: center; align-self: start; background: #ff9900; }
+.ls-card > div { min-width: 0; }
+.ls-card b { font: 800 calc(15px * var(--text-scale, 1))/1.1 var(--ui-font); display: block; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ls-card small { font-size: calc(11px * var(--text-scale, 1)); line-height: 1.15; display: block; opacity: 0.8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ls-card .best { position: absolute; right: 8px; top: 8px; background: #ffd23f; color: #3a1450; border-radius: 999px; padding: 1px 7px; font: 800 calc(12px * var(--text-scale, 1)) var(--ui-font); }
-.ls-card .round { position: absolute; left: 8px; top: 8px; background: rgba(27,22,64,0.78); color: #fff; border-radius: 999px; padding: 1px 7px; font: 700 calc(11px * var(--text-scale, 1)) var(--body-font); }
+/* Best score at the thumbnail's top right, round at its bottom left (the goal picture is at the
+   bottom right), so the two never meet at any text size. */
+.ls-card .best, .ls-card .round { position: absolute; box-sizing: border-box; border-radius: 999px; padding: 1px 7px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+.ls-card .best { right: 8px; top: 8px; max-width: calc(100% - 16px); background: #ffd23f; color: #3a1450; font-weight: 800; font-size: calc(12px * var(--text-scale, 1)); font-family: var(--ui-font); }
+.ls-card .round { left: 8px; top: calc(70px - 13.2px * var(--text-scale, 1)); max-width: calc(100% - 52px); background: rgba(27,22,64,0.78); color: #fff; font-weight: 700; font-size: calc(11px * var(--text-scale, 1)); font-family: var(--body-font); }
 .ls-card[disabled] { cursor: default; filter: grayscale(0.85) brightness(0.62); transform: none; }
 .ls-card[disabled] .lock { position: absolute; left: 50%; top: 40px; transform: translate(-50%, -50%); width: 34px; height: 34px; color: #fff; }
 `;
@@ -64,7 +82,47 @@ function placeholder(canvas, colours, label) {
   g.fillText(label, canvas.width / 2, canvas.height / 2);
 }
 
-// The level's first screen: orange background, tiles around the player start, goal portrait.
+// Composes a Patty or Iggy portrait once (null when its art cannot be loaded). The microbe's
+// sheet is used from the shared cache when a level already loaded it, otherwise loaded
+// privately and freed at once.
+async function portraitPicture(name) {
+  if (portraits.has(name)) return portraits.get(name);
+  const p = PORTRAITS[name];
+  const idx = await sprites.loadIndex();
+  const atlasId = idx && idx.symbols && idx.symbols[p.symbol];
+  const shared = art.has(p.symbol);
+  const source = shared ? { draw: art.draw, symbol: art.symbol, close: () => {} } : atlasId ? await art.loadPrivate(atlasId) : null;
+  if (!source) return null;
+  try {
+    const sym = source.symbol(p.symbol);
+    if (!sym) return null;
+    const idle = (sym.labels && sym.labels.idle) || 1;
+    const fr = (sym.frames || [])[idle - 1];
+    const s0 = sym.scale || 1;
+    const b = fr ? { x: -fr[5] / s0, y: -fr[6] / s0, w: fr[3] / s0, h: fr[4] / s0 } : { x: 0, y: 0, w: 50, h: 50 };
+    const K = 2, W = 302, H = 337;
+    const pic = document.createElement('canvas');
+    pic.width = W; pic.height = H;
+    const ag = pic.getContext('2d');
+    ag.setTransform(K, 0, 0, K, 0, 0);
+    for (const [cx, cy, sc, flip] of p.layout) {
+      const rx = cx - (flip ? -(b.x + b.w / 2) : b.x + b.w / 2) * sc, ry = cy - (b.y + b.h / 2) * sc;
+      source.draw(ag, p.symbol, idle, [flip ? -sc : sc, 0, 0, sc, rx, ry]);
+    }
+    const out = document.createElement('canvas');
+    out.width = W; out.height = H;
+    const g = out.getContext('2d');
+    g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
+    g.shadowColor = 'rgba(255, 255, 255, 0.85)'; g.shadowBlur = 7;
+    g.drawImage(pic, 0, 0);
+    g.shadowBlur = 0;
+    g.drawImage(pic, 0, 0);
+    portraits.set(name, out);
+    return out;
+  } finally { source.close(); }
+}
+
+// The level's first screen: orange background, tiles around the player start, goal picture.
 async function drawLevelThumb(canvas, id, goal) {
   const data = await loadJson(`data/levels/${id}.json`);
   const n = /(\d+)$/.exec(id)[1];
@@ -72,6 +130,10 @@ async function drawLevelThumb(canvas, id, goal) {
   const idx = await sprites.loadIndex();
   const ids = ((idx && idx.sets && idx.sets['level' + n]) || []).filter(a => /^tiles-|^hud/.test(a));
   await Promise.all(ids.map(a => art.loadAtlas(a)));
+  // The goal picture, chosen as the HUD chooses it.
+  const bad = [...new Set((data.entities || []).map(e => data.palette[e[2]] && data.palette[e[2]].type).filter(tp => BAD_MICROBE_TYPES.includes(tp)))];
+  const portraitName = goalPortrait(goal, bad);
+  const portrait = portraitName ? await portraitPicture(portraitName).catch(() => null) : null;
   const g = canvas.getContext('2d');
   const k = canvas.width / 800;
   g.setTransform(k, 0, 0, k, 0, 0);
@@ -89,15 +151,18 @@ async function drawLevelThumb(canvas, id, goal) {
   // Player start marker: a little hoverboard shadow.
   const px = data.playerStart.col * 50 - camX + 25, py = data.playerStart.row * 50 + 100;
   g.fillStyle = 'rgba(0,0,0,0.25)'; g.beginPath(); g.ellipse(px, py, 34, 8, 0, 0, Math.PI * 2); g.fill();
-  // Goal portrait in a round badge, as on the ePhone status screen.
-  const pic = goal.goalType === 7 ? 'milk_image' : goal.goalType === 6 ? 'superinfection_image' : goal.goalType === 1 ? 'lucy_image' : goal.goalType === 0 ? PORTRAIT[goal.microbeType] : 'slurm_image';
+  // Goal picture in a round badge, as on the ePhone status screen.
+  const pic = goalImage(goal);
   g.save();
   g.translate(705, 355);
   g.fillStyle = '#fff'; g.strokeStyle = '#1b1640'; g.lineWidth = 10;
   g.beginPath(); g.arc(0, 0, 80, 0, Math.PI * 2); g.fill(); g.stroke();
   g.beginPath(); g.arc(0, 0, 74, 0, Math.PI * 2); g.clip();
-  const sym = pic && art.symbol(pic);
-  if (sym && sym.frames && sym.frames[0]) {
+  const sym = pic && pic !== 'status_background' && art.symbol(pic);
+  if (portrait) {
+    const s = Math.min(150 / 151, 150 / 168.5);
+    g.drawImage(portrait, (-151 * s) / 2, (-168.5 * s) / 2, 151 * s, 168.5 * s);
+  } else if (sym && sym.frames && sym.frames[0]) {
     const [, , , w, h] = sym.frames[0];
     const s = Math.min(150 / (w / (sym.scale || 1)), 150 / (h / (sym.scale || 1)));
     g.scale(s, s);
@@ -109,6 +174,7 @@ async function drawLevelThumb(canvas, id, goal) {
   }
   g.restore();
   g.setTransform(1, 0, 0, 1, 0, 0);
+  return portrait ? portraitName : sym ? pic : 'letter';
 }
 
 // Kitchen thumbnails from the 2009 intro pictures (kitchen_game_intro_level_N backdrops). The
@@ -201,7 +267,7 @@ export function levelSelectScene(app) {
       const c = document.createElement('canvas');
       c.width = THUMB_W * THUMB_SCALE; c.height = Math.round(THUMB_H * THUMB_SCALE);
       try {
-        await drawLevelThumb(c, id, levels.levels[id].goals[0]);
+        thumbPics.set(id, await drawLevelThumb(c, id, levels.levels[id].goals[0]));
         thumbs.set(id, c);
         const entry = cards.get(id);
         if (entry && !destroyed) entry.canvas.getContext('2d').drawImage(c, 0, 0);
@@ -240,7 +306,7 @@ export function levelSelectScene(app) {
       build();
       window.__test && window.__test.register('levelSelect', () => ({
         ready: !!root,
-        cards: [...cards.entries()].map(([id, c]) => ({ id, unlocked: !c.button.disabled, thumb: thumbs.has(id) })),
+        cards: [...cards.entries()].map(([id, c]) => ({ id, unlocked: !c.button.disabled, thumb: thumbs.has(id), pic: thumbPics.get(id) || null })),
         avatar: app.flow.profile.avatar || 'harry',
       }));
     },

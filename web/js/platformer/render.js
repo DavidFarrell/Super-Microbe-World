@@ -11,10 +11,10 @@
 // hoverboard, white hit flashes (tint), invulnerability blinking, a dim closed portal and a
 // glowing open one, an arrow to an open portal that is off screen, a tick badge over microbes
 // already photographed, and the player being drawn into the portal at the end.
-import { TILE, STAGE_W, STAGE_H, S, T, LEFT } from './constants.js';
+import { TILE, STAGE_W, STAGE_H, S, T, LEFT, BOMB_FUSE_STEPS } from './constants.js';
 import { sprites, MICROBE_NAMES } from './sprites.js';
 import { PLAYER_STATE, UPPER, LOWER } from './player.js';
-import { PORTAL, BULLET } from './actors.js';
+import { PORTAL, BULLET, BOMB } from './actors.js';
 import { ease, clamp } from '../core/tween.js';
 
 // The original drew one flat background for every level (root shape 1495: #ff9900).
@@ -33,6 +33,7 @@ export class PlatformRenderer {
     this.flash = new Map();   // entity -> ticks of white flash left
     this.exit = null;         // { age, ticks, from: {x, y}, to: {x, y} } while entering the portal
     this.portalOpenAge = -1;
+    this.touchLayout = false;  // set by the scene from the HUD layout (edge hints avoid the HUD)
     this.setGame(game);
   }
 
@@ -117,6 +118,7 @@ export class PlatformRenderer {
     ctx.restore();
 
     this.drawPortalArrow(ctx, vx, t);
+    this.drawBombHints(ctx, vx, t);
     if (g.whiteout > 0) {
       ctx.fillStyle = `rgba(255,255,255,${Math.min(1, g.whiteout / 100)})`;
       ctx.fillRect(0, 0, STAGE_W, STAGE_H);
@@ -147,9 +149,11 @@ export class PlatformRenderer {
     if (MICROBE_NAMES[e.symbol] && e.symbol !== 'superinfection_icon') text = MICROBE_NAMES[e.symbol] + (e.hasBeenPhotographed ? ' ✓' : '');
     if (e.type === T.SUPERINFECTION) text = e.lives > 0 ? `Superinfection  ${'●'.repeat(e.lives)}` : null;
     const fl = this.flash.get(e) || 0;
+    // A thrown antibiotic blinks red faster and faster as its fuse runs down (cosmetic).
+    const fuse = e.type === T.ANTIBIOTIC_BOMB ? bombBlink(e, t) : 0;
     sprites.drawSymbol(ctx, e.symbol || clip.symbol, label, frame, sx, y, {
       flipX: e.flip, alpha: Math.max(0, clip.alpha) / 100, t, text,
-      tint: fl ? '#ffffff' : null, tintAmount: fl / 8,
+      tint: fl ? '#ffffff' : fuse ? '#ff2a3c' : null, tintAmount: fl ? fl / 8 : fuse * 0.75,
     });
     if (e.hasBeenPhotographed && PHOTO_GOAL_TYPES.includes(this.goalType) && !e.removed && e.state !== S.BE_KILLED) this.drawTickBadge(ctx, e, sx, y);
   }
@@ -203,6 +207,15 @@ export class PlatformRenderer {
     });
   }
 
+  // Where an edge hint (portal arrow, antibiotic badge) goes, clear of the HUD: in keyboard
+  // play the left edge is free and the right edge sits between the hearts and the ePhone; in
+  // touch play the ePhone is at the top left and the thumb buttons are at the bottom, so the
+  // left hint moves to the right of the phone and both stay in the middle band.
+  edgeSpot(right, worldY, inset) {
+    if (right) return { x: STAGE_W - inset, y: clamp(worldY, 150, this.touchLayout ? 240 : 250) };
+    return this.touchLayout ? { x: 104 + inset, y: clamp(worldY, 130, 300) } : { x: inset, y: clamp(worldY, 130, 330) };
+  }
+
   // An arrow at the screen edge pointing to an open portal that is off screen.
   drawPortalArrow(ctx, vx, t) {
     const p = this.game.portal;
@@ -211,9 +224,9 @@ export class PlatformRenderer {
     const px = p.particle.position.x + b.x + b.w / 2 - vx;
     if (px > 40 && px < STAGE_W - 40) return;
     const right = px >= STAGE_W - 40;
-    const y = clamp(p.particle.position.y + b.y + b.h / 2, 130, 330);
+    const spot = this.edgeSpot(right, p.particle.position.y + b.y + b.h / 2, 34);
     const bob = this.reducedMotion ? 0 : Math.sin(t * 7) * 5;
-    const x = right ? STAGE_W - 34 + bob : 34 - bob;
+    const x = spot.x + (right ? bob : -bob), y = spot.y;
     ctx.save();
     ctx.translate(x, y);
     if (!right) ctx.scale(-1, 1);
@@ -221,6 +234,42 @@ export class PlatformRenderer {
     ctx.beginPath(); ctx.moveTo(18, 0); ctx.lineTo(-6, -20); ctx.lineTo(-6, -9); ctx.lineTo(-20, -9); ctx.lineTo(-20, 9); ctx.lineTo(-6, 9); ctx.lineTo(-6, 20); ctx.closePath();
     ctx.stroke(); ctx.fill();
     ctx.restore();
+  }
+
+  // Thrown antibiotics that are off screen (NOTES.md 11.9 #7: they now explode wherever they
+  // are): a badge at the screen edge with the capsule, an arrow towards it and a ring that
+  // empties as the fuse runs down.
+  drawBombHints(ctx, vx, t) {
+    if (this.exit) return;
+    for (const e of this.game.entities) {
+      if (!e || e.type !== T.ANTIBIOTIC_BOMB || e.removed) continue;
+      const cx = e.particle.position.x + e.particle.width / 2 - vx;
+      if (cx > -4 && cx < STAGE_W + 4) continue;
+      const right = cx >= STAGE_W;
+      const spot = this.edgeSpot(right, e.particle.position.y + e.particle.height / 2, 40);
+      const bob = this.reducedMotion ? 0 : Math.sin(t * 8) * 3;
+      const x = spot.x + (right ? bob : -bob), y = spot.y;
+      const left = e.state === BOMB.COUNTING_DOWN ? clamp(e.fuse / BOMB_FUSE_STEPS, 0, 1) : 1;
+      ctx.save();
+      ctx.translate(x, y);
+      // Arrow towards the bomb.
+      ctx.save();
+      if (!right) ctx.scale(-1, 1);
+      ctx.fillStyle = '#ff5a6a'; ctx.strokeStyle = '#1b1640'; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+      ctx.beginPath(); ctx.moveTo(34, 0); ctx.lineTo(22, -10); ctx.lineTo(22, 10); ctx.closePath(); ctx.stroke(); ctx.fill();
+      ctx.restore();
+      // Badge and fuse ring.
+      const pulse = e.state === BOMB.COUNTING_DOWN && !this.reducedMotion ? 1 + 0.08 * Math.max(0, Math.sin(t * (8 + 30 * (1 - left)))) : 1;
+      ctx.scale(pulse, pulse);
+      ctx.fillStyle = 'rgba(27, 22, 64, 0.85)';
+      ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)'; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = left < 0.35 ? '#ff5a6a' : '#fff4a8'; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(0, 0, 22, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * left); ctx.stroke();
+      sprites.drawSymbol(ctx, 'antibiotic_pickup', null, 0, -19.15, -8.15);
+      ctx.restore();
+    }
   }
 
   drawPlayer(ctx, p, vx, alpha, t) {
@@ -264,6 +313,14 @@ export class PlatformRenderer {
 }
 
 const g2frame = t => Math.floor(t * 25);
+
+// 0..1 red flash on a counting-down antibiotic: slow at first, fast near the end.
+function bombBlink(e, t) {
+  if (e.state !== BOMB.COUNTING_DOWN) return 0;
+  const left = clamp(e.fuse / BOMB_FUSE_STEPS, 0, 1);
+  const rate = 4 + 26 * (1 - left);
+  return Math.max(0, Math.sin(t * rate)) ** 2;
+}
 
 // A single logical animation name (debug avatar and tests).
 export function avatarAnim(p) {

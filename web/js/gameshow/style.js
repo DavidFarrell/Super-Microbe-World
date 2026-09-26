@@ -37,6 +37,7 @@ const CSS = `
 .gs-score.you b { color: #ffd84a; }
 @keyframes gs-card-in { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .gs-card { animation: none; } }
+html.reduced-motion .gs-card { animation: none; }
 `;
 
 export function injectStyle() {

@@ -32,8 +32,8 @@ import './sounds.js';
 
 const FPS = 25;                  // frames per game second (1 s = 25 frames exactly, NOTES 12.1)
 const SNEEZE_WINDOW = 50;        // frames: setInterval(makeSneeze, 2000) (KitchenGame.as:548)
-const BIN_FADE = 5;
-const BANNER_MIN = 40;           // ticks the end-of-level banner shows at least              // alpha per frame: removeBinItem, _alpha -= 5 every 40 ms (:621-629)
+const BIN_FADE = 5;              // alpha per frame: removeBinItem, _alpha -= 5 every 40 ms (:621-629)
+const BANNER_MIN = 40;           // ticks the end-of-level banner shows at least
 const TOUCH_PAUSE = ['pause'];
 const BAG = { x: 52, y: 186 };   // mouth of the shopping bag on the counter (items hop out of it)
 const AVATAR_ANIM = { [LOC.CUPBOARD]: 'cupboard', [LOC.BOWL]: 'bowl', [LOC.BIN]: 'bin' };
@@ -83,9 +83,16 @@ const STYLE = `
 .kz-notes { position: absolute; left: 30px; top: 48px; width: 648px; height: 272px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; justify-content: safe center; }
 #ui .kz-page .kz-notes { pointer-events: auto; }
 .kz-notes p { margin: 0; font: 400 calc(17px * var(--text-scale, 1))/1.35 var(--body-font); color: #111; animation: kz-row-in 0.35s ease both; }
+.kz-notes.many { gap: 7px; top: 46px; height: 284px; }
+.kz-notes.many p { font-size: calc(15px * var(--text-scale, 1)); line-height: 1.28; }
+.kz-notes.scrolls { justify-content: flex-start; padding-bottom: 26px; -webkit-mask-image: linear-gradient(#000 calc(100% - 44px), transparent); mask-image: linear-gradient(#000 calc(100% - 44px), transparent); }
+.kz-notes.scrolls.end { -webkit-mask-image: none; mask-image: none; }
 .kz-notes p.none { color: #13854a; font-weight: 700; }
 .kz-total { position: absolute; left: 0; width: 708px; font: 400 calc(22px * var(--text-scale, 1))/1.2 var(--body-font); animation: kz-row-in 0.35s ease both; }
-.kz-total b { font: 800 calc(40px * var(--text-scale, 1))/1 var(--ui-font); color: #1b1640; }
+.kz-total b { display: block; margin-top: 4px; font: 800 calc(40px * var(--text-scale, 1))/1 var(--ui-font); color: #1b1640; }
+.kz-total.big b { font-size: calc(58px * var(--text-scale, 1)); }
+.kz-total.small { font-size: calc(18px * var(--text-scale, 1)); color: #444; }
+.kz-total.small b { font-size: calc(30px * var(--text-scale, 1)); }
 .kz-total.plus b { color: #13854a; } .kz-total.minus b { color: #c02a3f; }
 .kz-pageno { position: absolute; right: 18px; bottom: 2px; font: 400 13px var(--body-font); color: #666; }
 .kz-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(20, 14, 50, 0.5); }
@@ -741,21 +748,25 @@ export function kitchenScene(app) {
       const notes = s.notes.length
         ? s.notes.map((k, i) => { const p = el('p', {}, t('kitchen.note.' + k)); p.style.animationDelay = `${i * 0.08}s`; return p; })
         : [el('p', { class: 'none' }, t('kitchen.outro.noMistakes'))];
-      body = [el('div', { class: 'kz-notes', tabindex: '0' }, notes)];
+      // All reminders are listed (the original had four slots); many of them get a compact layout,
+      // and a list that still overflows scrolls with a fade at the bottom until the end is reached.
+      body = [el('div', { class: 'kz-notes' + (s.notes.length > 6 ? ' many' : ''), tabindex: '0', 'aria-label': title }, notes)];
     } else {
-      title = t('kitchen.outro.totalPoints');
+      title = t('kitchen.outro.pointsPage');
       const total = startScore + s.points;
-      const line = (cls, top, label, value, delay) => {
+      // Awarded and deducted side by side, then this level's total and the running kitchen total.
+      // Only non-zero values are coloured, as on pages 1 and 2.
+      const line = (cls, top, left, width, label, value, delay) => {
         const d = el('div', { class: 'kz-total ' + cls }, el('div', {}, label), el('b', {}, value));
-        d.style.top = top + 'px';
-        d.style.animationDelay = delay + 's';
+        Object.assign(d.style, { top: top + 'px', left: left + 'px', width: width + 'px', animationDelay: delay + 's' });
         return d;
       };
+      const sign = n => (n > 0 ? 'plus' : n < 0 ? 'minus' : '');
       body = [
-        line('plus', 52, t('kitchen.outro.pointsAwarded'), s.awarded ? `+${s.awarded}` : '0', 0),
-        line('minus', 124, t('kitchen.outro.pointsDeducted'), s.deducted ? `-${s.deducted}` : '0', 0.1),
-        line('', 196, t('kitchen.outro.totalPoints'), String(s.points), 0.2),
-        line('', 268, t('kitchen.outro.kitchenTotal'), String(total), 0.3),
+        line(s.awarded ? 'plus' : '', 58, 40, 314, t('kitchen.outro.pointsAwarded'), s.awarded ? `+${s.awarded}` : '0', 0),
+        line(s.deducted ? 'minus' : '', 58, 354, 314, t('kitchen.outro.pointsDeducted'), s.deducted ? `-${s.deducted}` : '0', 0.1),
+        line('big ' + sign(s.points), 146, 0, 708, t('kitchen.outro.totalPoints'), String(s.points), 0.2),
+        line('small', 250, 0, 708, t('kitchen.outro.kitchenTotal'), String(total), 0.3),
       ];
     }
     const last = page === OUTRO_PAGES - 1;
@@ -767,10 +778,25 @@ export function kitchenScene(app) {
     const notesBox = panel.querySelector('.kz-notes');
     if (notesBox) live.push(notesBox);
     setPage(el('div', {}, panel, next), { live });
+    if (notesBox) {
+      // Checked now and again once the web fonts have loaded (a font swap can change the height).
+      const atEnd = () => notesBox.classList.toggle('end', notesBox.scrollTop + notesBox.clientHeight >= notesBox.scrollHeight - 4);
+      const check = () => {
+        if (!notesBox.isConnected) return;
+        notesBox.classList.toggle('scrolls', notesBox.scrollHeight > notesBox.clientHeight + 2);
+        atEnd();
+      };
+      notesBox.addEventListener('scroll', atEnd, { passive: true });
+      check();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(check, () => {});
+    }
     focusFirst(pageLayer);
     app.touch.show(TOUCH_PAUSE);
     audio.play(page === 0 ? 'kitchenDone' : 'pageTurn');
-    if (page === 0 && s.points > 0 && !reduced) particles.emit(400, 60, { count: 30, colors: ['#ffd84a', '#ff8a5c', '#5fd4ff', '#6fe0a8'], shape: 'square', speed: 4, spread: 2.4, angle: Math.PI / 2, life: 80, size: 5, gravity: 0.08 });
+    // A little confetti from the panel's top corners (kept clear of the rows).
+    if (page === 0 && s.points > 0 && !reduced) {
+      for (const [x, a] of [[58, 0.35], [742, Math.PI - 0.35]]) particles.emit(x, 24, { count: 14, colors: ['#ffd84a', '#ff8a5c', '#5fd4ff', '#6fe0a8'], shape: 'square', speed: 3.2, spread: 0.7, angle: a, life: 40, size: 4.5, gravity: 0.1 });
+    }
   }
 
   function outroNext() {
@@ -1124,23 +1150,12 @@ export function kitchenScene(app) {
         if (hot) drawGlow(ctx, tg.glow, { colour: '#ffb400', alpha: 1, width: 5, fill: 'rgba(255,216,74,0.28)' });
         else drawGlow(ctx, tg.glow, { colour: '#1f8fd0', alpha: 0.5 + 0.35 * pulse, width: 3, dash: [9, 6], fill: 'rgba(95,212,255,0.16)' });
       }
-    } else if (controls && controls.hover && TARGET[controls.hover] && (mode === 'play' || mode === 'tutorial')) {
+    } else if (controls && controls.hover && TARGET[controls.hover] && (mode === 'tutorial' || (mode === 'play' && gstate !== 'end'))) {
       const tg = TARGET[controls.hover];
       if (tg.kind !== 'item') drawGlow(ctx, tg.glow || tg.hit, { colour: '#ffffff', alpha: 0.7, width: 3, fill: 'rgba(255,255,255,0.1)' });
     }
-    // Sneeze: the tissues glow, with a ring counting down the two seconds.
-    if (mode === 'play' && gstate === 'sneeze') {
-      const tg = TARGET.tissues;
-      const left = 1 - sneezeFrames / SNEEZE_WINDOW;
-      drawGlow(ctx, tg.glow, { colour: '#ff8a5c', alpha: pulse, width: 5, fill: 'rgba(255,138,92,0.2)' });
-      const c = centre(tg.glow);
-      ctx.save();
-      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 5; ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.arc(c.x, c.y - 44, 13, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * left); ctx.stroke();
-      ctx.fillStyle = '#ff8a5c';
-      ctx.beginPath(); ctx.arc(c.x, c.y - 44, 8, 0, Math.PI * 2); ctx.fill();
-      ctx.restore();
-    }
+    // Sneeze: the tissues glow (the countdown ring and the "Tissue!" bubble are in the HUD).
+    if (mode === 'play' && gstate === 'sneeze') drawGlow(ctx, TARGET.tissues.glow, { colour: '#ff8a5c', alpha: pulse, width: 5, fill: 'rgba(255,138,92,0.2)' });
     if (focusId && device() !== 'touch' && TARGET[focusId]) {
       const tg = TARGET[focusId];
       const r = tg.kind === 'item' && current ? pad(counterRect(current), 8) : tg.glow || tg.hit;
@@ -1174,9 +1189,12 @@ export function kitchenScene(app) {
     const x = CLOCK.x - w + 4, y = 10;
     ctx.fillStyle = 'rgba(32,100,140,0.14)';
     roundRect(ctx, x, y, w, 26, 13); ctx.fill();
+    // A tick in a disc: items put away.
     ctx.fillStyle = '#20648c';
-    roundRect(ctx, x + 9, y + 9, 12, 11, 2); ctx.fill();
-    ctx.strokeStyle = '#20648c'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(x + 15, y + 9, 3.2, Math.PI, 0); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x + 15, y + 13, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(x + 11, y + 13.5); ctx.lineTo(x + 14, y + 16.5); ctx.lineTo(x + 19.5, y + 10); ctx.stroke();
+    ctx.fillStyle = '#20648c';
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
     ctx.fillText(label, x + 27, y + 14);
     ctx.restore();
@@ -1209,8 +1227,20 @@ export function kitchenScene(app) {
       const m = mouth();
       const jig = reduced ? 0 : Math.sin(tick * 0.9) * 1.5;
       drawBubble(ctx, m.x + 58 + jig, 40, t('kitchen.hud.sneeze'), { tx: m.x + 22, ty: 70, fill: '#fff4e0' });
+      // Over the tissue box: a ring counting down the two-second window, and the bubble above it.
+      const c = centre(TARGET.tissues.glow);
+      const left = 1 - sneezeFrames / SNEEZE_WINDOW;
+      const ry = c.y - 46;
+      ctx.save();
+      ctx.fillStyle = 'rgba(27,22,64,0.55)';
+      ctx.beginPath(); ctx.arc(c.x, ry, 15, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(c.x, ry, 11, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * left); ctx.stroke();
+      ctx.fillStyle = '#ff8a5c';
+      ctx.beginPath(); ctx.arc(c.x, ry, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
       const tissue = t(device() === 'keyboard' ? 'kitchen.hud.tissueKey' : 'kitchen.hud.tissueTap');
-      drawBubble(ctx, 52, 190 + jig * 0.5, tissue, { font: '800 15px Baloo, "Trebuchet MS", sans-serif', fill: '#ffe2d6', tx: 52, ty: 208 });
+      drawBubble(ctx, c.x, ry - 34 + jig * 0.5, tissue, { font: '800 15px Baloo, "Trebuchet MS", sans-serif', fill: '#ffe2d6', tx: c.x, ty: ry - 16 });
     }
     // End-of-level banner.
     if (banner) {

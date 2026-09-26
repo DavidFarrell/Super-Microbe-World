@@ -56,13 +56,17 @@ the port applies them, with sources. Source paths are relative to `reference/Jun
 
 | # | Original | Port | Source |
 |---|---|---|---|
-| G1 | No host feedback and no CPU turn after the last question of a sighted round (build A calls `nextRound()` at once) | Every question, including the last, gets its reply and CPU turn (build B, `doc:1911-1915`) | `GameShow.as:293-298`; NOTES 10.2 #41 |
+| G1 | No host feedback and no CPU turn after the last question of a sighted round (build A calls `nextRound()` at once). In the blind half the last answer's reply ("<name>, you chose X." and the blind notice) is built but never shown: the talkie goes straight to "Step right this way..." (capture 031) | Every question, including the last, gets its reply: in a sighted round the verdict and the CPU turn (build B, `doc:1911-1915`); in the blind half the echo and the blind notice, then "Step right this way..." (NOTES 11.1 #1: "Every question, including the last, gets host feedback") | `GameShow.as:278-298`; `reference/captures/index.md` 031; NOTES 10.2 #41, 11.1 #1 |
 | G2 | Player always Harry on the right podium, CPU always "Amy" | The chosen child is the player on their own podium; the other child is the CPU, named after that child (or the flow's `cpuName`) | `GameShow.as:52,85-104`; NOTES 10.2 #39 |
 | G3 | The last intro line needs a second click (`showRoundText` leaves `busy = true`) | One press moves on to question 1 | `GameShow.as:147-166`; NOTES 10.2 #42 |
 | G4 | Blind reaction asks for `"confident"`, which does not exist | Plays `condifent` (falls back to `cautious` until the atlas has those frames, see `web/requests/gameshow.md` #1) | `GameShow.as:227`; NOTES 10.2 #43 |
 | G5 | Talkie "next" arrow shows 0.4 s after every line starts, while still typing | The arrow blinks only once the page is complete | `Talkie.as:40-59`; NOTES 10.2 #52a |
 | G6 | Talkie placeholder text "df" visible at a transition | Never shown (text is drawn from the statement only) | `Talkie.as:44`; NOTES 10.2 #52 |
 | G7 | Blind intro promises "a great bonus later" (never implemented) | The sentence is dropped by position (round 1 line 3, round 2 line 2; same slots in all 11 languages) | `levels/alpha_gameshow_round1.xml:10`; NOTES 11.9 #2 |
+| G8 | Live `en_en` intro has "Ready ?" (rounds 1 and 2) | English intro lines lose the space before `?` and `!` ("Ready?", as capture 056 shows). English only: French "Prêt ?" and "Allons-y !" are correct French spacing and stay (`rules.js` `normaliseIntro()`) | `web/data/quiz/en.json` `rounds[0].intro.normal[4]`, `rounds[1].intro.normal[3]`; NOTES 6.8 |
+| G9 | Known 2009 data defect: the `por_por` sighted intro of rounds 1 and 2 has the Polish points line ("Za prawidłową odpowiedź otrzymasz 10 punktów, ...") | Replaced by the Portuguese translator's own points line from rounds 3 to 5 without "Lembra-te que" ("Remember"): "Ganhas 10 pontos por cada resposta certa. Se estiver errada o outro jogador é que ganha.", which says the same as the English line. A counted override matched on the exact text in `por_por` only (`pl_pl` keeps it), so it stops applying once the data is fixed (`web/requests/gameshow.md` #3) | `Assets/Resources/TextFiles/quiz/por_por_gameshow_round1.xml`, `_round2.xml`; `web/data/quiz/por_por.json` `rounds[0].intro.normal[2]`, `rounds[1].intro.normal[1]` |
+| G10 | (port bug, review) Enter or Space on the pause menu's Resume button also reached the game on the next tick: on the board it submitted the highlighted answer, in the talkie it completed or advanced the line. A gamepad A on Resume leaked the same way within the tick | `resume()` calls `input.clearAll()` (as `flow/settings.js` `close()` does), and `update()` returns early on the tick the menu resumed (a gamepad A clicks Resume from `focusNavigator()` inside the tick, after `pressedSet` is built) | `js/core/input.js:52-59,117-135`; `js/ui/dom.js:52`; spec "pause: Enter, Space or gamepad A on Resume ..." |
+| G11 | (port bug, review) The mouse lit one answer while the keyboard selection lit another, and Enter picked the keyboard one (Enter on a focused answer clicks it natively) | A mouse entering an answer selects and focuses it, and a keyboard move clears the hover light, so the one lit button is the one Enter picks. Each answer the mouse enters plays the `gsSelect` blip, as an arrow press does (the flow's menus likewise play `hover` on every focus move) | `js/gameshow/board.js` `pointerenter`, `select()` |
 
 ## Port decisions
 
@@ -94,14 +98,64 @@ the port applies them, with sources. Source paths are relative to `reference/Jun
    passes `stepRight: true`, at the end of the sighted half (a shrink follows). Otherwise the
    sighted half ends on the last CPU line and a short pause (build B: "the last CPU line leads
    straight to the shrink").
-9. **Input**: 1 / 2 / 3 answer at once; up / down (or left / right) select and Enter or Space
+9. **Input**: 1 / 2 / 3 (or whatever `answer1`-`answer3` are bound to) answer at once; up / down (or left / right) select and Enter or Space
    confirms (Space only when Up is not held, since Up and W are also jump keys); a press with
    nothing selected selects Agree rather than answering. Answers are ignored for 0.3 s after the
    board appears, so a press that dismissed the host's line cannot answer. Touch: tap a button
-   (219 x 79 stage px, at least 44 CSS px on phones), tap anywhere to advance the talkie.
+   (219 x 79 stage px, at least 44 CSS px on phones), tap anywhere to advance the talkie. A mouse
+   over an answer selects it (G11). Resuming from the pause menu drops the press that did it (G10).
 10. **Sound** (the original was silent, NOTES 8.5): `gsCorrect`, `gsWrong`, `gsNeutral`,
     `gsDrum` and `gsDrumroll`, `gsCrash`, `gsApplause`, `gsFanfare`, `gsBoard`, `gsLock`,
     `gsSelect`, `gsDigit`, plus the core `typeBlip` and `tap`; music track `gameshow` (C major,
     126 bpm), ducked on the board and under the pause menu.
 11. **Result**: `{ playerScore, cpuScore, answers: [{ q, choice, value, score, blind, cpu }],
     round, blind, lang }` (the contract's fields plus extras).
+12. **Blind rounds setting**: the flow owns the `blindRounds` setting and always passes `blind`
+    (`js/flow/flow.js` `playQuiz()`; `js/flow/contract.md`), so a flow launch is never second-guessed
+    by the scene (reading the setting there would run the blind half twice). Only when the scene
+    is opened on its own (no `onComplete`, no `blind` param, e.g. `?scene=gameshow`) does it read
+    `settings.get('blindRounds')` itself (undefined counts as off, NOTES 11.9 #1): it then plays the
+    warm-up (blind) half first, and its results card ("Warm-up done!") offers "On to the scored
+    questions", the same round's sighted half with the scores carried over.
+13. **Board labels**: "Agree", "Don't Know" and "Disagree" were static DefineText in the SWF
+    (white, bold, no outline; NOTES 8.6 and `flash-ruffle.md` 8.1), and the atlas's `gs_button_*`
+    art has them omitted, so the port draws them: white Verdana Bold, no outline, 23 stage px at
+    100% text size (the three labels measure 151 / 76.5 / 115 px wide in capture 021, which 23 px
+    matches), shrunk with `fitLine` for long translations (minimum 14). Baloo stays for the port's
+    own DOM UI only.
+14. **Control prompts follow the bindings and the device**: the title card says
+    `{Press_confirm} to start` through `ui/prompts.js` `tp()` ("Press Enter to start", "Press A to
+    start" on a gamepad, "Tap to start" on touch); the board hint says "Press {key_answer1},
+    {key_answer2} or {key_answer3}, or use {key_up} {key_down} and {key_confirm}" with the live
+    keys (`keyFor()`), and each key badge shows the key bound to that answer (none when unbound).
+    Known edge: if the player unbinds `confirm` entirely, the prompts show "?" for it (as
+    `ui/prompts.js` does everywhere); the jump keys still confirm.
+15. **Board hint legibility**: white Verdana Bold 17 stage px at full opacity with a dark outline
+    (about 14 CSS px on a 667 x 375 phone; white on the board blue is above 5:1 before the outline),
+    fitted to 700 px for long remapped key names.
+16. **Name tags**: 15 px, shrinking to no less than 13 stage px (11 CSS px or more on a 667 px wide
+    phone), then cut with an ellipsis at 112 px of text, so two long tags (centres 136 px apart)
+    never overlap. The talkie and the results card show the whole nickname.
+17. **Memory**: the pre-scaled copies of the set, board, podia and talkie frames (about 12 MB on a
+    2x phone) are released in the scene's `exit()` (`art.js` `releaseBlits()`); the cutscene and
+    ending rebuild their own on first draw.
+18. **Reduced motion**: the pause and results cards skip their bounce-in when either the OS
+    preference or the game's own Reduced motion setting (`html.reduced-motion`) is on.
+19. **Gallery shot**: `gameshow-verdict.png` is taken once the player's verdict has landed (board
+    gone, host `excited`, the +10 popup showing) rather than on the first frame of the CPU turn,
+    which caught the board still fading out.
+
+## Verification
+
+- `web/tests/gameshow.spec.mjs` (10 tests): full rounds by keyboard (1/2/3, arrows + Enter, Space)
+  and by touch taps with per-step score checks against `rules.js`; all 11 languages x 5 rounds
+  (231 boards, every intro line as normalised by `normaliseIntro()` and every question read; no
+  space before `?` in English, no Polish in `por_por`); the blind half; talkie timing and paging;
+  pause and quit with 44 px targets; standalone play with the results card; the blind-rounds
+  setting when standalone; Enter, Space and gamepad A on Resume neither answer the board nor move
+  the talkie (G10; the test fails with either half of the fix removed); mouse hover and keyboard
+  selection agree and Enter picks the lit answer (G11); key badges, hint and title prompt follow a
+  remapped key and the device; 23 px labels; long name tags; the reduced-motion class stops the
+  card animation; the blit cache is empty after the scene exits.
+- The flow's cutscene and ending use `createTalkie`, `Studio`, `art.js` and `sound.js`; the flow
+  spec (`web/tests/flow.spec.mjs`) covers them and passes.

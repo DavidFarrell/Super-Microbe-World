@@ -72,7 +72,7 @@ Strings: `web/data/lang/en/kitchen.json` (namespace `kitchen`). Tests: `web/test
 | Cling film overlays left in the fridge between levels | `:820-823` | Nothing carries over: each level (one scene visit) starts with an empty kitchen. |
 | Raw meat on the hands: wrong index and property, no effect | `:685-689` | Decision #13: placing raw meat contaminates the hands until they are washed; every other item placed meanwhile (except into the bin) carries raw-meat microbes and raises the "Raw Meat Hands" reminder (the original's unused string, `:1185`). No points change, like the sneeze reminder. A red-germ hand badge shows while the hands are dirty. |
 | "Bad Food" could repeat in the BOWL case (`badFood` not set) | `:396-398` | Every reminder is raised once per level. |
-| Only four reminder slots on the "Microbial Mistakes" page | outro frame 30; `:340-342` | All reminders are listed (the list scrolls if needed); an empty page says "No microbial mistakes this time. Well done!" (new string). |
+| Only four reminder slots on the "Microbial Mistakes" page | outro frame 30; `:340-342` | All reminders are listed: more than six use a compact layout (all twelve possible reminders fit at the default text size), and a list that still overflows (larger text sizes) scrolls with a fade at the bottom until its end; an empty page says "No microbial mistakes this time. Well done!" (new string). |
 | Level 4 intro says "45 seconds"; the code gives 120 | `:844-848`; intro level 3 | Decision #12: 120 s kept; the intro says "You have 120 seconds this time." |
 | Clock shows 99 for a second at time out; malformed `</face>` | `:151,180` | The clock shows 0. |
 | Mouldy or burst items in a wrong place get their category's location reminder | `:552-600` | They get "Bad Food" or "Burst Container" instead (`judge` checks mouldy/burst before the location rules). |
@@ -133,12 +133,17 @@ Strings: `web/data/lang/en/kitchen.json` (namespace `kitchen`). Tests: `web/test
   the texts reads "click" or "tap" for the input in use. Level 0's tutorial keeps the original
   logic (the drawer is right; the cupboard, bowl, shelves, door and bin are wrong; "Wrong! Try
   again." repeats the two rules) with a short hint line for how to answer.
-- Outro: the three original pages on the white panel, then a new fourth page using the original's
-  unused "Points Awarded", "Points Deducted" and "Total Points" strings (`:1173-1177`), plus the
-  running kitchen score. Non-zero counts are coloured (green right, red wrong).
-- HUD additions: an items-put-away counter beside the clock, a dirty-hands badge (green germs:
-  sneeze, red: raw meat) with a "Wash" hint and a pulse on the sink, and a sneeze warning ("Ah...
-  ah..." bubble, the tissues glowing with a two-second countdown ring).
+- Outro: the three original pages on the white panel, then a new fourth page, "Points This Level"
+  (new string), using the original's unused "Points Awarded", "Points Deducted" and "Total Points"
+  strings (`:1173-1177`): awarded and deducted side by side, the level's total large, then the
+  running kitchen score. Only non-zero values are coloured (green right, red wrong), on every page.
+  Page 1 throws a little confetti from the panel's top corners when the level scored points (kept
+  clear of the rows).
+- HUD additions: an items-put-away counter (a tick glyph and "n of N") beside the clock, a
+  dirty-hands badge (green germs: sneeze, red: raw meat) with a "Wash" hint and a pulse on the
+  sink, and a sneeze warning: an "Ah... ah..." bubble by the avatar, the tissues glowing, and above
+  the tissue box a ring counting down the two-second window under a "Tissue!" bubble (the ring
+  used to sit under the bubble, hidden). Hover highlights stop once the level has ended.
 - Immediate feedback (the original only showed results in the outro): a tick or cross and +10 /
   -10 where the item lands, a chime or a soft "uh-oh", a small shake on a mistake; bad food in the
   bin gets a tick and "Binned". Germs orbit sneezed-on or meat-contaminated items.

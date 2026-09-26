@@ -521,19 +521,27 @@ export const tests = [
     },
   },
   {
-    name: 'splash: New Game starts level 1 (keyboard and tap)',
-    timeoutMs: 60000,
+    // New Game now runs the flow's journey (cutscene, shrinking zone; flow.spec.mjs covers it),
+    // so level 1 is reached here through Level select, the flow's one-level path.
+    name: 'splash: Level select starts level 1 with its briefing (keyboard and tap)',
+    timeoutMs: 90000,
     async run(ctx) {
       for (const [opts, how] of [[{ viewport: { width: 1280, height: 720 } }, 'enter'], [PHONE, 'tap']]) {
         const { context, page, errors } = await ctx.openPage(opts);
-        await page.goto(`${ctx.baseUrl}/index.html`);
+        await page.goto(`${ctx.baseUrl}/index.html?lang=en`);
         await page.waitForFunction(() => window.__test && window.__test.scene === 'splash', null, { timeout: 20000 });
-        if (how === 'tap') await page.locator('#btn-new-game').tap();
-        else { await page.locator('#btn-new-game').focus(); await page.keyboard.press('Enter'); }
+        const press = async sel => {
+          await page.locator(sel).waitFor({ state: 'visible', timeout: 30000 });
+          if (how === 'tap') await page.locator(sel).tap();
+          else { await page.locator(sel).focus(); await page.keyboard.press('Enter'); }
+        };
+        await press('#btn-level-select');
+        await page.waitForFunction(() => window.__test.scene === 'levelSelect', null, { timeout: 20000 });
+        await press('#level-alpha_level1');
         await page.waitForFunction(() => window.__test.scene === 'platform' && window.__test.probe('platform') && window.__test.probe('platform').ready, null, { timeout: 20000 });
         const p = await page.evaluate(() => window.__test.probe('platform'));
-        assert(p.level === 'alpha_level1', `New Game opened ${p.level}`);
-        assert(p.ui === 'intro', `New Game should open the briefing first (ui=${p.ui})`);
+        assert(p.level === 'alpha_level1', `Level select opened ${p.level}`);
+        assert(p.ui === 'intro', `level 1 should open the briefing first (ui=${p.ui})`);
         assert(errors.length === 0, `${how}: console errors:\n${errors.join('\n')}`);
         await context.close();
       }

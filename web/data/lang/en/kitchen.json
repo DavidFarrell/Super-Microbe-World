@@ -58,6 +58,7 @@
   "kitchen.outro.pointsDeducted": "Points Deducted",
   "kitchen.outro.totalPoints": "Total Points",
   "kitchen.outro.kitchenTotal": "Kitchen score so far",
+  "kitchen.outro.pointsPage": "Points This Level",
   "kitchen.outro.times": "X",
   "kitchen.outro.equals": "=",
   "kitchen.outro.page": "Page {n} of {total}",

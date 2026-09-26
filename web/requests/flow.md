@@ -74,3 +74,13 @@ running total (as the platform scene does with hoverboard points). The flow also
 - **Reason**: the journey itself is the brief; keeping the shortcut would skip the cutscene.
 - **Workaround**: none from the flow side; `web/tests/flow.spec.mjs` covers splash to level 1 with
   the keyboard and with touch.
+
+## 8. `web/js/platformer/hud.js`: export the goal portrait canvas
+
+- **Change**: export `portraitCanvas(name)` (or a `goalPortraitCanvas(goal, badTypes)` wrapper)
+  so Level select can draw the same Patty (level 4) and Iggy (level 7) ePhone portraits the HUD
+  builds (decision 11.9 #9).
+- **Reason**: one composition for both screens; today the layout constants live in two files.
+- **Workaround**: `web/js/flow/levelSelect.js` uses the exported `goalPortrait()` and
+  `goalImage()` to choose the picture, and composes the two portraits itself with the same
+  layout (the microbe sheet loaded privately and freed at once when no level has loaded it).

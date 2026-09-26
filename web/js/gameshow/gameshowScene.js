@@ -5,7 +5,8 @@
 // onQuit() }:
 //   blind: true      the round's blind half (build A, "warm-up questions"): blind intro, the
 //                    questions without scores or CPU turns, then "Step right this way..."; the
-//                    flow calls it before the shrink when settings 'blindRounds' is on (NOTES 2.3)
+//                    flow calls it before the shrink when settings 'blindRounds' is on (NOTES 2.3).
+//                    Left out with no onComplete (opened on its own), it follows that setting.
 //   stepRight: true  end the sighted half with "Step right this way..." (a shrink follows)
 //   cpuName          the other child's name (default: that avatar's name)
 //   seed             seeds the gameplay random stream (the CPU's answers)
@@ -37,9 +38,9 @@ import { t, language } from '../core/i18n.js';
 import { AREA_MUSIC } from '../core/music.js';
 import { Particles, Popups, Shake, haptic } from '../core/fx.js';
 import { gameRng } from '../core/rng.js';
-import { device } from '../ui/prompts.js';
+import { device, tp } from '../ui/prompts.js';
 import { openSettings } from '../flow/settings.js';
-import { loadAtlases, atlasSet } from './art.js';
+import { loadAtlases, atlasSet, releaseBlits } from './art.js';
 import { createTalkie } from './talkie.js';
 import { Studio } from './studio.js';
 import { Board } from './board.js';
@@ -48,7 +49,7 @@ import { registerGameshowSounds } from './sound.js';
 import { BALOO, roundRect, fitLine } from './text.js';
 import {
   scorePlayerAnswer, scoreCpuAnswer, cpuChoice, verdictKey, PLAYER_REACTION, CPU_REACTION,
-  BLIND_REACTIONS, blindIntro, buttonLabels, ANSWER_CORRECT, ANSWER_WRONG,
+  BLIND_REACTIONS, blindIntro, normaliseIntro, buttonLabels, ANSWER_CORRECT, ANSWER_WRONG,
 } from './rules.js';
 
 const ROUNDS = 5;
@@ -151,7 +152,7 @@ export function gameshowScene(app) {
     stageTap.hidden = true;
     phase = 'intro';
     studio.react('host', 'excited');
-    const lines = blind ? blindIntro(roundNo, roundData.intro.blind) : roundData.intro.normal;
+    const lines = normaliseIntro(quizCode, blind ? blindIntro(roundNo, roundData.intro.blind) : roundData.intro.normal);
     mark('intro');
     talkie.say(lines.length ? lines : [''], () => ask(0));
   }
@@ -197,7 +198,8 @@ export function gameshowScene(app) {
     talkie.show();
     if (blind) {
       // Blind round: no verdict, the host looks serious and the player makes a random face
-      // (GameShow.as:216-243).
+      // (GameShow.as:216-243). The last blind answer gets this echo too, before "Step right this
+      // way..." (build A dropped it, :284-292; NOTES 11.1 #1; decisions G1).
       text += '\n' + t('gameshow.blindNotice');
       studio.react('host', 'serious');
       studio.react(avatar, BLIND_REACTIONS[Math.min(2, Math.floor(gameRng.next() * 3))]);
@@ -421,6 +423,10 @@ export function gameshowScene(app) {
     if (!paused) return;
     paused = false;
     clearOverlay();
+    // The Enter or Space that pressed Resume must not also reach the board or the talkie on the
+    // next poll (input.js adds the key to keysTapped before the button's native click runs), as
+    // flow/settings.js close() does.
+    input.clearAll();
     audio.musicLevel(phase === 'board' ? 0.55 : 1);
     mark('resume');
   }
@@ -437,11 +443,12 @@ export function gameshowScene(app) {
     const them = el('div', { class: 'gs-score' }, el('b', {}, String(scores.cpu)), el('span', {}, cpuName));
     const buttons = [];
     const base = { avatar, nickname: params.nickname || '', lang: params.lang, seed: params.seed };
+    if (blind) buttons.push(button(t('gameshow.scoredQuestions'), () => app.scenes.go('gameshow', { ...base, round: roundNo, blind: false, playerScore: scores.player, cpuScore: scores.cpu }), { class: 'primary', id: 'gs-scored' }));
     if (roundNo < ROUNDS && !blind) buttons.push(button(t('gameshow.nextRound'), () => app.scenes.go('gameshow', { ...base, round: roundNo + 1, playerScore: scores.player, cpuScore: scores.cpu }), { class: 'primary', id: 'gs-next-round' }));
     buttons.push(button(t('gameshow.playAgain'), () => app.scenes.go('gameshow', { ...base, round: roundNo, blind, playerScore: startScores.player, cpuScore: startScores.cpu }), { id: 'gs-again' }));
     buttons.push(button(t('gameshow.backToTitle'), () => app.scenes.go('splash'), { id: 'gs-title' }));
     showOverlay(el('div', { class: 'gs-card', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'gs-end-title' },
-      el('h2', { id: 'gs-end-title' }, t('gameshow.roundComplete')),
+      el('h2', { id: 'gs-end-title' }, t(blind ? 'gameshow.warmUpComplete' : 'gameshow.roundComplete')),
       el('div', { class: 'gs-scores' }, you, them),
       el('div', { class: 'gs-row' }, ...buttons)));
   }
@@ -461,7 +468,11 @@ export function gameshowScene(app) {
       app.touch.hide();
       if (params.seed != null && params.seed !== '') gameRng.seed(Number(params.seed));
       roundNo = Math.max(1, Math.min(ROUNDS, Math.round(Number(params.round) || 1)));
-      blind = truthy(params.blind);
+      // The flow always says which half it wants. Opened on its own (no callback, no `blind`),
+      // the scene follows the flow's 'blindRounds' setting like a journey would: the blind half
+      // first, and its results card leads on to the scored half (NOTES 11.9 #1).
+      const standalone = typeof params.onComplete !== 'function';
+      blind = params.blind != null && params.blind !== '' ? truthy(params.blind) : standalone && !!settings.get('blindRounds');
       avatar = params.avatar === 'amy' ? 'amy' : 'harry';
       cpuAvatar = avatar === 'amy' ? 'harry' : 'amy';
       const nick = String(params.nickname || '').trim();
@@ -481,6 +492,9 @@ export function gameshowScene(app) {
       clearOverlay();
       if (talkie) talkie.destroy();
       if (board) board.destroy();
+      // The pre-scaled copies of the set, board, podia and talkie (about 12 MB on a 2x phone)
+      // are not needed outside the studio; the cutscene and ending rebuild theirs on first draw.
+      releaseBlits();
       audio.stopMusic();
       window.__test && window.__test.unregister('gameshow');
     },
@@ -489,6 +503,7 @@ export function gameshowScene(app) {
 
     update() {
       if (app.flow && app.flow.overlayOpen) return;   // the settings panel has the input
+      const wasPaused = paused;
       if (overlayNav) overlayNav();
       if (!studio) return;
       startMusicWhenUnlocked();
@@ -496,6 +511,9 @@ export function gameshowScene(app) {
         if (input.pressed('pause') || input.pressed('back')) resume();
         return;
       }
+      // Resumed by the menu during this tick (a gamepad A on Resume clicks it from overlayNav()
+      // above): this tick's presses are spent.
+      if (wasPaused) return;
       if (phase === 'done') { tick++; studio.update(); particles.update(); popups.update(); shake.update(); return; }
       if (input.pressed('pause')) { pause(); return; }
       tick++;
@@ -608,7 +626,7 @@ export function gameshowScene(app) {
     ctx.restore();
     // Sparkles drifting up behind the card.
     if (!reducedMotion && titleAge % 6 === 0 && titleAge < 120) particles.emit(160 + (titleAge * 53) % 480, 250, { count: 2, colors: ['#fff6b0', '#ffffff', '#ffd84a'], shape: 'star', speed: 1.5, angle: -Math.PI / 2, spread: 1, gravity: -0.02, life: 60, size: 6 });
-    const hint = t(device() === 'touch' ? 'gameshow.tapToStart' : 'gameshow.pressToStart');
+    const hint = titleHintText();
     if (titleAge > 40) {
       ctx.save();
       ctx.globalAlpha = Math.min(1, (titleAge - 40) / 20) * (0.7 + 0.3 * Math.sin(titleAge * 0.1));
@@ -618,6 +636,11 @@ export function gameshowScene(app) {
       ctx.fillText(hint, 400, 275);
       ctx.restore();
     }
+  }
+
+  // "Tap to start", or "Press <the key bound to confirm> to start" ("Press A" on a gamepad).
+  function titleHintText() {
+    return device() === 'touch' ? t('gameshow.tapToStart') : tp('gameshow.pressToStart');
   }
 
   // window.__test probe: everything a bot or test needs.
@@ -630,7 +653,8 @@ export function gameshowScene(app) {
       question: q ? { text: q.text, score: q.score, values: q.answers.map(a => a.value) } : null,
       labels,
       talkie: talkie ? talkie.state() : null,
-      board: board ? board.state() : null,
+      board: board ? board.state(device()) : null,
+      titleHint: titleHintText(),
       scores: { ...scores, shownPlayer: studio ? studio.scores[avatar].shown : scores.player, shownCpu: studio ? studio.scores[cpuAvatar].shown : scores.cpu },
       startScores: { ...startScores },
       answers: answers.map(a => ({ ...a, cpu: a.cpu ? { ...a.cpu } : null })),

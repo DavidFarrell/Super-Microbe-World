@@ -82,7 +82,7 @@ export function clearNav() { stack.length = 0; }
 export const navDepth = () => stack.length;
 
 function items(container) {
-  return [...container.querySelectorAll('button:not([disabled]), [data-focusable]:not([disabled])')]
+  return [...container.querySelectorAll('button:not([disabled]), input:not([disabled]), [data-focusable]:not([disabled])')]
     .filter(n => n.offsetParent !== null && !n.closest('[inert]'));
 }
 
@@ -149,9 +149,55 @@ export function tickNav() {
     moveFocus(top.container, dx, dy, inside);
     return;
   }
-  // Gamepad A activates the focused item (keyboard Enter / Space use the native button action).
+  // Gamepad A activates the focused item. Keyboard Enter uses the native button action and
+  // Space is handled by onKeyDown below (core/input.js cancels Space's default outside
+  // [data-native-keys], so the native action never fires).
   if (inside && input.lastDevice === 'gamepad' && (input.pressed('confirm') || input.pressed('jump'))) inside.click();
 }
+
+// Keyboard in flow menus, read in the window capture phase (before core/input.js, which cancels
+// the default action of Space, Tab and the arrows everywhere outside [data-native-keys]):
+//   - Tab / Shift+Tab move the focus through the top container's items in document order and
+//     wrap, so dialogs keep the focus inside and the details form's field is reachable again;
+//   - Space activates the focused button (a fresh press only);
+//   - a held Enter or Space (key auto-repeat) never activates a flow button, so a key held from
+//     the previous screen cannot pick a choice the player has not seen.
+// The handler never stops the event: core/input.js still sees every key. It does nothing while
+// no flow container is on screen (other areas' scenes run their own keyboard handling).
+const ACTIVATE_KEYS = new Set(['Enter', 'NumpadEnter', 'Space']);
+let keysSuspended = false;
+// Settings' key remapping reads the next key itself; the menu keys stay off meanwhile.
+export function suspendMenuKeys(on) { keysSuspended = !!on; }
+function onKeyDown(e) {
+  if (keysSuspended) return;
+  const top = stack[stack.length - 1];
+  if (!top || !top.container.isConnected) return;
+  const target = e.target;
+  const typing = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+  if (e.code === 'Tab' || e.key === 'Tab') {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    const list = items(top.container);
+    if (!list.length) return;
+    e.preventDefault();
+    const i = list.indexOf(document.activeElement);
+    const next = i < 0 ? list[e.shiftKey ? list.length - 1 : 0] : list[(i + (e.shiftKey ? -1 : 1) + list.length) % list.length];
+    next.focus({ preventScroll: true });
+    if (next.scrollIntoView) next.scrollIntoView({ block: 'nearest' });
+    if (next.select && next.tagName === 'INPUT') next.select();
+    audio.play('hover');
+    return;
+  }
+  if (!ACTIVATE_KEYS.has(e.code) || typing) return;
+  const active = document.activeElement;
+  const isButton = active && active.tagName === 'BUTTON' && top.container.contains(active);
+  if (!isButton) return;
+  if (e.repeat) { e.preventDefault(); return; }
+  if (e.code === 'Space' && !e.altKey && !e.ctrlKey && !e.metaKey) {
+    e.preventDefault();
+    if (!active.disabled) active.click();
+  }
+}
+addEventListener('keydown', onKeyDown, true);
 
 // The top of the focus stack (for overlays that navigate from raw key events).
 export const topNav = () => stack[stack.length - 1] || null;

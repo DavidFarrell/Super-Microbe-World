@@ -48,6 +48,30 @@ export function blindIntro(round, lines) {
   return lines.filter((_, i) => !drop.includes(i));
 }
 
+// Host intro lines as spoken (NOTES 6.8 and web/NOTES-gameshow-decisions.md G8, G9):
+//   en: the live en_en text has "Ready ?" (rounds 1 and 2); NOTES 6.8 normalises the spacing to
+//       "Ready?". Only English: French "Prêt ?" and "Allons-y !" are correct French spacing.
+//   por_por: rounds 1 and 2 carry the Polish points line from the 2009 XML
+//       (por_por_gameshow_round1.xml, _round2.xml). It is replaced by the Portuguese translator's
+//       own points line from rounds 3 to 5 without "Lembra-te que" ("Remember"), which says the
+//       same as the English line. Matched on the exact text, so it stops applying once the data
+//       is fixed (web/requests/gameshow.md #3).
+export const INTRO_OVERRIDES = {
+  por_por: {
+    'Za prawidłową odpowiedź otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik.':
+      'Ganhas 10 pontos por cada resposta certa. Se estiver errada o outro jogador é que ganha.',
+  },
+};
+
+export function normaliseIntro(code, lines) {
+  const over = INTRO_OVERRIDES[code] || {};
+  return (lines || []).map(line => {
+    let s = Object.prototype.hasOwnProperty.call(over, line) ? over[line] : String(line);
+    if (code === 'en') s = s.replace(/\s+([?!])/g, '$1');
+    return s;
+  });
+}
+
 // Board button labels for a language: the most common label at each position across all its
 // questions (the original buttons had fixed text; one cz_cz answer label is left in English).
 export function buttonLabels(quiz) {

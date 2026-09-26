@@ -22,18 +22,21 @@ import { avatarName, otherAvatar } from './flow.js';
 import { ensureStyle, glossy, pushNav, tickNav, clearNav } from './ui.js';
 
 const CSS = `
-.en-card { left: 22px; top: 20px; width: 410px; padding: 18px 22px 18px; display: grid; gap: 10px; text-align: center; transform-origin: 50% 0; }
+.en-card { left: 22px; top: 20px; width: 410px; max-height: 410px; box-sizing: border-box; padding: 18px 22px 0; display: grid; gap: 10px; text-align: center; transform-origin: 50% 0;
+  overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; scrollbar-width: thin; }
 .en-card h2 { font-size: calc(38px * var(--text-scale, 1)); color: #7a2f99; }
 .en-card.win h2 { color: #c2410c; }
 .en-sub { font: 700 calc(15px * var(--text-scale, 1)) var(--body-font); opacity: 0.85; }
-.en-table { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 4px 8px; align-items: center; font: 700 calc(15px * var(--text-scale, 1)) var(--body-font); text-align: left; }
-.en-table .h { font: 800 calc(16px * var(--text-scale, 1)) var(--ui-font); text-align: center; }
+.en-table { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 4px 8px; align-items: center; font: 700 calc(15px * var(--text-scale, 1)) var(--body-font); text-align: left; }
+.en-table .h { font: 800 calc(16px * var(--text-scale, 1)) var(--ui-font); text-align: center; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .en-table .n { text-align: center; font: 800 calc(24px * var(--text-scale, 1))/1.1 var(--ui-font); color: #1b1640; }
 .en-table .n.lead { color: #c2410c; }
 .en-table .muted { opacity: 0.6; font-weight: 400; }
 .en-table hr { grid-column: 1 / -1; width: 100%; border: 0; border-top: 2px dashed rgba(27,22,64,0.25); margin: 2px 0; }
 .en-note { font: 400 calc(13px * var(--text-scale, 1))/1.3 var(--body-font); opacity: 0.8; }
-.en-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+/* The buttons stay in view at the card's foot whatever the text size (the card scrolls). */
+.en-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; position: sticky; bottom: 0; z-index: 1;
+  background: #fffdf6; padding: 8px 0 16px; box-shadow: 0 -8px 10px -8px rgba(27, 22, 64, 0.25); }
 .en-buttons .wide { grid-column: 1 / span 2; }
 `;
 
@@ -90,7 +93,7 @@ export function endingScene(app) {
       el('h2', { id: 'ending-title' }, title),
       el('div', { class: 'en-sub' }, sub),
       el('div', { class: 'en-table', role: 'table', 'aria-label': t('flow.ending.scores') },
-        el('div', {}), el('div', { class: 'h' }, nick), el('div', { class: 'h' }, cpuName),
+        el('div', {}), el('div', { class: 'h', title: nick }, nick), el('div', { class: 'h', title: cpuName }, cpuName),
         el('div', {}, t('flow.ending.quizPoints')), cell(quiz, quiz > cpu), cell(cpu, cpu > quiz),
         el('hr', {}),
         el('div', {}, t('flow.ending.hoverPoints')), cell(hover, false), el('div', { class: 'n muted' }, '-'),
