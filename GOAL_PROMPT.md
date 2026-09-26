@@ -41,6 +41,7 @@ Related Flash-era design docs, readable as text with the Drive `read_file_conten
   3. List every file through the Drive tools. Download each one with `curl -L` from `drive.usercontent.google.com/download?id=<id>&export=download&resourcekey=<key>` (the host is confirmed reachable).
   4. Check every file's byte size against the Drive `fileSize`. A small HTML file means a login or virus-scan page came back instead of the file.
   5. Revoke the folder share, and confirm with `get_file_permissions` that the permissions match the originals.
+  6. Keep the downloads in `reference/`. Commit the SWF, `.as`, `.txt`, `.xml`, `.html` and art files, so later sessions don't need Drive again. Skip `.fla`, `.swd`, `.bak` and `.svn` files, and any single file over 50 MB.
 
 If neither route is available, text-sized files (`.as`, `.txt`, `.xml`) can still come through `read_file_content`. Build from Unity plus those, and flag everything unconfirmed.
 
