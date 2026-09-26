@@ -57,3 +57,20 @@ export function focusFirst(container) {
   const first = container.querySelector('[autofocus], button:not([disabled])');
   if (first && input.lastDevice !== 'touch') first.focus({ preventScroll: true });
 }
+
+// Modal focus handling for a dialog: Tab and Shift+Tab cycle through its buttons (wrapping) and
+// never leave it, even when focus is outside it (after a tap). Returns a function that removes
+// the handler. Arrow keys and Enter are handled by focusNavigator and the native button.
+export function trapFocus(container) {
+  const onKey = e => {
+    if (e.key !== 'Tab' || !container.isConnected) return;
+    const list = [...container.querySelectorAll('button:not([disabled]), [data-focusable]:not([disabled])')].filter(n => n.offsetParent !== null);
+    if (!list.length) return;
+    e.preventDefault();
+    const i = list.indexOf(document.activeElement);
+    const next = i < 0 ? (e.shiftKey ? list.length - 1 : 0) : (i + (e.shiftKey ? -1 : 1) + list.length) % list.length;
+    list[next].focus({ preventScroll: true });
+  };
+  document.addEventListener('keydown', onKey, true);
+  return () => document.removeEventListener('keydown', onKey, true);
+}

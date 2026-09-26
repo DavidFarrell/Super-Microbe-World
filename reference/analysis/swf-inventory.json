@@ -1,6 +1,6 @@
 {
  "generatedBy": "tools/analyse-swfs.mjs",
- "generatedAt": "2026-09-26T12:40:04.363Z",
+ "generatedAt": "2026-09-26T12:48:55.899Z",
  "sourceRoot": "reference/Junior_Game",
  "units": "Bounds in pixels (twips / 20), relative to the symbol registration point. frameRate in frames per second. Frame numbers are 1-based as in the Flash IDE.",
  "totals": {
@@ -2978,8 +2978,16 @@
      "exportName": null,
      "usedBy": [],
      "alphaBytes": 1144,
-     "file": "bitmaps/root__ad/335.jpg",
-     "alphaFile": "bitmaps/root__ad/335_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 358,
+      "meanColourWhereTransparent": 8.68,
+      "lowAlphaPixels": 108,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 210.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "cfc884ba5d47ba5ccb07ff51ebc91f17b4477cca",
+     "file": "bitmaps/root__ad/335.png"
     }
    ],
    "scriptDump": "swf-scripts/root__ad.txt",
@@ -6336,8 +6344,16 @@
      "exportName": null,
      "usedBy": [],
      "alphaBytes": 1144,
-     "file": "bitmaps/ad/399.jpg",
-     "alphaFile": "bitmaps/ad/399_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 358,
+      "meanColourWhereTransparent": 8.68,
+      "lowAlphaPixels": 108,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 210.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "cfc884ba5d47ba5ccb07ff51ebc91f17b4477cca",
+     "file": "bitmaps/ad/399.png"
     }
    ],
    "scriptDump": "swf-scripts/ad.txt",
@@ -12928,8 +12944,16 @@
      "exportName": null,
      "usedBy": [],
      "alphaBytes": 1144,
-     "file": "bitmaps/ad2/723.jpg",
-     "alphaFile": "bitmaps/ad2/723_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 358,
+      "meanColourWhereTransparent": 8.68,
+      "lowAlphaPixels": 108,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 210.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "cfc884ba5d47ba5ccb07ff51ebc91f17b4477cca",
+     "file": "bitmaps/ad2/723.png"
     },
     {
      "id": 729,
@@ -13006,8 +13030,16 @@
      "exportName": null,
      "usedBy": [],
      "alphaBytes": 1144,
-     "file": "bitmaps/ad2/803.jpg",
-     "alphaFile": "bitmaps/ad2/803_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 358,
+      "meanColourWhereTransparent": 8.68,
+      "lowAlphaPixels": 108,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 210.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "cfc884ba5d47ba5ccb07ff51ebc91f17b4477cca",
+     "file": "bitmaps/ad2/803.png"
     }
    ],
    "scriptDump": "swf-scripts/ad2.txt",
@@ -15740,8 +15772,16 @@
      "exportName": null,
      "usedBy": [],
      "alphaBytes": 1144,
-     "file": "bitmaps/amy/204.jpg",
-     "alphaFile": "bitmaps/amy/204_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 358,
+      "meanColourWhereTransparent": 8.68,
+      "lowAlphaPixels": 108,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 210.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "cfc884ba5d47ba5ccb07ff51ebc91f17b4477cca",
+     "file": "bitmaps/amy/204.png"
     }
    ],
    "scriptDump": "swf-scripts/amy.txt",
@@ -18529,6 +18569,7 @@
       "antibiotic_pickup"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/antibiotic_pickup/1.jpg"
     }
    ],
@@ -35869,6 +35910,7 @@
       "talkie"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/cut_scene_director/839.jpg"
     }
    ],
@@ -43153,6 +43195,7 @@
       "talkie"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/cutscene_introduction/836.jpg"
     }
    ],
@@ -55912,6 +55955,7 @@
       "antibiotic_pickup"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/67.jpg"
     },
     {
@@ -55926,8 +55970,16 @@
       "milk_glass_icon"
      ],
      "alphaBytes": 30000,
-     "file": "bitmaps/EBug_Level_Editor/70.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/70_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1487,
+      "meanColourWhereTransparent": 3.17,
+      "lowAlphaPixels": 157,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 242.59,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "ed1ef0e4c88d96e09b61a43db916cff5163cd051",
+     "file": "bitmaps/EBug_Level_Editor/70.png"
     },
     {
      "id": 73,
@@ -55941,8 +55993,16 @@
       "milk_glass"
      ],
      "alphaBytes": 30000,
-     "file": "bitmaps/EBug_Level_Editor/73.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/73_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1487,
+      "meanColourWhereTransparent": 3.17,
+      "lowAlphaPixels": 157,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 242.59,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "ed1ef0e4c88d96e09b61a43db916cff5163cd051",
+     "file": "bitmaps/EBug_Level_Editor/73.png"
     },
     {
      "id": 75,
@@ -55956,8 +56016,16 @@
       "milk_glass"
      ],
      "alphaBytes": 30000,
-     "file": "bitmaps/EBug_Level_Editor/75.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/75_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1487,
+      "meanColourWhereTransparent": 3.38,
+      "lowAlphaPixels": 88,
+      "medianColourToAlphaRatio": 0.91,
+      "meanColourWhereOpaque": 241.97,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c2ca40831d4007df2f94c4e966f18c491b774822",
+     "file": "bitmaps/EBug_Level_Editor/75.png"
     },
     {
      "id": 77,
@@ -55971,8 +56039,16 @@
       "milk_glass"
      ],
      "alphaBytes": 30000,
-     "file": "bitmaps/EBug_Level_Editor/77.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/77_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1280,
+      "meanColourWhereTransparent": 3.37,
+      "lowAlphaPixels": 157,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 235.49,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "431a409b936ec59494bd3ede747efac78d65b4c3",
+     "file": "bitmaps/EBug_Level_Editor/77.png"
     },
     {
      "id": 92,
@@ -55986,8 +56062,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/EBug_Level_Editor/92.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/92_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 591,
+      "meanColourWhereTransparent": 1.7,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 205.18,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "9b5db87b6427aab74335b7d6ff5ff8052e0b786a",
+     "file": "bitmaps/EBug_Level_Editor/92.png"
     },
     {
      "id": 94,
@@ -56001,8 +56085,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1554,
-     "file": "bitmaps/EBug_Level_Editor/94.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/94_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 520,
+      "meanColourWhereTransparent": 1.52,
+      "lowAlphaPixels": 82,
+      "medianColourToAlphaRatio": 0.83,
+      "meanColourWhereOpaque": 201.32,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "83f3a5b51de4ada7cf7c4ed0bc0093d12338d7c4",
+     "file": "bitmaps/EBug_Level_Editor/94.png"
     },
     {
      "id": 96,
@@ -56016,8 +56108,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1596,
-     "file": "bitmaps/EBug_Level_Editor/96.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/96_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 545,
+      "meanColourWhereTransparent": 1.75,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.8,
+      "meanColourWhereOpaque": 199.52,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "941c1c31fd71b629361791a4f0d28f668c37e091",
+     "file": "bitmaps/EBug_Level_Editor/96.png"
     },
     {
      "id": 98,
@@ -56031,8 +56131,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1680,
-     "file": "bitmaps/EBug_Level_Editor/98.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/98_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 590,
+      "meanColourWhereTransparent": 1.53,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.87,
+      "meanColourWhereOpaque": 198.78,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "3cab17756cd7352760c4e678ecf24ef57a52fddf",
+     "file": "bitmaps/EBug_Level_Editor/98.png"
     },
     {
      "id": 100,
@@ -56046,8 +56154,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1764,
-     "file": "bitmaps/EBug_Level_Editor/100.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/100_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 620,
+      "meanColourWhereTransparent": 1.35,
+      "lowAlphaPixels": 85,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 199.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "e8fa0543a3410aec7cfb268ce160894fad702e25",
+     "file": "bitmaps/EBug_Level_Editor/100.png"
     },
     {
      "id": 102,
@@ -56061,8 +56177,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/EBug_Level_Editor/102.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/102_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 640,
+      "meanColourWhereTransparent": 1.56,
+      "lowAlphaPixels": 90,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 199.82,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a433f5624a93455cdf75913c1b830ef64d9430b3",
+     "file": "bitmaps/EBug_Level_Editor/102.png"
     },
     {
      "id": 104,
@@ -56076,8 +56200,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/EBug_Level_Editor/104.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/104_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 720,
+      "meanColourWhereTransparent": 1.26,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 202.98,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "25d6875b4df4ff4b2d192472cbf8d97479668c91",
+     "file": "bitmaps/EBug_Level_Editor/104.png"
     },
     {
      "id": 106,
@@ -56091,8 +56223,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/EBug_Level_Editor/106.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/106_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 725,
+      "meanColourWhereTransparent": 1.33,
+      "lowAlphaPixels": 89,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 206.84,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "7cc04bcba63582055829968de14b97413c175094",
+     "file": "bitmaps/EBug_Level_Editor/106.png"
     },
     {
      "id": 108,
@@ -56106,8 +56246,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1932,
-     "file": "bitmaps/EBug_Level_Editor/108.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/108_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 783,
+      "meanColourWhereTransparent": 1.4,
+      "lowAlphaPixels": 93,
+      "medianColourToAlphaRatio": 0.79,
+      "meanColourWhereOpaque": 208.92,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "8b38ad8a8f7c40e3d211ece1d672ad5d6c873270",
+     "file": "bitmaps/EBug_Level_Editor/108.png"
     },
     {
      "id": 110,
@@ -56121,8 +56269,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/EBug_Level_Editor/110.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/110_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 759,
+      "meanColourWhereTransparent": 1.1,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.83,
+      "meanColourWhereOpaque": 210.83,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69db41d6cc361c05c6353f34ae1e7512d24f2e60",
+     "file": "bitmaps/EBug_Level_Editor/110.png"
     },
     {
      "id": 112,
@@ -56136,8 +56292,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1764,
-     "file": "bitmaps/EBug_Level_Editor/112.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/112_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 672,
+      "meanColourWhereTransparent": 1.25,
+      "lowAlphaPixels": 82,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 210.94,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f7980e0023720abd7dd8b8cb3516349b66310f5b",
+     "file": "bitmaps/EBug_Level_Editor/112.png"
     },
     {
      "id": 114,
@@ -56151,8 +56315,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1680,
-     "file": "bitmaps/EBug_Level_Editor/114.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/114_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 632,
+      "meanColourWhereTransparent": 1.5,
+      "lowAlphaPixels": 73,
+      "medianColourToAlphaRatio": 0.84,
+      "meanColourWhereOpaque": 210.63,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "cc73dc96e5b5ab6b88619f26f9221cc0740c2a19",
+     "file": "bitmaps/EBug_Level_Editor/114.png"
     },
     {
      "id": 116,
@@ -56166,8 +56338,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/EBug_Level_Editor/116.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/116_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 603,
+      "meanColourWhereTransparent": 1.45,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 207.26,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c76f961387ff0a77ca4d5650d9cceb2f18094fe2",
+     "file": "bitmaps/EBug_Level_Editor/116.png"
     },
     {
      "id": 118,
@@ -56181,8 +56361,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/EBug_Level_Editor/118.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/118_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 595,
+      "meanColourWhereTransparent": 1.46,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 204.42,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "9e17a23845c47e7d207c0f69b8f83f4d8adbea93",
+     "file": "bitmaps/EBug_Level_Editor/118.png"
     },
     {
      "id": 120,
@@ -56196,8 +56384,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1596,
-     "file": "bitmaps/EBug_Level_Editor/120.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/120_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 555,
+      "meanColourWhereTransparent": 1.61,
+      "lowAlphaPixels": 85,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 200.26,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "0a87dde7d7d4d03d861c91d64f04acbd98f28bbc",
+     "file": "bitmaps/EBug_Level_Editor/120.png"
     },
     {
      "id": 122,
@@ -56211,8 +56407,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1596,
-     "file": "bitmaps/EBug_Level_Editor/122.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/122_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 563,
+      "meanColourWhereTransparent": 1.73,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 197.65,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "65e7356d99e623eccd6ed23f05b9efaae41727fc",
+     "file": "bitmaps/EBug_Level_Editor/122.png"
     },
     {
      "id": 124,
@@ -56226,8 +56430,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/EBug_Level_Editor/124.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/124_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 575,
+      "meanColourWhereTransparent": 1.42,
+      "lowAlphaPixels": 91,
+      "medianColourToAlphaRatio": 0.8,
+      "meanColourWhereOpaque": 196.83,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f2bdd78d817cfea0e024a022ab0a76920d56ab07",
+     "file": "bitmaps/EBug_Level_Editor/124.png"
     },
     {
      "id": 126,
@@ -56241,8 +56453,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1764,
-     "file": "bitmaps/EBug_Level_Editor/126.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/126_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 647,
+      "meanColourWhereTransparent": 1.36,
+      "lowAlphaPixels": 89,
+      "medianColourToAlphaRatio": 0.84,
+      "meanColourWhereOpaque": 196.91,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "76896d2c597ff3b5c6dcb50bde230fc61beda0d8",
+     "file": "bitmaps/EBug_Level_Editor/126.png"
     },
     {
      "id": 128,
@@ -56256,8 +56476,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/EBug_Level_Editor/128.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/128_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 648,
+      "meanColourWhereTransparent": 1.35,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 199.82,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a381a3a9d1c07a9344ad0e308f111d1850b7ef18",
+     "file": "bitmaps/EBug_Level_Editor/128.png"
     },
     {
      "id": 130,
@@ -56271,8 +56499,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/EBug_Level_Editor/130.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/130_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 629,
+      "meanColourWhereTransparent": 1.38,
+      "lowAlphaPixels": 85,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 201.86,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "df4ea86e2868df672f157ea86809b507b2227872",
+     "file": "bitmaps/EBug_Level_Editor/130.png"
     },
     {
      "id": 132,
@@ -56286,8 +56522,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/EBug_Level_Editor/132.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/132_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 710,
+      "meanColourWhereTransparent": 1.35,
+      "lowAlphaPixels": 86,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 204.86,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "ee8426ad4672df182b0462905b1b45b5f044be4d",
+     "file": "bitmaps/EBug_Level_Editor/132.png"
     },
     {
      "id": 134,
@@ -56301,8 +56545,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1974,
-     "file": "bitmaps/EBug_Level_Editor/134.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/134_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 810,
+      "meanColourWhereTransparent": 1.33,
+      "lowAlphaPixels": 94,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 208.28,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "1e321e1d995fbc95897002a4d0bd3294be75bf6c",
+     "file": "bitmaps/EBug_Level_Editor/134.png"
     },
     {
      "id": 136,
@@ -56316,8 +56568,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1932,
-     "file": "bitmaps/EBug_Level_Editor/136.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/136_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 788,
+      "meanColourWhereTransparent": 1.33,
+      "lowAlphaPixels": 92,
+      "medianColourToAlphaRatio": 0.87,
+      "meanColourWhereOpaque": 210.26,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "216561f2902b96492290a2a5d5644874304fbebc",
+     "file": "bitmaps/EBug_Level_Editor/136.png"
     },
     {
      "id": 138,
@@ -56331,8 +56591,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/EBug_Level_Editor/138.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/138_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 691,
+      "meanColourWhereTransparent": 1.4,
+      "lowAlphaPixels": 81,
+      "medianColourToAlphaRatio": 0.91,
+      "meanColourWhereOpaque": 210.72,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "6aac6aaf0692f70a6ff79fbf58464b08ad6b139b",
+     "file": "bitmaps/EBug_Level_Editor/138.png"
     },
     {
      "id": 140,
@@ -56346,8 +56614,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1722,
-     "file": "bitmaps/EBug_Level_Editor/140.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/140_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 643,
+      "meanColourWhereTransparent": 1.25,
+      "lowAlphaPixels": 74,
+      "medianColourToAlphaRatio": 0.93,
+      "meanColourWhereOpaque": 210.33,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d8cd560db0113735240c9033610db0eca75aea03",
+     "file": "bitmaps/EBug_Level_Editor/140.png"
     },
     {
      "id": 142,
@@ -56361,8 +56637,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1680,
-     "file": "bitmaps/EBug_Level_Editor/142.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/142_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 632,
+      "meanColourWhereTransparent": 1.46,
+      "lowAlphaPixels": 80,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 209.02,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "2949db64ae228d402750e12d04be5f932ee3029d",
+     "file": "bitmaps/EBug_Level_Editor/142.png"
     },
     {
      "id": 144,
@@ -56376,8 +56660,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/EBug_Level_Editor/144.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/144_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 595,
+      "meanColourWhereTransparent": 1.66,
+      "lowAlphaPixels": 96,
+      "medianColourToAlphaRatio": 0.86,
+      "meanColourWhereOpaque": 206.2,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "8f753e446d7d337ca01dc53a5d1a3a75e2e16759",
+     "file": "bitmaps/EBug_Level_Editor/144.png"
     },
     {
      "id": 146,
@@ -56391,8 +56683,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/EBug_Level_Editor/146.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/146_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 591,
+      "meanColourWhereTransparent": 1.74,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 205.5,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69a6b37b7a850dd4153e380842c2c4addb6e336f",
+     "file": "bitmaps/EBug_Level_Editor/146.png"
     },
     {
      "id": 149,
@@ -56406,8 +56706,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/EBug_Level_Editor/149.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/149_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 470,
+      "meanColourWhereTransparent": 7.29,
+      "lowAlphaPixels": 76,
+      "medianColourToAlphaRatio": 0.77,
+      "meanColourWhereOpaque": 216.67,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d299c4be912e448bec1c46606bb6b6df240f2ad8",
+     "file": "bitmaps/EBug_Level_Editor/149.png"
     },
     {
      "id": 151,
@@ -56421,8 +56729,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/EBug_Level_Editor/151.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/151_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 462,
+      "meanColourWhereTransparent": 7.2,
+      "lowAlphaPixels": 102,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 224.24,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "ef2a64f097327b8d192f801e17e01fed11c21f20",
+     "file": "bitmaps/EBug_Level_Editor/151.png"
     },
     {
      "id": 153,
@@ -56436,8 +56752,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1540,
-     "file": "bitmaps/EBug_Level_Editor/153.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/153_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 7.14,
+      "lowAlphaPixels": 77,
+      "medianColourToAlphaRatio": 0.72,
+      "meanColourWhereOpaque": 221.13,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "79f0e2b78d5f35eb381abcfcad2610444ee07bfe",
+     "file": "bitmaps/EBug_Level_Editor/153.png"
     },
     {
      "id": 155,
@@ -56451,8 +56775,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/EBug_Level_Editor/155.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/155_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 435,
+      "meanColourWhereTransparent": 6.33,
+      "lowAlphaPixels": 93,
+      "medianColourToAlphaRatio": 0.81,
+      "meanColourWhereOpaque": 217.75,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "b80400e4aca558f85532d35f5a46ac0d819586d8",
+     "file": "bitmaps/EBug_Level_Editor/155.png"
     },
     {
      "id": 157,
@@ -56466,8 +56798,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1320,
-     "file": "bitmaps/EBug_Level_Editor/157.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/157_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 353,
+      "meanColourWhereTransparent": 9.17,
+      "lowAlphaPixels": 96,
+      "medianColourToAlphaRatio": 0.75,
+      "meanColourWhereOpaque": 214.28,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "4c77b5937d13ad32e6379e39543ce0305cf95a6a",
+     "file": "bitmaps/EBug_Level_Editor/157.png"
     },
     {
      "id": 159,
@@ -56481,8 +56821,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1188,
-     "file": "bitmaps/EBug_Level_Editor/159.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/159_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 340,
+      "meanColourWhereTransparent": 9.21,
+      "lowAlphaPixels": 101,
+      "medianColourToAlphaRatio": 0.72,
+      "meanColourWhereOpaque": 210.74,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "4fc2ffd76ba6eb97e43a7a4e102466a389f731ef",
+     "file": "bitmaps/EBug_Level_Editor/159.png"
     },
     {
      "id": 161,
@@ -56496,8 +56844,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/EBug_Level_Editor/161.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/161_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 359,
+      "meanColourWhereTransparent": 9.81,
+      "lowAlphaPixels": 75,
+      "medianColourToAlphaRatio": 0.73,
+      "meanColourWhereOpaque": 213.52,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "4b453ba328dceecef73ccbdeecb36f1b2e47654e",
+     "file": "bitmaps/EBug_Level_Editor/161.png"
     },
     {
      "id": 163,
@@ -56511,8 +56867,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/EBug_Level_Editor/163.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/163_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 8.17,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.65,
+      "meanColourWhereOpaque": 212.33,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a48a73f207601d413fc03a44abe6736dd66f9f7e",
+     "file": "bitmaps/EBug_Level_Editor/163.png"
     },
     {
      "id": 165,
@@ -56526,8 +56890,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1144,
-     "file": "bitmaps/EBug_Level_Editor/165.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/165_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 360,
+      "meanColourWhereTransparent": 8.9,
+      "lowAlphaPixels": 110,
+      "medianColourToAlphaRatio": 0.96,
+      "meanColourWhereOpaque": 199.63,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69cc09cd9bd37bfa89c9c710ff4727c4d5864bfd",
+     "file": "bitmaps/EBug_Level_Editor/165.png"
     },
     {
      "id": 167,
@@ -56541,8 +56913,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1232,
-     "file": "bitmaps/EBug_Level_Editor/167.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/167_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 325,
+      "meanColourWhereTransparent": 10.58,
+      "lowAlphaPixels": 98,
+      "medianColourToAlphaRatio": 0.69,
+      "meanColourWhereOpaque": 187.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c77b60ed2503ace40367e04c95d8da40b5bd8555",
+     "file": "bitmaps/EBug_Level_Editor/167.png"
     },
     {
      "id": 169,
@@ -56556,8 +56936,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1408,
-     "file": "bitmaps/EBug_Level_Editor/169.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/169_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 388,
+      "meanColourWhereTransparent": 9.9,
+      "lowAlphaPixels": 114,
+      "medianColourToAlphaRatio": 0.78,
+      "meanColourWhereOpaque": 181.37,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "be95898ec410bedad38a351cd67733dba5651b33",
+     "file": "bitmaps/EBug_Level_Editor/169.png"
     },
     {
      "id": 171,
@@ -56571,8 +56959,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/EBug_Level_Editor/171.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/171_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 415,
+      "meanColourWhereTransparent": 8.1,
+      "lowAlphaPixels": 117,
+      "medianColourToAlphaRatio": 0.74,
+      "meanColourWhereOpaque": 184.2,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "b1e6210b10d2adc256b6d723c495ec0487148d75",
+     "file": "bitmaps/EBug_Level_Editor/171.png"
     },
     {
      "id": 173,
@@ -56586,8 +56982,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/EBug_Level_Editor/173.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/173_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 461,
+      "meanColourWhereTransparent": 7.65,
+      "lowAlphaPixels": 111,
+      "medianColourToAlphaRatio": 0.86,
+      "meanColourWhereOpaque": 195.56,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a9460cd211f89fd744577129daa08deb2d76e8eb",
+     "file": "bitmaps/EBug_Level_Editor/173.png"
     },
     {
      "id": 175,
@@ -56601,8 +57005,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/EBug_Level_Editor/175.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/175_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 468,
+      "meanColourWhereTransparent": 6.79,
+      "lowAlphaPixels": 93,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 210.68,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "aa6b0b05717f11553287698b969178f0cde20238",
+     "file": "bitmaps/EBug_Level_Editor/175.png"
     },
     {
      "id": 177,
@@ -56616,8 +57028,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/EBug_Level_Editor/177.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/177_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 469,
+      "meanColourWhereTransparent": 6.94,
+      "lowAlphaPixels": 98,
+      "medianColourToAlphaRatio": 0.95,
+      "meanColourWhereOpaque": 221.51,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "6b2c7a7ea7d96c4e98c044213ab6580e048a4ee1",
+     "file": "bitmaps/EBug_Level_Editor/177.png"
     },
     {
      "id": 179,
@@ -56631,8 +57051,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/EBug_Level_Editor/179.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/179_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 462,
+      "meanColourWhereTransparent": 7.03,
+      "lowAlphaPixels": 105,
+      "medianColourToAlphaRatio": 0.81,
+      "meanColourWhereOpaque": 223.16,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "557769d7fe0d80bb2f15a6de5378f6965ca46242",
+     "file": "bitmaps/EBug_Level_Editor/179.png"
     },
     {
      "id": 181,
@@ -56646,8 +57074,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/EBug_Level_Editor/181.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/181_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 417,
+      "meanColourWhereTransparent": 7.84,
+      "lowAlphaPixels": 116,
+      "medianColourToAlphaRatio": 0.74,
+      "meanColourWhereOpaque": 219.1,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "de47108fadec958266d5210fc7637c30be956311",
+     "file": "bitmaps/EBug_Level_Editor/181.png"
     },
     {
      "id": 183,
@@ -56661,8 +57097,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1408,
-     "file": "bitmaps/EBug_Level_Editor/183.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/183_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 387,
+      "meanColourWhereTransparent": 8.71,
+      "lowAlphaPixels": 113,
+      "medianColourToAlphaRatio": 0.65,
+      "meanColourWhereOpaque": 213.84,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "430c6afeeaa391c352b039a1af4b6e0f53cbf6f9",
+     "file": "bitmaps/EBug_Level_Editor/183.png"
     },
     {
      "id": 185,
@@ -56676,8 +57120,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1232,
-     "file": "bitmaps/EBug_Level_Editor/185.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/185_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 326,
+      "meanColourWhereTransparent": 10.37,
+      "lowAlphaPixels": 97,
+      "medianColourToAlphaRatio": 0.77,
+      "meanColourWhereOpaque": 213.11,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "dbf346fe80d20ebfbc6f985cde8912ed0ac0bb18",
+     "file": "bitmaps/EBug_Level_Editor/185.png"
     },
     {
      "id": 187,
@@ -56691,8 +57143,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1144,
-     "file": "bitmaps/EBug_Level_Editor/187.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/187_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 358,
+      "meanColourWhereTransparent": 9.05,
+      "lowAlphaPixels": 108,
+      "medianColourToAlphaRatio": 0.67,
+      "meanColourWhereOpaque": 211.32,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69ffd604320da2a752c4212c7383dc11f575bc37",
+     "file": "bitmaps/EBug_Level_Editor/187.png"
     },
     {
      "id": 189,
@@ -56706,8 +57166,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/EBug_Level_Editor/189.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/189_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 7.32,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.81,
+      "meanColourWhereOpaque": 215.81,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c4829095b2e0c3a3fdf8e0d7c60072d0792167dd",
+     "file": "bitmaps/EBug_Level_Editor/189.png"
     },
     {
      "id": 191,
@@ -56721,8 +57189,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/EBug_Level_Editor/191.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/191_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 359,
+      "meanColourWhereTransparent": 8.92,
+      "lowAlphaPixels": 64,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 203.55,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "94fff3ad6c4feaf560b15fbd17a6f7fd83a5c2cf",
+     "file": "bitmaps/EBug_Level_Editor/191.png"
     },
     {
      "id": 193,
@@ -56736,8 +57212,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1188,
-     "file": "bitmaps/EBug_Level_Editor/193.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/193_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 338,
+      "meanColourWhereTransparent": 9.07,
+      "lowAlphaPixels": 114,
+      "medianColourToAlphaRatio": 0.73,
+      "meanColourWhereOpaque": 192.71,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "3655795b0145ec674edfc31f80c8df1dbe12cfb2",
+     "file": "bitmaps/EBug_Level_Editor/193.png"
     },
     {
      "id": 195,
@@ -56751,8 +57235,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1320,
-     "file": "bitmaps/EBug_Level_Editor/195.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/195_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 353,
+      "meanColourWhereTransparent": 9.31,
+      "lowAlphaPixels": 97,
+      "medianColourToAlphaRatio": 0.7,
+      "meanColourWhereOpaque": 183.31,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "fc78ba5d98c779a9f47ef9b94883ef7ad517fe55",
+     "file": "bitmaps/EBug_Level_Editor/195.png"
     },
     {
      "id": 197,
@@ -56766,8 +57258,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/EBug_Level_Editor/197.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/197_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 433,
+      "meanColourWhereTransparent": 7.99,
+      "lowAlphaPixels": 91,
+      "medianColourToAlphaRatio": 0.84,
+      "meanColourWhereOpaque": 180.46,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "15caf2c0f2680a73e1804bc0a819434c1ce1cece",
+     "file": "bitmaps/EBug_Level_Editor/197.png"
     },
     {
      "id": 199,
@@ -56781,8 +57281,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1540,
-     "file": "bitmaps/EBug_Level_Editor/199.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/199_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 447,
+      "meanColourWhereTransparent": 7.75,
+      "lowAlphaPixels": 75,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 189.55,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "259c2229aeb8787ce843e37e93d3c35494d98167",
+     "file": "bitmaps/EBug_Level_Editor/199.png"
     },
     {
      "id": 201,
@@ -56796,8 +57304,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/EBug_Level_Editor/201.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/201_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 463,
+      "meanColourWhereTransparent": 7.35,
+      "lowAlphaPixels": 100,
+      "medianColourToAlphaRatio": 0.83,
+      "meanColourWhereOpaque": 202.66,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "0bf7a552337085abb58c1afcc4088c776409bcb3",
+     "file": "bitmaps/EBug_Level_Editor/201.png"
     },
     {
      "id": 203,
@@ -56811,8 +57327,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/EBug_Level_Editor/203.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/203_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 470,
+      "meanColourWhereTransparent": 7.34,
+      "lowAlphaPixels": 76,
+      "medianColourToAlphaRatio": 0.76,
+      "meanColourWhereOpaque": 216.79,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "15b354ecdae11a30ead5fc4bca91b64198bd0697",
+     "file": "bitmaps/EBug_Level_Editor/203.png"
     },
     {
      "id": 206,
@@ -56826,8 +57350,16 @@
       "acid_pit_end_obj"
      ],
      "alphaBytes": 15000,
-     "file": "bitmaps/EBug_Level_Editor/206.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/206_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1190,
+      "meanColourWhereTransparent": 3.18,
+      "lowAlphaPixels": 44,
+      "medianColourToAlphaRatio": 0.79,
+      "meanColourWhereOpaque": 194.48,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "07a22142ea7723c5a33e2d09100f4d83524574dd",
+     "file": "bitmaps/EBug_Level_Editor/206.png"
     },
     {
      "id": 209,
@@ -56841,8 +57373,16 @@
       "acid_pit_mid_obj"
      ],
      "alphaBytes": 14800,
-     "file": "bitmaps/EBug_Level_Editor/209.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/209_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 973,
+      "meanColourWhereTransparent": 4.1,
+      "lowAlphaPixels": 47,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 172.51,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "fbc8c48d439a99d5a469b4507b7468fcd980ebd9",
+     "file": "bitmaps/EBug_Level_Editor/209.png"
     },
     {
      "id": 212,
@@ -56856,8 +57396,16 @@
       "acid_pit_start_obj"
      ],
      "alphaBytes": 15000,
-     "file": "bitmaps/EBug_Level_Editor/212.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/212_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1190,
+      "meanColourWhereTransparent": 3.44,
+      "lowAlphaPixels": 39,
+      "medianColourToAlphaRatio": 0.79,
+      "meanColourWhereOpaque": 194.19,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5fd1a4384c39e3d034e3f5be824901fe7d8b8e09",
+     "file": "bitmaps/EBug_Level_Editor/212.png"
     },
     {
      "id": 215,
@@ -56916,8 +57464,16 @@
       "bubble_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/224.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/224_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 432,
+      "meanColourWhereTransparent": 4.56,
+      "lowAlphaPixels": 70,
+      "medianColourToAlphaRatio": 0.86,
+      "meanColourWhereOpaque": 189.12,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d1199ca4f93741150dac4a1f89369b3567ac25e5",
+     "file": "bitmaps/EBug_Level_Editor/224.png"
     },
     {
      "id": 227,
@@ -56931,8 +57487,16 @@
       "cell_front_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/227.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/227_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 444,
+      "meanColourWhereTransparent": 8.42,
+      "lowAlphaPixels": 64,
+      "medianColourToAlphaRatio": 1.09,
+      "meanColourWhereOpaque": 184.01,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "40a1919f7f94dacc37444b25d257f201ef18be06",
+     "file": "bitmaps/EBug_Level_Editor/227.png"
     },
     {
      "id": 230,
@@ -56961,8 +57525,16 @@
       "corner_l_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/233.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/233_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 149,
+      "meanColourWhereTransparent": 16.63,
+      "lowAlphaPixels": 15,
+      "medianColourToAlphaRatio": 1,
+      "meanColourWhereOpaque": 193.69,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "dd435bc96213071c318dc722cec3d2ba99e21b6c",
+     "file": "bitmaps/EBug_Level_Editor/233.png"
     },
     {
      "id": 236,
@@ -56976,8 +57548,16 @@
       "corner_r_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/236.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/236_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 149,
+      "meanColourWhereTransparent": 14.7,
+      "lowAlphaPixels": 15,
+      "medianColourToAlphaRatio": 0.93,
+      "meanColourWhereOpaque": 193.68,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "1dec5b54993299cdbdd14e7a3a8977e1022c611a",
+     "file": "bitmaps/EBug_Level_Editor/236.png"
     },
     {
      "id": 239,
@@ -56991,6 +57571,7 @@
       "flesh_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/239.jpg"
     },
     {
@@ -57005,6 +57586,7 @@
       "flesh_gristle_1_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/242.jpg"
     },
     {
@@ -57019,6 +57601,7 @@
       "flesh_gristle_2_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/245.jpg"
     },
     {
@@ -57033,6 +57616,7 @@
       "flesh_gristle_3_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/248.jpg"
     },
     {
@@ -57047,6 +57631,7 @@
       "flesh_gristle_4_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/251.jpg"
     },
     {
@@ -57061,6 +57646,7 @@
       "flesh_gristle_5_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/254.jpg"
     },
     {
@@ -57075,6 +57661,7 @@
       "flesh_gristle_6_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/257.jpg"
     },
     {
@@ -57089,8 +57676,16 @@
       "floor_a_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/260.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/260_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 59,
+      "meanColourWhereTransparent": 4.17,
+      "lowAlphaPixels": 53,
+      "medianColourToAlphaRatio": 1.26,
+      "meanColourWhereOpaque": 200.72,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "e50a706f7c3efcc6f59b65137cea43ff42762ed6",
+     "file": "bitmaps/EBug_Level_Editor/260.png"
     },
     {
      "id": 263,
@@ -57104,8 +57699,16 @@
       "floor_b_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/263.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/263_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 55,
+      "meanColourWhereTransparent": 5.24,
+      "lowAlphaPixels": 50,
+      "medianColourToAlphaRatio": 1.28,
+      "meanColourWhereOpaque": 200.02,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "85ce6187f4a196f6101d2465e972794315568f90",
+     "file": "bitmaps/EBug_Level_Editor/263.png"
     },
     {
      "id": 266,
@@ -57119,8 +57722,16 @@
       "platform_bridge_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/266.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/266_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 789,
+      "meanColourWhereTransparent": 4.92,
+      "lowAlphaPixels": 29,
+      "medianColourToAlphaRatio": 1.2,
+      "meanColourWhereOpaque": 203.69,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a6d557ac8fb0a5c6bea34399f3e5cc6f9f8c541a",
+     "file": "bitmaps/EBug_Level_Editor/266.png"
     },
     {
      "id": 269,
@@ -57134,8 +57745,16 @@
       "platform_end_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/269.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/269_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1938,
+      "meanColourWhereTransparent": 1.6,
+      "lowAlphaPixels": 18,
+      "medianColourToAlphaRatio": 1.07,
+      "meanColourWhereOpaque": 202.73,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "9789458133745290f44cbbfabce3d02ba0ee1a40",
+     "file": "bitmaps/EBug_Level_Editor/269.png"
     },
     {
      "id": 272,
@@ -57149,8 +57768,16 @@
       "platform_mid_obj"
      ],
      "alphaBytes": 5000,
-     "file": "bitmaps/EBug_Level_Editor/272.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/272_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1652,
+      "meanColourWhereTransparent": 7.25,
+      "lowAlphaPixels": 98,
+      "medianColourToAlphaRatio": 0.93,
+      "meanColourWhereOpaque": 204.08,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5c8544582fd7595102b05e69ddb08bbe8c2859dd",
+     "file": "bitmaps/EBug_Level_Editor/272.png"
     },
     {
      "id": 275,
@@ -57164,8 +57791,16 @@
       "platform_start_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/275.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/275_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 860,
+      "meanColourWhereTransparent": 5.32,
+      "lowAlphaPixels": 41,
+      "medianColourToAlphaRatio": 1.13,
+      "meanColourWhereOpaque": 200.29,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "b1d2bfb654ac28a658b48c0d079af624a495e5e9",
+     "file": "bitmaps/EBug_Level_Editor/275.png"
     },
     {
      "id": 278,
@@ -57179,8 +57814,16 @@
       "roof_a_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/278.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/278_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 59,
+      "meanColourWhereTransparent": 1.41,
+      "lowAlphaPixels": 53,
+      "medianColourToAlphaRatio": 1.31,
+      "meanColourWhereOpaque": 200.55,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5d10b65a8c20f29f4a68da82f197b1b029131fab",
+     "file": "bitmaps/EBug_Level_Editor/278.png"
     },
     {
      "id": 281,
@@ -57194,8 +57837,16 @@
       "roof_b_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/281.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/281_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 55,
+      "meanColourWhereTransparent": 1.85,
+      "lowAlphaPixels": 50,
+      "medianColourToAlphaRatio": 1.31,
+      "meanColourWhereOpaque": 200,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "1b07cb43bf86907270221c2f41beb59675c41b04",
+     "file": "bitmaps/EBug_Level_Editor/281.png"
     },
     {
      "id": 284,
@@ -57209,8 +57860,16 @@
       "vertical_a_l_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/284.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/284_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 68,
+      "meanColourWhereTransparent": 16.32,
+      "lowAlphaPixels": 9,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 206.31,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "58a349a47da56e82197c4ffafa59023fd00a7c42",
+     "file": "bitmaps/EBug_Level_Editor/284.png"
     },
     {
      "id": 287,
@@ -57224,8 +57883,16 @@
       "vertical_a_r_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/287.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/287_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 68,
+      "meanColourWhereTransparent": 11.25,
+      "lowAlphaPixels": 9,
+      "medianColourToAlphaRatio": 0.77,
+      "meanColourWhereOpaque": 206.38,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "78f863719cbc4dc6bf8decbeb2273844e4529073",
+     "file": "bitmaps/EBug_Level_Editor/287.png"
     },
     {
      "id": 290,
@@ -57239,8 +57906,16 @@
       "vertical_b_l_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/290.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/290_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 72,
+      "meanColourWhereTransparent": 15.69,
+      "lowAlphaPixels": 8,
+      "medianColourToAlphaRatio": 0.91,
+      "meanColourWhereOpaque": 206.72,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "96f2aeed68ea5b11128ecf71e77b332546b3324b",
+     "file": "bitmaps/EBug_Level_Editor/290.png"
     },
     {
      "id": 293,
@@ -57254,8 +57929,16 @@
       "vertical_b_r_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/293.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/293_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 72,
+      "meanColourWhereTransparent": 10.99,
+      "lowAlphaPixels": 8,
+      "medianColourToAlphaRatio": 0.72,
+      "meanColourWhereOpaque": 206.67,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5825641dacff0f0c5c91a37f8217f6a8ef5c00ff",
+     "file": "bitmaps/EBug_Level_Editor/293.png"
     },
     {
      "id": 296,
@@ -57269,8 +57952,16 @@
       "villi_floor_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/EBug_Level_Editor/296.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/296_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1289,
+      "meanColourWhereTransparent": 4.48,
+      "lowAlphaPixels": 492,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 195.56,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "2b19a05982579e5fb3ad8e14784354a850dbd1c1",
+     "file": "bitmaps/EBug_Level_Editor/296.png"
     },
     {
      "id": 299,
@@ -57284,8 +57975,16 @@
       "villi_roof_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/EBug_Level_Editor/299.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/299_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1289,
+      "meanColourWhereTransparent": 4.82,
+      "lowAlphaPixels": 492,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 195.56,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "2d88d3296f1597ab9a2bf3b849d44f0d7b9a9634",
+     "file": "bitmaps/EBug_Level_Editor/299.png"
     },
     {
      "id": 302,
@@ -57299,8 +57998,16 @@
       "lint_ball_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/302.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/302_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 168,
+      "meanColourWhereTransparent": 3.14,
+      "lowAlphaPixels": 615,
+      "medianColourToAlphaRatio": 1.11,
+      "meanColourWhereOpaque": 209.29,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c81a3d1ba194c2d59cd63217d3e6226e0e5dda66",
+     "file": "bitmaps/EBug_Level_Editor/302.png"
     },
     {
      "id": 305,
@@ -57314,6 +58021,7 @@
       "plaster_multi_bridge_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/305.jpg"
     },
     {
@@ -57328,8 +58036,16 @@
       "plaster_multi_end_obj"
      ],
      "alphaBytes": 7500,
-     "file": "bitmaps/EBug_Level_Editor/308.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/308_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 222,
+      "meanColourWhereTransparent": 6.36,
+      "lowAlphaPixels": 24,
+      "medianColourToAlphaRatio": 0.39,
+      "meanColourWhereOpaque": 209.9,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "fba3de19a636d587c80e3425057eb065d991f5d6",
+     "file": "bitmaps/EBug_Level_Editor/308.png"
     },
     {
      "id": 311,
@@ -57343,8 +58059,16 @@
       "plaster_multi_start_obj"
      ],
      "alphaBytes": 7500,
-     "file": "bitmaps/EBug_Level_Editor/311.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/311_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 254,
+      "meanColourWhereTransparent": 10.07,
+      "lowAlphaPixels": 5,
+      "medianColourToAlphaRatio": 0.69,
+      "meanColourWhereOpaque": 209.62,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "73dc592feea2affea1e1712fc29cdab8121a2c37",
+     "file": "bitmaps/EBug_Level_Editor/311.png"
     },
     {
      "id": 314,
@@ -57358,6 +58082,7 @@
       "plaster_multi_mid_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/314.jpg"
     },
     {
@@ -57372,8 +58097,16 @@
       "plaster_singular_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/EBug_Level_Editor/317.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/317_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 508,
+      "meanColourWhereTransparent": 9.01,
+      "lowAlphaPixels": 10,
+      "medianColourToAlphaRatio": 0.87,
+      "meanColourWhereOpaque": 209.59,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "61a7035346df7e7b2a81aad668d06ac35dc376ba",
+     "file": "bitmaps/EBug_Level_Editor/317.png"
     },
     {
      "id": 320,
@@ -57387,8 +58120,16 @@
       "scab_obj"
      ],
      "alphaBytes": 20000,
-     "file": "bitmaps/EBug_Level_Editor/320.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/320_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1801,
+      "meanColourWhereTransparent": 2.17,
+      "lowAlphaPixels": 96,
+      "medianColourToAlphaRatio": 0.4,
+      "meanColourWhereOpaque": 124.72,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f90a8b80da0fefd3325449ebc9b783ebf7cdc83a",
+     "file": "bitmaps/EBug_Level_Editor/320.png"
     },
     {
      "id": 323,
@@ -57402,8 +58143,16 @@
       "splinter_obj"
      ],
      "alphaBytes": 12500,
-     "file": "bitmaps/EBug_Level_Editor/323.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/323_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 2125,
+      "meanColourWhereTransparent": 4.85,
+      "lowAlphaPixels": 356,
+      "medianColourToAlphaRatio": 0.97,
+      "meanColourWhereOpaque": 169.31,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "cd986c6d3b27cc17cfd6adfbb50df627c2cb3910",
+     "file": "bitmaps/EBug_Level_Editor/323.png"
     },
     {
      "id": 326,
@@ -57417,8 +58166,16 @@
       "spot_large_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/EBug_Level_Editor/326.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/326_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1366,
+      "meanColourWhereTransparent": 6.27,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.96,
+      "meanColourWhereOpaque": 211.09,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5487c8ad54aff2373a563e185b96af0c63d44da2",
+     "file": "bitmaps/EBug_Level_Editor/326.png"
     },
     {
      "id": 329,
@@ -57432,8 +58189,16 @@
       "spot_ooze_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/EBug_Level_Editor/329.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/329_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 3335,
+      "meanColourWhereTransparent": 2.42,
+      "lowAlphaPixels": 110,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 197.2,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "dbb961ba1aed23344177532274841795efced288",
+     "file": "bitmaps/EBug_Level_Editor/329.png"
     },
     {
      "id": 332,
@@ -57447,8 +58212,16 @@
       "spot_small_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/EBug_Level_Editor/332.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/332_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 338,
+      "meanColourWhereTransparent": 8.35,
+      "lowAlphaPixels": 46,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 209.64,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "1afe71f91cdece5b9408e6422c79a655eb332aa8",
+     "file": "bitmaps/EBug_Level_Editor/332.png"
     },
     {
      "id": 335,
@@ -57462,8 +58235,16 @@
       "wart_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/EBug_Level_Editor/335.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/335_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1201,
+      "meanColourWhereTransparent": 4.61,
+      "lowAlphaPixels": 66,
+      "medianColourToAlphaRatio": 0.96,
+      "meanColourWhereOpaque": 207.75,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d5f74e2565acd2cb781f7095a4eec0e96eaa3afb",
+     "file": "bitmaps/EBug_Level_Editor/335.png"
     },
     {
      "id": 338,
@@ -57477,6 +58258,7 @@
       "hair_base_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/338.jpg"
     },
     {
@@ -57536,8 +58318,16 @@
       "hair_slope_end_obj"
      ],
      "alphaBytes": 5000,
-     "file": "bitmaps/EBug_Level_Editor/350.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/350_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 2265,
+      "meanColourWhereTransparent": 1.79,
+      "lowAlphaPixels": 44,
+      "medianColourToAlphaRatio": 0.39,
+      "meanColourWhereOpaque": 82.56,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a52b95ffd6e9d0914b973ec8ed0727990bf39177",
+     "file": "bitmaps/EBug_Level_Editor/350.png"
     },
     {
      "id": 353,
@@ -57551,8 +58341,16 @@
       "hair_slope_start_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/EBug_Level_Editor/353.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/353_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 4741,
+      "meanColourWhereTransparent": 1.28,
+      "lowAlphaPixels": 62,
+      "medianColourToAlphaRatio": 0.43,
+      "meanColourWhereOpaque": 93.13,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5a5c7b9ae2e3d3371b5b136b05eae1fbc4c8d85a",
+     "file": "bitmaps/EBug_Level_Editor/353.png"
     },
     {
      "id": 356,
@@ -57581,6 +58379,7 @@
       "skin_base_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/359.jpg"
     },
     {
@@ -57595,6 +58394,7 @@
       "skin_surface_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/362.jpg"
     },
     {
@@ -58014,8 +58814,16 @@
       "loaf_end_L_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/EBug_Level_Editor/446.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/446_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 438,
+      "meanColourWhereTransparent": 6.4,
+      "lowAlphaPixels": 79,
+      "medianColourToAlphaRatio": 0.63,
+      "meanColourWhereOpaque": 142.17,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f63bd0ae0316d41005058af21b3f0aace7ec716b",
+     "file": "bitmaps/EBug_Level_Editor/446.png"
     },
     {
      "id": 449,
@@ -58029,8 +58837,16 @@
       "loaf_end_R_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/EBug_Level_Editor/449.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/449_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 438,
+      "meanColourWhereTransparent": 5.61,
+      "lowAlphaPixels": 79,
+      "medianColourToAlphaRatio": 0.67,
+      "meanColourWhereOpaque": 148.44,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "64503996d3c276f3b6a0b6f944f8bdd549aca53e",
+     "file": "bitmaps/EBug_Level_Editor/449.png"
     },
     {
      "id": 452,
@@ -58044,6 +58860,7 @@
       "loaf_mid_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/452.jpg"
     },
     {
@@ -58058,6 +58875,7 @@
       "loaf_mid_mould_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/455.jpg"
     },
     {
@@ -58072,6 +58890,7 @@
       "loaf_mid_mould2_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/458.jpg"
     },
     {
@@ -58086,6 +58905,7 @@
       "loaf_mid_mould3_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/461.jpg"
     },
     {
@@ -58100,8 +58920,16 @@
       "pepper_obj"
      ],
      "alphaBytes": 20000,
-     "file": "bitmaps/EBug_Level_Editor/464.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/464_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 938,
+      "meanColourWhereTransparent": 2.96,
+      "lowAlphaPixels": 124,
+      "medianColourToAlphaRatio": 0.87,
+      "meanColourWhereOpaque": 194.89,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "469991f3fd12dfd9a193f34942f1ec91f49e1660",
+     "file": "bitmaps/EBug_Level_Editor/464.png"
     },
     {
      "id": 467,
@@ -58115,8 +58943,16 @@
       "salt_obj"
      ],
      "alphaBytes": 20000,
-     "file": "bitmaps/EBug_Level_Editor/467.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/467_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 938,
+      "meanColourWhereTransparent": 2.86,
+      "lowAlphaPixels": 124,
+      "medianColourToAlphaRatio": 0.94,
+      "meanColourWhereOpaque": 215.64,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a36baabcf159e7a2997cdaf9facff07b1525995f",
+     "file": "bitmaps/EBug_Level_Editor/467.png"
     },
     {
      "id": 470,
@@ -58130,8 +58966,16 @@
       "toast_jam_obj"
      ],
      "alphaBytes": 12500,
-     "file": "bitmaps/EBug_Level_Editor/470.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/470_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 298,
+      "meanColourWhereTransparent": 23.57,
+      "lowAlphaPixels": 94,
+      "medianColourToAlphaRatio": 1.18,
+      "meanColourWhereOpaque": 172.48,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f658208042ab32ed3c19d9cfb450fa94e59e7264",
+     "file": "bitmaps/EBug_Level_Editor/470.png"
     },
     {
      "id": 473,
@@ -58145,8 +58989,16 @@
       "toast_marm_obj"
      ],
      "alphaBytes": 12500,
-     "file": "bitmaps/EBug_Level_Editor/473.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/473_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 298,
+      "meanColourWhereTransparent": 15.17,
+      "lowAlphaPixels": 94,
+      "medianColourToAlphaRatio": 1.06,
+      "meanColourWhereOpaque": 177.78,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c4d2b2971ad32ecd3914f02fadb68382f3557088",
+     "file": "bitmaps/EBug_Level_Editor/473.png"
     },
     {
      "id": 476,
@@ -58160,8 +59012,16 @@
       "yoghurt_obj"
      ],
      "alphaBytes": 22500,
-     "file": "bitmaps/EBug_Level_Editor/476.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/476_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1428,
+      "meanColourWhereTransparent": 11.53,
+      "lowAlphaPixels": 10,
+      "medianColourToAlphaRatio": 1.03,
+      "meanColourWhereOpaque": 227.01,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "b6892c689a72fe96147eeb4930d8e6fa680d2ad5",
+     "file": "bitmaps/EBug_Level_Editor/476.png"
     },
     {
      "id": 479,
@@ -58175,8 +59035,16 @@
       "yoghurt_lid_obj"
      ],
      "alphaBytes": 22500,
-     "file": "bitmaps/EBug_Level_Editor/479.jpg",
-     "alphaFile": "bitmaps/EBug_Level_Editor/479_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 9481,
+      "meanColourWhereTransparent": 0.37,
+      "lowAlphaPixels": 111,
+      "medianColourToAlphaRatio": 0.91,
+      "meanColourWhereOpaque": 244.34,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "50309ba493f9018811887f77d647f02f3fc535ab",
+     "file": "bitmaps/EBug_Level_Editor/479.png"
     },
     {
      "id": 1433,
@@ -58190,6 +59058,7 @@
       "eraser"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/EBug_Level_Editor/1433.jpg"
     }
    ],
@@ -65511,6 +66380,7 @@
       "talkie"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/eBugGameShow/14.jpg"
     }
    ],
@@ -75979,6 +76849,7 @@
      "sourceSha1": "d8178737e632a26cd576da59587f4319ba337181",
      "exportName": null,
      "usedBy": [],
+     "decodedOk": true,
      "file": "bitmaps/Game_Show/308.jpg"
     },
     {
@@ -75991,8 +76862,16 @@
      "exportName": null,
      "usedBy": [],
      "alphaBytes": 363759,
-     "file": "bitmaps/Game_Show/868.jpg",
-     "alphaFile": "bitmaps/Game_Show/868_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 318785,
+      "meanColourWhereTransparent": 0.4,
+      "lowAlphaPixels": 403,
+      "medianColourToAlphaRatio": 1.02,
+      "meanColourWhereOpaque": 215.67,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "90dcade86dab36676c09f1f967bf5694f60aeb05",
+     "file": "bitmaps/Game_Show/868.png"
     }
    ],
    "scriptDump": "swf-scripts/Game_Show.txt",
@@ -83652,6 +84531,7 @@
       "talkie"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/ghd_demo/23.jpg"
     },
     {
@@ -86256,8 +87136,16 @@
      "exportName": null,
      "usedBy": [],
      "alphaBytes": 1144,
-     "file": "bitmaps/harry/189.jpg",
-     "alphaFile": "bitmaps/harry/189_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 358,
+      "meanColourWhereTransparent": 8.68,
+      "lowAlphaPixels": 108,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 210.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "cfc884ba5d47ba5ccb07ff51ebc91f17b4477cca",
+     "file": "bitmaps/harry/189.png"
     }
    ],
    "scriptDump": "swf-scripts/harry.txt",
@@ -89470,6 +90358,7 @@
      "exportName": null,
      "usedBy": [],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/introductionToMicrobes_comicIntroduction/156.jpg"
     }
    ],
@@ -92695,6 +93584,7 @@
      "exportName": null,
      "usedBy": [],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/introductionToMicrobes_exitQuiz/156.jpg"
     }
    ],
@@ -102632,8 +103522,16 @@
       "white_projectile"
      ],
      "alphaBytes": 360,
-     "file": "bitmaps/introductionToMicrobes_platformer/73.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/73_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 61,
+      "meanColourWhereTransparent": 2.15,
+      "lowAlphaPixels": 34,
+      "medianColourToAlphaRatio": 0.46,
+      "meanColourWhereOpaque": 182.66,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c8f854ab9fc42ca3544dcca48a04320125856ece",
+     "file": "bitmaps/introductionToMicrobes_platformer/73.png"
     },
     {
      "id": 77,
@@ -102647,8 +103545,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/introductionToMicrobes_platformer/77.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/77_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 591,
+      "meanColourWhereTransparent": 1.7,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 205.18,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "9b5db87b6427aab74335b7d6ff5ff8052e0b786a",
+     "file": "bitmaps/introductionToMicrobes_platformer/77.png"
     },
     {
      "id": 79,
@@ -102662,8 +103568,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1554,
-     "file": "bitmaps/introductionToMicrobes_platformer/79.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/79_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 520,
+      "meanColourWhereTransparent": 1.52,
+      "lowAlphaPixels": 82,
+      "medianColourToAlphaRatio": 0.83,
+      "meanColourWhereOpaque": 201.32,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "83f3a5b51de4ada7cf7c4ed0bc0093d12338d7c4",
+     "file": "bitmaps/introductionToMicrobes_platformer/79.png"
     },
     {
      "id": 81,
@@ -102677,8 +103591,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1596,
-     "file": "bitmaps/introductionToMicrobes_platformer/81.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/81_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 545,
+      "meanColourWhereTransparent": 1.75,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.8,
+      "meanColourWhereOpaque": 199.52,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "941c1c31fd71b629361791a4f0d28f668c37e091",
+     "file": "bitmaps/introductionToMicrobes_platformer/81.png"
     },
     {
      "id": 83,
@@ -102692,8 +103614,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1680,
-     "file": "bitmaps/introductionToMicrobes_platformer/83.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/83_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 590,
+      "meanColourWhereTransparent": 1.53,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.87,
+      "meanColourWhereOpaque": 198.78,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "3cab17756cd7352760c4e678ecf24ef57a52fddf",
+     "file": "bitmaps/introductionToMicrobes_platformer/83.png"
     },
     {
      "id": 85,
@@ -102707,8 +103637,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1764,
-     "file": "bitmaps/introductionToMicrobes_platformer/85.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/85_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 620,
+      "meanColourWhereTransparent": 1.35,
+      "lowAlphaPixels": 85,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 199.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "e8fa0543a3410aec7cfb268ce160894fad702e25",
+     "file": "bitmaps/introductionToMicrobes_platformer/85.png"
     },
     {
      "id": 87,
@@ -102722,8 +103660,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/introductionToMicrobes_platformer/87.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/87_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 640,
+      "meanColourWhereTransparent": 1.56,
+      "lowAlphaPixels": 90,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 199.82,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a433f5624a93455cdf75913c1b830ef64d9430b3",
+     "file": "bitmaps/introductionToMicrobes_platformer/87.png"
     },
     {
      "id": 89,
@@ -102737,8 +103683,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/introductionToMicrobes_platformer/89.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/89_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 720,
+      "meanColourWhereTransparent": 1.26,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 202.98,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "25d6875b4df4ff4b2d192472cbf8d97479668c91",
+     "file": "bitmaps/introductionToMicrobes_platformer/89.png"
     },
     {
      "id": 91,
@@ -102752,8 +103706,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/introductionToMicrobes_platformer/91.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/91_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 725,
+      "meanColourWhereTransparent": 1.33,
+      "lowAlphaPixels": 89,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 206.84,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "7cc04bcba63582055829968de14b97413c175094",
+     "file": "bitmaps/introductionToMicrobes_platformer/91.png"
     },
     {
      "id": 93,
@@ -102767,8 +103729,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1932,
-     "file": "bitmaps/introductionToMicrobes_platformer/93.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/93_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 783,
+      "meanColourWhereTransparent": 1.4,
+      "lowAlphaPixels": 93,
+      "medianColourToAlphaRatio": 0.79,
+      "meanColourWhereOpaque": 208.92,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "8b38ad8a8f7c40e3d211ece1d672ad5d6c873270",
+     "file": "bitmaps/introductionToMicrobes_platformer/93.png"
     },
     {
      "id": 95,
@@ -102782,8 +103752,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/introductionToMicrobes_platformer/95.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/95_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 759,
+      "meanColourWhereTransparent": 1.1,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.83,
+      "meanColourWhereOpaque": 210.83,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69db41d6cc361c05c6353f34ae1e7512d24f2e60",
+     "file": "bitmaps/introductionToMicrobes_platformer/95.png"
     },
     {
      "id": 97,
@@ -102797,8 +103775,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1764,
-     "file": "bitmaps/introductionToMicrobes_platformer/97.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/97_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 672,
+      "meanColourWhereTransparent": 1.25,
+      "lowAlphaPixels": 82,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 210.94,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f7980e0023720abd7dd8b8cb3516349b66310f5b",
+     "file": "bitmaps/introductionToMicrobes_platformer/97.png"
     },
     {
      "id": 99,
@@ -102812,8 +103798,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1680,
-     "file": "bitmaps/introductionToMicrobes_platformer/99.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/99_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 632,
+      "meanColourWhereTransparent": 1.5,
+      "lowAlphaPixels": 73,
+      "medianColourToAlphaRatio": 0.84,
+      "meanColourWhereOpaque": 210.63,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "cc73dc96e5b5ab6b88619f26f9221cc0740c2a19",
+     "file": "bitmaps/introductionToMicrobes_platformer/99.png"
     },
     {
      "id": 101,
@@ -102827,8 +103821,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/introductionToMicrobes_platformer/101.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/101_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 603,
+      "meanColourWhereTransparent": 1.45,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 207.26,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c76f961387ff0a77ca4d5650d9cceb2f18094fe2",
+     "file": "bitmaps/introductionToMicrobes_platformer/101.png"
     },
     {
      "id": 103,
@@ -102842,8 +103844,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/introductionToMicrobes_platformer/103.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/103_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 595,
+      "meanColourWhereTransparent": 1.46,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 204.42,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "9e17a23845c47e7d207c0f69b8f83f4d8adbea93",
+     "file": "bitmaps/introductionToMicrobes_platformer/103.png"
     },
     {
      "id": 105,
@@ -102857,8 +103867,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1596,
-     "file": "bitmaps/introductionToMicrobes_platformer/105.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/105_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 555,
+      "meanColourWhereTransparent": 1.61,
+      "lowAlphaPixels": 85,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 200.26,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "0a87dde7d7d4d03d861c91d64f04acbd98f28bbc",
+     "file": "bitmaps/introductionToMicrobes_platformer/105.png"
     },
     {
      "id": 107,
@@ -102872,8 +103890,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1596,
-     "file": "bitmaps/introductionToMicrobes_platformer/107.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/107_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 563,
+      "meanColourWhereTransparent": 1.73,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 197.65,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "65e7356d99e623eccd6ed23f05b9efaae41727fc",
+     "file": "bitmaps/introductionToMicrobes_platformer/107.png"
     },
     {
      "id": 109,
@@ -102887,8 +103913,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/introductionToMicrobes_platformer/109.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/109_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 575,
+      "meanColourWhereTransparent": 1.42,
+      "lowAlphaPixels": 91,
+      "medianColourToAlphaRatio": 0.8,
+      "meanColourWhereOpaque": 196.83,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f2bdd78d817cfea0e024a022ab0a76920d56ab07",
+     "file": "bitmaps/introductionToMicrobes_platformer/109.png"
     },
     {
      "id": 111,
@@ -102902,8 +103936,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1764,
-     "file": "bitmaps/introductionToMicrobes_platformer/111.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/111_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 647,
+      "meanColourWhereTransparent": 1.36,
+      "lowAlphaPixels": 89,
+      "medianColourToAlphaRatio": 0.84,
+      "meanColourWhereOpaque": 196.91,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "76896d2c597ff3b5c6dcb50bde230fc61beda0d8",
+     "file": "bitmaps/introductionToMicrobes_platformer/111.png"
     },
     {
      "id": 113,
@@ -102917,8 +103959,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/introductionToMicrobes_platformer/113.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/113_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 648,
+      "meanColourWhereTransparent": 1.35,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 199.82,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a381a3a9d1c07a9344ad0e308f111d1850b7ef18",
+     "file": "bitmaps/introductionToMicrobes_platformer/113.png"
     },
     {
      "id": 115,
@@ -102932,8 +103982,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/introductionToMicrobes_platformer/115.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/115_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 629,
+      "meanColourWhereTransparent": 1.38,
+      "lowAlphaPixels": 85,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 201.86,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "df4ea86e2868df672f157ea86809b507b2227872",
+     "file": "bitmaps/introductionToMicrobes_platformer/115.png"
     },
     {
      "id": 117,
@@ -102947,8 +104005,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/introductionToMicrobes_platformer/117.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/117_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 710,
+      "meanColourWhereTransparent": 1.35,
+      "lowAlphaPixels": 86,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 204.86,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "ee8426ad4672df182b0462905b1b45b5f044be4d",
+     "file": "bitmaps/introductionToMicrobes_platformer/117.png"
     },
     {
      "id": 119,
@@ -102962,8 +104028,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1974,
-     "file": "bitmaps/introductionToMicrobes_platformer/119.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/119_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 810,
+      "meanColourWhereTransparent": 1.33,
+      "lowAlphaPixels": 94,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 208.28,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "1e321e1d995fbc95897002a4d0bd3294be75bf6c",
+     "file": "bitmaps/introductionToMicrobes_platformer/119.png"
     },
     {
      "id": 121,
@@ -102977,8 +104051,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1932,
-     "file": "bitmaps/introductionToMicrobes_platformer/121.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/121_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 788,
+      "meanColourWhereTransparent": 1.33,
+      "lowAlphaPixels": 92,
+      "medianColourToAlphaRatio": 0.87,
+      "meanColourWhereOpaque": 210.26,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "216561f2902b96492290a2a5d5644874304fbebc",
+     "file": "bitmaps/introductionToMicrobes_platformer/121.png"
     },
     {
      "id": 123,
@@ -102992,8 +104074,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/introductionToMicrobes_platformer/123.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/123_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 691,
+      "meanColourWhereTransparent": 1.4,
+      "lowAlphaPixels": 81,
+      "medianColourToAlphaRatio": 0.91,
+      "meanColourWhereOpaque": 210.72,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "6aac6aaf0692f70a6ff79fbf58464b08ad6b139b",
+     "file": "bitmaps/introductionToMicrobes_platformer/123.png"
     },
     {
      "id": 125,
@@ -103007,8 +104097,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1722,
-     "file": "bitmaps/introductionToMicrobes_platformer/125.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/125_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 643,
+      "meanColourWhereTransparent": 1.25,
+      "lowAlphaPixels": 74,
+      "medianColourToAlphaRatio": 0.93,
+      "meanColourWhereOpaque": 210.33,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d8cd560db0113735240c9033610db0eca75aea03",
+     "file": "bitmaps/introductionToMicrobes_platformer/125.png"
     },
     {
      "id": 127,
@@ -103022,8 +104120,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1680,
-     "file": "bitmaps/introductionToMicrobes_platformer/127.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/127_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 632,
+      "meanColourWhereTransparent": 1.46,
+      "lowAlphaPixels": 80,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 209.02,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "2949db64ae228d402750e12d04be5f932ee3029d",
+     "file": "bitmaps/introductionToMicrobes_platformer/127.png"
     },
     {
      "id": 129,
@@ -103037,8 +104143,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/introductionToMicrobes_platformer/129.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/129_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 595,
+      "meanColourWhereTransparent": 1.66,
+      "lowAlphaPixels": 96,
+      "medianColourToAlphaRatio": 0.86,
+      "meanColourWhereOpaque": 206.2,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "8f753e446d7d337ca01dc53a5d1a3a75e2e16759",
+     "file": "bitmaps/introductionToMicrobes_platformer/129.png"
     },
     {
      "id": 131,
@@ -103052,8 +104166,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/introductionToMicrobes_platformer/131.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/131_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 591,
+      "meanColourWhereTransparent": 1.74,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 205.5,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69a6b37b7a850dd4153e380842c2c4addb6e336f",
+     "file": "bitmaps/introductionToMicrobes_platformer/131.png"
     },
     {
      "id": 134,
@@ -103067,8 +104189,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer/134.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/134_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 470,
+      "meanColourWhereTransparent": 7.29,
+      "lowAlphaPixels": 76,
+      "medianColourToAlphaRatio": 0.77,
+      "meanColourWhereOpaque": 216.67,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d299c4be912e448bec1c46606bb6b6df240f2ad8",
+     "file": "bitmaps/introductionToMicrobes_platformer/134.png"
     },
     {
      "id": 136,
@@ -103082,8 +104212,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer/136.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/136_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 462,
+      "meanColourWhereTransparent": 7.2,
+      "lowAlphaPixels": 102,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 224.24,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "ef2a64f097327b8d192f801e17e01fed11c21f20",
+     "file": "bitmaps/introductionToMicrobes_platformer/136.png"
     },
     {
      "id": 138,
@@ -103097,8 +104235,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1540,
-     "file": "bitmaps/introductionToMicrobes_platformer/138.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/138_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 7.14,
+      "lowAlphaPixels": 77,
+      "medianColourToAlphaRatio": 0.72,
+      "meanColourWhereOpaque": 221.13,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "79f0e2b78d5f35eb381abcfcad2610444ee07bfe",
+     "file": "bitmaps/introductionToMicrobes_platformer/138.png"
     },
     {
      "id": 140,
@@ -103112,8 +104258,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/introductionToMicrobes_platformer/140.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/140_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 435,
+      "meanColourWhereTransparent": 6.33,
+      "lowAlphaPixels": 93,
+      "medianColourToAlphaRatio": 0.81,
+      "meanColourWhereOpaque": 217.75,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "b80400e4aca558f85532d35f5a46ac0d819586d8",
+     "file": "bitmaps/introductionToMicrobes_platformer/140.png"
     },
     {
      "id": 142,
@@ -103127,8 +104281,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1320,
-     "file": "bitmaps/introductionToMicrobes_platformer/142.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/142_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 353,
+      "meanColourWhereTransparent": 9.17,
+      "lowAlphaPixels": 96,
+      "medianColourToAlphaRatio": 0.75,
+      "meanColourWhereOpaque": 214.28,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "4c77b5937d13ad32e6379e39543ce0305cf95a6a",
+     "file": "bitmaps/introductionToMicrobes_platformer/142.png"
     },
     {
      "id": 144,
@@ -103142,8 +104304,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1188,
-     "file": "bitmaps/introductionToMicrobes_platformer/144.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/144_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 340,
+      "meanColourWhereTransparent": 9.21,
+      "lowAlphaPixels": 101,
+      "medianColourToAlphaRatio": 0.72,
+      "meanColourWhereOpaque": 210.74,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "4fc2ffd76ba6eb97e43a7a4e102466a389f731ef",
+     "file": "bitmaps/introductionToMicrobes_platformer/144.png"
     },
     {
      "id": 146,
@@ -103157,8 +104327,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/introductionToMicrobes_platformer/146.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/146_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 359,
+      "meanColourWhereTransparent": 9.81,
+      "lowAlphaPixels": 75,
+      "medianColourToAlphaRatio": 0.73,
+      "meanColourWhereOpaque": 213.52,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "4b453ba328dceecef73ccbdeecb36f1b2e47654e",
+     "file": "bitmaps/introductionToMicrobes_platformer/146.png"
     },
     {
      "id": 148,
@@ -103172,8 +104350,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/introductionToMicrobes_platformer/148.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/148_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 8.17,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.65,
+      "meanColourWhereOpaque": 212.33,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a48a73f207601d413fc03a44abe6736dd66f9f7e",
+     "file": "bitmaps/introductionToMicrobes_platformer/148.png"
     },
     {
      "id": 150,
@@ -103187,8 +104373,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1144,
-     "file": "bitmaps/introductionToMicrobes_platformer/150.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/150_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 360,
+      "meanColourWhereTransparent": 8.9,
+      "lowAlphaPixels": 110,
+      "medianColourToAlphaRatio": 0.96,
+      "meanColourWhereOpaque": 199.63,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69cc09cd9bd37bfa89c9c710ff4727c4d5864bfd",
+     "file": "bitmaps/introductionToMicrobes_platformer/150.png"
     },
     {
      "id": 152,
@@ -103202,8 +104396,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1232,
-     "file": "bitmaps/introductionToMicrobes_platformer/152.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/152_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 325,
+      "meanColourWhereTransparent": 10.58,
+      "lowAlphaPixels": 98,
+      "medianColourToAlphaRatio": 0.69,
+      "meanColourWhereOpaque": 187.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c77b60ed2503ace40367e04c95d8da40b5bd8555",
+     "file": "bitmaps/introductionToMicrobes_platformer/152.png"
     },
     {
      "id": 154,
@@ -103217,8 +104419,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1408,
-     "file": "bitmaps/introductionToMicrobes_platformer/154.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/154_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 388,
+      "meanColourWhereTransparent": 9.9,
+      "lowAlphaPixels": 114,
+      "medianColourToAlphaRatio": 0.78,
+      "meanColourWhereOpaque": 181.37,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "be95898ec410bedad38a351cd67733dba5651b33",
+     "file": "bitmaps/introductionToMicrobes_platformer/154.png"
     },
     {
      "id": 156,
@@ -103232,8 +104442,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/introductionToMicrobes_platformer/156.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/156_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 415,
+      "meanColourWhereTransparent": 8.1,
+      "lowAlphaPixels": 117,
+      "medianColourToAlphaRatio": 0.74,
+      "meanColourWhereOpaque": 184.2,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "b1e6210b10d2adc256b6d723c495ec0487148d75",
+     "file": "bitmaps/introductionToMicrobes_platformer/156.png"
     },
     {
      "id": 158,
@@ -103247,8 +104465,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer/158.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/158_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 461,
+      "meanColourWhereTransparent": 7.65,
+      "lowAlphaPixels": 111,
+      "medianColourToAlphaRatio": 0.86,
+      "meanColourWhereOpaque": 195.56,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a9460cd211f89fd744577129daa08deb2d76e8eb",
+     "file": "bitmaps/introductionToMicrobes_platformer/158.png"
     },
     {
      "id": 160,
@@ -103262,8 +104488,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer/160.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/160_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 468,
+      "meanColourWhereTransparent": 6.79,
+      "lowAlphaPixels": 93,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 210.68,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "aa6b0b05717f11553287698b969178f0cde20238",
+     "file": "bitmaps/introductionToMicrobes_platformer/160.png"
     },
     {
      "id": 162,
@@ -103277,8 +104511,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer/162.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/162_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 469,
+      "meanColourWhereTransparent": 6.94,
+      "lowAlphaPixels": 98,
+      "medianColourToAlphaRatio": 0.95,
+      "meanColourWhereOpaque": 221.51,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "6b2c7a7ea7d96c4e98c044213ab6580e048a4ee1",
+     "file": "bitmaps/introductionToMicrobes_platformer/162.png"
     },
     {
      "id": 164,
@@ -103292,8 +104534,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer/164.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/164_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 462,
+      "meanColourWhereTransparent": 7.03,
+      "lowAlphaPixels": 105,
+      "medianColourToAlphaRatio": 0.81,
+      "meanColourWhereOpaque": 223.16,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "557769d7fe0d80bb2f15a6de5378f6965ca46242",
+     "file": "bitmaps/introductionToMicrobes_platformer/164.png"
     },
     {
      "id": 166,
@@ -103307,8 +104557,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/introductionToMicrobes_platformer/166.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/166_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 417,
+      "meanColourWhereTransparent": 7.84,
+      "lowAlphaPixels": 116,
+      "medianColourToAlphaRatio": 0.74,
+      "meanColourWhereOpaque": 219.1,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "de47108fadec958266d5210fc7637c30be956311",
+     "file": "bitmaps/introductionToMicrobes_platformer/166.png"
     },
     {
      "id": 168,
@@ -103322,8 +104580,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1408,
-     "file": "bitmaps/introductionToMicrobes_platformer/168.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/168_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 387,
+      "meanColourWhereTransparent": 8.71,
+      "lowAlphaPixels": 113,
+      "medianColourToAlphaRatio": 0.65,
+      "meanColourWhereOpaque": 213.84,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "430c6afeeaa391c352b039a1af4b6e0f53cbf6f9",
+     "file": "bitmaps/introductionToMicrobes_platformer/168.png"
     },
     {
      "id": 170,
@@ -103337,8 +104603,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1232,
-     "file": "bitmaps/introductionToMicrobes_platformer/170.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/170_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 326,
+      "meanColourWhereTransparent": 10.37,
+      "lowAlphaPixels": 97,
+      "medianColourToAlphaRatio": 0.77,
+      "meanColourWhereOpaque": 213.11,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "dbf346fe80d20ebfbc6f985cde8912ed0ac0bb18",
+     "file": "bitmaps/introductionToMicrobes_platformer/170.png"
     },
     {
      "id": 172,
@@ -103352,8 +104626,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1144,
-     "file": "bitmaps/introductionToMicrobes_platformer/172.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/172_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 358,
+      "meanColourWhereTransparent": 9.05,
+      "lowAlphaPixels": 108,
+      "medianColourToAlphaRatio": 0.67,
+      "meanColourWhereOpaque": 211.32,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69ffd604320da2a752c4212c7383dc11f575bc37",
+     "file": "bitmaps/introductionToMicrobes_platformer/172.png"
     },
     {
      "id": 174,
@@ -103367,8 +104649,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/introductionToMicrobes_platformer/174.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/174_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 7.32,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.81,
+      "meanColourWhereOpaque": 215.81,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c4829095b2e0c3a3fdf8e0d7c60072d0792167dd",
+     "file": "bitmaps/introductionToMicrobes_platformer/174.png"
     },
     {
      "id": 176,
@@ -103382,8 +104672,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/introductionToMicrobes_platformer/176.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/176_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 359,
+      "meanColourWhereTransparent": 8.92,
+      "lowAlphaPixels": 64,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 203.55,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "94fff3ad6c4feaf560b15fbd17a6f7fd83a5c2cf",
+     "file": "bitmaps/introductionToMicrobes_platformer/176.png"
     },
     {
      "id": 178,
@@ -103397,8 +104695,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1188,
-     "file": "bitmaps/introductionToMicrobes_platformer/178.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/178_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 338,
+      "meanColourWhereTransparent": 9.07,
+      "lowAlphaPixels": 114,
+      "medianColourToAlphaRatio": 0.73,
+      "meanColourWhereOpaque": 192.71,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "3655795b0145ec674edfc31f80c8df1dbe12cfb2",
+     "file": "bitmaps/introductionToMicrobes_platformer/178.png"
     },
     {
      "id": 180,
@@ -103412,8 +104718,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1320,
-     "file": "bitmaps/introductionToMicrobes_platformer/180.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/180_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 353,
+      "meanColourWhereTransparent": 9.31,
+      "lowAlphaPixels": 97,
+      "medianColourToAlphaRatio": 0.7,
+      "meanColourWhereOpaque": 183.31,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "fc78ba5d98c779a9f47ef9b94883ef7ad517fe55",
+     "file": "bitmaps/introductionToMicrobes_platformer/180.png"
     },
     {
      "id": 182,
@@ -103427,8 +104741,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/introductionToMicrobes_platformer/182.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/182_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 433,
+      "meanColourWhereTransparent": 7.99,
+      "lowAlphaPixels": 91,
+      "medianColourToAlphaRatio": 0.84,
+      "meanColourWhereOpaque": 180.46,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "15caf2c0f2680a73e1804bc0a819434c1ce1cece",
+     "file": "bitmaps/introductionToMicrobes_platformer/182.png"
     },
     {
      "id": 184,
@@ -103442,8 +104764,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1540,
-     "file": "bitmaps/introductionToMicrobes_platformer/184.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/184_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 447,
+      "meanColourWhereTransparent": 7.75,
+      "lowAlphaPixels": 75,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 189.55,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "259c2229aeb8787ce843e37e93d3c35494d98167",
+     "file": "bitmaps/introductionToMicrobes_platformer/184.png"
     },
     {
      "id": 186,
@@ -103457,8 +104787,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer/186.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/186_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 463,
+      "meanColourWhereTransparent": 7.35,
+      "lowAlphaPixels": 100,
+      "medianColourToAlphaRatio": 0.83,
+      "meanColourWhereOpaque": 202.66,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "0bf7a552337085abb58c1afcc4088c776409bcb3",
+     "file": "bitmaps/introductionToMicrobes_platformer/186.png"
     },
     {
      "id": 188,
@@ -103472,8 +104810,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer/188.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/188_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 470,
+      "meanColourWhereTransparent": 7.34,
+      "lowAlphaPixels": 76,
+      "medianColourToAlphaRatio": 0.76,
+      "meanColourWhereOpaque": 216.79,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "15b354ecdae11a30ead5fc4bca91b64198bd0697",
+     "file": "bitmaps/introductionToMicrobes_platformer/188.png"
     },
     {
      "id": 1042,
@@ -103519,8 +104865,16 @@
       "soap_projectile"
      ],
      "alphaBytes": 1250,
-     "file": "bitmaps/introductionToMicrobes_platformer/1048.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/1048_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 635,
+      "meanColourWhereTransparent": 10.49,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.73,
+      "meanColourWhereOpaque": 209.84,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f6a246ffae5e6e579c297ec275cf422e95b99b75",
+     "file": "bitmaps/introductionToMicrobes_platformer/1048.png"
     },
     {
      "id": 1065,
@@ -103534,6 +104888,7 @@
       "talkie"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/introductionToMicrobes_platformer/1065.jpg"
     },
     {
@@ -103550,6 +104905,7 @@
       "e_phone"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/introductionToMicrobes_platformer/1138.jpg"
     },
     {
@@ -103566,6 +104922,7 @@
       "e_phone"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/introductionToMicrobes_platformer/1141.jpg"
     },
     {
@@ -103583,8 +104940,16 @@
       "e_phone"
      ],
      "alphaBytes": 30000,
-     "file": "bitmaps/introductionToMicrobes_platformer/1144.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/1144_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1487,
+      "meanColourWhereTransparent": 3.17,
+      "lowAlphaPixels": 157,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 242.59,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "ed1ef0e4c88d96e09b61a43db916cff5163cd051",
+     "file": "bitmaps/introductionToMicrobes_platformer/1144.png"
     },
     {
      "id": 1146,
@@ -103601,8 +104966,16 @@
       "e_phone"
      ],
      "alphaBytes": 30000,
-     "file": "bitmaps/introductionToMicrobes_platformer/1146.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/1146_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1487,
+      "meanColourWhereTransparent": 3.38,
+      "lowAlphaPixels": 88,
+      "medianColourToAlphaRatio": 0.91,
+      "meanColourWhereOpaque": 241.97,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c2ca40831d4007df2f94c4e966f18c491b774822",
+     "file": "bitmaps/introductionToMicrobes_platformer/1146.png"
     },
     {
      "id": 1148,
@@ -103619,8 +104992,16 @@
       "e_phone"
      ],
      "alphaBytes": 30000,
-     "file": "bitmaps/introductionToMicrobes_platformer/1148.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer/1148_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1280,
+      "meanColourWhereTransparent": 3.37,
+      "lowAlphaPixels": 157,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 235.49,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "431a409b936ec59494bd3ede747efac78d65b4c3",
+     "file": "bitmaps/introductionToMicrobes_platformer/1148.png"
     }
    ],
    "scriptDump": "swf-scripts/introductionToMicrobes_platformer.txt",
@@ -112417,8 +113798,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer9/908.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/908_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 470,
+      "meanColourWhereTransparent": 7.03,
+      "lowAlphaPixels": 76,
+      "medianColourToAlphaRatio": 0.78,
+      "meanColourWhereOpaque": 217.04,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "68acb1dcc13331708e3677389388b911a52be1a9",
+     "file": "bitmaps/introductionToMicrobes_platformer9/908.png"
     },
     {
      "id": 910,
@@ -112432,8 +113821,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer9/910.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/910_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 462,
+      "meanColourWhereTransparent": 7.12,
+      "lowAlphaPixels": 102,
+      "medianColourToAlphaRatio": 0.99,
+      "meanColourWhereOpaque": 224.51,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "da08ef7596ba215a5381450511fd8e0b604757cf",
+     "file": "bitmaps/introductionToMicrobes_platformer9/910.png"
     },
     {
      "id": 912,
@@ -112447,8 +113844,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1540,
-     "file": "bitmaps/introductionToMicrobes_platformer9/912.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/912_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 7.56,
+      "lowAlphaPixels": 77,
+      "medianColourToAlphaRatio": 0.69,
+      "meanColourWhereOpaque": 221.26,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5765a2fabd33dc977fa8d9c3c2fe50679ce04e30",
+     "file": "bitmaps/introductionToMicrobes_platformer9/912.png"
     },
     {
      "id": 914,
@@ -112462,8 +113867,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/introductionToMicrobes_platformer9/914.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/914_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 435,
+      "meanColourWhereTransparent": 6.7,
+      "lowAlphaPixels": 93,
+      "medianColourToAlphaRatio": 0.75,
+      "meanColourWhereOpaque": 217.62,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "ac9f16df8ec2a544a06883f6ef94dfda35f4a1e6",
+     "file": "bitmaps/introductionToMicrobes_platformer9/914.png"
     },
     {
      "id": 916,
@@ -112477,8 +113890,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1320,
-     "file": "bitmaps/introductionToMicrobes_platformer9/916.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/916_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 353,
+      "meanColourWhereTransparent": 9.53,
+      "lowAlphaPixels": 96,
+      "medianColourToAlphaRatio": 0.79,
+      "meanColourWhereOpaque": 213.8,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "2d41d8dd05a2e47e4bafff8be6ae733b10cb71ba",
+     "file": "bitmaps/introductionToMicrobes_platformer9/916.png"
     },
     {
      "id": 918,
@@ -112492,8 +113913,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1188,
-     "file": "bitmaps/introductionToMicrobes_platformer9/918.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/918_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 340,
+      "meanColourWhereTransparent": 9.17,
+      "lowAlphaPixels": 101,
+      "medianColourToAlphaRatio": 0.73,
+      "meanColourWhereOpaque": 211.1,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a6b6afc3682a61d49631e283c157f928b361b4e5",
+     "file": "bitmaps/introductionToMicrobes_platformer9/918.png"
     },
     {
      "id": 920,
@@ -112507,8 +113936,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/introductionToMicrobes_platformer9/920.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/920_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 359,
+      "meanColourWhereTransparent": 9.37,
+      "lowAlphaPixels": 75,
+      "medianColourToAlphaRatio": 0.69,
+      "meanColourWhereOpaque": 214.07,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "bb04e1779951d8878c421c5c59338b2db9a27367",
+     "file": "bitmaps/introductionToMicrobes_platformer9/920.png"
     },
     {
      "id": 922,
@@ -112522,8 +113959,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/introductionToMicrobes_platformer9/922.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/922_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 7.79,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.67,
+      "meanColourWhereOpaque": 211.84,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "516027f6ebf1cbda52babe097d39c663cb81ffce",
+     "file": "bitmaps/introductionToMicrobes_platformer9/922.png"
     },
     {
      "id": 924,
@@ -112537,8 +113982,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1144,
-     "file": "bitmaps/introductionToMicrobes_platformer9/924.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/924_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 360,
+      "meanColourWhereTransparent": 9.17,
+      "lowAlphaPixels": 110,
+      "medianColourToAlphaRatio": 0.93,
+      "meanColourWhereOpaque": 199.02,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "bc6a8440efa6f5b44884ca739f483090d0c5e6fc",
+     "file": "bitmaps/introductionToMicrobes_platformer9/924.png"
     },
     {
      "id": 926,
@@ -112552,8 +114005,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1232,
-     "file": "bitmaps/introductionToMicrobes_platformer9/926.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/926_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 325,
+      "meanColourWhereTransparent": 10.52,
+      "lowAlphaPixels": 98,
+      "medianColourToAlphaRatio": 0.7,
+      "meanColourWhereOpaque": 186.8,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "769e576f951c14b929f5d2472cdf615b74ff500f",
+     "file": "bitmaps/introductionToMicrobes_platformer9/926.png"
     },
     {
      "id": 928,
@@ -112567,8 +114028,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1408,
-     "file": "bitmaps/introductionToMicrobes_platformer9/928.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/928_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 388,
+      "meanColourWhereTransparent": 9.98,
+      "lowAlphaPixels": 114,
+      "medianColourToAlphaRatio": 0.79,
+      "meanColourWhereOpaque": 181.41,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f49ecc0502e80eb1e69a35c591f5387d91c3a80d",
+     "file": "bitmaps/introductionToMicrobes_platformer9/928.png"
     },
     {
      "id": 930,
@@ -112582,8 +114051,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/introductionToMicrobes_platformer9/930.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/930_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 415,
+      "meanColourWhereTransparent": 8.94,
+      "lowAlphaPixels": 117,
+      "medianColourToAlphaRatio": 0.74,
+      "meanColourWhereOpaque": 183.67,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "62363fb8cd1fd591cd59d0e904c5b7cbc775cbc1",
+     "file": "bitmaps/introductionToMicrobes_platformer9/930.png"
     },
     {
      "id": 932,
@@ -112597,8 +114074,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer9/932.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/932_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 461,
+      "meanColourWhereTransparent": 7.47,
+      "lowAlphaPixels": 111,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 196.26,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "bf2886a55e8365a9e756b7c3d7290b43ee65b255",
+     "file": "bitmaps/introductionToMicrobes_platformer9/932.png"
     },
     {
      "id": 934,
@@ -112612,8 +114097,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer9/934.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/934_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 468,
+      "meanColourWhereTransparent": 7.55,
+      "lowAlphaPixels": 93,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 210.94,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "49ed7c4fe22beff21a744437fb04a19b87776095",
+     "file": "bitmaps/introductionToMicrobes_platformer9/934.png"
     },
     {
      "id": 936,
@@ -112627,8 +114120,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer9/936.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/936_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 469,
+      "meanColourWhereTransparent": 6.92,
+      "lowAlphaPixels": 98,
+      "medianColourToAlphaRatio": 0.98,
+      "meanColourWhereOpaque": 221.89,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f4e9d4be86cbeeda9c98272fd5639ea2548945a8",
+     "file": "bitmaps/introductionToMicrobes_platformer9/936.png"
     },
     {
      "id": 938,
@@ -112642,8 +114143,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer9/938.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/938_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 462,
+      "meanColourWhereTransparent": 6.68,
+      "lowAlphaPixels": 105,
+      "medianColourToAlphaRatio": 0.77,
+      "meanColourWhereOpaque": 223.52,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5a6f6a25a37f2fb54b4b22965dabd7457746f1eb",
+     "file": "bitmaps/introductionToMicrobes_platformer9/938.png"
     },
     {
      "id": 940,
@@ -112657,8 +114166,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/introductionToMicrobes_platformer9/940.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/940_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 417,
+      "meanColourWhereTransparent": 9.11,
+      "lowAlphaPixels": 116,
+      "medianColourToAlphaRatio": 0.74,
+      "meanColourWhereOpaque": 218.62,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5759335ef4568afd7be56fdfc88cc69b95e61e7c",
+     "file": "bitmaps/introductionToMicrobes_platformer9/940.png"
     },
     {
      "id": 942,
@@ -112672,8 +114189,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1408,
-     "file": "bitmaps/introductionToMicrobes_platformer9/942.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/942_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 387,
+      "meanColourWhereTransparent": 9.37,
+      "lowAlphaPixels": 113,
+      "medianColourToAlphaRatio": 0.66,
+      "meanColourWhereOpaque": 213.66,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "9a536d698af9181bdd2addb306be0f02ec71f175",
+     "file": "bitmaps/introductionToMicrobes_platformer9/942.png"
     },
     {
      "id": 944,
@@ -112687,8 +114212,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1232,
-     "file": "bitmaps/introductionToMicrobes_platformer9/944.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/944_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 326,
+      "meanColourWhereTransparent": 10.75,
+      "lowAlphaPixels": 97,
+      "medianColourToAlphaRatio": 0.78,
+      "meanColourWhereOpaque": 212.89,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "6adf3dd253ab24b797e5904827fbd9ca94282499",
+     "file": "bitmaps/introductionToMicrobes_platformer9/944.png"
     },
     {
      "id": 946,
@@ -112702,8 +114235,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1144,
-     "file": "bitmaps/introductionToMicrobes_platformer9/946.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/946_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 358,
+      "meanColourWhereTransparent": 9.44,
+      "lowAlphaPixels": 108,
+      "medianColourToAlphaRatio": 0.69,
+      "meanColourWhereOpaque": 210.87,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c18e672bea158b8f4490738b3557462f63cb3fb2",
+     "file": "bitmaps/introductionToMicrobes_platformer9/946.png"
     },
     {
      "id": 948,
@@ -112717,8 +114258,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/introductionToMicrobes_platformer9/948.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/948_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 6.12,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.82,
+      "meanColourWhereOpaque": 216.31,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "3f0f3d7a80ff36ccdfc972060d57adad21bbd1fd",
+     "file": "bitmaps/introductionToMicrobes_platformer9/948.png"
     },
     {
      "id": 950,
@@ -112732,8 +114281,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/introductionToMicrobes_platformer9/950.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/950_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 359,
+      "meanColourWhereTransparent": 7.45,
+      "lowAlphaPixels": 64,
+      "medianColourToAlphaRatio": 0.76,
+      "meanColourWhereOpaque": 203.77,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "e00c0cdd3e48c104642dbf7d429f9cd942c153f4",
+     "file": "bitmaps/introductionToMicrobes_platformer9/950.png"
     },
     {
      "id": 952,
@@ -112747,8 +114304,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1188,
-     "file": "bitmaps/introductionToMicrobes_platformer9/952.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/952_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 338,
+      "meanColourWhereTransparent": 10.12,
+      "lowAlphaPixels": 114,
+      "medianColourToAlphaRatio": 0.72,
+      "meanColourWhereOpaque": 192.39,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "bff971e419a0b978855f182252d067000da3dd8a",
+     "file": "bitmaps/introductionToMicrobes_platformer9/952.png"
     },
     {
      "id": 954,
@@ -112762,8 +114327,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1320,
-     "file": "bitmaps/introductionToMicrobes_platformer9/954.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/954_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 353,
+      "meanColourWhereTransparent": 9.96,
+      "lowAlphaPixels": 97,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 182.94,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "85646c0746890b7faccbdea2a1497775ead79549",
+     "file": "bitmaps/introductionToMicrobes_platformer9/954.png"
     },
     {
      "id": 956,
@@ -112777,8 +114350,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/introductionToMicrobes_platformer9/956.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/956_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 433,
+      "meanColourWhereTransparent": 8.15,
+      "lowAlphaPixels": 91,
+      "medianColourToAlphaRatio": 0.84,
+      "meanColourWhereOpaque": 180.88,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d2bc66ca8bb8b9fa8389caa1b311f620112212f8",
+     "file": "bitmaps/introductionToMicrobes_platformer9/956.png"
     },
     {
      "id": 958,
@@ -112792,8 +114373,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1540,
-     "file": "bitmaps/introductionToMicrobes_platformer9/958.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/958_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 447,
+      "meanColourWhereTransparent": 8.23,
+      "lowAlphaPixels": 75,
+      "medianColourToAlphaRatio": 0.72,
+      "meanColourWhereOpaque": 189.54,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d6a79ceeefeb37a37829b73d6f93937bbcf4154d",
+     "file": "bitmaps/introductionToMicrobes_platformer9/958.png"
     },
     {
      "id": 960,
@@ -112807,8 +114396,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer9/960.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/960_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 463,
+      "meanColourWhereTransparent": 7.61,
+      "lowAlphaPixels": 100,
+      "medianColourToAlphaRatio": 0.91,
+      "meanColourWhereOpaque": 202.35,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "fa0c6b9b4a494cab7dba543b11448e927e5a57c1",
+     "file": "bitmaps/introductionToMicrobes_platformer9/960.png"
     },
     {
      "id": 962,
@@ -112822,8 +114419,16 @@
       "soap_pickup"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/introductionToMicrobes_platformer9/962.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/962_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 470,
+      "meanColourWhereTransparent": 7.07,
+      "lowAlphaPixels": 76,
+      "medianColourToAlphaRatio": 0.78,
+      "meanColourWhereOpaque": 217.12,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "748c5ad34f24b4f33ec723453cf21cf017c1ac8e",
+     "file": "bitmaps/introductionToMicrobes_platformer9/962.png"
     },
     {
      "id": 965,
@@ -112854,8 +114459,16 @@
       "soap_projectile"
      ],
      "alphaBytes": 1250,
-     "file": "bitmaps/introductionToMicrobes_platformer9/968.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/968_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 635,
+      "meanColourWhereTransparent": 9.31,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.75,
+      "meanColourWhereOpaque": 211.67,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "4c523fac2522660bcd2f66428025595bc3242bf3",
+     "file": "bitmaps/introductionToMicrobes_platformer9/968.png"
     },
     {
      "id": 972,
@@ -113174,8 +114787,16 @@
       "kitchen_yogurtdollop_pepper_r1c1"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/introductionToMicrobes_platformer9/1048.jpg",
-     "alphaFile": "bitmaps/introductionToMicrobes_platformer9/1048_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 169,
+      "meanColourWhereTransparent": 4.44,
+      "lowAlphaPixels": 17,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 186.75,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "300e191c2ded1d783efc2cd811eefa9877506f26",
+     "file": "bitmaps/introductionToMicrobes_platformer9/1048.png"
     },
     {
      "id": 1052,
@@ -122038,6 +123659,7 @@
       "eraser"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/337.jpg"
     },
     {
@@ -122052,8 +123674,16 @@
       "acid_pit_end_obj"
      ],
      "alphaBytes": 15000,
-     "file": "bitmaps/junior_game_assets/346.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/346_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1190,
+      "meanColourWhereTransparent": 3.18,
+      "lowAlphaPixels": 44,
+      "medianColourToAlphaRatio": 0.79,
+      "meanColourWhereOpaque": 194.48,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "07a22142ea7723c5a33e2d09100f4d83524574dd",
+     "file": "bitmaps/junior_game_assets/346.png"
     },
     {
      "id": 349,
@@ -122067,8 +123697,16 @@
       "acid_pit_mid_obj"
      ],
      "alphaBytes": 14800,
-     "file": "bitmaps/junior_game_assets/349.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/349_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 973,
+      "meanColourWhereTransparent": 4.1,
+      "lowAlphaPixels": 47,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 172.51,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "fbc8c48d439a99d5a469b4507b7468fcd980ebd9",
+     "file": "bitmaps/junior_game_assets/349.png"
     },
     {
      "id": 352,
@@ -122082,8 +123720,16 @@
       "acid_pit_start_obj"
      ],
      "alphaBytes": 15000,
-     "file": "bitmaps/junior_game_assets/352.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/352_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1190,
+      "meanColourWhereTransparent": 3.44,
+      "lowAlphaPixels": 39,
+      "medianColourToAlphaRatio": 0.79,
+      "meanColourWhereOpaque": 194.19,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5fd1a4384c39e3d034e3f5be824901fe7d8b8e09",
+     "file": "bitmaps/junior_game_assets/352.png"
     },
     {
      "id": 355,
@@ -122142,8 +123788,16 @@
       "bubble_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/364.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/364_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 432,
+      "meanColourWhereTransparent": 4.56,
+      "lowAlphaPixels": 70,
+      "medianColourToAlphaRatio": 0.86,
+      "meanColourWhereOpaque": 189.12,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d1199ca4f93741150dac4a1f89369b3567ac25e5",
+     "file": "bitmaps/junior_game_assets/364.png"
     },
     {
      "id": 367,
@@ -122157,8 +123811,16 @@
       "cell_front_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/367.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/367_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 444,
+      "meanColourWhereTransparent": 8.42,
+      "lowAlphaPixels": 64,
+      "medianColourToAlphaRatio": 1.09,
+      "meanColourWhereOpaque": 184.01,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "40a1919f7f94dacc37444b25d257f201ef18be06",
+     "file": "bitmaps/junior_game_assets/367.png"
     },
     {
      "id": 370,
@@ -122187,8 +123849,16 @@
       "corner_l_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/373.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/373_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 149,
+      "meanColourWhereTransparent": 16.63,
+      "lowAlphaPixels": 15,
+      "medianColourToAlphaRatio": 1,
+      "meanColourWhereOpaque": 193.69,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "dd435bc96213071c318dc722cec3d2ba99e21b6c",
+     "file": "bitmaps/junior_game_assets/373.png"
     },
     {
      "id": 376,
@@ -122202,8 +123872,16 @@
       "corner_r_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/376.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/376_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 149,
+      "meanColourWhereTransparent": 14.7,
+      "lowAlphaPixels": 15,
+      "medianColourToAlphaRatio": 0.93,
+      "meanColourWhereOpaque": 193.68,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "1dec5b54993299cdbdd14e7a3a8977e1022c611a",
+     "file": "bitmaps/junior_game_assets/376.png"
     },
     {
      "id": 379,
@@ -122217,6 +123895,7 @@
       "flesh_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/379.jpg"
     },
     {
@@ -122231,6 +123910,7 @@
       "flesh_gristle_1_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/382.jpg"
     },
     {
@@ -122245,6 +123925,7 @@
       "flesh_gristle_2_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/385.jpg"
     },
     {
@@ -122259,6 +123940,7 @@
       "flesh_gristle_3_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/388.jpg"
     },
     {
@@ -122273,6 +123955,7 @@
       "flesh_gristle_4_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/391.jpg"
     },
     {
@@ -122287,6 +123970,7 @@
       "flesh_gristle_5_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/394.jpg"
     },
     {
@@ -122301,6 +123985,7 @@
       "flesh_gristle_6_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/397.jpg"
     },
     {
@@ -122315,8 +124000,16 @@
       "floor_a_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/400.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/400_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 59,
+      "meanColourWhereTransparent": 4.17,
+      "lowAlphaPixels": 53,
+      "medianColourToAlphaRatio": 1.26,
+      "meanColourWhereOpaque": 200.72,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "e50a706f7c3efcc6f59b65137cea43ff42762ed6",
+     "file": "bitmaps/junior_game_assets/400.png"
     },
     {
      "id": 403,
@@ -122330,8 +124023,16 @@
       "floor_b_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/403.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/403_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 55,
+      "meanColourWhereTransparent": 5.24,
+      "lowAlphaPixels": 50,
+      "medianColourToAlphaRatio": 1.28,
+      "meanColourWhereOpaque": 200.02,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "85ce6187f4a196f6101d2465e972794315568f90",
+     "file": "bitmaps/junior_game_assets/403.png"
     },
     {
      "id": 406,
@@ -122345,8 +124046,16 @@
       "platform_bridge_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/406.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/406_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 789,
+      "meanColourWhereTransparent": 4.92,
+      "lowAlphaPixels": 29,
+      "medianColourToAlphaRatio": 1.2,
+      "meanColourWhereOpaque": 203.69,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a6d557ac8fb0a5c6bea34399f3e5cc6f9f8c541a",
+     "file": "bitmaps/junior_game_assets/406.png"
     },
     {
      "id": 409,
@@ -122360,8 +124069,16 @@
       "platform_end_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/409.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/409_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1938,
+      "meanColourWhereTransparent": 1.6,
+      "lowAlphaPixels": 18,
+      "medianColourToAlphaRatio": 1.07,
+      "meanColourWhereOpaque": 202.73,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "9789458133745290f44cbbfabce3d02ba0ee1a40",
+     "file": "bitmaps/junior_game_assets/409.png"
     },
     {
      "id": 412,
@@ -122375,8 +124092,16 @@
       "platform_mid_obj"
      ],
      "alphaBytes": 5000,
-     "file": "bitmaps/junior_game_assets/412.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/412_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1652,
+      "meanColourWhereTransparent": 7.25,
+      "lowAlphaPixels": 98,
+      "medianColourToAlphaRatio": 0.93,
+      "meanColourWhereOpaque": 204.08,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5c8544582fd7595102b05e69ddb08bbe8c2859dd",
+     "file": "bitmaps/junior_game_assets/412.png"
     },
     {
      "id": 415,
@@ -122390,8 +124115,16 @@
       "platform_start_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/415.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/415_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 860,
+      "meanColourWhereTransparent": 5.32,
+      "lowAlphaPixels": 41,
+      "medianColourToAlphaRatio": 1.13,
+      "meanColourWhereOpaque": 200.29,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "b1d2bfb654ac28a658b48c0d079af624a495e5e9",
+     "file": "bitmaps/junior_game_assets/415.png"
     },
     {
      "id": 418,
@@ -122405,8 +124138,16 @@
       "roof_a_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/418.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/418_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 59,
+      "meanColourWhereTransparent": 1.41,
+      "lowAlphaPixels": 53,
+      "medianColourToAlphaRatio": 1.31,
+      "meanColourWhereOpaque": 200.55,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5d10b65a8c20f29f4a68da82f197b1b029131fab",
+     "file": "bitmaps/junior_game_assets/418.png"
     },
     {
      "id": 421,
@@ -122420,8 +124161,16 @@
       "roof_b_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/421.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/421_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 55,
+      "meanColourWhereTransparent": 1.85,
+      "lowAlphaPixels": 50,
+      "medianColourToAlphaRatio": 1.31,
+      "meanColourWhereOpaque": 200,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "1b07cb43bf86907270221c2f41beb59675c41b04",
+     "file": "bitmaps/junior_game_assets/421.png"
     },
     {
      "id": 424,
@@ -122435,8 +124184,16 @@
       "vertical_a_l_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/424.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/424_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 68,
+      "meanColourWhereTransparent": 16.32,
+      "lowAlphaPixels": 9,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 206.31,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "58a349a47da56e82197c4ffafa59023fd00a7c42",
+     "file": "bitmaps/junior_game_assets/424.png"
     },
     {
      "id": 427,
@@ -122450,8 +124207,16 @@
       "vertical_a_r_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/427.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/427_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 68,
+      "meanColourWhereTransparent": 11.25,
+      "lowAlphaPixels": 9,
+      "medianColourToAlphaRatio": 0.77,
+      "meanColourWhereOpaque": 206.38,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "78f863719cbc4dc6bf8decbeb2273844e4529073",
+     "file": "bitmaps/junior_game_assets/427.png"
     },
     {
      "id": 430,
@@ -122465,8 +124230,16 @@
       "vertical_b_l_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/430.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/430_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 72,
+      "meanColourWhereTransparent": 15.69,
+      "lowAlphaPixels": 8,
+      "medianColourToAlphaRatio": 0.91,
+      "meanColourWhereOpaque": 206.72,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "96f2aeed68ea5b11128ecf71e77b332546b3324b",
+     "file": "bitmaps/junior_game_assets/430.png"
     },
     {
      "id": 433,
@@ -122480,8 +124253,16 @@
       "vertical_b_r_tile"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/433.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/433_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 72,
+      "meanColourWhereTransparent": 10.99,
+      "lowAlphaPixels": 8,
+      "medianColourToAlphaRatio": 0.72,
+      "meanColourWhereOpaque": 206.67,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5825641dacff0f0c5c91a37f8217f6a8ef5c00ff",
+     "file": "bitmaps/junior_game_assets/433.png"
     },
     {
      "id": 436,
@@ -122495,8 +124276,16 @@
       "villi_floor_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/junior_game_assets/436.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/436_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1289,
+      "meanColourWhereTransparent": 4.48,
+      "lowAlphaPixels": 492,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 195.56,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "2b19a05982579e5fb3ad8e14784354a850dbd1c1",
+     "file": "bitmaps/junior_game_assets/436.png"
     },
     {
      "id": 439,
@@ -122510,8 +124299,16 @@
       "villi_roof_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/junior_game_assets/439.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/439_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1289,
+      "meanColourWhereTransparent": 4.82,
+      "lowAlphaPixels": 492,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 195.56,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "2d88d3296f1597ab9a2bf3b849d44f0d7b9a9634",
+     "file": "bitmaps/junior_game_assets/439.png"
     },
     {
      "id": 442,
@@ -122525,8 +124322,16 @@
       "lint_ball_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/442.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/442_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 168,
+      "meanColourWhereTransparent": 3.14,
+      "lowAlphaPixels": 615,
+      "medianColourToAlphaRatio": 1.11,
+      "meanColourWhereOpaque": 209.29,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c81a3d1ba194c2d59cd63217d3e6226e0e5dda66",
+     "file": "bitmaps/junior_game_assets/442.png"
     },
     {
      "id": 445,
@@ -122540,6 +124345,7 @@
       "plaster_multi_bridge_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/445.jpg"
     },
     {
@@ -122554,8 +124360,16 @@
       "plaster_multi_end_obj"
      ],
      "alphaBytes": 7500,
-     "file": "bitmaps/junior_game_assets/448.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/448_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 222,
+      "meanColourWhereTransparent": 6.36,
+      "lowAlphaPixels": 24,
+      "medianColourToAlphaRatio": 0.39,
+      "meanColourWhereOpaque": 209.9,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "fba3de19a636d587c80e3425057eb065d991f5d6",
+     "file": "bitmaps/junior_game_assets/448.png"
     },
     {
      "id": 451,
@@ -122569,8 +124383,16 @@
       "plaster_multi_start_obj"
      ],
      "alphaBytes": 7500,
-     "file": "bitmaps/junior_game_assets/451.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/451_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 254,
+      "meanColourWhereTransparent": 10.07,
+      "lowAlphaPixels": 5,
+      "medianColourToAlphaRatio": 0.69,
+      "meanColourWhereOpaque": 209.62,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "73dc592feea2affea1e1712fc29cdab8121a2c37",
+     "file": "bitmaps/junior_game_assets/451.png"
     },
     {
      "id": 454,
@@ -122584,6 +124406,7 @@
       "plaster_multi_mid_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/454.jpg"
     },
     {
@@ -122598,8 +124421,16 @@
       "plaster_singular_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/junior_game_assets/457.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/457_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 508,
+      "meanColourWhereTransparent": 9.01,
+      "lowAlphaPixels": 10,
+      "medianColourToAlphaRatio": 0.87,
+      "meanColourWhereOpaque": 209.59,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "61a7035346df7e7b2a81aad668d06ac35dc376ba",
+     "file": "bitmaps/junior_game_assets/457.png"
     },
     {
      "id": 460,
@@ -122613,8 +124444,16 @@
       "scab_obj"
      ],
      "alphaBytes": 20000,
-     "file": "bitmaps/junior_game_assets/460.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/460_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1801,
+      "meanColourWhereTransparent": 2.17,
+      "lowAlphaPixels": 96,
+      "medianColourToAlphaRatio": 0.4,
+      "meanColourWhereOpaque": 124.72,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f90a8b80da0fefd3325449ebc9b783ebf7cdc83a",
+     "file": "bitmaps/junior_game_assets/460.png"
     },
     {
      "id": 463,
@@ -122628,8 +124467,16 @@
       "splinter_obj"
      ],
      "alphaBytes": 12500,
-     "file": "bitmaps/junior_game_assets/463.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/463_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 2125,
+      "meanColourWhereTransparent": 4.85,
+      "lowAlphaPixels": 356,
+      "medianColourToAlphaRatio": 0.97,
+      "meanColourWhereOpaque": 169.31,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "cd986c6d3b27cc17cfd6adfbb50df627c2cb3910",
+     "file": "bitmaps/junior_game_assets/463.png"
     },
     {
      "id": 466,
@@ -122643,8 +124490,16 @@
       "spot_large_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/junior_game_assets/466.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/466_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1366,
+      "meanColourWhereTransparent": 6.27,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.96,
+      "meanColourWhereOpaque": 211.09,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5487c8ad54aff2373a563e185b96af0c63d44da2",
+     "file": "bitmaps/junior_game_assets/466.png"
     },
     {
      "id": 469,
@@ -122658,8 +124513,16 @@
       "spot_ooze_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/junior_game_assets/469.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/469_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 3335,
+      "meanColourWhereTransparent": 2.42,
+      "lowAlphaPixels": 110,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 197.2,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "dbb961ba1aed23344177532274841795efced288",
+     "file": "bitmaps/junior_game_assets/469.png"
     },
     {
      "id": 472,
@@ -122673,8 +124536,16 @@
       "spot_small_obj"
      ],
      "alphaBytes": 2500,
-     "file": "bitmaps/junior_game_assets/472.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/472_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 338,
+      "meanColourWhereTransparent": 8.35,
+      "lowAlphaPixels": 46,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 209.64,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "1afe71f91cdece5b9408e6422c79a655eb332aa8",
+     "file": "bitmaps/junior_game_assets/472.png"
     },
     {
      "id": 475,
@@ -122688,8 +124559,16 @@
       "wart_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/junior_game_assets/475.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/475_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1201,
+      "meanColourWhereTransparent": 4.61,
+      "lowAlphaPixels": 66,
+      "medianColourToAlphaRatio": 0.96,
+      "meanColourWhereOpaque": 207.75,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d5f74e2565acd2cb781f7095a4eec0e96eaa3afb",
+     "file": "bitmaps/junior_game_assets/475.png"
     },
     {
      "id": 478,
@@ -122703,6 +124582,7 @@
       "hair_base_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/478.jpg"
     },
     {
@@ -122762,8 +124642,16 @@
       "hair_slope_end_obj"
      ],
      "alphaBytes": 5000,
-     "file": "bitmaps/junior_game_assets/490.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/490_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 2265,
+      "meanColourWhereTransparent": 1.79,
+      "lowAlphaPixels": 44,
+      "medianColourToAlphaRatio": 0.39,
+      "meanColourWhereOpaque": 82.56,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a52b95ffd6e9d0914b973ec8ed0727990bf39177",
+     "file": "bitmaps/junior_game_assets/490.png"
     },
     {
      "id": 493,
@@ -122777,8 +124665,16 @@
       "hair_slope_start_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/junior_game_assets/493.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/493_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 4741,
+      "meanColourWhereTransparent": 1.28,
+      "lowAlphaPixels": 62,
+      "medianColourToAlphaRatio": 0.43,
+      "meanColourWhereOpaque": 93.13,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "5a5c7b9ae2e3d3371b5b136b05eae1fbc4c8d85a",
+     "file": "bitmaps/junior_game_assets/493.png"
     },
     {
      "id": 496,
@@ -122807,6 +124703,7 @@
       "skin_base_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/499.jpg"
     },
     {
@@ -122821,6 +124718,7 @@
       "skin_surface_tile"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/502.jpg"
     },
     {
@@ -123240,8 +125138,16 @@
       "loaf_end_L_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/junior_game_assets/586.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/586_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 438,
+      "meanColourWhereTransparent": 6.4,
+      "lowAlphaPixels": 79,
+      "medianColourToAlphaRatio": 0.63,
+      "meanColourWhereOpaque": 142.17,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f63bd0ae0316d41005058af21b3f0aace7ec716b",
+     "file": "bitmaps/junior_game_assets/586.png"
     },
     {
      "id": 589,
@@ -123255,8 +125161,16 @@
       "loaf_end_R_obj"
      ],
      "alphaBytes": 10000,
-     "file": "bitmaps/junior_game_assets/589.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/589_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 438,
+      "meanColourWhereTransparent": 5.61,
+      "lowAlphaPixels": 79,
+      "medianColourToAlphaRatio": 0.67,
+      "meanColourWhereOpaque": 148.44,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "64503996d3c276f3b6a0b6f944f8bdd549aca53e",
+     "file": "bitmaps/junior_game_assets/589.png"
     },
     {
      "id": 592,
@@ -123270,6 +125184,7 @@
       "loaf_mid_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/592.jpg"
     },
     {
@@ -123284,6 +125199,7 @@
       "loaf_mid_mould_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/595.jpg"
     },
     {
@@ -123298,6 +125214,7 @@
       "loaf_mid_mould2_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/598.jpg"
     },
     {
@@ -123312,6 +125229,7 @@
       "loaf_mid_mould3_obj"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/junior_game_assets/601.jpg"
     },
     {
@@ -123326,8 +125244,16 @@
       "pepper_obj"
      ],
      "alphaBytes": 20000,
-     "file": "bitmaps/junior_game_assets/604.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/604_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 938,
+      "meanColourWhereTransparent": 2.96,
+      "lowAlphaPixels": 124,
+      "medianColourToAlphaRatio": 0.87,
+      "meanColourWhereOpaque": 194.89,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "469991f3fd12dfd9a193f34942f1ec91f49e1660",
+     "file": "bitmaps/junior_game_assets/604.png"
     },
     {
      "id": 607,
@@ -123341,8 +125267,16 @@
       "salt_obj"
      ],
      "alphaBytes": 20000,
-     "file": "bitmaps/junior_game_assets/607.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/607_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 938,
+      "meanColourWhereTransparent": 2.86,
+      "lowAlphaPixels": 124,
+      "medianColourToAlphaRatio": 0.94,
+      "meanColourWhereOpaque": 215.64,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a36baabcf159e7a2997cdaf9facff07b1525995f",
+     "file": "bitmaps/junior_game_assets/607.png"
     },
     {
      "id": 610,
@@ -123356,8 +125290,16 @@
       "toast_jam_obj"
      ],
      "alphaBytes": 12500,
-     "file": "bitmaps/junior_game_assets/610.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/610_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 298,
+      "meanColourWhereTransparent": 23.57,
+      "lowAlphaPixels": 94,
+      "medianColourToAlphaRatio": 1.18,
+      "meanColourWhereOpaque": 172.48,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f658208042ab32ed3c19d9cfb450fa94e59e7264",
+     "file": "bitmaps/junior_game_assets/610.png"
     },
     {
      "id": 613,
@@ -123371,8 +125313,16 @@
       "toast_marm_obj"
      ],
      "alphaBytes": 12500,
-     "file": "bitmaps/junior_game_assets/613.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/613_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 298,
+      "meanColourWhereTransparent": 15.17,
+      "lowAlphaPixels": 94,
+      "medianColourToAlphaRatio": 1.06,
+      "meanColourWhereOpaque": 177.78,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c4d2b2971ad32ecd3914f02fadb68382f3557088",
+     "file": "bitmaps/junior_game_assets/613.png"
     },
     {
      "id": 616,
@@ -123386,8 +125336,16 @@
       "yoghurt_obj"
      ],
      "alphaBytes": 22500,
-     "file": "bitmaps/junior_game_assets/616.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/616_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1428,
+      "meanColourWhereTransparent": 11.53,
+      "lowAlphaPixels": 10,
+      "medianColourToAlphaRatio": 1.03,
+      "meanColourWhereOpaque": 227.01,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "b6892c689a72fe96147eeb4930d8e6fa680d2ad5",
+     "file": "bitmaps/junior_game_assets/616.png"
     },
     {
      "id": 619,
@@ -123401,8 +125359,16 @@
       "yoghurt_lid_obj"
      ],
      "alphaBytes": 22500,
-     "file": "bitmaps/junior_game_assets/619.jpg",
-     "alphaFile": "bitmaps/junior_game_assets/619_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 9481,
+      "meanColourWhereTransparent": 0.37,
+      "lowAlphaPixels": 111,
+      "medianColourToAlphaRatio": 0.91,
+      "meanColourWhereOpaque": 244.34,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "50309ba493f9018811887f77d647f02f3fc535ab",
+     "file": "bitmaps/junior_game_assets/619.png"
     }
    ],
    "scriptDump": "swf-scripts/junior_game_assets.txt",
@@ -123852,6 +125818,7 @@
      "exportName": null,
      "usedBy": [],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/kitchen_game_intro_level_0/1.jpg"
     }
    ],
@@ -124182,6 +126149,7 @@
      "exportName": null,
      "usedBy": [],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/kitchen_game_intro_level_1/1.jpg"
     }
    ],
@@ -124506,6 +126474,7 @@
      "exportName": null,
      "usedBy": [],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/kitchen_game_intro_level_2/1.jpg"
     }
    ],
@@ -124844,6 +126813,7 @@
      "exportName": null,
      "usedBy": [],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/kitchen_game_intro_level_3/1.jpg"
     }
    ],
@@ -140107,6 +142077,7 @@
       "erasor"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/map_builder/3.jpg"
     }
    ],
@@ -142100,8 +144071,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/1.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/1_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 470,
+      "meanColourWhereTransparent": 7.29,
+      "lowAlphaPixels": 76,
+      "medianColourToAlphaRatio": 0.77,
+      "meanColourWhereOpaque": 216.67,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d299c4be912e448bec1c46606bb6b6df240f2ad8",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/1.png"
     },
     {
      "id": 3,
@@ -142115,8 +144094,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/3.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/3_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 462,
+      "meanColourWhereTransparent": 7.2,
+      "lowAlphaPixels": 102,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 224.24,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "ef2a64f097327b8d192f801e17e01fed11c21f20",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/3.png"
     },
     {
      "id": 5,
@@ -142130,8 +144117,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1540,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/5.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/5_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 7.14,
+      "lowAlphaPixels": 77,
+      "medianColourToAlphaRatio": 0.72,
+      "meanColourWhereOpaque": 221.13,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "79f0e2b78d5f35eb381abcfcad2610444ee07bfe",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/5.png"
     },
     {
      "id": 7,
@@ -142145,8 +144140,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/7.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/7_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 435,
+      "meanColourWhereTransparent": 6.33,
+      "lowAlphaPixels": 93,
+      "medianColourToAlphaRatio": 0.81,
+      "meanColourWhereOpaque": 217.75,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "b80400e4aca558f85532d35f5a46ac0d819586d8",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/7.png"
     },
     {
      "id": 9,
@@ -142160,8 +144163,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1320,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/9.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/9_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 353,
+      "meanColourWhereTransparent": 9.17,
+      "lowAlphaPixels": 96,
+      "medianColourToAlphaRatio": 0.75,
+      "meanColourWhereOpaque": 214.28,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "4c77b5937d13ad32e6379e39543ce0305cf95a6a",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/9.png"
     },
     {
      "id": 11,
@@ -142175,8 +144186,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1188,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/11.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/11_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 340,
+      "meanColourWhereTransparent": 9.21,
+      "lowAlphaPixels": 101,
+      "medianColourToAlphaRatio": 0.72,
+      "meanColourWhereOpaque": 210.74,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "4fc2ffd76ba6eb97e43a7a4e102466a389f731ef",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/11.png"
     },
     {
      "id": 13,
@@ -142190,8 +144209,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/13.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/13_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 359,
+      "meanColourWhereTransparent": 9.81,
+      "lowAlphaPixels": 75,
+      "medianColourToAlphaRatio": 0.73,
+      "meanColourWhereOpaque": 213.52,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "4b453ba328dceecef73ccbdeecb36f1b2e47654e",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/13.png"
     },
     {
      "id": 15,
@@ -142205,8 +144232,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/15.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/15_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 8.17,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.65,
+      "meanColourWhereOpaque": 212.33,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a48a73f207601d413fc03a44abe6736dd66f9f7e",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/15.png"
     },
     {
      "id": 17,
@@ -142220,8 +144255,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1144,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/17.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/17_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 360,
+      "meanColourWhereTransparent": 8.9,
+      "lowAlphaPixels": 110,
+      "medianColourToAlphaRatio": 0.96,
+      "meanColourWhereOpaque": 199.63,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69cc09cd9bd37bfa89c9c710ff4727c4d5864bfd",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/17.png"
     },
     {
      "id": 19,
@@ -142235,8 +144278,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1232,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/19.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/19_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 325,
+      "meanColourWhereTransparent": 10.58,
+      "lowAlphaPixels": 98,
+      "medianColourToAlphaRatio": 0.69,
+      "meanColourWhereOpaque": 187.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c77b60ed2503ace40367e04c95d8da40b5bd8555",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/19.png"
     },
     {
      "id": 21,
@@ -142250,8 +144301,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1408,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/21.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/21_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 388,
+      "meanColourWhereTransparent": 9.9,
+      "lowAlphaPixels": 114,
+      "medianColourToAlphaRatio": 0.78,
+      "meanColourWhereOpaque": 181.37,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "be95898ec410bedad38a351cd67733dba5651b33",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/21.png"
     },
     {
      "id": 23,
@@ -142265,8 +144324,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/23.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/23_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 415,
+      "meanColourWhereTransparent": 8.1,
+      "lowAlphaPixels": 117,
+      "medianColourToAlphaRatio": 0.74,
+      "meanColourWhereOpaque": 184.2,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "b1e6210b10d2adc256b6d723c495ec0487148d75",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/23.png"
     },
     {
      "id": 25,
@@ -142280,8 +144347,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/25.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/25_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 461,
+      "meanColourWhereTransparent": 7.65,
+      "lowAlphaPixels": 111,
+      "medianColourToAlphaRatio": 0.86,
+      "meanColourWhereOpaque": 195.56,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a9460cd211f89fd744577129daa08deb2d76e8eb",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/25.png"
     },
     {
      "id": 27,
@@ -142295,8 +144370,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/27.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/27_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 468,
+      "meanColourWhereTransparent": 6.79,
+      "lowAlphaPixels": 93,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 210.68,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "aa6b0b05717f11553287698b969178f0cde20238",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/27.png"
     },
     {
      "id": 29,
@@ -142310,8 +144393,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/29.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/29_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 469,
+      "meanColourWhereTransparent": 6.94,
+      "lowAlphaPixels": 98,
+      "medianColourToAlphaRatio": 0.95,
+      "meanColourWhereOpaque": 221.51,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "6b2c7a7ea7d96c4e98c044213ab6580e048a4ee1",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/29.png"
     },
     {
      "id": 31,
@@ -142325,8 +144416,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/31.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/31_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 462,
+      "meanColourWhereTransparent": 7.03,
+      "lowAlphaPixels": 105,
+      "medianColourToAlphaRatio": 0.81,
+      "meanColourWhereOpaque": 223.16,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "557769d7fe0d80bb2f15a6de5378f6965ca46242",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/31.png"
     },
     {
      "id": 33,
@@ -142340,8 +144439,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/33.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/33_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 417,
+      "meanColourWhereTransparent": 7.84,
+      "lowAlphaPixels": 116,
+      "medianColourToAlphaRatio": 0.74,
+      "meanColourWhereOpaque": 219.1,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "de47108fadec958266d5210fc7637c30be956311",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/33.png"
     },
     {
      "id": 35,
@@ -142355,8 +144462,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1408,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/35.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/35_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 387,
+      "meanColourWhereTransparent": 8.71,
+      "lowAlphaPixels": 113,
+      "medianColourToAlphaRatio": 0.65,
+      "meanColourWhereOpaque": 213.84,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "430c6afeeaa391c352b039a1af4b6e0f53cbf6f9",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/35.png"
     },
     {
      "id": 37,
@@ -142370,8 +144485,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1232,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/37.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/37_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 326,
+      "meanColourWhereTransparent": 10.37,
+      "lowAlphaPixels": 97,
+      "medianColourToAlphaRatio": 0.77,
+      "meanColourWhereOpaque": 213.11,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "dbf346fe80d20ebfbc6f985cde8912ed0ac0bb18",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/37.png"
     },
     {
      "id": 39,
@@ -142385,8 +144508,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1144,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/39.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/39_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 358,
+      "meanColourWhereTransparent": 9.05,
+      "lowAlphaPixels": 108,
+      "medianColourToAlphaRatio": 0.67,
+      "meanColourWhereOpaque": 211.32,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69ffd604320da2a752c4212c7383dc11f575bc37",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/39.png"
     },
     {
      "id": 41,
@@ -142400,8 +144531,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/41.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/41_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 442,
+      "meanColourWhereTransparent": 7.32,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.81,
+      "meanColourWhereOpaque": 215.81,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c4829095b2e0c3a3fdf8e0d7c60072d0792167dd",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/41.png"
     },
     {
      "id": 43,
@@ -142415,8 +144554,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1056,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/43.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/43_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 359,
+      "meanColourWhereTransparent": 8.92,
+      "lowAlphaPixels": 64,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 203.55,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "94fff3ad6c4feaf560b15fbd17a6f7fd83a5c2cf",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/43.png"
     },
     {
      "id": 45,
@@ -142430,8 +144577,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1188,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/45.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/45_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 338,
+      "meanColourWhereTransparent": 9.07,
+      "lowAlphaPixels": 114,
+      "medianColourToAlphaRatio": 0.73,
+      "meanColourWhereOpaque": 192.71,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "3655795b0145ec674edfc31f80c8df1dbe12cfb2",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/45.png"
     },
     {
      "id": 47,
@@ -142445,8 +144600,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1320,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/47.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/47_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 353,
+      "meanColourWhereTransparent": 9.31,
+      "lowAlphaPixels": 97,
+      "medianColourToAlphaRatio": 0.7,
+      "meanColourWhereOpaque": 183.31,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "fc78ba5d98c779a9f47ef9b94883ef7ad517fe55",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/47.png"
     },
     {
      "id": 49,
@@ -142460,8 +144623,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1496,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/49.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/49_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 433,
+      "meanColourWhereTransparent": 7.99,
+      "lowAlphaPixels": 91,
+      "medianColourToAlphaRatio": 0.84,
+      "meanColourWhereOpaque": 180.46,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "15caf2c0f2680a73e1804bc0a819434c1ce1cece",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/49.png"
     },
     {
      "id": 51,
@@ -142475,8 +144646,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1540,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/51.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/51_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 447,
+      "meanColourWhereTransparent": 7.75,
+      "lowAlphaPixels": 75,
+      "medianColourToAlphaRatio": 0.71,
+      "meanColourWhereOpaque": 189.55,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "259c2229aeb8787ce843e37e93d3c35494d98167",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/51.png"
     },
     {
      "id": 53,
@@ -142490,8 +144669,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/53.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/53_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 463,
+      "meanColourWhereTransparent": 7.35,
+      "lowAlphaPixels": 100,
+      "medianColourToAlphaRatio": 0.83,
+      "meanColourWhereOpaque": 202.66,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "0bf7a552337085abb58c1afcc4088c776409bcb3",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/53.png"
     },
     {
      "id": 55,
@@ -142505,8 +144692,16 @@
       "liquid_soap"
      ],
      "alphaBytes": 1584,
-     "file": "bitmaps/Sandy_Art__Liquid_Soap/55.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__Liquid_Soap/55_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 470,
+      "meanColourWhereTransparent": 7.34,
+      "lowAlphaPixels": 76,
+      "medianColourToAlphaRatio": 0.76,
+      "meanColourWhereOpaque": 216.79,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "15b354ecdae11a30ead5fc4bca91b64198bd0697",
+     "file": "bitmaps/Sandy_Art__Liquid_Soap/55.png"
     }
    ],
    "scriptDump": null,
@@ -142725,8 +144920,16 @@
      "exportName": null,
      "usedBy": [],
      "alphaBytes": 30000,
-     "file": "bitmaps/Sandy_Art__milk/1.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__milk/1_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1487,
+      "meanColourWhereTransparent": 3.17,
+      "lowAlphaPixels": 157,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 242.59,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "ed1ef0e4c88d96e09b61a43db916cff5163cd051",
+     "file": "bitmaps/Sandy_Art__milk/1.png"
     },
     {
      "id": 3,
@@ -142738,8 +144941,16 @@
      "exportName": null,
      "usedBy": [],
      "alphaBytes": 30000,
-     "file": "bitmaps/Sandy_Art__milk/3.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__milk/3_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1487,
+      "meanColourWhereTransparent": 3.38,
+      "lowAlphaPixels": 88,
+      "medianColourToAlphaRatio": 0.91,
+      "meanColourWhereOpaque": 241.97,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c2ca40831d4007df2f94c4e966f18c491b774822",
+     "file": "bitmaps/Sandy_Art__milk/3.png"
     },
     {
      "id": 5,
@@ -142751,8 +144962,16 @@
      "exportName": null,
      "usedBy": [],
      "alphaBytes": 30000,
-     "file": "bitmaps/Sandy_Art__milk/5.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__milk/5_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 1280,
+      "meanColourWhereTransparent": 3.37,
+      "lowAlphaPixels": 157,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 235.49,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "431a409b936ec59494bd3ede747efac78d65b4c3",
+     "file": "bitmaps/Sandy_Art__milk/5.png"
     }
    ],
    "scriptDump": "swf-scripts/Sandy_Art__milk.txt",
@@ -142940,8 +145159,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/1.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/1_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 591,
+      "meanColourWhereTransparent": 1.7,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 205.18,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "9b5db87b6427aab74335b7d6ff5ff8052e0b786a",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/1.png"
     },
     {
      "id": 3,
@@ -142955,8 +145182,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1554,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/3.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/3_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 520,
+      "meanColourWhereTransparent": 1.52,
+      "lowAlphaPixels": 82,
+      "medianColourToAlphaRatio": 0.83,
+      "meanColourWhereOpaque": 201.32,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "83f3a5b51de4ada7cf7c4ed0bc0093d12338d7c4",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/3.png"
     },
     {
      "id": 5,
@@ -142970,8 +145205,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1596,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/5.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/5_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 545,
+      "meanColourWhereTransparent": 1.75,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.8,
+      "meanColourWhereOpaque": 199.52,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "941c1c31fd71b629361791a4f0d28f668c37e091",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/5.png"
     },
     {
      "id": 7,
@@ -142985,8 +145228,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1680,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/7.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/7_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 590,
+      "meanColourWhereTransparent": 1.53,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.87,
+      "meanColourWhereOpaque": 198.78,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "3cab17756cd7352760c4e678ecf24ef57a52fddf",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/7.png"
     },
     {
      "id": 9,
@@ -143000,8 +145251,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1764,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/9.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/9_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 620,
+      "meanColourWhereTransparent": 1.35,
+      "lowAlphaPixels": 85,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 199.22,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "e8fa0543a3410aec7cfb268ce160894fad702e25",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/9.png"
     },
     {
      "id": 11,
@@ -143015,8 +145274,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/11.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/11_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 640,
+      "meanColourWhereTransparent": 1.56,
+      "lowAlphaPixels": 90,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 199.82,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a433f5624a93455cdf75913c1b830ef64d9430b3",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/11.png"
     },
     {
      "id": 13,
@@ -143030,8 +145297,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/13.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/13_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 720,
+      "meanColourWhereTransparent": 1.26,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 202.98,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "25d6875b4df4ff4b2d192472cbf8d97479668c91",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/13.png"
     },
     {
      "id": 15,
@@ -143045,8 +145320,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/15.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/15_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 725,
+      "meanColourWhereTransparent": 1.33,
+      "lowAlphaPixels": 89,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 206.84,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "7cc04bcba63582055829968de14b97413c175094",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/15.png"
     },
     {
      "id": 17,
@@ -143060,8 +145343,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1932,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/17.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/17_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 783,
+      "meanColourWhereTransparent": 1.4,
+      "lowAlphaPixels": 93,
+      "medianColourToAlphaRatio": 0.79,
+      "meanColourWhereOpaque": 208.92,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "8b38ad8a8f7c40e3d211ece1d672ad5d6c873270",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/17.png"
     },
     {
      "id": 19,
@@ -143075,8 +145366,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/19.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/19_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 759,
+      "meanColourWhereTransparent": 1.1,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.83,
+      "meanColourWhereOpaque": 210.83,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69db41d6cc361c05c6353f34ae1e7512d24f2e60",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/19.png"
     },
     {
      "id": 21,
@@ -143090,8 +145389,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1764,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/21.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/21_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 672,
+      "meanColourWhereTransparent": 1.25,
+      "lowAlphaPixels": 82,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 210.94,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f7980e0023720abd7dd8b8cb3516349b66310f5b",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/21.png"
     },
     {
      "id": 23,
@@ -143105,8 +145412,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1680,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/23.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/23_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 632,
+      "meanColourWhereTransparent": 1.5,
+      "lowAlphaPixels": 73,
+      "medianColourToAlphaRatio": 0.84,
+      "meanColourWhereOpaque": 210.63,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "cc73dc96e5b5ab6b88619f26f9221cc0740c2a19",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/23.png"
     },
     {
      "id": 25,
@@ -143120,8 +145435,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/25.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/25_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 603,
+      "meanColourWhereTransparent": 1.45,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 207.26,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c76f961387ff0a77ca4d5650d9cceb2f18094fe2",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/25.png"
     },
     {
      "id": 27,
@@ -143135,8 +145458,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/27.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/27_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 595,
+      "meanColourWhereTransparent": 1.46,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 204.42,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "9e17a23845c47e7d207c0f69b8f83f4d8adbea93",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/27.png"
     },
     {
      "id": 29,
@@ -143150,8 +145481,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1596,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/29.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/29_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 555,
+      "meanColourWhereTransparent": 1.61,
+      "lowAlphaPixels": 85,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 200.26,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "0a87dde7d7d4d03d861c91d64f04acbd98f28bbc",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/29.png"
     },
     {
      "id": 31,
@@ -143165,8 +145504,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1596,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/31.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/31_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 563,
+      "meanColourWhereTransparent": 1.73,
+      "lowAlphaPixels": 83,
+      "medianColourToAlphaRatio": 0.85,
+      "meanColourWhereOpaque": 197.65,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "65e7356d99e623eccd6ed23f05b9efaae41727fc",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/31.png"
     },
     {
      "id": 33,
@@ -143180,8 +145527,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/33.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/33_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 575,
+      "meanColourWhereTransparent": 1.42,
+      "lowAlphaPixels": 91,
+      "medianColourToAlphaRatio": 0.8,
+      "meanColourWhereOpaque": 196.83,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "f2bdd78d817cfea0e024a022ab0a76920d56ab07",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/33.png"
     },
     {
      "id": 35,
@@ -143195,8 +145550,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1764,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/35.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/35_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 647,
+      "meanColourWhereTransparent": 1.36,
+      "lowAlphaPixels": 89,
+      "medianColourToAlphaRatio": 0.84,
+      "meanColourWhereOpaque": 196.91,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "76896d2c597ff3b5c6dcb50bde230fc61beda0d8",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/35.png"
     },
     {
      "id": 37,
@@ -143210,8 +145573,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/37.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/37_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 648,
+      "meanColourWhereTransparent": 1.35,
+      "lowAlphaPixels": 87,
+      "medianColourToAlphaRatio": 0.88,
+      "meanColourWhereOpaque": 199.82,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "a381a3a9d1c07a9344ad0e308f111d1850b7ef18",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/37.png"
     },
     {
      "id": 39,
@@ -143225,8 +145596,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/39.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/39_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 629,
+      "meanColourWhereTransparent": 1.38,
+      "lowAlphaPixels": 85,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 201.86,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "df4ea86e2868df672f157ea86809b507b2227872",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/39.png"
     },
     {
      "id": 41,
@@ -143240,8 +145619,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1890,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/41.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/41_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 710,
+      "meanColourWhereTransparent": 1.35,
+      "lowAlphaPixels": 86,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 204.86,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "ee8426ad4672df182b0462905b1b45b5f044be4d",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/41.png"
     },
     {
      "id": 43,
@@ -143255,8 +145642,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1974,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/43.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/43_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 810,
+      "meanColourWhereTransparent": 1.33,
+      "lowAlphaPixels": 94,
+      "medianColourToAlphaRatio": 0.89,
+      "meanColourWhereOpaque": 208.28,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "1e321e1d995fbc95897002a4d0bd3294be75bf6c",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/43.png"
     },
     {
      "id": 45,
@@ -143270,8 +145665,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1932,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/45.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/45_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 788,
+      "meanColourWhereTransparent": 1.33,
+      "lowAlphaPixels": 92,
+      "medianColourToAlphaRatio": 0.87,
+      "meanColourWhereOpaque": 210.26,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "216561f2902b96492290a2a5d5644874304fbebc",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/45.png"
     },
     {
      "id": 47,
@@ -143285,8 +145688,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1806,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/47.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/47_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 691,
+      "meanColourWhereTransparent": 1.4,
+      "lowAlphaPixels": 81,
+      "medianColourToAlphaRatio": 0.91,
+      "meanColourWhereOpaque": 210.72,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "6aac6aaf0692f70a6ff79fbf58464b08ad6b139b",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/47.png"
     },
     {
      "id": 49,
@@ -143300,8 +145711,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1722,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/49.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/49_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 643,
+      "meanColourWhereTransparent": 1.25,
+      "lowAlphaPixels": 74,
+      "medianColourToAlphaRatio": 0.93,
+      "meanColourWhereOpaque": 210.33,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "d8cd560db0113735240c9033610db0eca75aea03",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/49.png"
     },
     {
      "id": 51,
@@ -143315,8 +145734,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1680,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/51.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/51_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 632,
+      "meanColourWhereTransparent": 1.46,
+      "lowAlphaPixels": 80,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 209.02,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "2949db64ae228d402750e12d04be5f932ee3029d",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/51.png"
     },
     {
      "id": 53,
@@ -143330,8 +145757,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/53.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/53_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 595,
+      "meanColourWhereTransparent": 1.66,
+      "lowAlphaPixels": 96,
+      "medianColourToAlphaRatio": 0.86,
+      "meanColourWhereOpaque": 206.2,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "8f753e446d7d337ca01dc53a5d1a3a75e2e16759",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/53.png"
     },
     {
      "id": 55,
@@ -143345,8 +145780,16 @@
       "white_pickup"
      ],
      "alphaBytes": 1638,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/55.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/55_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 591,
+      "meanColourWhereTransparent": 1.74,
+      "lowAlphaPixels": 95,
+      "medianColourToAlphaRatio": 0.9,
+      "meanColourWhereOpaque": 205.5,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "69a6b37b7a850dd4153e380842c2c4addb6e336f",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Pick_Up/55.png"
     }
    ],
    "scriptDump": null,
@@ -143578,8 +146021,16 @@
       "white_projectile"
      ],
      "alphaBytes": 360,
-     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Projectile/1.jpg",
-     "alphaFile": "bitmaps/Sandy_Art__White_Blood_Cell_Projectile/1_alpha.png"
+     "alphaCheck": {
+      "transparentPixels": 61,
+      "meanColourWhereTransparent": 2.15,
+      "lowAlphaPixels": 34,
+      "medianColourToAlphaRatio": 0.46,
+      "meanColourWhereOpaque": 182.66,
+      "verdict": "premultiplied"
+     },
+     "pixelSha1": "c8f854ab9fc42ca3544dcca48a04320125856ece",
+     "file": "bitmaps/Sandy_Art__White_Blood_Cell_Projectile/1.png"
     }
    ],
    "scriptDump": "swf-scripts/Sandy_Art__White_Blood_Cell_Projectile.txt",
@@ -147730,6 +150181,7 @@
      "sourceSha1": "fda37e4db6d508a9e6da0fc66cc28ce3ecd1eacd",
      "exportName": null,
      "usedBy": [],
+     "decodedOk": true,
      "file": "bitmaps/senior__BI2/208.jpg"
     }
    ],
@@ -156644,6 +159096,7 @@
       "talkie"
      ],
      "jpegTablesBytes": 574,
+     "decodedOk": true,
      "file": "bitmaps/talkie/14.jpg"
     }
    ],

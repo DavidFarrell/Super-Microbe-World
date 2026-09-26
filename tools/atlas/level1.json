@@ -1,0 +1,295 @@
+{
+ "index": "web/data/atlas/index.json",
+ "defaults": {
+  "pageSize": 2048,
+  "quality": 0.8,
+  "padding": 2,
+  "png": false
+ },
+ "atlases": [
+  {
+   "out": "web/data/atlas/tiles-kitchen",
+   "symbols": [
+    {
+     "sheet": "junior_game_assets/pepper_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/salt_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Yog_L_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Yog_Mid_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Yog_R_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Cheese_L_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Cheese_Mid_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Cheese_R_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/yoghurt_lid_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/yoghurt_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/loaf_end_L_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/loaf_mid_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/loaf_end_R_obj",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Chip_L_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Chip_Mid_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Chip_R_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Sausage_L_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Sausage_Mid_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Sausage_R_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/C_Chip_L_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/C_Chip_Mid_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/C_Chip_R_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Unit_1_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Unit_2_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Unit_3_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Unit_4_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Unit_5_Tile",
+     "extrude": 2
+    },
+    {
+     "sheet": "junior_game_assets/Unit_6_Tile",
+     "extrude": 2
+    }
+   ],
+   "quality": 1
+  },
+  {
+   "out": "web/data/atlas/microbe-lucy",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/lucy_icon",
+     "reachable": true
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/entities",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/portal_exit_icon"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/white_pickup"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/soap_pickup"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/white_projectile"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/soap_projectile"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/wbc_projectile"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/camera_flash"
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/hud",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/heart"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/heart_half"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/digit"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/score"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/timer"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/e_phone"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/status"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/status_background"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/lucy_image"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/exit_status"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/camera_icon"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/tick_box_button"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/ephone_ingame"
+    },
+    {
+     "sheet": "introductionToMicrobes_platformer/level_background",
+     "resample": 0.25
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/player-harry",
+   "symbols": [
+    {
+     "sheet": "harry/harry_lower",
+     "entryLabels": [
+      "idle",
+      "move",
+      "accelerate_start",
+      "decelerate_start",
+      "jump_start",
+      "jump_end",
+      "hurt"
+     ]
+    },
+    {
+     "sheet": "harry/harry_upper",
+     "entryLabels": [
+      "idle",
+      "move",
+      "accelerate_start",
+      "decelerate_start",
+      "take_photo_start",
+      "hurt",
+      "shoot_soap"
+     ]
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/player-amy",
+   "symbols": [
+    {
+     "sheet": "amy/amy_lower",
+     "entryLabels": [
+      "idle",
+      "move",
+      "accelerate_start",
+      "decelerate_start",
+      "jump_start",
+      "jump_end",
+      "hurt"
+     ]
+    },
+    {
+     "sheet": "amy/amy_upper",
+     "entryLabels": [
+      "idle",
+      "move",
+      "accelerate_start",
+      "decelerate_start",
+      "take_photo_start",
+      "hurt",
+      "shoot_soap"
+     ]
+    }
+   ]
+  },
+  {
+   "out": "web/data/atlas/intro-level1",
+   "symbols": [
+    {
+     "sheet": "introductionToMicrobes_platformer/level_intros_level1",
+     "name": "level_intros",
+     "frames": "1-39"
+    }
+   ]
+  }
+ ],
+ "sets": {
+  "level1": [
+   "tiles-kitchen",
+   "microbe-lucy",
+   "entities",
+   "hud",
+   "intro-level1"
+  ],
+  "player-harry": [
+   "player-harry"
+  ],
+  "player-amy": [
+   "player-amy"
+  ]
+ }
+}

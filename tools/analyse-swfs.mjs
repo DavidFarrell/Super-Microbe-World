@@ -985,7 +985,8 @@ function analyseSwf(file) {
 // ---------------------------------------------------------------------------
 // Extraction
 async function extractAssets(results) {
-  const decoder = EXTRACT ? await makeJpegDecoder() : null;
+  // The decoder is needed for the analysis (JPEG3 alpha check, decode check), not just for writing files.
+  const decoder = await makeJpegDecoder();
   const bitmapShaIndex = new Map();
   for (const r of results) {
     const outBitmaps = [];

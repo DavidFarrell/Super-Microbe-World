@@ -1,0 +1,296 @@
+{
+ "scale": 2,
+ "margin": 4,
+ "jobs": [
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "lucy_icon"
+  },
+  {
+   "swf": "movies/harry.swf",
+   "symbol": "root:lower",
+   "name": "harry_lower"
+  },
+  {
+   "swf": "movies/harry.swf",
+   "symbol": "root:upper",
+   "name": "harry_upper"
+  },
+  {
+   "swf": "movies/amy.swf",
+   "symbol": "root:lower",
+   "name": "amy_lower"
+  },
+  {
+   "swf": "movies/amy.swf",
+   "symbol": "root:upper",
+   "name": "amy_upper"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "pepper_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "salt_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Yog_L_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Yog_Mid_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Yog_R_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Cheese_L_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Cheese_Mid_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Cheese_R_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "yoghurt_lid_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "yoghurt_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "loaf_end_L_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "loaf_mid_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "loaf_end_R_obj"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Chip_L_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Chip_Mid_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Chip_R_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Sausage_L_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Sausage_Mid_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Sausage_R_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "C_Chip_L_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "C_Chip_Mid_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "C_Chip_R_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Unit_1_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Unit_2_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Unit_3_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Unit_4_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Unit_5_Tile"
+  },
+  {
+   "swf": "movies/junior_game_assets.swf",
+   "symbol": "Unit_6_Tile"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "portal_exit_icon",
+   "ticks": 30
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "white_pickup"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "soap_pickup"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "white_projectile"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "soap_projectile"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "wbc_projectile"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "camera_flash"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": 1495,
+   "name": "level_background"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "heart"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "heart_half"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "digit"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "score",
+   "hide": [
+    "thousands",
+    "hundreds",
+    "tens",
+    "units"
+   ],
+   "track": [
+    "thousands",
+    "hundreds",
+    "tens",
+    "units"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "timer"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "e_phone",
+   "hide": [
+    "screen",
+    "bigScreen"
+   ],
+   "track": [
+    "screen",
+    "bigScreen"
+   ],
+   "frames": "2,30",
+   "groupTrack": 30,
+   "erase": [
+    {
+     "shape": 248,
+     "rect": [
+      88,
+      36,
+      131,
+      53
+     ],
+     "why": "e-Bug wordmark under the earpiece; kept out of the hosted build"
+    }
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "status",
+   "hide": [
+    "background",
+    "button1",
+    "button2",
+    "button3",
+    "button4",
+    "button5",
+    "button6",
+    "mode"
+   ],
+   "track": [
+    "background",
+    "button1",
+    "button2",
+    "button3",
+    "button4",
+    "button5",
+    "button6",
+    "mode"
+   ]
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "tick_box_button"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "lucy_image"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "exit_status"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "background",
+   "name": "status_background"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "camera_icon"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "ephone_ingame"
+  },
+  {
+   "swf": "movies/introductionToMicrobes_platformer.swf",
+   "symbol": "level_intros",
+   "frames": "1-39",
+   "omitText": true,
+   "name": "level_intros_level1",
+   "track": []
+  },
+  {
+   "swf": "movies/new portal.swf",
+   "symbol": 3,
+   "name": "portal_new"
+  }
+ ]
+}

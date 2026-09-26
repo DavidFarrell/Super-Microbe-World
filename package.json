@@ -5,7 +5,14 @@
   "type": "module",
   "scripts": {
     "serve": "npx --yes serve web",
-    "test": "node web/tests/run.mjs"
+    "test": "node web/tests/run.mjs",
+    "art:sheets": "node tools/swf-sheet/sheet.mjs tools/swf-sheet/jobs/level1.json",
+    "art:atlas": "node tools/build-atlas.cjs tools/atlas/level1.json",
+    "art:verify": "node tools/swf-sheet/verify-atlas.mjs",
+    "test:unit": "node --test web/tests/unit/*.test.mjs",
+    "levels": "node tools/convert-levels.mjs && node tools/extract-timelines.mjs",
+    "test:platform": "node web/tests/run.mjs --no-unit level1",
+    "screenshots": "node web/tests/run.mjs --no-unit --screenshots level1"
   },
   "devDependencies": {
     "@fontsource/atkinson-hyperlegible": "^5.3.0",

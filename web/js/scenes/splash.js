@@ -1,5 +1,6 @@
 // Placeholder splash used while the engine core is brought up; replaced by the faithful
-// TV "tuning in" splash once the art pipeline lands.
+// TV "tuning in" splash once the art pipeline lands. For now New Game goes straight to level 1
+// (until the full flow of player select, cutscene and game show exists).
 import { el, button, focusFirst, focusNavigator } from '../ui/dom.js';
 import { Particles } from '../core/fx.js';
 import { input } from '../core/input.js';
@@ -10,7 +11,7 @@ export function splashScene(app) {
   return {
     enter() {
       const panel = el('div', { style: { position: 'absolute', left: '0', top: '300px', width: '800px', display: 'flex', justifyContent: 'center', gap: '16px' } },
-        button('New Game', () => app.announce('New game'), { class: 'primary', id: 'btn-new-game' }));
+        button('New Game', () => app.scenes.go('platform', { level: 'alpha_level1', avatar: app.params.get('avatar') === 'amy' ? 'amy' : 'harry' }, { style: 'iris' }), { class: 'primary', id: 'btn-new-game' }));
       app.ui.append(panel);
       focusFirst(panel);
       nav = focusNavigator(panel);

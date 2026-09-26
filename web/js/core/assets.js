@@ -42,7 +42,10 @@ export async function loadFont(family, url, descriptors = {}) {
   return cache.get(key);
 }
 
-// An atlas is a packed image plus JSON: { image, frames: { name: {x,y,w,h, ox, oy, sw, sh} }, anims: { name: [frameNames], fps } }
+// An atlas is JSON plus WebP pages in the "smw-atlas/1" format written by tools/build-atlas.cjs:
+// { images: [page files], symbols: { name: { scale, frameCount, labels, scripts, tracks,
+// frames: [[image, x, y, w, h, originX, originY] | null] } } }. See that file's header for the
+// draw formula; web/data/atlas/index.json maps symbols to atlases and lists per-level sets.
 export async function loadAtlas(jsonUrl) {
   if (!cache.has(jsonUrl)) {
     cache.set(jsonUrl, (async () => {

@@ -6,9 +6,13 @@
   // Serves the original SWFs through Ruffle for reference captures (dev-only, never shipped).
   // Usage: /tools/ruffle/harness.html?swf=/reference/Junior_Game/movies/e-Bug%20Junior%20Game.swf&base=/reference/Junior_Game/movies/&vars=language=en_en
   window.RufflePlayer = window.RufflePlayer || {};
-  window.RufflePlayer.config = { autoplay: 'on', unmuteOverlay: 'hidden', splashScreen: false, letterbox: 'on', logLevel: new URLSearchParams(location.search).get('log') || 'warn', allowScriptAccess: true, publicPath: '/node_modules/@ruffle-rs/ruffle/' };
+  // optional ?ruffle=<url path of another Ruffle build folder> (default: the npm package in node_modules)
+  window.__rufflePath = new URLSearchParams(location.search).get('ruffle') || '/node_modules/@ruffle-rs/ruffle/';
+  window.RufflePlayer.config = { autoplay: 'on', unmuteOverlay: 'hidden', splashScreen: false, letterbox: 'on', logLevel: new URLSearchParams(location.search).get('log') || 'warn', allowScriptAccess: true, publicPath: window.__rufflePath };
+  // optional ?renderer=wgpu-webgl|webgl|canvas and ?quality=low|medium|high (performance comparisons)
+  for (const k of ['renderer', 'quality']) { const v = new URLSearchParams(location.search).get(k); if (v) window.RufflePlayer.config[k === 'renderer' ? 'preferredRenderer' : k] = v; }
 </script>
-<script src="/node_modules/@ruffle-rs/ruffle/ruffle.js"></script>
+<script>document.write('<script src="' + window.__rufflePath + 'ruffle.js"><\/script>');</script>
 <script>
   const q = new URLSearchParams(location.search);
   const player = window.RufflePlayer.newest().createPlayer();

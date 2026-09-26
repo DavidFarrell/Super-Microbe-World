@@ -1,0 +1,344 @@
+{
+ "name": "alpha_level8",
+ "title": "level8",
+ "id": null,
+ "cols": 37,
+ "rows": 9,
+ "next": "alpha_level9",
+ "bodyLevel": true,
+ "bodyLevelAttr": "true",
+ "goals": [
+  {
+   "goalType": 7,
+   "microbeType": 17,
+   "required": 1
+  }
+ ],
+ "playerStart": {
+  "row": 2,
+  "col": 3
+ },
+ "tiles": [
+  [0,0,20],
+  [0,33,21],
+  [2,9,34],
+  [2,10,35],
+  [2,11,35],
+  [2,12,36],
+  [2,24,22],
+  [2,25,23],
+  [2,26,24],
+  [3,14,0],
+  [3,15,1],
+  [3,16,2],
+  [3,20,6],
+  [3,21,7],
+  [3,22,7],
+  [3,23,8],
+  [4,0,21],
+  [4,28,25],
+  [4,29,25],
+  [4,30,25],
+  [4,31,25],
+  [4,32,25],
+  [4,33,20],
+  [5,13,25],
+  [5,24,25],
+  [5,25,25],
+  [5,26,25],
+  [5,27,25],
+  [5,28,25],
+  [6,10,34],
+  [6,11,35],
+  [6,12,35],
+  [6,13,36],
+  [7,10,9],
+  [7,11,10],
+  [7,12,11],
+  [7,13,12],
+  [7,14,11],
+  [7,15,12],
+  [7,16,13],
+  [7,20,22],
+  [7,21,23],
+  [7,22,24],
+  [8,0,28],
+  [8,1,30],
+  [8,2,30],
+  [8,3,30],
+  [8,4,30],
+  [8,5,30],
+  [8,6,30],
+  [8,7,30],
+  [8,8,30],
+  [8,9,30],
+  [8,10,30],
+  [8,11,30],
+  [8,12,30],
+  [8,13,30],
+  [8,14,30],
+  [8,15,30],
+  [8,16,30],
+  [8,17,30],
+  [8,18,30],
+  [8,19,30],
+  [8,20,30],
+  [8,21,30],
+  [8,22,30],
+  [8,23,32],
+  [8,33,29],
+  [8,34,31],
+  [8,35,31],
+  [8,36,31]
+ ],
+ "entities": [
+  [0,11,93],
+  [0,25,93],
+  [1,15,93],
+  [1,21,93],
+  [1,31,107],
+  [2,3,111],
+  [4,17,106]
+ ],
+ "palette": {
+  "0": {
+   "movie": "C_Chip_L_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "1": {
+   "movie": "C_Chip_Mid_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "2": {
+   "movie": "C_Chip_R_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "6": {
+   "movie": "Chip_L_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "7": {
+   "movie": "Chip_Mid_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "8": {
+   "movie": "Chip_R_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "9": {
+   "movie": "Chop_L_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "10": {
+   "movie": "Chop_Mid1_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "11": {
+   "movie": "Chop_Mid2_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "12": {
+   "movie": "Chop_Mid3_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "13": {
+   "movie": "Chop_R_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "20": {
+   "movie": "pepper_obj",
+   "type": 1,
+   "w": 100,
+   "h": 200,
+   "ax": 0,
+   "ay": 0
+  },
+  "21": {
+   "movie": "salt_obj",
+   "type": 1,
+   "w": 100,
+   "h": 200,
+   "ax": 0,
+   "ay": 0
+  },
+  "22": {
+   "movie": "Sausage_L_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "23": {
+   "movie": "Sausage_Mid_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "24": {
+   "movie": "Sausage_R_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "25": {
+   "movie": "Sugar_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "28": {
+   "movie": "Unit_1_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "29": {
+   "movie": "Unit_4_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "30": {
+   "movie": "Unit_2_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "31": {
+   "movie": "Unit_5_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "32": {
+   "movie": "Unit_3_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "34": {
+   "movie": "Yog_L_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "35": {
+   "movie": "Yog_Mid_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "36": {
+   "movie": "Yog_R_Tile",
+   "type": 1,
+   "w": 50,
+   "h": 50,
+   "ax": 0,
+   "ay": 0
+  },
+  "93": {
+   "movie": "lucy_icon",
+   "type": 11,
+   "w": 42.32,
+   "h": 97.58,
+   "ax": -0.46,
+   "ay": -0.38
+  },
+  "106": {
+   "movie": "milk_glass_icon",
+   "type": 20,
+   "w": 150,
+   "h": 200,
+   "ax": 0,
+   "ay": 0
+  },
+  "107": {
+   "movie": "portal_exit_icon",
+   "type": 6,
+   "w": 103.6,
+   "h": 163.8,
+   "ax": -0.5,
+   "ay": -0.5
+  },
+  "111": {
+   "movie": "player_start",
+   "type": 0,
+   "w": 31.2,
+   "h": 53.6,
+   "ax": 9.4,
+   "ay": -0.5
+  }
+ },
+ "intro": [
+  "We've sent you back into the kitchen. This time you're going to see what good microbes can REALLY do!",
+  "Lucy Lactobacillus can turn milk into yogurt. That's how yogurt gets made. Amazing isnt' it?",
+  "To turn the milk into yogurt, just push Lucy into the glass."
+ ],
+ "outOfRange": [],
+ "source": "reference/Junior_Game/levels/alpha_level8.xml"
+}

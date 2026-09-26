@@ -1,0 +1,215 @@
+{
+ "source": "GameController.as:65-69 (round entry levels) and each level's next= attribute",
+ "order": [
+  "alpha_level1",
+  "alpha_level2",
+  "alpha_level3",
+  "alpha_level4",
+  "alpha_level5",
+  "alpha_level6",
+  "alpha_level7",
+  "alpha_level8",
+  "alpha_level9",
+  "alpha_level10"
+ ],
+ "rounds": [
+  {
+   "round": 0,
+   "kind": "platform",
+   "levels": [
+    "alpha_level1",
+    "alpha_level2",
+    "alpha_level3",
+    "alpha_level4"
+   ]
+  },
+  {
+   "round": 1,
+   "kind": "platform",
+   "levels": [
+    "alpha_level5",
+    "alpha_level6",
+    "alpha_level7"
+   ]
+  },
+  {
+   "round": 2,
+   "kind": "platform",
+   "levels": [
+    "alpha_level8",
+    "alpha_level9"
+   ]
+  },
+  {
+   "round": 3,
+   "kind": "kitchen",
+   "levels": []
+  },
+  {
+   "round": 4,
+   "kind": "platform",
+   "levels": [
+    "alpha_level10"
+   ]
+  }
+ ],
+ "unused": [
+  "alpha_level11"
+ ],
+ "levels": {
+  "alpha_level1": {
+   "title": "level1",
+   "next": "alpha_level2",
+   "cols": 69,
+   "rows": 9,
+   "bodyLevel": true,
+   "goals": [
+    {
+     "goalType": 0,
+     "microbeType": 11,
+     "required": 3
+    }
+   ]
+  },
+  "alpha_level2": {
+   "title": "level2",
+   "next": "alpha_level3",
+   "cols": 44,
+   "rows": 11,
+   "bodyLevel": true,
+   "goals": [
+    {
+     "goalType": 1,
+     "microbeType": 11,
+     "required": 3
+    }
+   ]
+  },
+  "alpha_level3": {
+   "title": "level3",
+   "next": "alpha_level4",
+   "cols": 44,
+   "rows": 11,
+   "bodyLevel": true,
+   "goals": [
+    {
+     "goalType": 0,
+     "microbeType": 14,
+     "required": 3
+    }
+   ]
+  },
+  "alpha_level4": {
+   "title": "level4",
+   "next": "exit",
+   "cols": 69,
+   "rows": 9,
+   "bodyLevel": true,
+   "goals": [
+    {
+     "goalType": 0,
+     "microbeType": 13,
+     "required": 3
+    }
+   ]
+  },
+  "alpha_level5": {
+   "title": "level5",
+   "next": "alpha_level6",
+   "cols": 69,
+   "rows": 9,
+   "bodyLevel": false,
+   "goals": [
+    {
+     "goalType": 4,
+     "microbeType": 17,
+     "required": 3
+    }
+   ]
+  },
+  "alpha_level6": {
+   "title": "level6",
+   "next": "alpha_level7",
+   "cols": 69,
+   "rows": 9,
+   "bodyLevel": false,
+   "goals": [
+    {
+     "goalType": 4,
+     "microbeType": 17,
+     "required": 3
+    }
+   ]
+  },
+  "alpha_level7": {
+   "title": "level7",
+   "next": "exit",
+   "cols": 75,
+   "rows": 9,
+   "bodyLevel": true,
+   "goals": [
+    {
+     "goalType": 4,
+     "microbeType": 17,
+     "required": 3
+    }
+   ]
+  },
+  "alpha_level8": {
+   "title": "level8",
+   "next": "alpha_level9",
+   "cols": 37,
+   "rows": 9,
+   "bodyLevel": true,
+   "goals": [
+    {
+     "goalType": 7,
+     "microbeType": 17,
+     "required": 1
+    }
+   ]
+  },
+  "alpha_level9": {
+   "title": "level9",
+   "next": "exit",
+   "cols": 64,
+   "rows": 9,
+   "bodyLevel": true,
+   "goals": [
+    {
+     "goalType": 7,
+     "microbeType": 17,
+     "required": 3
+    }
+   ]
+  },
+  "alpha_level10": {
+   "title": "level10",
+   "next": "exit",
+   "cols": 46,
+   "rows": 9,
+   "bodyLevel": true,
+   "goals": [
+    {
+     "goalType": 6,
+     "microbeType": 17,
+     "required": 6
+    }
+   ]
+  },
+  "alpha_level11": {
+   "title": "level11",
+   "next": "exit",
+   "cols": 35,
+   "rows": 9,
+   "bodyLevel": true,
+   "goals": [
+    {
+     "goalType": 4,
+     "microbeType": 17,
+     "required": 6
+    }
+   ]
+  }
+ }
+}

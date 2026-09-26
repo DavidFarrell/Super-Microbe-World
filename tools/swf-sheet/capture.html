@@ -1,0 +1,70 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SWF sheet capture</title>
+<style>
+  /* Everything transparent so a Playwright screenshot with omitBackground keeps the alpha. */
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+  #stage { position: absolute; left: 0; top: 0; }
+  ruffle-player, ruffle-object, ruffle-embed { display: block; }
+</style>
+</head><body><div id="stage"></div>
+<script>
+  // Dev-only page driven by tools/swf-sheet/sheet.mjs: renders one synthetic sheet SWF in Ruffle
+  // at 1 stage pixel = 1 CSS pixel with a transparent stage, so the screenshot is the sheet.
+  window.RufflePlayer = window.RufflePlayer || {};
+  window.RufflePlayer.config = {
+    publicPath: '/node_modules/@ruffle-rs/ruffle/',
+    autoplay: 'on', unmuteOverlay: 'hidden', splashScreen: false, contextMenu: 'off',
+    letterbox: 'off', scale: 'noScale', forceScale: true, salign: 'TL',
+    wmode: 'transparent', backgroundColor: null, quality: 'best',
+    showSwfDownload: false, warnOnUnsupportedContent: false, logLevel: 'error',
+    allowScriptAccess: false, maxExecutionDuration: 5, frameRate: null,
+  };
+  const q = new URLSearchParams(location.search);
+  if (q.get('renderer')) window.RufflePlayer.config.preferredRenderer = q.get('renderer');
+  if (q.get('quality')) window.RufflePlayer.config.quality = q.get('quality');
+</script>
+<script src="/node_modules/@ruffle-rs/ruffle/ruffle.js"></script>
+<script>
+  // Hides anything Ruffle draws over the stage (hardware acceleration notice, play button...).
+  function hideOverlays(player) {
+    const root = player.shadowRoot;
+    if (!root || root.getElementById('__sheet_style')) return;
+    const style = document.createElement('style');
+    style.id = '__sheet_style';
+    style.textContent = `#container { background: transparent !important; }
+      #play-button, #unmute-overlay, #splash-screen, #panic, #message-overlay, #context-menu-overlay,
+      .hardware-acceleration-modal, #hardware-acceleration-modal, dialog, #save-manager,
+      #volume-controls-modal, .modal { display: none !important; }`;
+    root.appendChild(style);
+    for (const el of root.querySelectorAll('*')) {
+      if (el.tagName !== 'CANVAS' && /hardware acceleration/i.test(el.textContent || '') && el.children.length < 8) el.style.display = 'none';
+    }
+  }
+
+  // Loads a SWF sized w x h CSS pixels; resolves once Ruffle has had time to render a frame.
+  window.loadSwf = async (url, w, h, settleMs = 600) => {
+    const stage = document.getElementById('stage');
+    stage.innerHTML = '';
+    stage.style.width = w + 'px'; stage.style.height = h + 'px';
+    const player = window.RufflePlayer.newest().createPlayer();
+    player.style.width = w + 'px'; player.style.height = h + 'px';
+    stage.appendChild(player);
+    window.__player = player;
+    const api = () => (typeof player.ruffle === 'function' ? player.ruffle() : player);
+    for (let n = 0; typeof api().load !== 'function'; n++) {
+      if (n > 200) throw new Error('Ruffle API never became ready');
+      await new Promise(r => setTimeout(r, 25));
+    }
+    await api().load({ url });
+    for (let n = 0; !player.shadowRoot || !player.shadowRoot.querySelector('canvas'); n++) {
+      if (n > 200) throw new Error('Ruffle never created a canvas');
+      await new Promise(r => setTimeout(r, 25));
+    }
+    hideOverlays(player);
+    await new Promise(r => setTimeout(r, settleMs));
+    hideOverlays(player);
+    const c = player.shadowRoot.querySelector('canvas');
+    return { canvasW: c.width, canvasH: c.height, renderer: api().renderer || null };
+  };
+</script>
+</body></html>

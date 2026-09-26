@@ -32,8 +32,15 @@ Living checklist for the remake (see `../GOAL_PROMPT.md` for the full brief and 
 - [x] PWA: manifest, icons, service worker with stamped precache; artifact build script
 
 ## Content
-- [ ] Asset pipeline: atlases (WebP), level JSON, text JSON (11 languages), sounds
-- [ ] Vertical slice: level 1 end to end with touch, juice, sound, bot test; published
+- [ ] Asset pipeline: atlases (WebP), level JSON, text JSON (11 languages), sounds (level 1 atlases done; English platformer text done; the original has no sounds)
+- [x] Vertical slice: level 1 end to end with touch, juice, sound, bot test (publishing pending)
+  - [x] Original art in play: tiles, Lucy, Harry/Amy (upper + lower clips), pickups, projectiles, camera flash, portal, background
+  - [x] Canvas HUD from the original art (score digits, hearts, timer, ePhone status with goal picture and tick boxes); touch layout variant
+  - [x] Animated ePhone briefing from the original art, translatable text (`web/data/lang/en.json`), device-aware prompts, re-open with the phone
+  - [x] Juice: squash/stretch, particles, hit-stop, shake, hit flashes, sparkle trails to the ePhone, popups, eased counters, camera look-ahead, portal burst, suck-in + iris to level complete
+  - [x] Synthesised effects and a procedural kitchen music loop
+  - [x] `npm test`: unit tests plus `web/tests/level1.spec.mjs` (keyboard bot, touch bot, viewport and multi-touch checks)
+  - [x] Screenshots in `web/screenshots/` (`npm run screenshots`)
 - [ ] Remaining platform levels, each with a bot test
 - [ ] Kitchen game
 - [ ] Game show: host dialogue, quiz rounds, scoreboard, winner screen

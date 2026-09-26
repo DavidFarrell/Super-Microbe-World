@@ -39,6 +39,7 @@
     inset: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
   }
   #game { position: absolute; display: block; background: #000; }
+  #game:focus { outline: none; }
   #ui {
     position: absolute; width: 800px; height: 450px; transform-origin: 0 0; overflow: hidden;
     font-family: var(--ui-font); pointer-events: none;
@@ -49,7 +50,10 @@
   /* Buttons */
   .btn {
     font: 800 22px/1 var(--ui-font); color: #1b1640; background: var(--ink);
-    border: 0; border-radius: 999px; padding: 12px 26px 10px; min-height: 48px; min-width: 48px; cursor: pointer;
+    border: 0; border-radius: 999px; padding: 12px 26px 10px; cursor: pointer;
+    /* Sized in stage units inside the scaled #ui layer, but never under 44 CSS px on screen
+       (--stage-scale is the layer's scale, set by View.resize; 46 leaves a margin for rounding). */
+    min-height: max(48px, calc(46px / var(--stage-scale, 1))); min-width: max(48px, calc(46px / var(--stage-scale, 1)));
     box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35); transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
     letter-spacing: 0.3px;
   }
@@ -68,8 +72,11 @@
     pointer-events: auto; position: absolute; display: grid; place-items: center; color: #fff;
     background: rgba(20, 14, 60, calc(var(--touch-opacity) * 0.9)); border: 3px solid rgba(255, 255, 255, var(--touch-opacity));
     border-radius: 50%; touch-action: none; opacity: calc(0.4 + var(--touch-opacity));
-    transition: transform 0.06s ease, background 0.06s ease;
+    transition: transform 0.06s ease, background 0.06s ease, opacity 0.15s ease;
   }
+  /* A control over a goal microbe or the portal fades so the target stays visible (the scene sets
+     the class each tick from the stage rectangles). */
+  .touch-btn.occluding { opacity: 0.25; }
   .touch-btn svg { width: 55%; height: 55%; }
   .touch-btn.down { transform: scale(0.92); background: rgba(255, 138, 92, 0.75); }
   .touch-dpad {
@@ -83,9 +90,11 @@
   .touch-jump { width: 96px; height: 96px; right: 0; bottom: 0; }
   .touch-fire { width: 78px; height: 78px; right: 108px; bottom: 6px; }
   .touch-camera { width: 70px; height: 70px; right: 40px; bottom: 108px; }
-  .touch-top { position: absolute; right: calc(env(safe-area-inset-right, 0px) + 14px); top: calc(env(safe-area-inset-top, 0px) + 12px); width: 130px; height: 60px; }
+  /* Pause and phone sit top-left: the stage's top-left is empty in the original HUD, while the
+     score and hearts fill the top right. */
+  .touch-top { position: absolute; left: calc(env(safe-area-inset-left, 0px) + 14px); top: calc(env(safe-area-inset-top, 0px) + 12px); width: 130px; height: 60px; }
   .touch-top .touch-btn { width: 54px; height: 54px; top: 0; border-radius: 16px; }
-  .touch-phone { right: 66px; } .touch-pause { right: 0; }
+  .touch-pause { left: 0; } .touch-phone { left: 66px; }
   @media (max-height: 420px) {
     .touch-dpad { width: 172px; height: 84px; } .touch-dpad .touch-btn { width: 78px; height: 78px; }
     .touch-jump { width: 84px; height: 84px; } .touch-fire { width: 68px; height: 68px; right: 94px; } .touch-camera { width: 60px; height: 60px; right: 34px; bottom: 94px; }
@@ -111,7 +120,7 @@
 <body>
 <div id="app">
   <div id="stage-root">
-    <canvas id="game" aria-label="Super Microbe World game screen"></canvas>
+    <canvas id="game" tabindex="-1" aria-label="Super Microbe World game screen"></canvas>
     <div id="ui"></div>
   </div>
   <div id="touch" hidden></div>
