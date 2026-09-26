@@ -263,6 +263,7 @@ export function createFlow(app) {
       return;
     }
     const start = r.hover;
+    prefetch(() => art.loadSet('summary'));       // the card a failed level shows
     // The retry straight after the summary card skips the briefing just read; a level reached
     // any other way (Continue, a round restart) shows it.
     const skipIntro = retrying;
@@ -361,6 +362,7 @@ export function createFlow(app) {
       }, { style: 'iris' });
       return;
     }
+    prefetch(() => art.loadSet('summary'));       // the results card
     launch('platform', {
       level: id, avatar, score: 0, seed: singleSeed(id),
       onComplete: res => results(res || {}, numberOr(res && res.score, 0)),

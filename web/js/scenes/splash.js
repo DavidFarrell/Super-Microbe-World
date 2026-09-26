@@ -261,7 +261,6 @@ export function splashScene(app) {
 
   // The 2009 New Game art with its alpha ramp; a small lift and glow on hover / focus, a press.
   function drawNewGame(ctx) {
-    if (!art.has('splash_new_game')) return;
     const a = frame >= LAST ? 1 : Math.max(0, art.alphaTrack('splash_timeline', 'd390', frame) ?? (frame - MENU_FROM) / (LAST - MENU_FROM));
     if (a <= 0) return;
     const m = art.track('splash_timeline', 'd390', Math.max(MENU_FROM, frame)) || [0.49576, 0, 0, 0.49379, NEW_GAME.x, NEW_GAME.y];
@@ -272,14 +271,27 @@ export function splashScene(app) {
     ctx.save();
     ctx.globalAlpha = a;
     if (newGlow > 0.02) {
-      const g = ctx.createRadialGradient(cx, cy, 10, cx, cy, NEW_GAME.w * 0.75);
+      // An elliptical glow that fades to nothing at its edge.
+      const R = NEW_GAME.w * 0.75;
+      ctx.save();
+      ctx.translate(cx, cy); ctx.scale(1, 0.55);
+      const g = ctx.createRadialGradient(0, 0, 10, 0, 0, R);
       g.addColorStop(0, `rgba(255, 236, 140, ${0.45 * newGlow})`);
       g.addColorStop(1, 'rgba(255, 236, 140, 0)');
       ctx.fillStyle = g;
-      ctx.fillRect(cx - NEW_GAME.w, cy - NEW_GAME.h * 1.4, NEW_GAME.w * 2, NEW_GAME.h * 2.8);
+      ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
     }
     ctx.translate(cx, cy); ctx.scale(k, k); ctx.translate(-cx, -cy);
-    art.draw(ctx, 'splash_new_game', 1, m);
+    if (!art.draw(ctx, 'splash_new_game', 1, m)) {
+      // No art (a failed load): a plain glossy blue button in the same place.
+      const g = ctx.createLinearGradient(0, NEW_GAME.y, 0, NEW_GAME.y + NEW_GAME.h);
+      g.addColorStop(0, '#9fd8ff'); g.addColorStop(0.5, '#45b1f7'); g.addColorStop(1, '#2a8fd8');
+      ctx.fillStyle = g; ctx.strokeStyle = '#0e3d6b'; ctx.lineWidth = 3;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(NEW_GAME.x, NEW_GAME.y, NEW_GAME.w, NEW_GAME.h, 10); else ctx.rect(NEW_GAME.x, NEW_GAME.y, NEW_GAME.w, NEW_GAME.h);
+      ctx.fill(); ctx.stroke();
+    }
     // The label was a text field on the button (not part of the art render): white, centred.
     const label = t('flow.menu.newGame');
     let size = 18 * (Number(settings.get('textScale')) || 1);
@@ -368,7 +380,7 @@ export function splashScene(app) {
     render(ctx) {
       if (!ready && !failed) { drawLoading(ctx, waiting, '#000'); return; }
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 800, 450);
-      if (!ready) { drawPlaceholder(ctx); if (frame >= MENU_FROM) drawTitle(ctx, null, 0); return; }
+      if (!ready) { drawPlaceholder(ctx); if (frame >= MENU_FROM) { drawTitle(ctx, null, 0); drawNewGame(ctx); } return; }
       art.draw(ctx, 'splash_back', 1);
       art.draw(ctx, 'splash_studio', STUDIO_FROM);
       if (frame >= STUDIO_FROM) {

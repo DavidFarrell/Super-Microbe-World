@@ -15,11 +15,11 @@ import { el, button, focusFirst, focusNavigator, trapFocus } from '../ui/dom.js'
 import { audio } from '../core/audio.js';
 import { AREA_MUSIC } from '../core/music.js';
 import { settings } from '../core/settings.js';
-import { t } from '../core/i18n.js';
+import { t, has } from '../core/i18n.js';
 import { Particles, Shake, Popups, haptic } from '../core/fx.js';
 import { gameRng } from '../core/rng.js';
 import { ease, clamp, lerp } from '../core/tween.js';
-import { device } from '../ui/prompts.js';
+import { device, keyFor, promptVars } from '../ui/prompts.js';
 import * as art from './art.js';
 import { Clip, framesAt, loadKitchenArt } from './art.js';
 import { AVATAR_TIMELINE, SINK_TIMELINE } from './timeline.js';
@@ -33,7 +33,13 @@ import './sounds.js';
 const FPS = 25;                  // frames per game second (1 s = 25 frames exactly, NOTES 12.1)
 const SNEEZE_WINDOW = 50;        // frames: setInterval(makeSneeze, 2000) (KitchenGame.as:548)
 const BIN_FADE = 5;              // alpha per frame: removeBinItem, _alpha -= 5 every 40 ms (:621-629)
-const BANNER_MIN = 40;           // ticks the end-of-level banner shows at least
+// Port change (NOTES-kitchen-decisions.md, "Timing"): after the last item goes in, the outro waits
+// for the first second tick at least this many ticks (0.6 s) later, so the item lands and the
+// "All put away!" banner can be read. A time-out already ends on a second tick, so its outro
+// follows one second later, as in the original.
+const BANNER_MIN = 40;
+// Flash device fonts for text drawn inside the original art (NOTES 8.6).
+const VERDANA = 'Verdana, "DejaVu Sans", "Liberation Sans", Geneva, sans-serif';
 const TOUCH_PAUSE = ['pause'];
 const BAG = { x: 52, y: 186 };   // mouth of the shopping bag on the counter (items hop out of it)
 const AVATAR_ANIM = { [LOC.CUPBOARD]: 'cupboard', [LOC.BOWL]: 'bowl', [LOC.BIN]: 'bin' };
@@ -46,6 +52,44 @@ const INTRO = [
   [[1, 2], [3, 4], [5, 6, 7], [8, 9]],
   [[1, 2], [3, 4], [5, 6, 7]],
 ];
+// The intro SWFs' text fields text0..text11 (DefineEditText rectangles as placed on the root:
+// x, y, width, height, gutter included), per level and screen, and for the tutorial's wrong and
+// right screens (level 0 frames 60 and 70). Each line starts at its field's top unless the line
+// before it runs longer (larger text sizes), which pushes it down. Levels 1-3 put "Level N" in an
+// 84.4 px field centred on x 393.05; the port widens it about the same centre.
+const TITLE_FIELD = [143.05, 63.75, 500, 28.3];
+const INTRO_FIELDS = [
+  [
+    [[82.05, 63.75, 622, 28.3], [200, 158.9, 342.95, 38.1]],
+    [[141, 62.9, 493.95, 62.1], [123, 158.9, 530.95, 62.1]],
+    [[141, 62.9, 493.95, 62.1], [134.55, 160.9, 530.95, 29.15], [134.55, 213.45, 530.95, 29.15]],
+    [[141, 62.9, 493.95, 193.15]],
+  ],
+  [
+    [TITLE_FIELD, [176, 166.9, 435.95, 80.9]],
+    [[141, 62.9, 493.95, 62.1], [123, 158.9, 530.95, 62.1]],
+    [[141, 62.9, 493.95, 41.1], [134.55, 160.9, 530.95, 29.15], [134.55, 213.45, 530.95, 54.6]],
+    [[141, 62.9, 493.95, 105.1], [141, 202.4, 493.95, 105.1]],
+  ],
+  [
+    [TITLE_FIELD, [176, 166.9, 435.95, 80.9]],
+    [[141, 62.9, 493.95, 62.1], [123, 158.9, 530.95, 80.9]],
+    [[139, 26.9, 514.95, 103.1], [134.55, 143.9, 530.95, 46.1], [134.55, 200, 530.95, 134]],
+    [[141, 62.9, 493.95, 105.1], [141, 202.4, 493.95, 105.1]],
+  ],
+  [
+    [TITLE_FIELD, [176, 166.9, 435.95, 80.9]],
+    [[141, 62.9, 493.95, 62.1], [123, 158.9, 530.95, 80.9]],
+    [[139, 26.9, 514.95, 103.1], [134.55, 143.9, 530.95, 46.1], [134.55, 200, 530.95, 134]],
+  ],
+];
+const TUTORIAL_FIELDS = {
+  wrong: [[120.05, 54.95, 500.1, 31.95], [120.05, 204.2, 530.95, 29.15], [120.05, 256.75, 530.95, 29.15]],
+  right: [[120.05, 54.95, 500.1, 36.8], [120.05, 122.2, 530.95, 95.85], [120.05, 238.7, 500.1, 73.4]],
+};
+const FIELD_SLACK = 40;
+// "Microbial Mistakes": the outro's text1..text4 reminder fields are 71 px apart (frame 30).
+const NOTE_SLOT = 71;
 const OUTRO_PAGES = 4;
 
 const STYLE = `
@@ -56,11 +100,10 @@ const STYLE = `
 #ui .kz-page { position: absolute; inset: 0; pointer-events: none; }
 #ui .kz-page * { pointer-events: none; }
 #ui .kz-page .kz-live, #ui .kz-page .kz-live * { pointer-events: auto; }
-.kz-intro-text { position: absolute; left: 70px; top: 26px; width: 660px; height: 296px; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center; text-align: center; }
-.kz-intro-text p { margin: 0; color: #fff; font: 700 calc(22px * var(--text-scale, 1))/1.3 var(--body-font); text-shadow: 0 2px 0 rgba(0,0,0,0.55), 0 0 12px rgba(0,0,0,0.5); max-width: 640px; animation: kz-rise 0.45s cubic-bezier(.2,1.2,.4,1) both; }
-.kz-intro-text p.big { font: 800 calc(34px * var(--text-scale, 1))/1.1 var(--ui-font); letter-spacing: 0.5px; color: #fff4a8; }
-.kz-intro-text p.wrong { font: 800 calc(30px * var(--text-scale, 1))/1.1 var(--ui-font); color: #ffb3c0; }
-.kz-intro-text p.right { font: 800 calc(30px * var(--text-scale, 1))/1.1 var(--ui-font); color: #b9f6c9; }
+.kz-intro-text { position: absolute; left: 0; top: 0; width: 800px; display: flex; flex-direction: column; align-items: flex-start; text-align: center; }
+.kz-intro-text .kz-field { flex: none; box-sizing: border-box; padding-bottom: 8px; }
+.kz-intro-text p { margin: 0; color: #fff; font: bold calc(20px * var(--text-scale, 1))/1.25 ${VERDANA}; text-shadow: 0 1px 2px rgba(0,0,0,0.35); animation: kz-rise 0.45s cubic-bezier(.2,1.2,.4,1) both; }
+.kz-intro-text p.wrong { font-size: calc(23px * var(--text-scale, 1)); }
 .btn.kz-blue { position: absolute; width: 219px; height: 79px; padding: 0; border-radius: 16px; color: #fff; font: 800 34px/1 var(--ui-font); letter-spacing: 0.5px;
   background: linear-gradient(#9ddcff 0%, #58bdf7 46%, #2ea5f2 54%, #3cb2f7 100%); border: 4px solid #0d4f82; box-shadow: 0 5px 0 rgba(0,0,0,0.35), inset 0 2px 0 rgba(255,255,255,0.6);
   text-shadow: 0 2px 0 rgba(13,79,130,0.8); }
@@ -70,37 +113,41 @@ const STYLE = `
 .kz-legend { position: absolute; left: 0; right: 0; bottom: 6px; margin: 0 auto; width: fit-content; max-width: 780px; padding: 4px 12px 3px; border-radius: 999px; background: rgba(255,255,255,0.86); box-shadow: 0 2px 0 rgba(0,0,0,0.15); text-align: center; white-space: nowrap; color: #1f4d3b; font: 700 calc(12.5px * var(--text-scale, 1))/1.3 var(--body-font); }
 .kz-legend kbd { font: 800 12px/1 var(--body-font); background: #1f4d3b; color: #fff; border-radius: 5px; padding: 2px 5px 1px; }
 .kz-outro { position: absolute; left: 46px; top: 16px; width: 708px; height: 330px; color: #111; text-align: center; }
-.kz-outro h2 { margin: 0; height: 44px; line-height: 44px; font: 400 calc(24px * var(--text-scale, 1))/44px var(--body-font); color: #111; }
-.kz-row { position: absolute; left: 0; width: 708px; height: 36px; font: 400 calc(21px * var(--text-scale, 1))/36px var(--body-font); animation: kz-row-in 0.35s ease both; }
+.kz-outro h2 { margin: 0; height: 44px; line-height: 44px; font: bold calc(20px * var(--text-scale, 1))/44px ${VERDANA}; color: #111; }
+.kz-row { position: absolute; left: 0; width: 708px; height: 36px; font: 400 calc(20px * var(--text-scale, 1))/36px ${VERDANA}; animation: kz-row-in 0.35s ease both; }
 .kz-row span { position: absolute; top: 0; text-align: center; }
 .kz-row .l { left: 56px; width: 300px; }
 .kz-row .x { left: 334px; width: 30px; font-weight: 700; }
-.kz-row .n { left: 380px; width: 58px; font-family: var(--ui-font); font-weight: 700; }
+.kz-row .n { left: 380px; width: 58px; }
 .kz-row .e { left: 460px; width: 30px; font-weight: 700; }
-.kz-row .s { left: 510px; width: 124px; font-family: var(--ui-font); font-weight: 700; }
+.kz-row .s { left: 510px; width: 124px; }
 .kz-row.good .s, .kz-row.good .n { color: #13854a; font-weight: 700; }
 .kz-row.bad .s, .kz-row.bad .n { color: #c02a3f; font-weight: 700; }
-.kz-notes { position: absolute; left: 30px; top: 48px; width: 648px; height: 272px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; justify-content: safe center; }
+.kz-notes { position: absolute; left: 30px; top: 48px; width: 648px; height: 272px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; justify-content: flex-start; }
 #ui .kz-page .kz-notes { pointer-events: auto; }
-.kz-notes p { margin: 0; font: 400 calc(17px * var(--text-scale, 1))/1.35 var(--body-font); color: #111; animation: kz-row-in 0.35s ease both; }
+.kz-notes p { margin: 0; flex: none; font: 400 calc(16px * var(--text-scale, 1))/1.35 ${VERDANA}; color: #111; animation: kz-row-in 0.35s ease both; }
+.kz-notes.slots p { min-height: ${NOTE_SLOT - 12}px; }
 .kz-notes.many { gap: 7px; top: 46px; height: 284px; }
-.kz-notes.many p { font-size: calc(15px * var(--text-scale, 1)); line-height: 1.28; }
+.kz-notes.many p { font-size: calc(14px * var(--text-scale, 1)); line-height: 1.28; }
 .kz-notes.scrolls { justify-content: flex-start; padding-bottom: 26px; -webkit-mask-image: linear-gradient(#000 calc(100% - 44px), transparent); mask-image: linear-gradient(#000 calc(100% - 44px), transparent); }
 .kz-notes.scrolls.end { -webkit-mask-image: none; mask-image: none; }
 .kz-notes p.none { color: #13854a; font-weight: 700; }
-.kz-total { position: absolute; left: 0; width: 708px; font: 400 calc(22px * var(--text-scale, 1))/1.2 var(--body-font); animation: kz-row-in 0.35s ease both; }
-.kz-total b { display: block; margin-top: 4px; font: 800 calc(40px * var(--text-scale, 1))/1 var(--ui-font); color: #1b1640; }
-.kz-total.big b { font-size: calc(58px * var(--text-scale, 1)); }
-.kz-total.small { font-size: calc(18px * var(--text-scale, 1)); color: #444; }
-.kz-total.small b { font-size: calc(30px * var(--text-scale, 1)); }
+.kz-points { position: absolute; left: 0; top: 58px; width: 708px; display: flex; flex-direction: column; align-items: stretch; gap: 14px; }
+.kz-points .pair { display: flex; margin: 0 40px; }
+.kz-points .pair .kz-total { flex: 1 1 0; }
+.kz-total { font: 400 calc(20px * var(--text-scale, 1))/1.2 ${VERDANA}; animation: kz-row-in 0.35s ease both; }
+.kz-total b { display: block; margin-top: 4px; font: bold 40px/1 ${VERDANA}; color: #1b1640; }
+.kz-total.big b { font-size: 56px; }
+.kz-total.small { font-size: calc(17px * var(--text-scale, 1)); color: #444; }
+.kz-total.small b { font-size: 30px; }
 .kz-total.plus b { color: #13854a; } .kz-total.minus b { color: #c02a3f; }
-.kz-pageno { position: absolute; right: 18px; bottom: 2px; font: 400 13px var(--body-font); color: #666; }
+.kz-pageno { position: absolute; right: 18px; bottom: 2px; font: 400 calc(13px * var(--text-scale, 1)) var(--body-font); color: #666; }
 .kz-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(20, 14, 50, 0.5); }
 .kz-card { width: 520px; max-width: 92%; background: var(--panel); color: var(--ink); border-radius: 26px; padding: 22px 26px 20px; text-align: center; box-shadow: 0 10px 0 rgba(0,0,0,0.3); border: 4px solid rgba(255,255,255,0.15); animation: kz-card-in 0.35s cubic-bezier(.2,1.4,.4,1) both; }
-.kz-card h2 { margin: 0 0 8px; font: 800 34px/1.1 var(--ui-font); }
-.kz-card p { margin: 6px 0 14px; font: 400 19px/1.35 var(--body-font); }
+.kz-card h2 { margin: 0 0 8px; font: 800 calc(34px * var(--text-scale, 1))/1.1 var(--ui-font); }
+.kz-card p { margin: 6px 0 14px; font: 400 calc(19px * var(--text-scale, 1))/1.35 var(--body-font); }
 .kz-card .row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
-.kz-card .kz-toggle { font-size: 16px; min-height: max(44px, calc(46px / var(--stage-scale, 1))); padding: 8px 18px 6px; }
+.kz-card .kz-toggle { font-size: calc(16px * var(--text-scale, 1)); min-height: max(44px, calc(46px / var(--stage-scale, 1))); padding: 8px 18px 6px; }
 @keyframes kz-rise { from { transform: translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes kz-row-in { from { transform: translateX(-14px); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes kz-card-in { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -151,8 +198,25 @@ export function kitchenScene(app) {
   // ------------------------------------------------------------------------------------------
   const spec = () => LEVELS[level];
   const foodName = item => t('kitchen.food.' + item.asset);
-  const clickWord = cap => t(`kitchen.${cap ? 'Click' : 'click'}.${device() === 'touch' ? 'touch' : 'keyboard'}`);
-  const words = () => ({ click: clickWord(false), Click: clickWord(true), seconds: LEVELS[3].seconds });
+  const clickWord = cap => t(`kitchen.${cap ? 'Click' : 'click'}.${device()}`);
+  // The move keys as prompts name them: the arrows while the four directions still start with
+  // them, else the first key of each direction as remapped in Settings.
+  function moveKeys(form) {
+    const keys = settings.get('keys') || {};
+    const arrows = ['Left', 'Right', 'Up', 'Down'].every(d => (keys[d.toLowerCase()] || [])[0] === 'Arrow' + d);
+    return arrows ? t('kitchen.keys.' + form) : ['up', 'left', 'down', 'right'].map(keyFor).join(' ');
+  }
+  // The controls the kitchen reads itself (controls.js: T, C, H, Enter) keep their literal names;
+  // gamepad names come from web/js/ui/prompts.js.
+  const words = () => ({
+    ...promptVars(device()), click: clickWord(false), Click: clickWord(true), seconds: LEVELS[3].seconds,
+    arrowKeys: moveKeys('arrows'), ArrowKeys: moveKeys('Arrows'),
+  });
+  // A string's variant for the input in use (key.keyboard, key.gamepad) when it has one: the
+  // intro sentences that name a control say "click on the tissues (or press T)", "tap on the
+  // tissues" or "press B for the tissues" (the rest of the 2009 wording is unchanged).
+  const tx = key => { const k = `${key}.${device()}`; return t(has(k) ? k : key, words()); };
+  const textScale = () => clamp(Number(settings.get('textScale')) || 1, 1, 1.5);
 
   function counterRect(item) {
     const [w, h] = foodSize(item.asset);
@@ -229,10 +293,11 @@ export function kitchenScene(app) {
   // ------------------------------------------------------------------------------------------
   // Intro screens and the level-0 tutorial
   // ------------------------------------------------------------------------------------------
+  // Every intro line is white Verdana Bold 20; only "Wrong!  Try again." is 23 (NOTES 8.6).
   function introLines(page) {
     if (page === 'wrong') return [['kitchen.intro.0.wrong', 'wrong'], ['kitchen.intro.0.6'], ['kitchen.intro.0.7']];
-    if (page === 'right') return [['kitchen.intro.0.right', 'right'], ['kitchen.intro.0.goal'], ['kitchen.intro.0.ready']];
-    return INTRO[level][page].map(k => [`kitchen.intro.${level}.${k}`, level > 0 && page === 0 && k === 1 ? 'big' : '']);
+    if (page === 'right') return [['kitchen.intro.0.right'], ['kitchen.intro.0.goal'], ['kitchen.intro.0.ready']];
+    return INTRO[level][page].map(k => [`kitchen.intro.${level}.${k}`]);
   }
 
   function showIntro(page, { quiet = false } = {}) {
@@ -242,15 +307,26 @@ export function kitchenScene(app) {
     held = false; dragging = false;
     if (controls) controls.hide();
     const lines = introLines(page);
+    const fields = typeof page === 'string' ? TUTORIAL_FIELDS[page] : INTRO_FIELDS[level][page];
     const last = page === 'right' || (typeof page === 'number' && level > 0 && page === INTRO[level].length - 1);
     const label = last ? t('kitchen.button.start') : t('kitchen.button.next');
     const next = blueButton(label, 'kz-next', () => introNext(), { x: 282.7, y: 335.4 });
+    // Each line sits in its text field (2 px Flash gutter); a field's height runs to the next
+    // field's top, so a line that wraps further pushes the rest down instead of overlapping.
     const text = el('div', { class: 'kz-intro-text', role: 'dialog', 'aria-live': 'polite' },
       lines.map(([key, cls], i) => {
-        const p = el('p', { class: cls || null }, t(key, words()));
+        const [x, y, w, h] = fields[Math.min(i, fields.length - 1)];
+        const below = fields[i + 1];
+        const p = el('p', { class: cls || null }, tx(key));
         p.style.animationDelay = `${i * 0.12}s`;
-        return p;
+        const f = el('div', { class: 'kz-field' }, p);
+        // Widened by up to FIELD_SLACK a side about the same centre: the browser's stand-in for
+        // Verdana Bold can run a little wider than Flash's, and a line should not wrap for that.
+        const slack = Math.min(FIELD_SLACK, x + 2 - 16, 800 - 16 - (x + w - 2));
+        Object.assign(f.style, { marginLeft: `${x + 2 - slack}px`, width: `${w - 4 + slack * 2}px`, minHeight: `${below ? below[1] - y : h - 4}px` });
+        return f;
       }));
+    text.style.paddingTop = `${fields[0][1] + 2}px`;
     setPage(el('div', {}, text, next), { live: [next] });
     focusFirst(pageLayer);
     app.touch.show(TOUCH_PAUSE);
@@ -275,7 +351,7 @@ export function kitchenScene(app) {
     tutorialStep = 'ask';
     held = false; dragging = false;
     current = makeItem(25, -1);
-    const hint = el('div', { class: 'kz-hint', role: 'status' }, t(device() === 'touch' ? 'kitchen.tutorial.hint.touch' : 'kitchen.tutorial.hint.keyboard'));
+    const hint = el('div', { class: 'kz-hint', role: 'status' }, t('kitchen.tutorial.hint.' + device(), words()));
     setPage(hint);
     showControls(['item', ...DEST_ORDER]);
     if (device() !== 'touch') setFocus('item');
@@ -345,15 +421,32 @@ export function kitchenScene(app) {
     }
   }
 
-  // Keyboard legend along the bottom of the counter (keyboard only; touch players tap the art).
+  // Key or button names for the HUD bubbles and the legend: T / H on a keyboard (controls.js reads
+  // them directly), the gamepad's B / Y (handleActions: camera = tissues, phone = wash).
+  const toolKey = tool => (device() === 'gamepad'
+    ? promptVars('gamepad')[tool === 'wash' ? 'key_phone' : tool === 'cling' ? 'key_fire' : 'key_camera']
+    : t(`kitchen.legend.${tool === 'wash' ? 'washKey' : tool === 'cling' ? 'clingKey' : 'tissuesKey'}`));
+
+  // HUD bubble texts: "Wash (H)" / "Wash (Y)" / "Wash", "Tissue! (T)" / "Tissue! (B)" / "Tissue!".
+  const washLabel = () => (gstate === 'wash' ? t('kitchen.hud.washing')
+    : device() === 'touch' ? t('kitchen.hud.washTap') : t('kitchen.hud.washKey', { key: toolKey('wash') }));
+  const tissueLabel = () => (device() === 'touch' ? t('kitchen.hud.tissueTap') : t('kitchen.hud.tissueKey', { key: toolKey('tissues') }));
+
+  // Control legend along the bottom of the counter (keyboard and gamepad; touch players tap the
+  // art). Pause and the move keys follow Settings; Tab, Enter, T, C and H are read directly.
   function buildLegend() {
     clearPage();
-    if (mode !== 'play' || device() !== 'keyboard') return;
-    const pairs = [['kitchen.legend.moveKeys', 'kitchen.legend.move'], ['kitchen.legend.actKeys', 'kitchen.legend.act'],
-      ['kitchen.legend.tissuesKey', 'kitchen.legend.tissues'], ['kitchen.legend.clingKey', 'kitchen.legend.cling'],
-      ['kitchen.legend.washKey', 'kitchen.legend.wash'], ['kitchen.legend.pauseKey', 'kitchen.legend.pause']];
+    const dev = device();
+    if (mode !== 'play' || dev === 'touch') return;
+    const pad = dev === 'gamepad';
+    const v = promptVars(dev);
+    const pairs = [
+      [pad ? t('kitchen.legend.dpad') : t('kitchen.legend.moveKeys', { keys: moveKeys('arrowsShort') }), 'kitchen.legend.move'],
+      [pad ? v.key_jump : t('kitchen.legend.actKeys'), 'kitchen.legend.act'],
+      [toolKey('tissues'), 'kitchen.legend.tissues'], [toolKey('cling'), 'kitchen.legend.cling'],
+      [toolKey('wash'), 'kitchen.legend.wash'], [pad ? v.key_pause : keyFor('pause'), 'kitchen.legend.pause']];
     const parts = [];
-    pairs.forEach(([k, label], i) => { if (i) parts.push('   '); parts.push(el('kbd', {}, t(k)), ' ' + t(label)); });
+    pairs.forEach(([k, label], i) => { if (i) parts.push('   '); parts.push(el('kbd', {}, k), ' ' + t(label)); });
     legend = el('div', { class: 'kz-legend', 'aria-hidden': 'true' }, parts);
     setPage(legend);
   }
@@ -453,8 +546,8 @@ export function kitchenScene(app) {
     haptic([40, 30, 40]);
     const from = mouth();
     const to = current ? centre(counterRect(current)) : { x: 170, y: 220 };
-    particles.emit(from.x, from.y, { count: 26, colors: ['#8fe36b', '#c5f59a', '#5cc24a', '#ffffff'], speed: 5, spread: 0.9, angle: Math.atan2(to.y - from.y, to.x - from.x), life: 34, size: 3.2, gravity: 0.15 });
-    popups.add(t('kitchen.hud.germs'), to.x, to.y - 40, { color: '#b9f6a0', size: 20 });
+    if (!reduced) particles.emit(from.x, from.y, { count: 26, colors: ['#8fe36b', '#c5f59a', '#5cc24a', '#ffffff'], speed: 5, spread: 0.9, angle: Math.atan2(to.y - from.y, to.x - from.x), life: 34, size: 3.2, gravity: 0.15 });
+    popups.add(t('kitchen.hud.germs'), to.x, to.y - 40, { color: '#b9f6a0', size: 20 * textScale() });
     app.announce(t('kitchen.say.sneezed'));
   }
 
@@ -465,7 +558,7 @@ export function kitchenScene(app) {
     audio.play('kitchenTissue');
     haptic(20);
     const m = mouth();
-    particles.emit(m.x, m.y, { count: 14, colors: ['#ffffff', '#f3f7ff', '#ffd6f0'], shape: 'square', speed: 2.2, life: 30, size: 4, gravity: 0.05 });
+    if (!reduced) particles.emit(m.x, m.y, { count: 14, colors: ['#ffffff', '#f3f7ff', '#ffd6f0'], shape: 'square', speed: 2.2, life: 30, size: 4, gravity: 0.05 });
     app.announce(t('kitchen.say.tissue'));
   }
 
@@ -522,7 +615,7 @@ export function kitchenScene(app) {
     audio.play('kitchenCling', { volume: again ? 0.5 : 1 });
     const r = counterRect(current);
     if (!again) {
-      particles.emit(r.x + r.w / 2, r.y + r.h / 2, { count: 10, colors: ['#ffffff', '#dff3ff', '#bfefff'], shape: 'star', speed: 2.2, life: 26, size: 4, gravity: -0.02 });
+      if (!reduced) particles.emit(r.x + r.w / 2, r.y + r.h / 2, { count: 10, colors: ['#ffffff', '#dff3ff', '#bfefff'], shape: 'star', speed: 2.2, life: 26, size: 4, gravity: -0.02 });
       app.announce(t('kitchen.say.covered'));
     }
   }
@@ -600,19 +693,20 @@ export function kitchenScene(app) {
     const s = slotContent.get(f.slot);
     if (s && s.item === f.item) s.landed = true;
     const cx = f.to.x + f.to.w / 2, cy = f.to.y + f.to.h / 2;
+    const ts = textScale();
     if (f.verdict === 'correct' || f.verdict === 'tutorial') {
       audio.play('kitchenCorrect');
       burst(cx, cy, true);
-      if (f.verdict === 'correct') popups.add('+10', cx, f.to.y - 16, { color: '#b9f6c9', size: 20 });
+      if (f.verdict === 'correct') popups.add('+10', cx, f.to.y - 16, { color: '#b9f6c9', size: 20 * ts });
       haptic(15);
     } else if (f.verdict === 'incorrect') {
       audio.play('kitchenWrong');
-      popups.add('-10', cx, f.to.y - 16, { color: '#ffb3c0', size: 20 });
+      popups.add('-10', cx, f.to.y - 16, { color: '#ffb3c0', size: 20 * ts });
       shake.add(0.28);
       haptic(45);
     } else {
-      popups.add(t('kitchen.hud.binned'), cx, f.to.y - 12, { color: '#ffffff', size: 18 });
-      particles.emit(cx, cy, { count: 10, colors: ['#c9c9c9', '#9a9a9a', '#e8e8e8'], speed: 1.6, life: 26, size: 3, gravity: 0.05 });
+      popups.add(t('kitchen.hud.binned'), cx, f.to.y - 12, { color: '#ffffff', size: 18 * ts });
+      if (!reduced) particles.emit(cx, cy, { count: 10, colors: ['#c9c9c9', '#9a9a9a', '#e8e8e8'], speed: 1.6, life: 26, size: 3, gravity: 0.05 });
     }
     // A tick for right (and for bad food binned, which is right to do though it scores nothing).
     marks.push({ x: cx, y: f.to.y - 4, ok: f.verdict !== 'incorrect', age: 0, life: 70 });
@@ -620,6 +714,7 @@ export function kitchenScene(app) {
   }
 
   function burst(x, y, good) {
+    if (reduced) return;
     particles.emit(x, y, { count: good ? 14 : 6, colors: good ? ['#fff4a8', '#ffffff', '#6fe0a8'] : ['#ffb3c0', '#ffffff'], shape: 'star', speed: 3, life: 28, size: 4.5, gravity: 0.04 });
   }
 
@@ -694,7 +789,10 @@ export function kitchenScene(app) {
 
   function handleActions() {
     if (input.pressed('pause')) { pause(); return true; }
-    if (input.pressed('back') && held) toggleHeld();
+    // Back puts a lifted item down. On a gamepad B is both back and the tissues: with an item
+    // lifted it puts it down (a sneeze has already dropped it), otherwise it takes a tissue.
+    let putBack = false;
+    if (input.pressed('back') && held) { toggleHeld(); putBack = true; }
     if (input.pressed('left')) moveFocus(-1, 0);
     else if (input.pressed('right')) moveFocus(1, 0);
     else if (input.pressed('up')) moveFocus(0, -1);
@@ -702,7 +800,7 @@ export function kitchenScene(app) {
     if (input.lastDevice === 'gamepad') {
       if (input.pressed('confirm') && focusId) activate(focusId);
       if (mode === 'play') {
-        if (input.pressed('camera')) activate('tissues');
+        if (input.pressed('camera') && !putBack) activate('tissues');
         if (input.pressed('fire')) activate('clingfilm');
         if (input.pressed('phone')) activate('sink');
       }
@@ -748,26 +846,29 @@ export function kitchenScene(app) {
       const notes = s.notes.length
         ? s.notes.map((k, i) => { const p = el('p', {}, t('kitchen.note.' + k)); p.style.animationDelay = `${i * 0.08}s`; return p; })
         : [el('p', { class: 'none' }, t('kitchen.outro.noMistakes'))];
-      // All reminders are listed (the original had four slots); many of them get a compact layout,
-      // and a list that still overflows scrolls with a fade at the bottom until the end is reached.
-      body = [el('div', { class: 'kz-notes' + (s.notes.length > 6 ? ' many' : ''), tabindex: '0', 'aria-label': title }, notes)];
+      // All reminders are listed (the original had four slots, text1..text4, 71 px apart from just
+      // under the title); up to four sit on those slots, more close up, many of them get a compact
+      // layout, and a list that still overflows scrolls with a fade at the bottom until its end.
+      const n = s.notes.length;
+      body = [el('div', { class: 'kz-notes' + (n > 6 ? ' many' : n && n <= 4 ? ' slots' : ''), tabindex: '0', 'aria-label': title }, notes)];
     } else {
       title = t('kitchen.outro.pointsPage');
       const total = startScore + s.points;
-      // Awarded and deducted side by side, then this level's total and the running kitchen total.
-      // Only non-zero values are coloured, as on pages 1 and 2.
-      const line = (cls, top, left, width, label, value, delay) => {
+      // Awarded and deducted side by side, then this level's total and the running kitchen total,
+      // in one column so larger text sizes push the blocks down instead of overlapping (the big
+      // numerals keep their size). Only non-zero values are coloured, as on pages 1 and 2.
+      const block = (cls, label, value, delay) => {
         const d = el('div', { class: 'kz-total ' + cls }, el('div', {}, label), el('b', {}, value));
-        Object.assign(d.style, { top: top + 'px', left: left + 'px', width: width + 'px', animationDelay: delay + 's' });
+        d.style.animationDelay = delay + 's';
         return d;
       };
       const sign = n => (n > 0 ? 'plus' : n < 0 ? 'minus' : '');
-      body = [
-        line(s.awarded ? 'plus' : '', 58, 40, 314, t('kitchen.outro.pointsAwarded'), s.awarded ? `+${s.awarded}` : '0', 0),
-        line(s.deducted ? 'minus' : '', 58, 354, 314, t('kitchen.outro.pointsDeducted'), s.deducted ? `-${s.deducted}` : '0', 0.1),
-        line('big ' + sign(s.points), 146, 0, 708, t('kitchen.outro.totalPoints'), String(s.points), 0.2),
-        line('small', 250, 0, 708, t('kitchen.outro.kitchenTotal'), String(total), 0.3),
-      ];
+      body = [el('div', { class: 'kz-points' },
+        el('div', { class: 'pair' },
+          block(s.awarded ? 'plus' : '', t('kitchen.outro.pointsAwarded'), s.awarded ? `+${s.awarded}` : '0', 0),
+          block(s.deducted ? 'minus' : '', t('kitchen.outro.pointsDeducted'), s.deducted ? `-${s.deducted}` : '0', 0.1)),
+        block('big ' + sign(s.points), t('kitchen.outro.totalPoints'), String(s.points), 0.2),
+        block('small', t('kitchen.outro.kitchenTotal'), String(total), 0.3))];
     }
     const last = page === OUTRO_PAGES - 1;
     const next = blueButton(t(last ? 'kitchen.button.continue' : 'kitchen.button.next'), 'kz-next', () => outroNext(), { x: 292.2, y: 351.9 });
@@ -865,7 +966,8 @@ export function kitchenScene(app) {
       el('p', {}, t('kitchen.levelLabel', { n: level + 1 })),
       el('div', { class: 'row' },
         button(t('pause.resume'), () => resume(), { class: 'primary', id: 'kz-resume' }),
-        button(t('pause.restart'), () => restart(), { id: 'kz-restart' }),
+        // No restart on the outro: the finished level's result would be thrown away.
+        pausedFrom === 'outro' ? null : button(t('pause.restart'), () => restart(), { id: 'kz-restart' }),
         button(t('pause.quit'), () => quit(), { id: 'kz-quit' })),
       el('div', { class: 'row' }, toggle, settingsButton()));
     showOverlay(card);
@@ -890,10 +992,13 @@ export function kitchenScene(app) {
     if ((mode === 'play' || mode === 'tutorial') && focusId && device() !== 'touch') setFocus(focusId);
   }
 
+  // From play the level starts again at once; from the intro or the tutorial the intro screens
+  // (and level 0's spring-onion tutorial) are shown again.
   function restart() {
+    const from = pausedFrom;
     clearOverlay();
     pausedFrom = null;
-    startLevel(level, { skipIntro: true });
+    startLevel(level, { skipIntro: from === 'play' });
   }
 
   function quit() {
@@ -932,23 +1037,43 @@ export function kitchenScene(app) {
 
     update() {
       tick++;
-      if (nav) nav();
+      // Settings > Reduced motion can change while the kitchen is open (pause > Settings).
+      reduced = !!settings.get('reducedMotion');
+      const settingsOpen = !!(app.flow && app.flow.overlayOpen);
+      const before = mode;
+      if (nav && !settingsOpen) nav();
+      // A gamepad press that just worked a card button (Resume, Restart) must not also act on the
+      // page that button brought back in this tick.
+      if (mode !== before) return;
       if (mode === 'loading' || mode === 'done') { cosmeticUpdate(); return; }
       startMusic();
-      const dev = device();
-      if (dev !== lastDevice) { lastDevice = dev; onDeviceChange(); }
+      // Where the focus was when this tick's keys went down (a device change below can rebuild
+      // the page and move the focus to its button, which then never saw the key).
+      const focusAtKey = document.activeElement;
       if (mode === 'paused') {
-        if (app.flow && app.flow.overlayOpen) return;   // the settings overlay has the input
+        if (settingsOpen) return;   // the settings overlay has the input
         if (input.pressed('pause') || input.pressed('back')) resume();
         return;   // the picture freezes under the pause card
       }
+      // Checked after the pause card, so a switch of device while paused is seen on resume.
+      const dev = device();
+      if (dev !== lastDevice) { lastDevice = dev; onDeviceChange(); }
       if (mode === 'intro' || mode === 'outro') {
         if (input.pressed('pause')) { pause(); return; }
-        const btn = document.getElementById('kz-next');
-        const onButton = btn && document.activeElement === btn;
-        if (!onButton && (input.pressed('confirm') || (input.pressed('jump') && !input.isDown('up')))) {
+        const active = focusAtKey;
+        const onButton = !!(active && active.id === 'kz-next');
+        const pad = input.lastDevice === 'gamepad';
+        // Space, Enter and the arrows scroll the reminders list natively while it has the focus.
+        const inList = !pad && active && active.closest && active.closest('.kz-notes');
+        const go = input.pressed('confirm') || (input.pressed('jump') && !input.isDown('up'));
+        // Enter and Space on the focused button click it natively; a gamepad's A does not.
+        if (go && !inList && (!onButton || pad)) {
           if (mode === 'intro') introNext(); else outroNext();
         }
+        // The d-pad (and the arrows, from outside the list) scroll a long reminders list.
+        const list = !inList && pageLayer && pageLayer.querySelector('.kz-notes.scrolls');
+        const dir = (input.isDown('down') ? 1 : 0) - (input.isDown('up') ? 1 : 0);
+        if (list && dir) list.scrollTop += dir * 6;
         cosmetic++;
         if (framesAt(cosmetic) !== framesAt(cosmetic - 1)) avatarClip.tick();
         cosmeticUpdate();
@@ -988,8 +1113,9 @@ export function kitchenScene(app) {
       drawKitchen(ctx);
       ctx.restore();
       if (mode === 'intro' || (mode === 'paused' && pausedFrom === 'intro')) {
-        // The intro SWFs show the kitchen picture at 30 % alpha over black (background cxform).
-        ctx.fillStyle = 'rgba(0,0,0,0.62)';
+        // The intro SWFs show the kitchen picture at 30 % alpha (background cxform, alpha 77/256)
+        // over the dark grey stage behind them (about #333, sampled from the captures).
+        ctx.fillStyle = 'rgba(51,51,51,0.70)';
         ctx.fillRect(0, 0, 800, 450);
         particles.draw(ctx);
         return;
@@ -1156,10 +1282,13 @@ export function kitchenScene(app) {
     }
     // Sneeze: the tissues glow (the countdown ring and the "Tissue!" bubble are in the HUD).
     if (mode === 'play' && gstate === 'sneeze') drawGlow(ctx, TARGET.tissues.glow, { colour: '#ff8a5c', alpha: pulse, width: 5, fill: 'rgba(255,138,92,0.2)' });
+    // Keyboard / gamepad focus: a two-tone ring (dark under light) that reads on the light-blue
+    // fridge and the white shelves as well as on the green counter.
     if (focusId && device() !== 'touch' && TARGET[focusId]) {
       const tg = TARGET[focusId];
       const r = tg.kind === 'item' && current ? pad(counterRect(current), 8) : tg.glow || tg.hit;
-      drawGlow(ctx, r, { colour: '#5fd4ff', alpha: 0.75 + 0.25 * pulse, width: 4 });
+      drawGlow(ctx, r, { colour: '#1b1640', alpha: 0.9, width: 8 });
+      drawGlow(ctx, r, { colour: '#5fd4ff', alpha: 0.8 + 0.2 * pulse, width: 4 });
     }
   }
   const pad = (r, p) => ({ x: r.x - p, y: r.y - p, w: r.w + p * 2, h: r.h + p * 2 });
@@ -1167,42 +1296,52 @@ export function kitchenScene(app) {
   function drawHud(ctx) {
     if (mode !== 'play' && mode !== 'paused' && mode !== 'tutorial') return;
     if (mode === 'tutorial' || pausedFrom === 'tutorial') return;
-    // Clock (KitchenGame.as:180): Verdana Bold 20, #20648c, centred in a 110 x 35 field.
+    // Clock (KitchenGame.as:180): Verdana Bold 20, #20648c, centred in a 110 x 35 field; its
+    // digits centre on y 20.7 (2 px gutter, Verdana ascent 1.005 em, cap height 0.73 em). Port
+    // additions: it follows the text size, and in the last ten seconds it turns red with a pulse.
+    const ts = textScale();
     const low = timeLeft <= 10;
-    const cx = CLOCK.x + CLOCK.w / 2, cy = CLOCK.y + 19;
+    const cx = CLOCK.x + CLOCK.w / 2, cy = CLOCK.y + 14.8;
     ctx.save();
     ctx.translate(cx, cy);
     const k = 1 + (reduced ? 0 : clockPulse * 0.3);
     ctx.scale(k, k);
-    ctx.font = '800 27px Baloo, Verdana, sans-serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    if (low) { ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.strokeText(String(timeLeft), 0, 2); }
+    ctx.font = `bold ${20 * ts}px ${VERDANA}`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    const base = 7.3 * ts;
+    if (low) { ctx.lineWidth = 4; ctx.lineJoin = 'round'; ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.strokeText(String(timeLeft), 0, base); }
     ctx.fillStyle = low ? '#d23c3c' : '#20648c';
-    ctx.fillText(String(timeLeft), 0, 2);
+    ctx.fillText(String(timeLeft), 0, base);
     ctx.restore();
-    // Items put away (port addition): a small pill left of the clock.
+    // Items put away (port addition): a small pill left of the clock, scaled with the text size
+    // about its right end.
     const done = Math.min(itemIndex, items.length);
+    const label = t('kitchen.hud.items', { n: done, total: items.length });
     ctx.save();
     ctx.font = '800 16px Baloo, "Trebuchet MS", sans-serif';
-    const label = t('kitchen.hud.items', { n: done, total: items.length });
     const w = ctx.measureText(label).width + 36;
-    const x = CLOCK.x - w + 4, y = 10;
+    const right = CLOCK.x + 4, y = 10;
+    ctx.translate(right, y);
+    ctx.scale(ts, ts);
     ctx.fillStyle = 'rgba(32,100,140,0.14)';
-    roundRect(ctx, x, y, w, 26, 13); ctx.fill();
+    roundRect(ctx, -w, 0, w, 26, 13); ctx.fill();
     // A tick in a disc: items put away.
     ctx.fillStyle = '#20648c';
-    ctx.beginPath(); ctx.arc(x + 15, y + 13, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(-w + 15, 13, 8, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    ctx.beginPath(); ctx.moveTo(x + 11, y + 13.5); ctx.lineTo(x + 14, y + 16.5); ctx.lineTo(x + 19.5, y + 10); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-w + 11, 13.5); ctx.lineTo(-w + 14, 16.5); ctx.lineTo(-w + 19.5, 10); ctx.stroke();
     ctx.fillStyle = '#20648c';
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    ctx.fillText(label, x + 27, y + 14);
+    ctx.fillText(label, -w + 27, 14);
     ctx.restore();
+    const x = right - w * ts;
+    const bubbleFont = size => `800 ${Math.round(size * ts)}px Baloo, "Trebuchet MS", sans-serif`;
+    const bubbleH = Math.round(30 * Math.max(1, ts * 0.95));
     // Hands: a badge in the HUD row while they carry microbes (sneeze or raw meat) or are being
     // washed, and a soft pulse on the sink.
     const dirty = hands.sneeze || hands.meat;
     if (dirty || gstate === 'wash') {
-      const bx = x - 26, by = y + 13;
+      const bx = x - 26, by = y + 13 * ts;
       const bob = reduced ? 0 : Math.sin(tick * 0.1) * 1.5;
       ctx.save();
       ctx.fillStyle = gstate === 'wash' ? 'rgba(223,246,255,0.95)' : 'rgba(255,255,255,0.95)';
@@ -1214,19 +1353,19 @@ export function kitchenScene(app) {
         if (hands.meat) drawGerms(ctx, bx, by + bob, 18, time() + 1, '#e0475b', 3, reduced);
       }
       ctx.restore();
-      const text = gstate === 'wash' ? t('kitchen.hud.washing') : t(device() === 'keyboard' ? 'kitchen.hud.washKey' : 'kitchen.hud.washTap');
+      const text = washLabel();
       ctx.save();
-      ctx.font = '800 14px Baloo, "Trebuchet MS", sans-serif';
+      ctx.font = bubbleFont(14);
       const tw = ctx.measureText(text).width;
       ctx.restore();
-      drawBubble(ctx, bx - 30 - tw / 2, by + bob, text, { font: '800 14px Baloo, "Trebuchet MS", sans-serif', fill: gstate === 'wash' ? '#dff6ff' : '#fffbe0' });
+      drawBubble(ctx, bx - 30 - tw / 2, by + bob, text, { font: bubbleFont(14), h: bubbleH, fill: gstate === 'wash' ? '#dff6ff' : '#fffbe0' });
       if (dirty && gstate === 'wait') drawGlow(ctx, TARGET.sink.glow, { colour: '#5fd4ff', alpha: 0.35 + 0.3 * (reduced ? 0.5 : 0.5 + 0.5 * Math.sin(tick * 0.12)), width: 3, fill: 'rgba(95,212,255,0.1)' });
     }
     // Sneeze warning above the avatar.
     if (gstate === 'sneeze' && mode === 'play') {
       const m = mouth();
       const jig = reduced ? 0 : Math.sin(tick * 0.9) * 1.5;
-      drawBubble(ctx, m.x + 58 + jig, 40, t('kitchen.hud.sneeze'), { tx: m.x + 22, ty: 70, fill: '#fff4e0' });
+      drawBubble(ctx, m.x + 58 + jig, 40, t('kitchen.hud.sneeze'), { font: bubbleFont(17), h: bubbleH, tx: m.x + 22, ty: 70, fill: '#fff4e0' });
       // Over the tissue box: a ring counting down the two-second window, and the bubble above it.
       const c = centre(TARGET.tissues.glow);
       const left = 1 - sneezeFrames / SNEEZE_WINDOW;
@@ -1239,8 +1378,7 @@ export function kitchenScene(app) {
       ctx.fillStyle = '#ff8a5c';
       ctx.beginPath(); ctx.arc(c.x, ry, 6, 0, Math.PI * 2); ctx.fill();
       ctx.restore();
-      const tissue = t(device() === 'keyboard' ? 'kitchen.hud.tissueKey' : 'kitchen.hud.tissueTap');
-      drawBubble(ctx, c.x, ry - 34 + jig * 0.5, tissue, { font: '800 15px Baloo, "Trebuchet MS", sans-serif', fill: '#ffe2d6', tx: c.x, ty: ry - 16 });
+      drawBubble(ctx, c.x, ry - 19 - bubbleH / 2 + jig * 0.5, tissueLabel(), { font: bubbleFont(15), h: bubbleH, fill: '#ffe2d6', tx: c.x, ty: ry - 16 });
     }
     // End-of-level banner.
     if (banner) {
@@ -1299,6 +1437,7 @@ export function kitchenScene(app) {
       targets: Object.fromEntries(TARGETS.map(tg => [tg.id, { ...tg.hit }])),
       fx: { particles: particles.items.length, popups: popups.items.length, flights: flights.length, marks: marks.length, shake: shake.trauma },
       music: musicOn, reducedMotion: reduced,
+      hud: { wash: washLabel(), tissue: tissueLabel() },
     };
   }
 

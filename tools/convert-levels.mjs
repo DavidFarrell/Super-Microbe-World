@@ -140,6 +140,19 @@ function loadBounds() {
   return table;
 }
 
+// Physics box sizes settled by the Ruffle captures where the two bounds surveys disagree (NOTES.md
+// 4.4 / 12.6). Patty: swf-inventory.json's boundsFrame1 gives 203.32 x 150.39, which pushes level
+// 4's first Patty (4,11) off her spawn cell on step 2 (the loaf and the cheese push by different
+// amounts) and leaves her hovering 60 px above the bread stick; captures 050-level4-opening and
+// 051-level4-moving show her standing on it at her spawn cell. The other survey's box
+// (reference/analysis/levels.json:1699-1706, "union of frame-1 child bounds, mask layers
+// excluded"; flash-levels.md:225) keeps her at (550, 200), as captured. Only the box (w, h) is
+// overridden: ax/ay feed the debug-art hint only, and the clip bounds used by hitTest and the
+// on-screen test (web/js/platformer/data/clips.js) are a separate question.
+const BOX_OVERRIDES = {
+  patty_icon: { w: 187.89, h: 141.53 },
+};
+
 function parseTileDefinitions(bounds) {
   const xml = readXml(path.join(LEVELS_DIR, 'tile_definitions.xml'));
   const defs = [];
@@ -148,7 +161,8 @@ function parseTileDefinitions(bounds) {
     const typeString = text(body, 'type');
     const icon = text(body, 'icon') || null;
     const type = TYPE_STRING[typeString] ?? TYPE.TILE;
-    const b = icon ? bounds.get(icon) : null;
+    const found = icon ? bounds.get(icon) : null;
+    const b = found && BOX_OVERRIDES[icon] ? { ...found, ...BOX_OVERRIDES[icon] } : found;
     defs.push({
       id: defs.length,
       label: text(body, 'label') || null,

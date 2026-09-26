@@ -15,9 +15,20 @@ let active = 'en';
 
 let manifest = null;
 
-// Loads a language's common table plus every namespace file; missing files are skipped.
-async function loadTable(code) {
+// HTML lang values for the original language codes (screen readers and hyphenation use them).
+const BCP47 = { en: 'en-GB', bg_fl: 'nl-BE', bg_fr: 'fr-BE', cz_cz: 'cs', dk_dk: 'da', fr_fr: 'fr', gk_gk: 'el', it_it: 'it', pl_pl: 'pl', por_por: 'pt', sp_sp: 'es' };
+
+async function loadManifest() {
   manifest ||= await loadJson('data/lang/manifest.json').catch(() => ({ languages: ['en'], namespaces: [] }));
+  return manifest;
+}
+
+// Loads a language's common table plus every namespace file. Only languages listed in the
+// manifest's uiTables have UI string files (the 2009 game translated just the quiz and the host's
+// introduction), so other languages make no requests and fall back to English for UI text.
+async function loadTable(code) {
+  await loadManifest();
+  if (!(manifest.uiTables || ['en']).includes(code)) return {};
   // Release builds (tools/build-artifact.mjs) merge each language into one bundle file.
   if (manifest.bundled) return loadJson(`data/lang/${code}.bundle.json`).catch(() => null);
   const parts = await Promise.all([
@@ -32,9 +43,13 @@ export const availableLanguages = () => (manifest ? manifest.languages : ['en'])
 
 export async function loadLanguage(code = settings.get('language') || 'en') {
   if (!tables.en || !Object.keys(tables.en).length) tables.en = (await loadTable('en')) || {};
-  if (code !== 'en' && !tables[code]) tables[code] = await loadTable(code);
-  active = tables[code] ? code : 'en';
-  document.documentElement.lang = active === 'en' ? 'en-GB' : active;
+  await loadManifest();
+  // Any language the game offers stays active even without UI tables: its quiz and host text
+  // exist, and t() falls back to English key by key.
+  if (!manifest.languages.includes(code)) code = 'en';
+  if (code !== 'en' && !tables[code]) tables[code] = (await loadTable(code)) || {};
+  active = code;
+  document.documentElement.lang = BCP47[active] || active;
   return active;
 }
 

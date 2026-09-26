@@ -60,10 +60,12 @@ export function fitInBox(box, w, h) {
   return { x: box.x, y: box.y + box.h - h * scale, scale, w: w * scale, h: h * scale };
 }
 
-// Touch and keyboard targets. `hit` is the tap/drop area (at least 53 stage px each way, which is
-// 44 CSS px at the smallest common landscape phone scale of about 0.83); `glow` is the art the
+// Touch and keyboard targets. `hit` is the tap/drop area (at least 56 stage px each way, which is
+// 44 CSS px down to a stage scale of 0.79, a 640 x 360 landscape phone); `glow` is the art the
 // highlight follows. The four fridge bands share the fridge column, stretched to the fridge's top
-// frame and body so each band is tall enough.
+// frame and body so each band is tall enough; the middle and bottom shelves' bands (56 px) meet
+// at the shelf between them (y 168), so the middle band takes the bottom 6 px of the top shelf's
+// art and the bottom band the top 12 px of the drawers'.
 const R = (x, y, w, h) => ({ x, y, w, h });
 export const TARGETS = [
   { id: 'item', kind: 'item', hit: R(104, 160, 100, 106), glow: null },
@@ -72,10 +74,10 @@ export const TARGETS = [
   { id: 'sink', kind: 'sink', hit: R(272, 210, 154, 58), glow: R(276, 214, 146, 50) },
   { id: 'bowl', kind: 'loc', loc: LOC.BOWL, hit: R(356, 132, 88, 76), glow: R(360, 148, 80, 70) },
   { id: 'cupboard', kind: 'loc', loc: LOC.CUPBOARD, hit: R(246, 10, 172, 118), glow: R(252, 24, 80, 100) },
-  { id: 'fridgeUpper', kind: 'loc', loc: LOC.FRIDGE_UPPER, hit: R(460, 38, 132, 78), glow: R(474, 64, 104, 54) },
-  { id: 'fridgeMid', kind: 'loc', loc: LOC.FRIDGE_MID, hit: R(460, 116, 132, 53), glow: R(474, 118, 104, 50) },
-  { id: 'fridgeLower', kind: 'loc', loc: LOC.FRIDGE_LOWER, hit: R(460, 169, 132, 53), glow: R(474, 168, 104, 44) },
-  { id: 'fridgeDrawer', kind: 'loc', loc: LOC.FRIDGE_DRAWER, hit: R(460, 222, 132, 78), glow: R(474, 212, 104, 50) },
+  { id: 'fridgeUpper', kind: 'loc', loc: LOC.FRIDGE_UPPER, hit: R(460, 38, 132, 74), glow: R(474, 64, 104, 54) },
+  { id: 'fridgeMid', kind: 'loc', loc: LOC.FRIDGE_MID, hit: R(460, 112, 132, 56), glow: R(474, 118, 104, 50) },
+  { id: 'fridgeLower', kind: 'loc', loc: LOC.FRIDGE_LOWER, hit: R(460, 168, 132, 56), glow: R(474, 168, 104, 44) },
+  { id: 'fridgeDrawer', kind: 'loc', loc: LOC.FRIDGE_DRAWER, hit: R(460, 224, 132, 76), glow: R(474, 212, 104, 50) },
   { id: 'fridgeDoor', kind: 'loc', loc: LOC.FRIDGE_DOOR, hit: R(594, 44, 106, 246), glow: R(600, 96, 98, 156) },
   { id: 'bin', kind: 'loc', loc: LOC.BIN, hit: R(702, 262, 98, 188), glow: R(708, 268, 88, 132) },
 ];

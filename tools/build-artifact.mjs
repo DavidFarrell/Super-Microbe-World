@@ -43,7 +43,7 @@ const files = {};
 const langDir = path.join(out, 'data/lang');
 if (fs.existsSync(path.join(langDir, 'manifest.json'))) {
   const manifest = JSON.parse(fs.readFileSync(path.join(langDir, 'manifest.json'), 'utf8'));
-  for (const code of manifest.languages) {
+  for (const code of manifest.uiTables || ['en']) {
     const merged = {};
     for (const f of [`${code}.json`, ...manifest.namespaces.map(ns => `${code}/${ns}.json`)]) {
       const p = path.join(langDir, f);

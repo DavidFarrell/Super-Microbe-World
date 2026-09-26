@@ -115,11 +115,12 @@ export const tests = [
       const GOOD = [T.GOOD_MICROBE, T.GENERIC, T.SANDY, T.PATTY, T.STEVE, T.LUCY];
       const BAD = [T.BAD_MICROBE, T.COLIN, T.SLARG, T.SLURM, T.IGGY, T.DONNA];
       // Microbes whose frame-1 box is wider than their slot and reaches into neighbouring tiles in
-      // the original data (the microbe falls and walks out of it; section 3.17 of NOTES.md). The
+      // the original data (the microbe falls and walks out of it; section 3.17 of NOTES.md). Level
+      // 4's first Patty reaches into the loaf but also into the cheese below, and the two pushes
+      // cancel, so she stays on her spawn cell as in the captures (NOTES-levels-decisions.md 5). The
       // exit portal is not solid and is listed by rule below.
       const KNOWN_OVERLAPS = new Set([
         'alpha_level4 patty_icon@(4,11) loaf_end_L_obj@(4,14)', 'alpha_level4 patty_icon@(4,11) loaf_mid_obj@(4,15)',
-        'alpha_level4 patty_icon@(5,23) toast_jam_obj@(7,27)', 'alpha_level4 patty_icon@(5,51) pepper_obj@(4,55)',
         'alpha_level5 slurm_icon@(5,39) spot_small_obj@(6,40)',
         'alpha_level6 slarg_icon@(3,43) skin_surface_tile@(7,43)', 'alpha_level6 slarg_icon@(3,43) skin_surface_tile@(7,44)',
       ]);
@@ -174,6 +175,12 @@ export const tests = [
         for (let i = 0; i < 80; i++) game.step({});
         const pb = game.player.particle;
         assert(pb.supported && pb.position.y < 349.5 && game.player.lives === 3, `${name}: the player did not land on a tile (y ${pb.position.y}, supported ${pb.supported})`);
+        // Level 4's first Patty stands on the bread stick at her spawn cell (captures 050, 051),
+        // not pushed up into the air by the loaf and the cheese.
+        if (name === 'alpha_level4') {
+          const patty = game.entities.find(e => e && e.type === T.PATTY);
+          assert(patty && Math.abs(patty.particle.position.y - 200) < 0.5, `${name}: the first Patty left her spawn cell (y ${patty && patty.particle.position.y})`);
+        }
         // Art: every placed tile and entity (not the start marker) draws from the level's set.
         const set = new Set([...(atlas.sets['level' + n] || []), 'hud', 'entities']);
         for (const m of new Set([...L.tiles, ...L.entities].map(([, , id]) => def(id).movie))) {

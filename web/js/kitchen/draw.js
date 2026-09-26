@@ -143,11 +143,12 @@ export function drawHand(ctx, x, y, s, fill = '#f6c8a8', stroke = '#9a5c3c') {
   ctx.restore();
 }
 
-// A speech bubble with text (canvas), pointing down-left to (tx, ty).
-export function drawBubble(ctx, x, y, text, { font = '800 17px Baloo, "Trebuchet MS", sans-serif', fill = '#ffffff', ink = '#1b1640', tx = null, ty = null } = {}) {
+// A speech bubble with text (canvas), pointing down-left to (tx, ty), kept on the stage.
+export function drawBubble(ctx, x, y, text, { font = '800 17px Baloo, "Trebuchet MS", sans-serif', fill = '#ffffff', ink = '#1b1640', tx = null, ty = null, h = 30 } = {}) {
   ctx.save();
   ctx.font = font;
-  const w = Math.ceil(ctx.measureText(text).width) + 22, h = 30;
+  const w = Math.ceil(ctx.measureText(text).width) + 22;
+  x = Math.max(4 + w / 2, Math.min(796 - w / 2, x));   // stays on the stage (larger text sizes)
   ctx.fillStyle = fill; ctx.strokeStyle = 'rgba(27,22,64,0.55)'; ctx.lineWidth = 2;
   roundRect(ctx, x - w / 2, y - h / 2, w, h, 14); ctx.fill(); ctx.stroke();
   if (tx != null) {

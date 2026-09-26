@@ -22,7 +22,7 @@ resolved decisions are applied as they stand. Source paths are relative to
 | F8 | The chosen child is the player everywhere; the other child is the CPU and is named after that child (`cpuName`) | NOTES 2.8 #1, 11.1 #4; `GameShow.as:52,85-104`; `Player.as:30-32` | fixes the preload-time male branch |
 | F9 | Unlocks: level 1 is always open; a level opens when the journey reaches it, or when the level before it is completed from Level select. NOTES 11.1 #3 says "completed once"; unlocking on reaching makes practice of a level the player keeps failing possible (the evaluation lost 50% of players per level, `eval:78`) | NOTES 11.1 #3, 11.9 #20 | `unlock()` in `playAction()` and `playSingle()` |
 | F10 | Level select plays one level alone (briefing, level, results card) with no shrink or quiz, records a best score (points scored in that run), and offers Next level / Play again / Level select; failures offer Try again / Level select. "New best score!" only when the score beats the previous best (**bug fixed**: a tie showed it, because the card compared with the already updated best) | NOTES 11.1 #3 | `playSingle()` passes `prevBest`; results on the summary card (`kind: 'complete'`) |
-| F11 | Art for the next screen is fetched while the current one plays, as Flash preloaded every SWF before the splash (NOTES 2.1): the shrinking zone's sheet from New Game, Continue, and every quiz that a shrink follows; the next level's sheets (`sprites.loadForLevel`) or the kitchen's (`loadKitchenArt`) during the shrinking zone. Each area's loader is memoised, so nothing loads twice | NOTES 2.1 (port: lazy per area, no placeholder gameplay art) | `prefetchShrink()`, `prefetchAction()` |
+| F11 | Art for the next screen is fetched while the current one plays, as Flash preloaded every SWF before the splash (NOTES 2.1): the shrinking zone's sheet from New Game, Continue, and every quiz that a shrink follows; the next level's sheets (`sprites.loadForLevel`) or the kitchen's (`loadKitchenArt`) during the shrinking zone; the summary card's sheet while a level plays. Each area's loader is memoised, so nothing loads twice | NOTES 2.1 (port: lazy per area, no placeholder gameplay art) | `prefetchShrink()`, `prefetchAction()` |
 
 ## 2. Splash (`web/js/scenes/splash.js`)
 
@@ -108,7 +108,7 @@ resolved decisions are applied as they stand. Source paths are relative to
 ## 10b. Level select (`web/js/flow/levelSelect.js`)
 
 - Thumbnails: the level's first screen from its tile art, with the goal's ePhone picture chosen as the HUD chooses it (`goalImage()`, `goalPortrait()` from `platformer/hud.js`), including the Patty (level 4) and Iggy (level 7) portraits of decision 11.9 #9, composed with the HUD's layout from the microbe's idle frame (**bug fixed**: level 4 showed a letter "P" and level 7 the Slurm picture). `hud.js` keeps its portrait canvas private, so the layout is repeated here (request #8).
-- Cards: one `minmax(0, 1fr)` column, so the goal line ends with an ellipsis instead of widening the card; rows are `calc(89px + 29.5px * text scale)` high (the card's fixed parts plus its two text lines), so they grow with the text size and the grid scrolls at 130%; the round badge sits at the thumbnail's bottom left and the best score at its top right, so a six-digit best never covers the round (**bug fixed**: long goals spilled out of the cards, and at 130% the thumbnails shifted out and the goal line was clipped).
+- Cards: one `minmax(0, 1fr)` column, so the goal line ends with an ellipsis instead of widening the card; rows are `calc(89px + 29.5px * text scale)` high (the card's fixed parts plus its two text lines), so they grow with the text size and the grid scrolls at 115% (by about 9 stage px) and 130%; the round badge sits at the thumbnail's bottom left and the best score at its top right, so a six-digit best never covers the round (**bug fixed**: long goals spilled out of the cards, and at 130% the thumbnails shifted out and the goal line was clipped).
 
 ## 11. Open items
 
@@ -119,7 +119,7 @@ resolved decisions are applied as they stand. Source paths are relative to
 
 | Finding | Action | Verified by |
 |---|---|---|
-| Shrink / splash played placeholder art on a slow first load | Prefetch (F11); both scenes wait on a loading ring, placeholder only after a failed load | `flow-fixes`: shrinking zone test holds the sheet back and checks a dark stage, frame 1, no skip |
+| Shrink / splash played placeholder art on a slow first load | Prefetch (F11); both scenes wait on a loading ring, placeholder only after a failed load (the splash then draws a plain New Game button in the art's place) | `flow-fixes`: shrinking zone test holds the sheet back and checks a dark stage, frame 1, no skip; a scratch run with the sheets aborted: the splash menu comes up on the placeholder TV, the placeholder shrink plays and hands over to level 1 |
 | Round 1 lacked "Step right this way" | Cutscene says it after the closing line (F3) | `flow`: keyboard journey sees the line before the shrink |
 | `restartScope` missing | Setting and Game-tab toggle (F5b) | `flow-fixes`: flow rules test (round restart to level 1 with briefing, score kept) |
 | Continue after a fail skipped the briefing | Retry flag in memory only (F5) | `flow-fixes`: flow rules test; saved run has no `retry` |
