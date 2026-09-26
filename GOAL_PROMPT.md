@@ -31,7 +31,9 @@ Related Flash-era design docs, readable as text with the Drive `read_file_conten
 - `e-Bug Junior Game Documentation.doc` (in `e-Bug Source Folder`);
 - `Learning Outcomes and Game Mechanics.xls`, `food rules.txt` and `games strategy.txt` (under `e-Bug Source Folder / ebug_latest / games`).
 
-**Getting the binaries:** the Drive connector returns files as base64 into your context, so never pull large files that way. Use whichever of these two routes David chose:
+**Decisions already made by David (2026-09-26):** route (b) below is approved (temporarily share the `Junior Game` folder by link), and "mobile native" means an installable PWA.
+
+**Getting the binaries:** the Drive connector returns files as base64 into your context, so never pull large files that way. Use route (b), which David has approved. Route (a) is only relevant if `reference/` already exists:
 - **(a)** David has put the `Junior Game` folder into `reference/` and pushed it. Check for it first.
 - **(b)** David has approved temporary link sharing. Steps:
   1. Record the current permissions of the `Junior Game` folder with `get_file_permissions`.
