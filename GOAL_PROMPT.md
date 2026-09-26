@@ -17,13 +17,28 @@ The original Flash project is on David's Google Drive in the folder `comu346 / L
   - subfolders `assets/`, `Sandy Art/`, `Microbes_Motions/`, `tests/`;
 - **`senior/`**: a different game, so ignore it.
 
+This listing is partial. Every Drive listing returned a `nextPageToken`, so page every folder to the end before treating the inventory as complete. Also read these as text: `e-Bug_Junior_Game.html` / `e-Bug_Junior_Game2.html` (the SWF wrappers, which show how the SWFs load each other) and `params.txt`.
+
+**Flash level layouts win over Unity's.** Find the original level data first. Candidates:
+- the output of the `EBug Level Editor`;
+- XML under `levels/`;
+- `xml format.as` and `davidtest,xml.txt`;
+- layouts baked into the platformer SWF.
+
+Use the Unity scene layouts only as a fallback, and check them against Ruffle captures. The CS3-era `.fla` files are OLE binaries (Drive reports them as `application/msword`), so treat them as unparseable. The SWF and `.as` files are the sources.
+
 Related Flash-era design docs, readable as text with the Drive `read_file_content` tool:
 - `e-Bug Junior Game Documentation.doc` (in `e-Bug Source Folder`);
 - `Learning Outcomes and Game Mechanics.xls`, `food rules.txt` and `games strategy.txt` (under `e-Bug Source Folder / ebug_latest / games`).
 
 **Getting the binaries:** the Drive connector returns files as base64 into your context, so never pull large files that way. Use whichever of these two routes David chose:
 - **(a)** David has put the `Junior Game` folder into `reference/` and pushed it. Check for it first.
-- **(b)** David has approved temporary link sharing. List every file in the tree through the Drive tools, use `share_file` to make them viewable by anyone with the link (keep a record of the original permissions), download each file with curl from `drive.usercontent.google.com/download?id=<id>&export=download&resourcekey=<key>` (confirmed reachable), and then restore the original sharing.
+- **(b)** David has approved temporary link sharing. Steps:
+  1. Record the current permissions of the `Junior Game` folder with `get_file_permissions`.
+  2. Share the **folder** once, as viewable by anyone with the link. The files inside inherit it.
+  3. List every file through the Drive tools. Download each one with `curl -L` from `drive.usercontent.google.com/download?id=<id>&export=download&resourcekey=<key>` (the host is confirmed reachable).
+  4. Check every file's byte size against the Drive `fileSize`. A small HTML file means a login or virus-scan page came back instead of the file.
+  5. Revoke the folder share, and confirm with `get_file_permissions` that the permissions match the originals.
 
 If neither route is available, text-sized files (`.as`, `.txt`, `.xml`) can still come through `read_file_content`. Build from Unity plus those, and flag everything unconfirmed.
 
@@ -139,11 +154,13 @@ Fix bugs you find in the original logic wherever the intent is clear. Log each f
    - gamepad;
    - service worker registration (it may be blocked on that origin, in which case offline mode is simply off there).
 
-   Give David the link and ask him to open it on his phone and report back.
+   The probe must also check that the artifact page contract (the added document skeleton, gutters and theme tokens) does not break a fullscreen, letterboxed canvas. If it does, move hosting to GitHub Pages.
+
+   Give David the link and ask them to open it on their phone and report back. Mention that they must be signed in to claude.ai on that phone to open a private artifact.
 2. **Hosting.**
    - If the probe works, host the game as a claude.ai Artifact. The limits are 16 MB per file, 255 files and 64 MB per publish.
-   - Publish after the vertical slice, then republish to the **same URL** at every milestone, so David can play along on his phone.
-   - Keep third-party logos (e-Bug, HPA/UKHSA) out of the hosted build, because artifacts must not carry an organisation's branding.
+   - Publish after the vertical slice, then republish to the **same URL** at every milestone, so David can play along on a phone.
+   - Keep third-party logos (e-Bug, HPA/UKHSA) out of the hosted build, because artifacts must not carry an organisation's branding. Title the page "Super Microbe World".
    - If the artifact route fails, try GitHub Pages through a workflow on the branch. If that fails too, say so.
 3. **Local fallback,** always documented in `web/README.md`:
    ```
@@ -151,6 +168,8 @@ Fix bugs you find in the original logic wherever the intent is clear. Log each f
    npx serve web        # or: python3 -m http.server 8000 -d web
    ```
    ES modules do not load from `file://`, so a local server is required.
+
+   The README must also give David a one-liner to run the E2E suite on their own machine, for example `npm ci && npx playwright install chromium && npm test`. Installing Playwright browsers is correct there, but forbidden in this environment. The final report must include both the play command and the test command.
 
 ## End-to-end testing
 Use Playwright with the preinstalled Chromium. Do not run `playwright install`. Commit the tests under `web/tests/`, runnable with one command.
@@ -190,7 +209,7 @@ Use Playwright with the preinstalled Chromium. Do not run `playwright install`. 
 6. Write docs and commits in British English, with no em dashes.
 
 ## Definition of done
-- The full Flash game is playable from start to finish at a link David can click, on his phone and on desktop.
+- The full Flash game is playable from start to finish at a link David can click, on a phone and on desktop.
 - The branch runs locally with one command.
 - The E2E suite passes: every level is completed by the bot, and the full journey passes on mobile emulation and desktop.
 - The PWA installs and works offline, at least when served locally.
