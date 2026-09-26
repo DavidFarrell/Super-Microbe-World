@@ -27,10 +27,13 @@
 //                                  scale, frameCount, labels: { label: frame },
 //                                  frames: [ [image, x, y, w, h, originX, originY] | null, ... ] } } }
 //   frames[i] is Flash frame i + 1; originX/Y is the registration point from the rectangle's
-//   top-left in atlas pixels; scale is atlas pixels per stage pixel. A null frame falls back to
+//   top-left in atlas pixels; scale is atlas pixels per stage pixel. Rig symbols ("mode": "rig",
+//   the level 2-11 microbes) store parts once and a pose per frame in rig.frames; a frame with a
+//   pose draws the pose, others fall back to the image frames (label starts). A null frame falls back to
 //   the nearest earlier drawn frame of the same label; with none, nothing is drawn. Symbols the
 //   index does not list fall back to the debug shapes below, never to an error.
 import { CLIPS } from './data/clips.js';
+import { prefetchBlob, fetchBlob, loadJson } from '../core/assets.js';
 
 const DEBUG_STYLE = {
   // name prefix / exact -> [fill, stroke]
@@ -53,47 +56,145 @@ class Sprites {
     this.baseUrl = 'data/atlas/';
     this.index = null;
     this.indexLoading = null;
-    this.atlasLoads = new Map(); // atlas id -> Promise<boolean> (memoised, so loads are additive)
+    this.atlasLoads = new Map(); // atlas id -> Promise<boolean> (memoised, so loads are additive; a failure is dropped)
+    this.decoded = new Map();    // atlas id -> ImageBitmap[] of a loaded atlas (what release() frees)
+    this.kept = new Map();       // atlas id -> { data, pages: Blob[] }: parsed JSON and compressed bytes
+    this.failed = new Set();     // atlas ids whose last load failed (a scene can offer a retry)
     this.symbols = new Map();    // symbol -> { sym, images, atlas }
     this.bounds = new Map();     // debug size hints
+    this.debugDrawn = new Set(); // symbols drawn as debug shapes (tests: no art is missing)
     this._scratch = null;        // shared canvas for tinted draws
   }
 
-  // Loads web/data/atlas/index.json once. Never throws: without it every symbol uses the debug
-  // renderer.
+  // Loads web/data/atlas/index.json. Never throws: without it every symbol uses the debug
+  // renderer. A failed load is not kept, so the next call (a later screen) tries again.
   loadIndex(baseUrl = this.baseUrl) {
     if (this.indexLoading) return this.indexLoading;
     this.baseUrl = baseUrl;
-    this.indexLoading = (async () => {
+    const job = (async () => {
       try {
-        const res = await fetch(baseUrl + 'index.json');
-        if (!res.ok) return null;
-        this.index = await res.json();
+        this.index = await loadJson(baseUrl + 'index.json');
       } catch { this.index = null; }
+      if (!this.index && this.indexLoading === job) this.indexLoading = null;
       return this.index;
     })();
-    return this.indexLoading;
+    this.indexLoading = job;
+    return job;
   }
 
-  // Loads one atlas (JSON plus WebP pages). Memoised per atlas; failures leave the debug fallback.
+  // The index, asking twice if the first attempt fails (each attempt already retries a network
+  // error once, core/assets.js fetchOk).
+  async ensureIndex() {
+    return (await this.loadIndex()) || this.loadIndex();
+  }
+
+  // Loads one atlas (JSON plus WebP pages). Memoised per atlas while it loads or is loaded; a
+  // failure is forgotten (and noted in `failed`), so the next request downloads it again. A
+  // released atlas decodes again from the compressed bytes kept in memory, without the network.
   loadAtlas(id) {
     if (this.atlasLoads.has(id)) return this.atlasLoads.get(id);
     const job = (async () => {
+      if (!this.index) await this.ensureIndex();
       const a = this.index && this.index.atlases && this.index.atlases[id];
-      if (!a) return false;
+      if (!a) {
+        // No index (it failed to download): forget this attempt too, so a later load retries.
+        // An id the index does not list stays answered "no".
+        if (!this.index) { if (this.atlasLoads.get(id) === job) this.atlasLoads.delete(id); this.failed.add(id); }
+        return false;
+      }
       try {
-        const file = typeof a === 'string' ? a : a.json;
-        const res = await fetch(this.baseUrl + file);
-        if (!res.ok) return false;
-        const data = await res.json();
-        const dir = this.baseUrl + file.slice(0, file.lastIndexOf('/') + 1);
-        const images = await Promise.all((data.images || []).map(src => loadBitmap(dir + src)));
-        for (const [name, sym] of Object.entries(data.symbols || {})) this.symbols.set(name, { sym, images, atlas: id });
+        let kept = this.kept.get(id);
+        if (!kept) {
+          const file = typeof a === 'string' ? a : a.json;
+          const dir = this.baseUrl + file.slice(0, file.lastIndexOf('/') + 1);
+          const data = JSON.parse(await (await fetchBlob(this.baseUrl + file)).text());
+          const pages = await Promise.all((data.images || []).map(src => fetchBlob(dir + src)));
+          kept = { data, pages };
+        }
+        const images = await Promise.all(kept.pages.map(b => createImageBitmap(b)));
+        this.kept.set(id, kept);
+        if (this.atlasLoads.get(id) !== job) { closeAll(images); return false; }
+        this.decoded.set(id, images);
+        for (const [name, sym] of Object.entries(kept.data.symbols || {})) this.symbols.set(name, { sym, images, atlas: id });
+        this.failed.delete(id);
         return true;
-      } catch { return false; }
+      } catch {
+        if (this.atlasLoads.get(id) === job) this.atlasLoads.delete(id);
+        this.failed.add(id);
+        return false;
+      }
     })();
     this.atlasLoads.set(id, job);
     return job;
+  }
+
+  // Frees the decoded pages of loaded atlases (ImageBitmap.close()) and forgets their symbols,
+  // which then draw as debug shapes until the atlas is loaded again. The compressed bytes stay,
+  // so loading it again costs a decode but no download. An atlas still loading is left alone.
+  release(ids) {
+    for (const id of ids) {
+      const images = this.decoded.get(id);
+      if (!images) continue;
+      this.decoded.delete(id);
+      this.atlasLoads.delete(id);
+      for (const [name, e] of this.symbols) if (e.atlas === id) this.symbols.delete(name);
+      closeAll(images);
+    }
+  }
+
+  // Keeps only the given atlases decoded (and any still loading); returns the ids released.
+  releaseExcept(keep) {
+    const k = new Set(keep);
+    const ids = [...this.decoded.keys()].filter(id => !k.has(id));
+    this.release(ids);
+    return ids;
+  }
+
+  // Decoded RGBA bytes of every loaded atlas page (width x height x 4), for the memory spec.
+  decodedBytes() {
+    let n = 0;
+    for (const images of this.decoded.values()) for (const img of images) n += (img.width * img.height * 4) || 0;
+    return n;
+  }
+
+  // Ids and bitmaps of a private (uncached) atlas load, for one-off use such as Level select
+  // thumbnails: nothing is added to `symbols`, and the caller closes the bitmaps when done.
+  async loadPrivate(id) {
+    await this.ensureIndex();
+    const a = this.index && this.index.atlases && this.index.atlases[id];
+    if (!a) return null;
+    let kept = this.kept.get(id);
+    if (!kept) {
+      const file = typeof a === 'string' ? a : a.json;
+      const dir = this.baseUrl + file.slice(0, file.lastIndexOf('/') + 1);
+      const data = JSON.parse(await (await fetchBlob(this.baseUrl + file)).text());
+      const pages = await Promise.all((data.images || []).map(src => fetchBlob(dir + src)));
+      kept = { data, pages };
+      this.kept.set(id, kept);
+    }
+    const images = await Promise.all(kept.pages.map(b => createImageBitmap(b)));
+    return { data: kept.data, images };
+  }
+
+  // Downloads an atlas (its JSON and pages) without decoding it, for a screen that may come next;
+  // loadAtlas() then decodes from those bytes instead of fetching them. Nothing happens for an
+  // atlas that is already loading or loaded, so a prefetch never costs texture memory.
+  async prefetchAtlas(id) {
+    if (this.atlasLoads.has(id) || this.kept.has(id)) return;
+    await this.ensureIndex();
+    const a = this.index && this.index.atlases && this.index.atlases[id];
+    if (!a || this.atlasLoads.has(id)) return;
+    const file = typeof a === 'string' ? a : a.json;
+    const dir = this.baseUrl + file.slice(0, file.lastIndexOf('/') + 1);
+    await Promise.all([prefetchBlob(this.baseUrl + file), ...(a.images || []).map(src => prefetchBlob(dir + src))]);
+  }
+
+  // Prefetches (downloads only) a named set of index.json ("cutscene", "gameshow", ...) or a list
+  // of atlas ids.
+  async prefetchSet(nameOrIds) {
+    await this.ensureIndex();
+    const ids = Array.isArray(nameOrIds) ? nameOrIds : ((this.index && this.index.sets && this.index.sets[nameOrIds]) || []);
+    await Promise.all(ids.map(id => this.prefetchAtlas(id)));
   }
 
   // The atlases a level needs: its named set in index.json ("level1" for alpha_level1) plus the
@@ -115,9 +216,9 @@ class Sprites {
 
   // Loads what a level needs, reporting progress in bytes (from index.json) as onProgress(0..1).
   async loadForLevel(levelName, avatar, onProgress = () => {}) {
-    await this.loadIndex();
+    await this.ensureIndex();
     const ids = this.atlasesFor(levelName, avatar);
-    const size = id => (this.index.atlases[id] && this.index.atlases[id].bytes) || 1;
+    const size = id => (this.index && this.index.atlases[id] && this.index.atlases[id].bytes) || 1;
     const total = ids.reduce((n, id) => n + size(id), 0) || 1;
     let done = 0;
     onProgress(0);
@@ -150,24 +251,118 @@ class Sprites {
   drawSymbol(ctx, symbol, label, frameIndex, x, y, opts = {}) {
     const e = this.symbols.get(symbol);
     if (e) {
-      const f = this._frame(e.sym, label, Math.max(0, frameIndex | 0));
-      if (f) this._drawFrame(ctx, f, e.images, e.sym.scale || 1, x, y, opts);
+      const n = this._frameNumber(e.sym, label, Math.max(0, frameIndex | 0));
+      const pose = n && e.sym.rig ? e.sym.rig.frames[n - 1] : null;
+      if (pose != null) this._drawPose(ctx, e, pose, x, y, opts);
+      else {
+        const f = this._frame(e.sym, label, Math.max(0, frameIndex | 0));
+        if (f) this._drawFrame(ctx, f, e.images, e.sym.scale || 1, x, y, opts);
+      }
       return 'atlas';
     }
+    if (this.debugDrawn.size < 256) this.debugDrawn.add(symbol);
     drawDebugSymbol(ctx, symbol, label, frameIndex, x, y, opts, this.boundsOf(symbol));
     return 'debug';
   }
 
   // Draws Flash frame `frame` (1-based) of a symbol with its registration point at the current
   // transform's origin. For HUD parts placed through track matrices. Returns false when the frame
-  // has no art.
+  // has no art. Rig symbols draw their pose for the frame.
   drawFrame(ctx, symbol, frame = 1, opts = {}) {
     const e = this.symbols.get(symbol);
     if (!e) return false;
+    const pose = e.sym.rig ? e.sym.rig.frames[frame - 1] : null;
+    if (pose != null) { this._drawPose(ctx, e, pose, 0, 0, opts); return true; }
     const fr = (e.sym.frames || [])[frame - 1];
     if (!fr) return false;
     this._drawFrame(ctx, fr, e.images, e.sym.scale || 1, 0, 0, opts);
     return true;
+  }
+
+  // The 1-based frame a label plus an offset resolves to (the same rule as _frame), or null.
+  _frameNumber(sym, label, frameIndex) {
+    const n = sym.frameCount || (sym.frames || []).length;
+    if (!n) return null;
+    const start = label != null && sym.labels && sym.labels[label] != null ? sym.labels[label] : null;
+    return start != null ? Math.min(n, start + frameIndex) : (frameIndex % n) + 1;
+  }
+
+  // Cut-out rigs (web/NOTES-art-decisions.md section 2; tools/swf-sheet/atlas-draw.js): a pose
+  // is a list of [part, a, b, c, d, tx, ty] and each part is an atlas rectangle
+  // [image, x, y, w, h, originX, originY, partScale]. Flip, scale and pivot apply to the whole
+  // pose, as for a frame. With alpha below 1 or a tint the pose is first composed on a scratch
+  // canvas, so overlapping parts fade and tint as one picture (a microbe washing away does not
+  // turn see-through part by part).
+  _drawPose(ctx, e, p, x, y, { flipX = false, alpha = 1, scaleX = 1, scaleY = 1, pivotX = x, pivotY = y, tint = null, tintAmount = 1 } = {}) {
+    const rig = e.sym.rig, pose = rig.poses[p];
+    if (!pose || alpha <= 0) return;
+    ctx.save();
+    if (scaleX !== 1 || scaleY !== 1) {
+      ctx.translate(pivotX, pivotY);
+      ctx.scale(scaleX, scaleY);
+      ctx.translate(-pivotX, -pivotY);
+    }
+    ctx.translate(x, y);
+    if (flipX) ctx.scale(-1, 1);
+    const composite = alpha < 1 || (tint && tintAmount > 0);
+    if (!composite) {
+      drawPoseParts(ctx, rig, pose, e.images);
+    } else {
+      const b = this._poseBounds(e.sym, p);
+      const k = 2;   // scratch pixels per stage pixel (the atlases are drawn at 2x)
+      const w = Math.max(1, Math.ceil(b.w * k)), h = Math.max(1, Math.ceil(b.h * k));
+      const c = this._poseCanvas(w, h);
+      const g = c.getContext('2d');
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      g.globalCompositeOperation = 'source-over';
+      g.globalAlpha = 1;
+      g.clearRect(0, 0, w, h);
+      g.setTransform(k, 0, 0, k, -b.x * k, -b.y * k);
+      drawPoseParts(g, rig, pose, e.images);
+      if (tint && tintAmount > 0) {
+        g.setTransform(1, 0, 0, 1, 0, 0);
+        g.globalCompositeOperation = 'source-atop';
+        g.globalAlpha = Math.min(1, tintAmount);
+        g.fillStyle = tint;
+        g.fillRect(0, 0, w, h);
+        g.globalCompositeOperation = 'source-over';
+        g.globalAlpha = 1;
+      }
+      ctx.globalAlpha *= alpha;
+      ctx.drawImage(c, 0, 0, w, h, b.x, b.y, w / k, h / k);
+    }
+    ctx.restore();
+  }
+
+  // Bounds of a pose in the symbol's own units (cached per symbol and pose).
+  _poseBounds(sym, p) {
+    let cache = this._boundsCache || (this._boundsCache = new WeakMap());
+    let m = cache.get(sym);
+    if (!m) { m = new Map(); cache.set(sym, m); }
+    let b = m.get(p);
+    if (b) return b;
+    const rig = sym.rig, pose = rig.poses[p];
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (let i = 0; i < pose.length; i += 7) {
+      const [, , , w, h, ox, oy, s] = rig.parts[pose[i]];
+      const k = 1 / s;
+      const rx = -ox * k, ry = -oy * k, rw = w * k, rh = h * k;
+      const [a, bb, c, d, tx, ty] = [pose[i + 1], pose[i + 2], pose[i + 3], pose[i + 4], pose[i + 5], pose[i + 6]];
+      for (const [px, py] of [[rx, ry], [rx + rw, ry], [rx, ry + rh], [rx + rw, ry + rh]]) {
+        const X = a * px + c * py + tx, Y = bb * px + d * py + ty;
+        if (X < x0) x0 = X; if (X > x1) x1 = X; if (Y < y0) y0 = Y; if (Y > y1) y1 = Y;
+      }
+    }
+    b = isFinite(x0) ? { x: Math.floor(x0) - 1, y: Math.floor(y0) - 1, w: Math.ceil(x1 - x0) + 3, h: Math.ceil(y1 - y0) + 3 } : { x: 0, y: 0, w: 1, h: 1 };
+    m.set(p, b);
+    return b;
+  }
+
+  _poseCanvas(w, h) {
+    let c = this._poseScratch;
+    if (!c) c = this._poseScratch = typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(w, h) : Object.assign(document.createElement('canvas'), { width: w, height: h });
+    if (c.width < w || c.height < h) { c.width = Math.max(c.width, w); c.height = Math.max(c.height, h); }
+    return c;
   }
 
   boundsOf(symbol) {
@@ -192,7 +387,7 @@ class Sprites {
   _drawFrame(ctx, fr, images, scale, x, y, { flipX = false, alpha = 1, scaleX = 1, scaleY = 1, pivotX = x, pivotY = y, tint = null, tintAmount = 1 } = {}) {
     const [img, sx, sy, w, h, ox, oy] = fr;
     const page = images[img];
-    if (!page || alpha <= 0) return;
+    if (!drawable(page) || alpha <= 0) return;
     const k = 1 / scale;
     ctx.save();
     ctx.globalAlpha *= alpha;
@@ -233,11 +428,26 @@ class Sprites {
   }
 }
 
-async function loadBitmap(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`${url}: ${res.status}`);
-  return createImageBitmap(await res.blob());
+// Draws every part of a rig pose at the current origin (the symbol's registration point).
+function drawPoseParts(ctx, rig, pose, images) {
+  for (let i = 0; i < pose.length; i += 7) {
+    const [img, x, y, w, h, ox, oy, s] = rig.parts[pose[i]];
+    const page = images[img];
+    if (!drawable(page)) continue;
+    const k = 1 / s;
+    ctx.save();
+    ctx.transform(pose[i + 1], pose[i + 2], pose[i + 3], pose[i + 4], pose[i + 5], pose[i + 6]);
+    ctx.drawImage(page, x, y, w, h, -ox * k, -oy * k, w * k, h * k);
+    ctx.restore();
+  }
 }
+
+function closeAll(images) {
+  for (const img of images) { try { img.close(); } catch { /* already closed */ } }
+}
+
+// A closed ImageBitmap (its atlas released) has no size; drawing it would throw.
+export const drawable = page => !!page && page.width > 0;
 
 // ---------------------------------------------------------------------------------------------
 // Debug shapes: readable coloured boxes and simple faces, sized from the Flash bounds.

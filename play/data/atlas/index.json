@@ -37,7 +37,8 @@
     "Unit_4_Tile",
     "Unit_5_Tile",
     "Unit_6_Tile"
-   ]
+   ],
+   "jsonBytes": 5455
   },
   "microbe-lucy": {
    "json": "microbe-lucy.json",
@@ -48,7 +49,8 @@
    "pixels": 4194304,
    "symbols": [
     "lucy_icon"
-   ]
+   ],
+   "jsonBytes": 5555
   },
   "entities": {
    "json": "entities.json",
@@ -65,7 +67,8 @@
     "soap_projectile",
     "wbc_projectile",
     "camera_flash"
-   ]
+   ],
+   "jsonBytes": 5204
   },
   "hud": {
    "json": "hud.json",
@@ -89,7 +92,8 @@
     "tick_box_button",
     "ephone_ingame",
     "level_background"
-   ]
+   ],
+   "jsonBytes": 27084
   },
   "player-harry": {
    "json": "player-harry.json",
@@ -101,7 +105,8 @@
    "symbols": [
     "harry_lower",
     "harry_upper"
-   ]
+   ],
+   "jsonBytes": 11131
   },
   "player-amy": {
    "json": "player-amy.json",
@@ -113,18 +118,490 @@
    "symbols": [
     "amy_lower",
     "amy_upper"
-   ]
+   ],
+   "jsonBytes": 11358
   },
   "intro-level1": {
    "json": "intro-level1.json",
    "images": [
     "intro-level1-0.webp"
    ],
-   "bytes": 25126,
-   "pixels": 864864,
+   "bytes": 45352,
+   "pixels": 3239600,
    "symbols": [
     "level_intros"
-   ]
+   ],
+   "jsonBytes": 4692
+  },
+  "gameshow-bg": {
+   "json": "gameshow-bg.json",
+   "images": [
+    "gameshow-bg-0.webp"
+   ],
+   "bytes": 107696,
+   "pixels": 7323648,
+   "symbols": [
+    "gs_set",
+    "gs_podia",
+    "gs_score",
+    "gs_digit",
+    "gs_talkie",
+    "gs_question_board",
+    "gs_button_agree",
+    "gs_button_dont_know",
+    "gs_button_disagree"
+   ],
+   "jsonBytes": 6391
+  },
+  "gameshow-cast": {
+   "json": "gameshow-cast.json",
+   "images": [
+    "gameshow-cast-0.webp"
+   ],
+   "bytes": 1363078,
+   "pixels": 14680064,
+   "symbols": [
+    "gs_host",
+    "gs_harry",
+    "gs_amy"
+   ],
+   "jsonBytes": 1745854
+  },
+  "cutscene": {
+   "json": "cutscene.json",
+   "images": [
+    "cutscene-0.webp"
+   ],
+   "bytes": 25672,
+   "pixels": 1859584,
+   "symbols": [
+    "cut_details_form",
+    "cut_submit_button"
+   ],
+   "jsonBytes": 945
+  },
+  "shrink": {
+   "json": "shrink.json",
+   "images": [
+    "shrink-0.webp"
+   ],
+   "bytes": 196324,
+   "pixels": 2621440,
+   "symbols": [
+    "gs_shrinking_zone",
+    "shrink_harry",
+    "shrink_amy"
+   ],
+   "jsonBytes": 760608
+  },
+  "kitchen": {
+   "json": "kitchen.json",
+   "images": [
+    "kitchen-0.webp"
+   ],
+   "bytes": 438486,
+   "pixels": 10485760,
+   "symbols": [
+    "kitchen_bg",
+    "kitchen_counter",
+    "kitchen_sink",
+    "food_yogurt",
+    "food_clingfilm_yogurt",
+    "food_tomatoes",
+    "food_clingfilm_tomatoes",
+    "food_mouldy_bread",
+    "food_clingfilm_mouldy_bread",
+    "food_burst_yogurt",
+    "food_clingfilm_burst_yogurt",
+    "food_carrots",
+    "food_clingfilm_carrots",
+    "food_orange",
+    "food_clingfilm_orange",
+    "food_bananas",
+    "food_clingfilm_bananas",
+    "food_mouldy_orange",
+    "food_clingfilm_mouldy_orange",
+    "food_cheese",
+    "food_clingfilm_cheese",
+    "food_orange_juice",
+    "food_clingfilm_orange_juice",
+    "food_red_apple",
+    "food_clingfilm_red_apple",
+    "food_raw_lamb",
+    "food_clingfilm_raw_lamb",
+    "food_cooked_lamb",
+    "food_clingfilm_cooked_lamb",
+    "food_green_apple",
+    "food_clingfilm_green_apple",
+    "food_pear",
+    "food_clingfilm_pear",
+    "food_milk",
+    "food_clingfilm_milk",
+    "food_soup",
+    "food_clingfilm_soup",
+    "food_raw_chicken",
+    "food_clingfilm_raw_chicken",
+    "food_broccoli",
+    "food_clingfilm_broccoli",
+    "food_cooked_chicken",
+    "food_clingfilm_cooked_chicken",
+    "food_raw_sausages",
+    "food_clingfilm_raw_sausages",
+    "food_raw_steak",
+    "food_clingfilm_raw_steak",
+    "food_cooked_steak",
+    "food_clingfilm_cooked_steak",
+    "food_spring_onion",
+    "food_clingfilm_spring_onion",
+    "food_bread",
+    "food_clingfilm_bread",
+    "kitchen_intro0_bg",
+    "kitchen_intro1_bg",
+    "kitchen_intro2_bg",
+    "kitchen_intro3_bg",
+    "kitchen_intro0_screen",
+    "kitchen_click_button",
+    "kitchen_outro_bg"
+   ],
+   "jsonBytes": 27131
+  },
+  "kitchen-harry": {
+   "json": "kitchen-harry.json",
+   "images": [
+    "kitchen-harry-0.webp"
+   ],
+   "bytes": 168370,
+   "pixels": 2088960,
+   "symbols": [
+    "kitchen_harry"
+   ],
+   "jsonBytes": 288313
+  },
+  "kitchen-amy": {
+   "json": "kitchen-amy.json",
+   "images": [
+    "kitchen-amy-0.webp"
+   ],
+   "bytes": 258098,
+   "pixels": 2617344,
+   "symbols": [
+    "kitchen_amy"
+   ],
+   "jsonBytes": 260546
+  },
+  "splash": {
+   "json": "splash.json",
+   "images": [
+    "splash-0.webp"
+   ],
+   "bytes": 329026,
+   "pixels": 5240144,
+   "symbols": [
+    "splash_back",
+    "splash_studio",
+    "splash_casing",
+    "splash_shine",
+    "splash_glass",
+    "splash_tuning",
+    "splash_timeline",
+    "splash_new_game",
+    "splash_screen"
+   ],
+   "jsonBytes": 32747
+  },
+  "summary": {
+   "json": "summary.json",
+   "images": [
+    "summary-0.webp"
+   ],
+   "bytes": 11556,
+   "pixels": 2290000,
+   "symbols": [
+    "summary_page_bg",
+    "summary_click_button"
+   ],
+   "jsonBytes": 7103
+  },
+  "tiles-skin": {
+   "json": "tiles-skin.json",
+   "images": [
+    "tiles-skin-0.webp"
+   ],
+   "bytes": 191714,
+   "pixels": 743424,
+   "symbols": [
+    "lint_ball_obj",
+    "plaster_multi_bridge_obj",
+    "plaster_multi_end_obj",
+    "plaster_multi_start_obj",
+    "plaster_multi_mid_obj",
+    "plaster_singular_obj",
+    "scab_obj",
+    "splinter_obj",
+    "spot_large_obj",
+    "spot_ooze_obj",
+    "spot_small_obj",
+    "wart_obj",
+    "hair_base_obj",
+    "hair_horiz_obj",
+    "hair_horiz_end_obj",
+    "hair_slope_obj",
+    "hair_slope_end_obj",
+    "hair_slope_start_obj",
+    "hair_vert_obj",
+    "skin_base_tile",
+    "skin_surface_tile"
+   ],
+   "jsonBytes": 4238
+  },
+  "tiles-body": {
+   "json": "tiles-body.json",
+   "images": [
+    "tiles-body-0.webp"
+   ],
+   "bytes": 225524,
+   "pixels": 784384,
+   "symbols": [
+    "acid_pit_end_obj",
+    "acid_pit_mid_obj",
+    "acid_pit_start_obj",
+    "bone_end_obj",
+    "bone_mid_obj",
+    "bone_start_obj",
+    "bubble_obj",
+    "cell_front_obj",
+    "cell_side_obj",
+    "corner_l_tile",
+    "corner_r_tile",
+    "flesh_tile",
+    "flesh_gristle_1_tile",
+    "flesh_gristle_2_tile",
+    "flesh_gristle_3_tile",
+    "flesh_gristle_4_tile",
+    "flesh_gristle_5_tile",
+    "flesh_gristle_6_tile",
+    "floor_a_tile",
+    "floor_b_tile",
+    "platform_bridge_obj",
+    "platform_end_obj",
+    "platform_mid_obj",
+    "platform_start_obj",
+    "roof_a_tile",
+    "roof_b_tile",
+    "vertical_a_l_tile",
+    "vertical_a_r_tile",
+    "vertical_b_l_tile",
+    "vertical_b_r_tile",
+    "villi_floor_obj",
+    "villi_roof_obj"
+   ],
+   "jsonBytes": 6411
+  },
+  "tiles-kitchen2": {
+   "json": "tiles-kitchen2.json",
+   "images": [
+    "tiles-kitchen2-0.webp"
+   ],
+   "bytes": 94218,
+   "pixels": 512064,
+   "symbols": [
+    "Chop_L_Tile",
+    "Chop_Mid1_Tile",
+    "Chop_Mid2_Tile",
+    "Chop_Mid3_Tile",
+    "Chop_R_Tile",
+    "Sugar_Tile",
+    "loaf_mid_mould_obj",
+    "loaf_mid_mould2_obj",
+    "loaf_mid_mould3_obj",
+    "toast_jam_obj",
+    "toast_marm_obj"
+   ],
+   "jsonBytes": 2217
+  },
+  "microbe-steve": {
+   "json": "microbe-steve.json",
+   "images": [
+    "microbe-steve-0.webp"
+   ],
+   "bytes": 142750,
+   "pixels": 1019904,
+   "symbols": [
+    "steve_icon"
+   ],
+   "jsonBytes": 15663
+  },
+  "microbe-patty": {
+   "json": "microbe-patty.json",
+   "images": [
+    "microbe-patty-0.webp"
+   ],
+   "bytes": 218658,
+   "pixels": 1566720,
+   "symbols": [
+    "patty_icon"
+   ],
+   "jsonBytes": 93357
+  },
+  "microbe-slurm": {
+   "json": "microbe-slurm.json",
+   "images": [
+    "microbe-slurm-0.webp"
+   ],
+   "bytes": 213796,
+   "pixels": 1572864,
+   "symbols": [
+    "slurm_icon"
+   ],
+   "jsonBytes": 23343
+  },
+  "microbe-slarg": {
+   "json": "microbe-slarg.json",
+   "images": [
+    "microbe-slarg-0.webp"
+   ],
+   "bytes": 246764,
+   "pixels": 2097152,
+   "symbols": [
+    "slarg_icon"
+   ],
+   "jsonBytes": 47090
+  },
+  "microbe-donna": {
+   "json": "microbe-donna.json",
+   "images": [
+    "microbe-donna-0.webp"
+   ],
+   "bytes": 307224,
+   "pixels": 3145728,
+   "symbols": [
+    "donna_icon"
+   ],
+   "jsonBytes": 40803
+  },
+  "microbe-iggy": {
+   "json": "microbe-iggy.json",
+   "images": [
+    "microbe-iggy-0.webp"
+   ],
+   "bytes": 367240,
+   "pixels": 1384448,
+   "symbols": [
+    "iggy_icon"
+   ],
+   "jsonBytes": 46120
+  },
+  "microbe-superinfection": {
+   "json": "microbe-superinfection.json",
+   "images": [
+    "microbe-superinfection-0.webp"
+   ],
+   "bytes": 572020,
+   "pixels": 4104192,
+   "symbols": [
+    "superinfection_icon"
+   ],
+   "jsonBytes": 202489
+  },
+  "microbe-extras": {
+   "json": "microbe-extras.json",
+   "images": [
+    "microbe-extras-0.webp"
+   ],
+   "bytes": 769602,
+   "pixels": 5242880,
+   "symbols": [
+    "sandy_icon",
+    "super_colin_icon",
+    "super_slurm_icon"
+   ],
+   "jsonBytes": 100854
+  },
+  "entities2": {
+   "json": "entities2.json",
+   "images": [
+    "entities2-0.webp"
+   ],
+   "bytes": 13654,
+   "pixels": 400768,
+   "symbols": [
+    "milk_glass_icon",
+    "antibiotic_pickup"
+   ],
+   "jsonBytes": 2424
+  },
+  "hud2": {
+   "json": "hud2.json",
+   "images": [
+    "hud2-0.webp"
+   ],
+   "bytes": 57696,
+   "pixels": 1028096,
+   "symbols": [
+    "steve_image",
+    "slurm_image",
+    "milk_image",
+    "superinfection_image",
+    "sandy_image",
+    "slarg_image",
+    "kill_icon",
+    "antibiotic_icon",
+    "yog_icon"
+   ],
+   "jsonBytes": 1933
+  },
+  "intro-r1": {
+   "json": "intro-r1.json",
+   "images": [
+    "intro-r1-0.webp"
+   ],
+   "bytes": 303964,
+   "pixels": 5183360,
+   "symbols": [
+    "level_intros_level2",
+    "level_intros_level3",
+    "level_intros_level4"
+   ],
+   "jsonBytes": 12800
+  },
+  "intro-r2": {
+   "json": "intro-r2.json",
+   "images": [
+    "intro-r2-0.webp"
+   ],
+   "bytes": 425804,
+   "pixels": 11883872,
+   "symbols": [
+    "level_intros_level5",
+    "level_intros_level6",
+    "level_intros_level7"
+   ],
+   "jsonBytes": 13733
+  },
+  "intro-r3": {
+   "json": "intro-r3.json",
+   "images": [
+    "intro-r3-0.webp"
+   ],
+   "bytes": 30524,
+   "pixels": 863408,
+   "symbols": [
+    "level_intros_level8",
+    "level_intros_level9"
+   ],
+   "jsonBytes": 8841
+  },
+  "intro-r5": {
+   "json": "intro-r5.json",
+   "images": [
+    "intro-r5-0.webp"
+   ],
+   "bytes": 25910,
+   "pixels": 647920,
+   "symbols": [
+    "level_intros_level10"
+   ],
+   "jsonBytes": 5441
   }
  },
  "symbols": {
@@ -182,7 +659,191 @@
   "harry_upper": "player-harry",
   "amy_lower": "player-amy",
   "amy_upper": "player-amy",
-  "level_intros": "intro-level1"
+  "level_intros": "intro-level1",
+  "gs_set": "gameshow-bg",
+  "gs_podia": "gameshow-bg",
+  "gs_score": "gameshow-bg",
+  "gs_digit": "gameshow-bg",
+  "gs_talkie": "gameshow-bg",
+  "gs_question_board": "gameshow-bg",
+  "gs_button_agree": "gameshow-bg",
+  "gs_button_dont_know": "gameshow-bg",
+  "gs_button_disagree": "gameshow-bg",
+  "gs_host": "gameshow-cast",
+  "gs_harry": "gameshow-cast",
+  "gs_amy": "gameshow-cast",
+  "cut_details_form": "cutscene",
+  "cut_submit_button": "cutscene",
+  "gs_shrinking_zone": "shrink",
+  "shrink_harry": "shrink",
+  "shrink_amy": "shrink",
+  "kitchen_bg": "kitchen",
+  "kitchen_counter": "kitchen",
+  "kitchen_sink": "kitchen",
+  "food_yogurt": "kitchen",
+  "food_clingfilm_yogurt": "kitchen",
+  "food_tomatoes": "kitchen",
+  "food_clingfilm_tomatoes": "kitchen",
+  "food_mouldy_bread": "kitchen",
+  "food_clingfilm_mouldy_bread": "kitchen",
+  "food_burst_yogurt": "kitchen",
+  "food_clingfilm_burst_yogurt": "kitchen",
+  "food_carrots": "kitchen",
+  "food_clingfilm_carrots": "kitchen",
+  "food_orange": "kitchen",
+  "food_clingfilm_orange": "kitchen",
+  "food_bananas": "kitchen",
+  "food_clingfilm_bananas": "kitchen",
+  "food_mouldy_orange": "kitchen",
+  "food_clingfilm_mouldy_orange": "kitchen",
+  "food_cheese": "kitchen",
+  "food_clingfilm_cheese": "kitchen",
+  "food_orange_juice": "kitchen",
+  "food_clingfilm_orange_juice": "kitchen",
+  "food_red_apple": "kitchen",
+  "food_clingfilm_red_apple": "kitchen",
+  "food_raw_lamb": "kitchen",
+  "food_clingfilm_raw_lamb": "kitchen",
+  "food_cooked_lamb": "kitchen",
+  "food_clingfilm_cooked_lamb": "kitchen",
+  "food_green_apple": "kitchen",
+  "food_clingfilm_green_apple": "kitchen",
+  "food_pear": "kitchen",
+  "food_clingfilm_pear": "kitchen",
+  "food_milk": "kitchen",
+  "food_clingfilm_milk": "kitchen",
+  "food_soup": "kitchen",
+  "food_clingfilm_soup": "kitchen",
+  "food_raw_chicken": "kitchen",
+  "food_clingfilm_raw_chicken": "kitchen",
+  "food_broccoli": "kitchen",
+  "food_clingfilm_broccoli": "kitchen",
+  "food_cooked_chicken": "kitchen",
+  "food_clingfilm_cooked_chicken": "kitchen",
+  "food_raw_sausages": "kitchen",
+  "food_clingfilm_raw_sausages": "kitchen",
+  "food_raw_steak": "kitchen",
+  "food_clingfilm_raw_steak": "kitchen",
+  "food_cooked_steak": "kitchen",
+  "food_clingfilm_cooked_steak": "kitchen",
+  "food_spring_onion": "kitchen",
+  "food_clingfilm_spring_onion": "kitchen",
+  "food_bread": "kitchen",
+  "food_clingfilm_bread": "kitchen",
+  "kitchen_intro0_bg": "kitchen",
+  "kitchen_intro1_bg": "kitchen",
+  "kitchen_intro2_bg": "kitchen",
+  "kitchen_intro3_bg": "kitchen",
+  "kitchen_intro0_screen": "kitchen",
+  "kitchen_click_button": "kitchen",
+  "kitchen_outro_bg": "kitchen",
+  "kitchen_harry": "kitchen-harry",
+  "kitchen_amy": "kitchen-amy",
+  "splash_back": "splash",
+  "splash_studio": "splash",
+  "splash_casing": "splash",
+  "splash_shine": "splash",
+  "splash_glass": "splash",
+  "splash_tuning": "splash",
+  "splash_timeline": "splash",
+  "splash_new_game": "splash",
+  "splash_screen": "splash",
+  "summary_page_bg": "summary",
+  "summary_click_button": "summary",
+  "lint_ball_obj": "tiles-skin",
+  "plaster_multi_bridge_obj": "tiles-skin",
+  "plaster_multi_end_obj": "tiles-skin",
+  "plaster_multi_start_obj": "tiles-skin",
+  "plaster_multi_mid_obj": "tiles-skin",
+  "plaster_singular_obj": "tiles-skin",
+  "scab_obj": "tiles-skin",
+  "splinter_obj": "tiles-skin",
+  "spot_large_obj": "tiles-skin",
+  "spot_ooze_obj": "tiles-skin",
+  "spot_small_obj": "tiles-skin",
+  "wart_obj": "tiles-skin",
+  "hair_base_obj": "tiles-skin",
+  "hair_horiz_obj": "tiles-skin",
+  "hair_horiz_end_obj": "tiles-skin",
+  "hair_slope_obj": "tiles-skin",
+  "hair_slope_end_obj": "tiles-skin",
+  "hair_slope_start_obj": "tiles-skin",
+  "hair_vert_obj": "tiles-skin",
+  "skin_base_tile": "tiles-skin",
+  "skin_surface_tile": "tiles-skin",
+  "acid_pit_end_obj": "tiles-body",
+  "acid_pit_mid_obj": "tiles-body",
+  "acid_pit_start_obj": "tiles-body",
+  "bone_end_obj": "tiles-body",
+  "bone_mid_obj": "tiles-body",
+  "bone_start_obj": "tiles-body",
+  "bubble_obj": "tiles-body",
+  "cell_front_obj": "tiles-body",
+  "cell_side_obj": "tiles-body",
+  "corner_l_tile": "tiles-body",
+  "corner_r_tile": "tiles-body",
+  "flesh_tile": "tiles-body",
+  "flesh_gristle_1_tile": "tiles-body",
+  "flesh_gristle_2_tile": "tiles-body",
+  "flesh_gristle_3_tile": "tiles-body",
+  "flesh_gristle_4_tile": "tiles-body",
+  "flesh_gristle_5_tile": "tiles-body",
+  "flesh_gristle_6_tile": "tiles-body",
+  "floor_a_tile": "tiles-body",
+  "floor_b_tile": "tiles-body",
+  "platform_bridge_obj": "tiles-body",
+  "platform_end_obj": "tiles-body",
+  "platform_mid_obj": "tiles-body",
+  "platform_start_obj": "tiles-body",
+  "roof_a_tile": "tiles-body",
+  "roof_b_tile": "tiles-body",
+  "vertical_a_l_tile": "tiles-body",
+  "vertical_a_r_tile": "tiles-body",
+  "vertical_b_l_tile": "tiles-body",
+  "vertical_b_r_tile": "tiles-body",
+  "villi_floor_obj": "tiles-body",
+  "villi_roof_obj": "tiles-body",
+  "Chop_L_Tile": "tiles-kitchen2",
+  "Chop_Mid1_Tile": "tiles-kitchen2",
+  "Chop_Mid2_Tile": "tiles-kitchen2",
+  "Chop_Mid3_Tile": "tiles-kitchen2",
+  "Chop_R_Tile": "tiles-kitchen2",
+  "Sugar_Tile": "tiles-kitchen2",
+  "loaf_mid_mould_obj": "tiles-kitchen2",
+  "loaf_mid_mould2_obj": "tiles-kitchen2",
+  "loaf_mid_mould3_obj": "tiles-kitchen2",
+  "toast_jam_obj": "tiles-kitchen2",
+  "toast_marm_obj": "tiles-kitchen2",
+  "steve_icon": "microbe-steve",
+  "patty_icon": "microbe-patty",
+  "slurm_icon": "microbe-slurm",
+  "slarg_icon": "microbe-slarg",
+  "donna_icon": "microbe-donna",
+  "iggy_icon": "microbe-iggy",
+  "superinfection_icon": "microbe-superinfection",
+  "sandy_icon": "microbe-extras",
+  "super_colin_icon": "microbe-extras",
+  "super_slurm_icon": "microbe-extras",
+  "milk_glass_icon": "entities2",
+  "antibiotic_pickup": "entities2",
+  "steve_image": "hud2",
+  "slurm_image": "hud2",
+  "milk_image": "hud2",
+  "superinfection_image": "hud2",
+  "sandy_image": "hud2",
+  "slarg_image": "hud2",
+  "kill_icon": "hud2",
+  "antibiotic_icon": "hud2",
+  "yog_icon": "hud2",
+  "level_intros_level2": "intro-r1",
+  "level_intros_level3": "intro-r1",
+  "level_intros_level4": "intro-r1",
+  "level_intros_level5": "intro-r2",
+  "level_intros_level6": "intro-r2",
+  "level_intros_level7": "intro-r2",
+  "level_intros_level8": "intro-r3",
+  "level_intros_level9": "intro-r3",
+  "level_intros_level10": "intro-r5"
  },
  "sets": {
   "level1": [
@@ -197,7 +858,162 @@
   ],
   "player-amy": [
    "player-amy"
+  ],
+  "gameshow": [
+   "gameshow-bg",
+   "gameshow-cast"
+  ],
+  "cutscene": [
+   "gameshow-bg",
+   "gameshow-cast",
+   "cutscene"
+  ],
+  "shrink": [
+   "shrink"
+  ],
+  "kitchen": [
+   "kitchen",
+   "kitchen-harry",
+   "kitchen-amy"
+  ],
+  "kitchen-harry": [
+   "kitchen-harry"
+  ],
+  "kitchen-amy": [
+   "kitchen-amy"
+  ],
+  "splash": [
+   "splash"
+  ],
+  "summary": [
+   "summary"
+  ],
+  "level2": [
+   "tiles-skin",
+   "microbe-lucy",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r1"
+  ],
+  "level3": [
+   "tiles-skin",
+   "microbe-steve",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r1"
+  ],
+  "level4": [
+   "tiles-kitchen",
+   "tiles-kitchen2",
+   "microbe-patty",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r1"
+  ],
+  "level5": [
+   "tiles-skin",
+   "microbe-steve",
+   "microbe-slurm",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r2"
+  ],
+  "level6": [
+   "tiles-skin",
+   "microbe-slurm",
+   "microbe-slarg",
+   "microbe-donna",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r2"
+  ],
+  "level7": [
+   "tiles-body",
+   "microbe-iggy",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r2"
+  ],
+  "level8": [
+   "tiles-kitchen",
+   "tiles-kitchen2",
+   "microbe-lucy",
+   "entities2",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r3"
+  ],
+  "level9": [
+   "tiles-kitchen",
+   "tiles-kitchen2",
+   "microbe-lucy",
+   "entities2",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r3"
+  ],
+  "level10": [
+   "tiles-body",
+   "microbe-lucy",
+   "microbe-slurm",
+   "microbe-iggy",
+   "microbe-superinfection",
+   "entities2",
+   "entities",
+   "hud",
+   "hud2",
+   "intro-r5"
+  ],
+  "level11": [
+   "tiles-body",
+   "microbe-steve",
+   "microbe-slurm",
+   "microbe-donna",
+   "microbe-iggy",
+   "entities2",
+   "entities",
+   "hud",
+   "hud2"
+  ],
+  "extras": [
+   "microbe-extras"
+  ],
+  "intro-level2": [
+   "intro-r1"
+  ],
+  "intro-level3": [
+   "intro-r1"
+  ],
+  "intro-level4": [
+   "intro-r1"
+  ],
+  "intro-level5": [
+   "intro-r2"
+  ],
+  "intro-level6": [
+   "intro-r2"
+  ],
+  "intro-level7": [
+   "intro-r2"
+  ],
+  "intro-level8": [
+   "intro-r3"
+  ],
+  "intro-level9": [
+   "intro-r3"
+  ],
+  "intro-level10": [
+   "intro-r5"
   ]
  },
- "totalBytes": 2702624
+ "totalBytes": 9828218,
+ "totalJsonBytes": 3827874
 }

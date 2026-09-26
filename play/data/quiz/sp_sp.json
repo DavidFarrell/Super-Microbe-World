@@ -1,0 +1,518 @@
+{
+ "code": "sp_sp",
+ "source": "sp_sp_gameshow_round1-5.xml + sp_sp_introductions.xml (live 2009 build)",
+ "name": "Español",
+ "intro": [
+  "¡Hola! ¡Bienvenido al Concurso de Super Microbe World!",
+  "Enseguida vas a visitar el maravilloso mundo de los microbios.",
+  "Pero, primero, elige un personaje.",
+  "",
+  "Háblame de ti:",
+  "Apodo",
+  "Edad",
+  "Correo-e",
+  "No es esencial que nos des esta información, pero si lo haces, podrás participar en concursos y enterarte de nuevas versiones del juego.",
+  "Veamos cuánto sabes sobre los microbios."
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "name": "All About Microbes",
+   "intro": {
+    "blind": [
+     "¡Bienvenido a la primera RONDA DE PREGUNTAS A CIEGAS!",
+     "Voy a hacerte unas preguntas, pero NO te diré si las has acertado.",
+     "Sin embargo, si las aciertas, obtendrás más tarde una bonificación importante, así que hazlo lo mejor que puedas.",
+     "¡Vamos allá!"
+    ],
+    "normal": [
+     "¡Muy bien! ¡Tienes un talento innato para la tabla voladora!",
+     "Veamos ahora lo que has aprendido.",
+     "Recibirás 10 puntos por una respuesta correcta, pero si te equivocas, se darán puntos al otro jugador.",
+     "Así que, si NO SABES la respuesta, más vale asegurarte y decirlo.",
+     "¿Listo?",
+     "¡Vamos allá!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Si un microbio no se ve, es que no está",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": -1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Las bacterias y los virus son lo mismo",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": -1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Los hongos son microbios",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Los microbios pueden encontrarse en tus manos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "name": "Good and Bad Bugs",
+   "intro": {
+    "blind": [
+     "Bienvenido a la SEGUNDA ronda",
+     "Sin embargo, si las aciertas, obtendrás más tarde una bonificación importante, así que hazlo lo mejor que puedas.",
+     "¡Vamos allá!"
+    ],
+    "normal": [
+     "Veamos ahora lo que has aprendido.",
+     "Recibirás 10 puntos por una respuesta correcta, pero si te equivocas, se darán puntos al otro jugador.",
+     "Así que, si NO SABES la respuesta, más vale asegurarte y decirlo.",
+     "¿Listo?",
+     "¡Vamos allá!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Todas las bacterias son perjudiciales.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": -1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "El jabón puede utilizarse para eliminar bacterias perjudiciales.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "La tos y los resfriados suelen curarse sin medicamentos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Nuestro cuerpo tiene defensas naturales que nos protegen contra las infecciones",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 3,
+   "name": "Good Microbes",
+   "intro": {
+    "blind": [
+     "Bienvenido a la TERCERA ronda",
+     "¿Qué sabes sobre los microbios BENEFICIOSOS?",
+     "¡Vamos allá!"
+    ],
+    "normal": [
+     "Veamos ahora lo que has aprendido.",
+     "Recuerda que ganarás 10 puntos por cada respuesta acertada; pero, si te equivocas, será tu contrincante quien se los lleve.",
+     "Así que, si NO SABES la respuesta, más vale asegurarte y decirlo.",
+     "¿Listo?",
+     "¡Vamos allá!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Utilizamos los microbios beneficiosos para hacer alimentos como el pan y el yogur.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Todos los microbios nos son perjudiciales.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": -1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 4,
+   "name": "Food Hygiene",
+   "intro": {
+    "blind": [
+     "Bienvenido a la CUARTA ronda"
+    ],
+    "normal": [
+     "Veamos ahora lo que has aprendido.",
+     "Recuerda que ganarás 10 puntos por cada respuesta acertada; pero, si te equivocas, será tu contrincante quien se los lleve.",
+     "Así que si NO SABES la respuesta, más vale asegurarte y decirlo.",
+     "¿Listo?",
+     "¡Vamos allá!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "La carne cruda debe tener un estante firme para ella sola, a fin de impedir que los microbios perjudiciales se transfieran a otros alimentos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Las bebidas, como la leche, el yogur líquido y los zumos, van en la puerta de la nevera.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Se pueden guardar las latas abiertas en la nevera sin peligro.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": -1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "La fruta debe colocarse en el frutero.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Si estornudas, tienes que lavarte las manos antes de manipular los alimentos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 5,
+   "name": "Treatment of infection",
+   "intro": {
+    "blind": [
+     "Bienvenido a la ÚLTIMA ronda.",
+     "Ahora vamos a ver qué sabes sobre cómo nos recuperamos de las infecciones.",
+     "¡Vamos allá!"
+    ],
+    "normal": [
+     "Veamos ahora lo que has aprendido.",
+     "Recuerda que ganarás 10 puntos por cada respuesta acertada; pero, si te equivocas, será tu contrincante quien se los lleve.",
+     "Así que si NO SABES la respuesta, más vale asegurarte y decirlo.",
+     "¿Listo?",
+     "¡Vamos allá!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Los antibióticos matan bacterias.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Los antibióticos matan virus.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": -1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Los antibióticos curan cualquier enfermedad.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": -1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Los antibióticos pueden dañar a nuestros microbios beneficiosos además de a los perjudiciales.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Los antibióticos te ayudan cuando tienes tos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": -1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "La tos y los resfriados suelen curarse sin antibióticos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Verdadero",
+       "value": 1
+      },
+      {
+       "label": "No lo sé",
+       "value": 0
+      },
+      {
+       "label": "Falso",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

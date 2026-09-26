@@ -26,6 +26,10 @@ export const DEFAULT_KEYS = {
   answer1: ['Digit1', 'Numpad1'],
   answer2: ['Digit2', 'Numpad2'],
   answer3: ['Digit3', 'Numpad3'],
+  // Kitchen tools (web/js/kitchen/controls.js reads them by code; NOTES 5.6).
+  tissues: ['KeyT', 'Digit1', 'Numpad1'],
+  clingfilm: ['KeyC', 'Digit2', 'Numpad2'],
+  wash: ['KeyH', 'Digit3', 'Numpad3'],
 };
 
 // Defaults. reducedMotion / reducedShake are null, meaning "follow the OS preference".

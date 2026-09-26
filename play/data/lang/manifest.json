@@ -1,0 +1,39 @@
+{
+  "_comment": "Languages offered in game and the per-area string files loaded for each (data/lang/<code>/<namespace>.json). Codes follow the original XML prefixes: en = en_en. uiTables lists the languages that have UI string files; the others use English UI text with their own quiz text.",
+  "languages": [
+    "en",
+    "bg_fl",
+    "bg_fr",
+    "cz_cz",
+    "dk_dk",
+    "fr_fr",
+    "gk_gk",
+    "it_it",
+    "pl_pl",
+    "por_por",
+    "sp_sp"
+  ],
+  "namespaces": [
+    "platform",
+    "levels",
+    "gameshow",
+    "kitchen",
+    "flow"
+  ],
+  "names": {
+    "en": "English",
+    "bg_fl": "Nederlands (België)",
+    "bg_fr": "Français (Belgique)",
+    "cz_cz": "Čeština",
+    "dk_dk": "Dansk",
+    "fr_fr": "Français",
+    "gk_gk": "Ελληνικά",
+    "it_it": "Italiano",
+    "pl_pl": "Polski",
+    "por_por": "Português",
+    "sp_sp": "Español"
+  },
+  "uiTables": [
+    "en"
+  ]
+}

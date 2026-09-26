@@ -18,22 +18,54 @@ import { Particles, Shake, Popups, haptic } from '../core/fx.js';
 import { gameRng } from '../core/rng.js';
 import { ease, clamp } from '../core/tween.js';
 import { device, tp } from '../ui/prompts.js';
+import { openSettings } from '../flow/settings.js';
+import { confirmDialog, tickNav, ensureStyle } from '../flow/ui.js';
+import { fullscreenButton } from '../ui/fullscreen.js';
 import { PlatformGame, GAME_STATE } from './game.js';
 import { PlatformRenderer } from './render.js';
 import { Hud, goalText } from './hud.js';
 import { IntroPhone } from './intro.js';
 import { StepInput } from './controls.js';
 import { sprites } from './sprites.js';
-import { TICKS_PER_STEP, END, STAGE_W, STEP_MS, LEFT, S, T } from './constants.js';
+import { TICKS_PER_STEP, END, STAGE_W, STEP_MS, LEFT, S, T, G } from './constants.js';
 
 const TOUCH_PLAY = ['dpad', 'jump', 'fire', 'camera', 'pause', 'phone'];
 const HIT_STOP = { hurt: 4, kill: 3, photo: 2 };   // logic steps frozen for impact
 const SUCK_TICKS = 34;                              // player drawn into the portal
 const IRIS_TICKS = 36;                              // iris closing on the portal
 const FLYER_TICKS = 38;                             // photo sparkle flying to the ePhone
-// On-screen controls that fade while a target is under them (see updateOcclusion).
-const TOUCH_BUTTON_IDS = ['touch-left', 'touch-right', 'touch-jump', 'touch-fire', 'touch-camera', 'touch-pause', 'touch-phone'];
+// On-screen controls that fade while a target is under them (see updateOcclusion). The d-pad and
+// Jump, which a thumb holds most of the time (and so covers the target anyway), stay solid: a
+// control the child is pressing must not flicker between solid and ghosted.
+const TOUCH_BUTTON_IDS = ['touch-fire', 'touch-camera', 'touch-pause', 'touch-phone'];
 const PROJECTILE_TYPES = [T.BULLET, T.CAMERA_FLASH, T.ANTIBIOTIC_BOMB];
+
+// Sounds for the later levels' mechanics (the original had no sound at all).
+audio.defineSynth('antibioticBoom', (a, v) => {
+  a.tone({ type: 'sine', freq: 140, to: 40, dur: 0.45, vol: 0.22 * v });
+  a.noise({ dur: 0.5, vol: 0.2 * v, freq: 1600, to: 180, type: 'lowpass' });
+  [1320, 1760, 2349].forEach((f, i) => a.tone({ type: 'triangle', freq: f, dur: 0.16, vol: 0.05 * v, delay: 0.12 + i * 0.06 }));
+});
+audio.defineSynth('superHit', (a, v) => {
+  a.tone({ type: 'sawtooth', freq: 110, to: 55, dur: 0.4, vol: 0.12 * v });
+  a.tone({ type: 'square', freq: 220, to: 90, dur: 0.25, vol: 0.06 * v, delay: 0.05 });
+  a.noise({ dur: 0.25, vol: 0.1 * v, freq: 600, type: 'lowpass' });
+});
+audio.defineSynth('superDefeated', (a, v) => {
+  a.tone({ type: 'sawtooth', freq: 160, to: 40, dur: 0.7, vol: 0.12 * v });
+  a.noise({ dur: 0.6, vol: 0.14 * v, freq: 900, to: 120, type: 'lowpass' });
+  [523, 659, 784, 1047].forEach((f, i) => a.tone({ type: 'triangle', freq: f, dur: 0.18, vol: 0.09 * v, delay: 0.45 + i * 0.09 }));
+});
+audio.defineSynth('milkSplash', (a, v) => {
+  a.tone({ type: 'sine', freq: 520, to: 1300, dur: 0.12, vol: 0.12 * v });
+  a.noise({ dur: 0.2, vol: 0.08 * v, freq: 2500, to: 700 });
+});
+
+// The level-complete card's goal counter label for each goal type.
+function goalLabel(type) {
+  const key = type === G.KILL_ALL ? 'kill' : type === G.YOGURT ? 'yogurt' : type === G.ANTIBIOTIC ? 'antibiotic' : 'photo';
+  return t(`platform.goalLabel.${key}`);
+}
 
 // Tile id ranges in tile_definitions.xml (flash-platformer.md section 6.2), for the area music.
 const areaOf = id => (id <= 38 ? 'kitchen' : id <= 69 ? 'body' : id <= 92 ? 'skin' : null);
@@ -52,6 +84,13 @@ const STYLE = `
 .pf-stat span { font: 400 14px/1.2 var(--body-font); opacity: 0.85; }
 .pf-stat.score b { color: #ffd84a; }
 .pf-toggle { font-size: 16px; min-height: max(44px, calc(46px / var(--stage-scale, 1))); padding: 8px 18px 6px; }
+.pf-cam-badge { position: absolute; right: -6px; top: -6px; width: 40px; height: 22px; border-radius: 11px; background: #1b1640; border: 2px solid #fff; display: grid; place-items: center; pointer-events: none; animation: pf-badge-in 0.3s cubic-bezier(.2,1.6,.4,1) both; }
+.pf-cam-badge svg { width: 30px; height: 14px; }
+.pf-ammo-badge { position: absolute; right: -6px; top: -6px; min-width: 26px; height: 24px; padding: 0 5px; box-sizing: border-box; border-radius: 12px; background: #1b1640; border: 2px solid #fff; color: #fff; font: 800 14px/20px var(--ui-font); text-align: center; pointer-events: none; }
+.touch-btn.empty { opacity: 0.35; }
+@keyframes pf-badge-in { from { transform: scale(0.2); } to { transform: scale(1); } }
+html.reduced-motion .pf-cam-badge { animation: none; }
+.pf-art-retry { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); z-index: 6; font-size: 15px; min-height: max(40px, calc(44px / var(--stage-scale, 1))); padding: 6px 16px 4px; }
 .pf-intro { position: absolute; inset: 0; }
 .pf-intro-tap { position: absolute; inset: 0; cursor: pointer; }
 .pf-intro-next { position: absolute; right: 12px; bottom: 6px; }
@@ -89,6 +128,7 @@ export function platformScene(app) {
   let stats = { photos: 0 };
   let untrap = null;             // removes the open dialog's Tab trap
   let controlRects = null, controlKey = '';
+  let retryPrompt = null;        // the game-over card's prompt { node, dev }, re-worded per device
   const occluding = new Set();   // ids of touch controls currently faded over a target
 
   // ------------------------------------------------------------------------------------------
@@ -126,25 +166,62 @@ export function platformScene(app) {
     if (!document.getElementById('pf-scene-style')) document.head.append(el('style', { id: 'pf-scene-style' }, STYLE));
     const name = String(params.level || 'alpha_level1').replace(/\.xml$/, '');
     const avatar = params.avatar === 'amy' ? 'amy' : 'harry';
+    mode = 'loading';
+    loadProgress = 0;
+    let ids = [];
     try {
-      [levelData, levelIndex] = await Promise.all([
+      [levelData, levelIndex, ids] = await Promise.all([
         loadJson(`data/levels/${name}.json`),
         loadJson('data/levels/index.json').catch(() => null),
         sprites.loadForLevel(name, avatar, p => { loadProgress = p; }),
       ]);
     } catch (e) {
+      if (destroyed) return;
       console.warn(e);
-      mode = 'error';
-      showOverlay(el('div', { class: 'pf-card' }, el('h2', {}, t('level.notFound')), el('p', {}, t('level.notFoundText', { name })),
-        el('div', { class: 'row' }, button(t('ui.back'), () => app.scenes.go('splash'), { class: 'primary' }))));
+      // A missing level (404) cannot be fixed by asking again; anything else is the connection.
+      showLoadError(name, /\(404\)/.test(String(e && e.message)) ? 'missing' : navigator.onLine === false ? 'offline' : 'network');
       return;
     }
     if (destroyed) return;
+    // Pictures that did not download: offline, the level waits for the connection rather than
+    // playing with placeholder shapes; online, it plays and offers to fetch them again.
+    const missingArt = (ids || []).filter(id => sprites.failed.has(id));
+    if (missingArt.length && navigator.onLine === false) { showLoadError(name, 'offline'); return; }
     if (params.seed != null) gameRng.seed(Number(params.seed));
     const counts = {};
     for (const [, , id] of levelData.tiles) { const a = areaOf(id); if (a) counts[a] = (counts[a] || 0) + 1; }
     area = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'kitchen';
     startLevel();
+    if (missingArt.length) showArtRetry(name, avatar);
+  }
+
+  // The level could not be loaded: say why, and offer Try again (the loaders keep no failure, so
+  // a second attempt really downloads again) and Back.
+  function showLoadError(name, kind) {
+    mode = 'error';
+    const title = t(kind === 'missing' ? 'level.notFound' : kind === 'offline' ? 'level.offline' : 'level.loadFailed');
+    const text = kind === 'missing' ? t('level.notFoundText', { name }) : t(kind === 'offline' ? 'level.offlineText' : 'level.loadFailedText');
+    showOverlay(el('div', { class: 'pf-card', role: 'dialog', 'aria-label': title }, el('h2', {}, title), el('p', {}, text),
+      el('div', { class: 'row' },
+        kind === 'missing' ? null : button(t('level.retry'), () => { clearOverlay(); load(); }, { class: 'primary', id: 'pf-load-retry' }),
+        button(t('ui.back'), () => quit(), { class: kind === 'missing' ? 'primary' : '', id: 'pf-load-back' }))));
+  }
+
+  // Some of the level's pictures failed while online: a small button at the top fetches them
+  // again (meanwhile those symbols draw as clean placeholder shapes).
+  let artRetry = null;
+  function showArtRetry(name, avatar) {
+    if (artRetry) artRetry.remove();
+    const b = button(t('level.artMissing'), async () => {
+      b.disabled = true;
+      await sprites.loadForLevel(name, avatar);
+      if (destroyed) return;
+      if (sprites.atlasesFor(name, avatar).some(id => sprites.failed.has(id))) { b.disabled = false; return; }
+      b.remove();
+      if (artRetry === b) artRetry = null;
+    }, { class: 'pf-art-retry', id: 'pf-art-retry' });
+    artRetry = b;
+    app.ui.append(b);
   }
 
   function startLevel() {
@@ -175,16 +252,26 @@ export function platformScene(app) {
   // ------------------------------------------------------------------------------------------
   // The ePhone briefing: at level start, and re-opened with the phone action (pauses play).
   // ------------------------------------------------------------------------------------------
+  // The first briefing starts play as its phone starts shrinking, as the original did
+  // (PlatformGame.as:545-549: shrink(), start the clock, UPDATE_WORLD in one call), so the level
+  // runs under the phone as it turns away; a re-opened briefing resumes once the phone has gone.
   function showIntro(briefing) {
     clearOverlay();
+    if (intro) { intro.destroy(); intro = null; }   // the first phone may still be shrinking
     mode = briefing ? 'briefing' : 'intro';
     app.touch.hide();
     hud.setVisible(true);
-    intro = new IntroPhone({
+    const phone = new IntroPhone({
       app, title: game.level.title || 'level1', briefing, reducedMotion,
       phoneOffset: () => hud.phoneOffset(),
-      onDone: () => { intro.destroy(); intro = null; if (briefing) resume(); else beginPlay(); },
+      onShrinkStart: () => { if (!briefing && intro === phone && mode === 'intro') beginPlay(); },
+      onDone: () => {
+        if (intro !== phone) return;
+        intro.destroy(); intro = null;
+        if (briefing && mode === 'briefing') resume();
+      },
     });
+    intro = phone;
     intro.goalText = goalSentence();
     intro.refreshDom();
     audio.musicLevel(0.45);
@@ -211,6 +298,14 @@ export function platformScene(app) {
     mode = 'paused';
     audio.play('tap');
     audio.musicLevel(0.35);
+    showPauseCard();
+  }
+
+  // The pause card. Settings opens the flow's settings panel over it (web/js/flow/contract.md:
+  // the level stays paused and takes no input meanwhile); Level select leaves the level for the
+  // flow's Level select (NOTES 11.1 #3: reachable from the splash, the pause menu and the winner
+  // screen). A journey is saved at the start of every step, so Continue resumes this level.
+  function showPauseCard(focusId = null) {
     const soundLabel = () => (settings.get('muted') ? '🔇 ' + t('pause.soundOff') : '🔊 ' + t('pause.soundOn'));
     const toggle = button(soundLabel(), () => {
       settings.set('muted', !settings.get('muted'));
@@ -227,17 +322,64 @@ export function platformScene(app) {
       }, { id, class: 'pf-toggle', 'aria-pressed': String(!!settings.get(key)) });
       return b;
     };
+    const flow = app.flow;
     const card = el('div', { class: 'pf-card', role: 'dialog', 'aria-label': t('pause.title') },
       el('h2', {}, t('pause.title')),
       el('p', {}, goalSentence()),
       el('div', { class: 'row' },
         button(t('pause.resume'), () => resume(), { class: 'primary', id: 'pf-resume' }),
-        button(t('pause.restart'), () => restart(), { id: 'pf-restart' }),
-        button(t('pause.quit'), () => quit(), { id: 'pf-quit' })),
+        button(t('pause.restart'), () => confirmThen('restart', restart, 'pf-restart'), { id: 'pf-restart' }),
+        button(t('pause.quit'), () => confirmThen('leave', quit, 'pf-quit'), { id: 'pf-quit' })),
+      el('div', { class: 'row' },
+        button(t('pause.settings'), () => openSettingsOverlay(), { id: 'pf-settings', class: 'pf-toggle' }),
+        flow && typeof flow.openLevelSelect === 'function'
+          ? button(t('pause.levelSelect'), () => confirmThen('leave', () => flow.openLevelSelect(), 'pf-level-select'), { id: 'pf-level-select', class: 'pf-toggle' }) : null,
+        fullscreenButton(button, { id: 'pf-fullscreen', class: 'pf-toggle' })),
       el('div', { class: 'row' }, toggle,
         motionToggle('reducedMotion', 'pf-motion', 'pause.reduceMotion'),
         motionToggle('reducedShake', 'pf-shake', 'pause.reduceShake')));
-    showOverlay(card);
+    showOverlay(card, { focus: !focusId });
+    if (focusId) document.getElementById(focusId)?.focus({ preventScroll: true });
+  }
+
+  // Restart, Quit and Level select throw the level in progress away, so each asks first (No is
+  // focused, and Escape or Back answers No); one mis-tap next to Resume cannot lose a level. The
+  // card's own keys are off while the question is up; the flow's focus stack drives it.
+  let confirming = false;
+  async function confirmThen(kind, action, fromId) {
+    if (confirming || mode !== 'paused') return;
+    confirming = true;
+    if (untrap) { untrap(); untrap = null; }
+    nav = null;
+    ensureStyle();
+    const restartKind = kind === 'restart';
+    const ok = await confirmDialog(app.ui, {
+      title: t(restartKind ? 'pause.confirmRestart' : 'pause.confirmLeave'), text: t('pause.confirmText'),
+      yes: t(restartKind ? 'pause.confirmRestartYes' : 'pause.confirmLeaveYes'), no: t('pause.confirmNo'), danger: true,
+    });
+    confirming = false;
+    if (destroyed || mode !== 'paused') return;
+    if (ok) { action(); return; }
+    if (overlay) {
+      nav = focusNavigator(overlay);
+      untrap = trapFocus(overlay);
+      if (device() !== 'touch') document.getElementById(fromId)?.focus({ preventScroll: true });
+    }
+  }
+
+  // The flow's settings panel over the pause card. The card's own keyboard handling (arrow
+  // navigation and the Tab trap) is off while the panel is open; on close the card is built
+  // again, so its sound and motion toggles show what was changed in the panel.
+  function openSettingsOverlay() {
+    if (mode !== 'paused') return;
+    if (untrap) { untrap(); untrap = null; }
+    nav = null;
+    openSettings(app, {
+      onClose: () => {
+        if (destroyed || mode !== 'paused') return;
+        showPauseCard('pf-settings');
+      },
+    });
   }
 
   // Reduced motion can change mid-level (the pause toggle, or the OS setting while it is followed).
@@ -312,7 +454,7 @@ export function platformScene(app) {
       el('h2', {}, roundOver ? t('complete.round') : t('complete.title', { n })),
       el('div', { class: 'pf-stats' },
         stat('score', scoreEl, t('complete.score')),
-        g ? stat('goal', el('b', {}, `${Math.min(g.achieved, g.required)}/${g.required}`), t('complete.photos')) : null,
+        g ? stat('goal', el('b', {}, `${Math.min(g.achieved, g.required)}/${g.required}`), goalLabel(g.goalType)) : null,
         stat('time', el('b', {}, `${Math.floor(secsUsed / 60)}:${String(secsUsed % 60).padStart(2, '0')}`), t('complete.time')),
         stat('lives', el('b', {}, '♥'.repeat(Math.max(0, game.player.lives)) || '0'), t('complete.lives'))),
       el('div', { class: 'row' },
@@ -336,6 +478,9 @@ export function platformScene(app) {
   // The original's summary page: "You Died!" / "You ran out of time." and "click to try again".
   // Retrying keeps the score, as the original did. (The original restarted the round from its
   // first level; the flow controller can restore that through params.onGameOver.)
+  // The prompt follows the input device ("Press Enter" / "Tap"), and both are true: Enter retries
+  // whatever has focus (see update()), and a click or tap anywhere off the buttons retries, as the
+  // original's "click to try again" page did.
   function onGameOver() {
     mode = 'gameover';
     const reason = game.exitReason;
@@ -343,13 +488,32 @@ export function platformScene(app) {
     audio.play('gameOver');
     audio.musicLevel(0.3);
     if (typeof params.onGameOver === 'function') { params.onGameOver(result); return; }
+    const retry = () => { params = { ...params, intro: '0', score: game.score }; startLevel(); };
+    const prompt = el('p', {}, tp('gameover.retryPrompt'));
     const card = el('div', { class: 'pf-card', role: 'dialog', 'aria-label': reason === END.TIME ? t('gameover.time') : t('gameover.died') },
       el('h2', {}, reason === END.TIME ? t('gameover.time') : t('gameover.died')),
-      el('p', {}, tp('gameover.retryPrompt')),
+      prompt,
       el('div', { class: 'row' },
-        button(t('gameover.retry'), () => { params = { ...params, intro: '0', score: game.score }; startLevel(); }, { class: 'primary', id: 'pf-retry' }),
+        button(t('gameover.retry'), retry, { class: 'primary', id: 'pf-retry' }),
         button(t('gameover.quit'), () => quit(), { id: 'pf-quit' })));
     showOverlay(card);
+    retryPrompt = { node: prompt, dev: device() };
+    overlay.addEventListener('pointerdown', e => {
+      if (e.button > 0 || (e.target instanceof Element && e.target.closest('button'))) return;
+      e.preventDefault();
+      retry();
+    });
+  }
+
+  // Enter on the game-over or level-complete card when no card button has focus (after a click
+  // on the backdrop, or on touch, where nothing is focused): the card's main button. A focused
+  // button takes Enter natively, so it is not pressed twice.
+  function confirmCard() {
+    if (!overlay || !input.pressed('confirm')) return;
+    const a = document.activeElement;
+    if (a && a.tagName === 'BUTTON' && overlay.contains(a)) return;
+    const main = overlay.querySelector('#pf-retry, #pf-next');
+    if (main) main.click();
   }
 
   // ------------------------------------------------------------------------------------------
@@ -388,7 +552,7 @@ export function platformScene(app) {
           const b = e && e.artBounds ? e.artBounds() : { x: 0, y: 0, w: 40, h: 60 };
           const cx = f.x + b.x + b.w / 2, cy = f.y + b.y + b.h / 2;
           particles.emit(cx, cy, { count: 16, colors: ['#fff4a8', '#ffffff', '#6fe0a8'], shape: 'star', speed: 3.5, life: 30, size: 5, gravity: 0.05 });
-          popups.add('Snap!', cx, f.y + b.y - 8, { color: '#fff4a8', size: 22 });
+          popups.add(t('platform.snap'), cx, f.y + b.y - 8, { color: '#fff4a8', size: 22 });
           renderer.hitFlash(e, 7);
           hitStop = Math.max(hitStop, HIT_STOP.photo);
           shake.add(0.12);
@@ -465,8 +629,50 @@ export function platformScene(app) {
           app.announce(t('hud.portalOpen'));
           break;
         }
-        case 'yogurt': audio.play('yogurt'); particles.emit(f.x + 75, f.y + 60, { count: 24, colors: ['#ffd0e0', '#ffffff'], shape: 'star', speed: 3, life: 40, size: 6, gravity: 0.02 }); break;
-        case 'explode': audio.play('whoosh'); shake.add(0.7); haptic([40, 30, 60]); break;
+        case 'yogurt':
+          audio.play('yogurt');
+          particles.emit(f.x + 75, f.y + 60, { count: 24, colors: ['#ffd0e0', '#ffffff'], shape: 'star', speed: 3, life: 40, size: 6, gravity: 0.02 });
+          particles.emit(f.x + 75, f.y + 40, { count: 14, colors: ['#ffe6ef', '#ffffff', '#fff4a8'], shape: 'bubble', speed: 2, spread: 1.2, angle: -Math.PI / 2, life: 46, size: 6, gravity: -0.04 });
+          popups.add(t('platform.yogurt'), f.x + 75, f.y - 10, { color: '#ffe6ef', size: 24 });
+          if (f.entity) renderer.hitFlash(f.entity, 8);
+          shake.add(0.15);
+          haptic([20, 30, 20]);
+          break;
+        case 'milkHit':
+          audio.play('milkSplash');
+          particles.emit(f.x + 75, f.y + 20, { count: 16, colors: ['#ffffff', '#f4f6ff', '#dfe8ff'], shape: 'bubble', speed: 3, spread: 1.4, angle: -Math.PI / 2, life: 34, size: 5, gravity: 0.12 });
+          break;
+        case 'explode': {
+          // The antibiotic: a burst of capsule shards and sparkles where it went off (if in view),
+          // the original's whiteout, and a flash on every microbe it kills.
+          audio.play('antibioticBoom');
+          if (f.onScreen) {
+            particles.emit(f.x + 19, f.y + 8, { count: 26, colors: ['#ff3b4e', '#ffffff', '#ffd6dc'], shape: 'square', speed: 5.5, life: 36, size: 5, gravity: 0.12, drag: 0.94 });
+            particles.emit(f.x + 19, f.y + 8, { count: 22, colors: ['#ffffff', '#fff4a8', '#bff4ff'], shape: 'star', speed: 4, life: 44, size: 6, gravity: 0 });
+          }
+          for (const v of f.entities || []) {
+            renderer.hitFlash(v, 10);
+            const b = v.artBounds ? v.artBounds() : { x: 0, y: 0, w: 40, h: 60 };
+            particles.emit(v.particle.position.x + b.x + b.w / 2, v.particle.position.y + b.y + b.h / 2, { count: 10, colors: ['#ffffff', '#ffd6dc'], shape: 'star', speed: 2.5, life: 26, size: 4, gravity: 0 });
+          }
+          shake.add(0.7);
+          haptic([40, 30, 60]);
+          break;
+        }
+        case 'superHit': {
+          const e = f.entity;
+          const b = e && e.artBounds ? e.artBounds() : { x: 0, y: 0, w: 400, h: 190 };
+          const cx = f.x + b.x + b.w / 2, cy = f.y + b.y + b.h / 2;
+          audio.play(f.lives > 0 ? 'superHit' : 'superDefeated');
+          if (e) renderer.hitFlash(e, 12);
+          particles.emit(cx, cy, { count: f.lives > 0 ? 24 : 60, colors: ['#b04070', '#ff8fd0', '#ffffff', '#6a1a8a'], shape: f.lives > 0 ? 'bubble' : 'star', speed: f.lives > 0 ? 4 : 6, life: f.lives > 0 ? 34 : 60, size: f.lives > 0 ? 6 : 7, gravity: 0.03 });
+          const camX = game.camera.x;
+          if (f.lives > 0) popups.add('-1', clamp(cx, camX + 90, camX + 710), Math.max(70, f.y + b.y - 6), { color: '#ffd0f0', size: 26 });
+          if (f.lives <= 0) { hud.showBanner(t('platform.superDefeated')); app.announce(t('platform.superDefeated')); }
+          hitStop = Math.max(hitStop, HIT_STOP.kill);
+          shake.add(f.lives > 0 ? 0.35 : 0.8);
+          break;
+        }
         case 'playerKilled': shake.add(0.6); break;
         default: break;
       }
@@ -528,6 +734,7 @@ export function platformScene(app) {
   }
 
   function updateOcclusion() {
+    updatePhoneFade();
     const on = new Set();
     if (mode === 'play' && device() === 'touch') {
       const rects = stageControlRects();
@@ -549,6 +756,67 @@ export function platformScene(app) {
     }
   }
 
+  // The HUD ePhone (at the left edge in the touch layout) fades while the player or a live
+  // microbe or pickup is under it, as the touch controls do: level 5 starts with the player
+  // behind it on a phone.
+  const PHONE_FADE = 0.35;
+  function updatePhoneFade() {
+    if (!hud || !game) return;
+    let under = false;
+    if (mode === 'play' || mode === 'exiting') {
+      const r = hud.phoneRect();
+      const camX = game.camera.x;
+      const hit = (x, y, w, h) => r.x < x + w && x < r.x + r.w && r.y < y + h && y < r.y + r.h;
+      const pb = game.player.particle;
+      under = hit(pb.position.x - camX, pb.position.y, pb.width, pb.height);
+      for (let i = 1; !under && i < game.entities.length; i++) {
+        const e = game.entities[i];
+        if (!e || e.removed || e.state === S.BE_KILLED || e.state === S.IGNORE || PROJECTILE_TYPES.includes(e.type)) continue;
+        const a = e.artRect();
+        under = hit(a.x - camX, a.y, a.w, a.h);
+      }
+    }
+    const target = under ? PHONE_FADE : 1;
+    hud.phoneAlpha += (target - hud.phoneAlpha) * (reducedMotion ? 1 : 0.2);
+    if (Math.abs(target - hud.phoneAlpha) < 0.01) hud.phoneAlpha = target;
+  }
+
+  // While an antibiotic is carried the camera button throws it (PlayerEntity.as:193-197): the
+  // touch camera button wears a capsule badge and says so to screen readers.
+  let camBadge = null, camLabel = null;
+  function syncCameraBadge(on) {
+    const btn = document.getElementById('touch-camera');
+    if (!btn) return;
+    if (on && !camBadge) {
+      camLabel = btn.getAttribute('aria-label');
+      camBadge = el('span', { class: 'pf-cam-badge', 'aria-hidden': 'true' });
+      camBadge.innerHTML = '<svg viewBox="0 0 30 14"><rect x="1" y="1" width="28" height="12" rx="6" fill="#fff"/><path d="M7 1h8v12H7a6 6 0 0 1 0-12z" fill="#e8283c"/><rect x="1" y="1" width="28" height="12" rx="6" fill="none" stroke="#1b1640" stroke-width="1.2"/></svg>';
+      btn.append(camBadge);
+      btn.setAttribute('aria-label', t('platform.throwAntibiotic'));
+    } else if (!on && camBadge) {
+      camBadge.remove(); camBadge = null;
+      if (camLabel != null) btn.setAttribute('aria-label', camLabel);
+    }
+  }
+
+  // The Throw button: dimmed (and aria-disabled) while there is nothing to throw, which is the
+  // whole of seven levels, with the soap or white blood cell count on a badge when there is. It
+  // stays in place and tappable, so the layout and a thumb's reach never change.
+  let fireAmmo = null, fireBadge = null;
+  function syncFireButton(ammo) {
+    const n = mode === 'exited' ? null : Math.max(0, ammo | 0);
+    if (n === fireAmmo) return;
+    fireAmmo = n;
+    const btn = document.getElementById('touch-fire');
+    if (!btn) return;
+    btn.classList.toggle('empty', n === 0);
+    if (n === 0) btn.setAttribute('aria-disabled', 'true'); else btn.removeAttribute('aria-disabled');
+    if (n && n > 0) {
+      if (!fireBadge) { fireBadge = el('span', { class: 'pf-ammo-badge', 'aria-hidden': 'true' }); btn.append(fireBadge); }
+      fireBadge.textContent = String(n);
+    } else if (fireBadge) { fireBadge.remove(); fireBadge = null; }
+  }
+
   function startMusicWhenUnlocked() {
     if (musicOn || !audio.unlocked || !audio.ctx || audio.ctx.state !== 'running') return;
     musicOn = true;
@@ -561,7 +829,6 @@ export function platformScene(app) {
     enter(p = {}) {
       params = { ...p };
       app.touch.hide();
-      app.__platform = scene;
       settings.addEventListener('change', onSettingChange);
       window.__test && window.__test.register('platform', probe);
       load();
@@ -572,23 +839,37 @@ export function platformScene(app) {
       settings.removeEventListener('change', onSettingChange);
       mode = 'exited';
       updateOcclusion();
+      syncCameraBadge(false);
+      syncFireButton(0);
+      const fire = document.getElementById('touch-fire');
+      if (fire) { fire.classList.remove('empty'); fire.removeAttribute('aria-disabled'); }
+      if (fireBadge) { fireBadge.remove(); fireBadge = null; }
       clearOverlay();
       if (intro) intro.destroy();
       if (hud) hud.destroy();
       app.touch.hide();
       audio.stopMusic();
       window.__test && window.__test.unregister('platform');
-      if (app.__platform === scene) app.__platform = null;
     },
 
-    onHidden() { pause(); },
+    // The player is away. In play: the pause card. During the first briefing (which has no
+    // pause card): its autoplay stops, so it cannot start the level unattended.
+    onHidden() {
+      if (mode === 'intro' && intro) intro.suspendAutoplay();
+      else pause();
+    },
 
     update() {
       tick++;
+      // The flow's settings panel is open over the pause card: it has the input (contract.md).
+      if (app.flow && app.flow.overlayOpen) return;
+      if (confirming) { tickNav(); return; }   // a pause-card question is up (confirmThen)
       if (nav) nav();
       if (!game) return;
       startMusicWhenUnlocked();
       const dev = device();
+      // The first briefing's phone shrinking away over the running level (paused: it waits).
+      if (intro && mode !== 'intro' && mode !== 'briefing' && mode !== 'paused') intro.update();
       if (mode === 'intro' || mode === 'briefing') {
         if (intro) intro.update();
       } else if (mode === 'paused') {
@@ -621,16 +902,25 @@ export function platformScene(app) {
       } else if (mode === 'ending') {
         if (++endAge >= 40) onGameOver();
       } else if (mode === 'complete') {
+        confirmCard();
         // Confetti behind the summary card.
         if (!reducedMotion && tick % 4 === 0 && tick < 100000) screenFx.emit(80 + (tick * 37) % 640, -10, { count: 2, colors: ['#ffd84a', '#ff8a5c', '#5fd4ff', '#6fe0a8', '#ffffff'], shape: 'square', speed: 1.2, spread: 1, angle: Math.PI / 2, life: 150, size: 6, gravity: 0.03, drag: 0.99 });
+      } else if (mode === 'gameover') {
+        if (retryPrompt && retryPrompt.node.isConnected && retryPrompt.dev !== dev) {
+          retryPrompt.dev = dev;
+          retryPrompt.node.textContent = tp('gameover.retryPrompt');
+        }
+        confirmCard();
       }
       updateOcclusion();
+      syncCameraBadge(!!game.player.has_antibiotic && (mode === 'play' || mode === 'paused' || mode === 'briefing'));
+      syncFireButton(game.player.ammo);
       flash = Math.max(0, flash - 0.04);
       // Paused or briefing: the picture under the card or phone is frozen (particles, popups,
       // shake, sparkles in flight and HUD counters wait); only the HUD's layout follows the device.
       if (mode === 'paused' || mode === 'briefing') { hud.updateLayout(dev); return; }
       time += 0.015;
-      if (renderer) renderer.update();
+      if (renderer) { renderer.touchLayout = hud.touchMix > 0.5; renderer.update(); }
       hud.update(game, dev);
       updateFlyers();
       particles.update();
@@ -644,13 +934,16 @@ export function platformScene(app) {
       const a = mode === 'play' && !frozen ? Math.min(1, (phase + alpha) / TICKS_PER_STEP) : 1;
       game.camera.shakeX = shake.x;
       game.camera.shakeY = shake.y;
-      renderer.draw(ctx, a, time);
+      // While the first briefing is up the original had built no tiles yet (INIT_DIALOGUE comes
+      // before the first RENDER_WORLD, PlatformGame.as:540-551 and 1090-1107): only the
+      // background, the level's entities and the HUD show around the phone.
+      renderer.draw(ctx, a, time, { tiles: mode !== 'intro' });
       const vx = game.camera.viewX(a);
       particles.draw(ctx, vx, shake.y);
       popups.draw(ctx, vx, shake.y);
       if (flash > 0) { ctx.fillStyle = `rgba(255,255,255,${flash})`; ctx.fillRect(0, 0, 800, 450); }
       const introOn = !!intro;
-      hud.draw(ctx, game, { phone: !introOn, reducedMotion });
+      hud.draw(ctx, game, { phone: !introOn, reducedMotion, whiteout: game.whiteout / 100 });
       if (mode === 'exiting' || mode === 'complete') drawIris(ctx);
       screenFx.draw(ctx);
       for (const f of flyers) drawFlyer(ctx, f);
@@ -661,6 +954,7 @@ export function platformScene(app) {
   function drawLoading(ctx) {
     ctx.fillStyle = '#1b1640';
     ctx.fillRect(0, 0, 800, 450);
+    if (mode === 'error') return;   // the load error card is up
     ctx.fillStyle = 'rgba(255,255,255,0.15)';
     ctx.fillRect(250, 262, 300, 12);
     ctx.fillStyle = '#ff8a5c';
@@ -714,15 +1008,16 @@ export function platformScene(app) {
 
   // window.__test probe: everything a bot or test needs to plan moves.
   function probe() {
-    if (!game) return { level: params.level || null, state: mode, ui: mode, ready: false, loadProgress };
+    if (!game) return { level: params.level || null, avatar: params.avatar === 'amy' ? 'amy' : 'harry', state: mode, ui: mode, ready: false, loadProgress, error: mode === 'error' ? (overlay && overlay.querySelector('h2') || {}).textContent || '' : null };
     return {
-      ...game.snapshot(), ui: mode, ready: true, stageWidth: STAGE_W, levelWidth: game.level.width, levelRows: game.level.rows,
+      ...game.snapshot(), avatar: game.avatar, ui: mode, ready: true, stageWidth: STAGE_W, levelWidth: game.level.width, levelRows: game.level.rows,
       hitStop, device: device(), flyers: flyers.length, time,
       fx: { particles: particles.items.length, popups: popups.items.length, shake: shake.trauma },
       occluding: [...occluding].sort(), reducedMotion: !!reducedMotion,
-      intro: intro ? { phase: intro.phase, page: intro.page, pages: intro.pages.length, text: intro.text, briefing: intro.briefing } : null,
-      hud: hud ? { ticksShown: hud.ticksShown, touchLayout: hud.touchMix > 0.5, phone: hud.phoneRect() } : null,
-      music: musicOn,
+      intro: intro ? { phase: intro.phase, page: intro.page, pages: intro.pages.length, text: intro.text, briefing: intro.briefing, autoplay: intro.autoplayOn } : null,
+      tilesDrawn: renderer ? renderer.tilesDrawn || 0 : 0, bombHints: renderer ? renderer.bombHints || [] : [], whiteout: game.whiteout,
+      hud: hud ? { ticksShown: hud.ticksShown, touchLayout: hud.touchMix > 0.5, phone: hud.phoneRect(), phoneAlpha: hud.phoneAlpha, ...hud.goalPicture() } : null,
+      music: musicOn, artRetry: !!(artRetry && artRetry.isConnected),
     };
   }
 

@@ -314,6 +314,12 @@ export class AntibioticBombEntity extends GameEntity {
     this.state = BOMB.FALLING;
     this.minimumSpeedTrigger = 2;
     this.fuse = 0;   // steps left; the original compared getTimer() with a 2000 ms deadline
+    // Port fix (NOTES 11.9 #7): the original bomb only advanced while on screen
+    // (PlatformGame.as:621), so one that scrolled away never exploded and level 10 (six
+    // detonations, six pickups) could no longer be won. It now keeps advancing off screen. Its
+    // body still freezes off screen as in the original (renderPass), so a bomb that leaves the
+    // view in mid-air reads as landed (dy 0) and its fuse starts where it hangs.
+    this.advancesOffScreen = true;
   }
 
   advance() {

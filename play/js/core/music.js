@@ -59,3 +59,7 @@ export const SKIN = shift(KITCHEN, 2, 100, 'skin');
 export const BODY = shift(KITCHEN, -3, 92, 'body');
 
 export const AREA_MUSIC = { kitchen: KITCHEN, skin: SKIN, body: BODY };
+
+// Areas (game show, kitchen game, menus) register their own tracks here instead of editing
+// this file; audio.playMusic(AREA_MUSIC[name]) then plays them.
+export function defineTrack(name, track) { AREA_MUSIC[name] = track; }

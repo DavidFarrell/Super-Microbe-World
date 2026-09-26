@@ -1,0 +1,518 @@
+{
+ "code": "en",
+ "source": "en_en_gameshow_round1-5.xml + en_en_introductions.xml (live 2009 build)",
+ "name": "English",
+ "intro": [
+  "Hello and welcome to the Super Microbe World Game Show!",
+  "Soon you will be visiting the weird world of the microbe.",
+  "But first, who do you want to play as?",
+  "",
+  "Tell me a little about yourself:",
+  "Nickname",
+  "Age",
+  "email address",
+  "You don't need to give us this information, but if you do you'll be able to take part in competitions and hear about new versions of the game.",
+  "Let's see what you know about microbes."
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "name": "All About Microbes",
+   "intro": {
+    "blind": [
+     "Welcome to the first BLIND QUESTION ROUND!",
+     "I'm going to ask you some questions but I'm NOT going to tell you if you get them right!",
+     "If you get them right, you'll get a great bonus later though, so try your best.",
+     "Let's Go!"
+    ],
+    "normal": [
+     "Well done, you're a hoverboard natural!",
+     "Now let's see what you have learned.",
+     "You get 10 points for a correct answer, but if you get it wrong, the other player gets points.",
+     "so if you DON'T KNOW the answer, it's best to play it safe and say so!",
+     "Ready?",
+     "Let's Go!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "If you cannot see a microbe it is not there",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": -1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Bacteria and Viruses are the same",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": -1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Fungi are microbes",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Microbes are found on our hands",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "name": "Good and Bad Bugs",
+   "intro": {
+    "blind": [
+     "Welcome to the SECOND round",
+     "If you get them right, you'll get a great bonus later though, so try your best.",
+     "Let's Go!"
+    ],
+    "normal": [
+     "Now let's see what you have learned.",
+     "You get 10 points for a correct answer, but if you get it wrong, the other player gets points.",
+     "so if you DON'T KNOW the answer, it's best to play it safe and say so!",
+     "Ready?",
+     "Let's Go!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "All bacteria are harmful",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": -1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Soap can be used to wash away harmful bugs",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Most coughs and colds get better without medicine",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Our bodies have natural defences that protect us against infection.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 3,
+   "name": "Good Microbes",
+   "intro": {
+    "blind": [
+     "Welcome to the THIRD round",
+     "What do you know about USEFUL microbes?",
+     "Let's Go!"
+    ],
+    "normal": [
+     "Now let's see what you have learned.",
+     "Remember, 10 points for a correct answer, but if you get it wrong, the other player gets the points.",
+     "so if you DON'T KNOW the answer, it's best to play it safe and say so!",
+     "Ready?",
+     "Let's Go!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "We use useful microbes to make things like bread and yogurt",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "All microbes are harmful for us",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": -1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 4,
+   "name": "Food Hygiene",
+   "intro": {
+    "blind": [
+     "Welcome to the FOURTH round"
+    ],
+    "normal": [
+     "Now let's see what you have learned.",
+     "Remember, 10 points for a correct answer, but if you get it wrong, the other player gets the points.",
+     "So if you DON'T KNOW the answer, it's best to play it safe and say so!",
+     "Ready?",
+     "Let's go!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Raw meat should have a solid shelf all to itself to prevent harmful microbes getting on to other food.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Liquids like milk, yogurt and juice go in the fridge door.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "It is safe to put opened tins in the fridge.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": -1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Fruit should be put in the fruit bowl.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "If you sneeze, you should wash your hands before handling food.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 5,
+   "name": "Treatment of infection",
+   "intro": {
+    "blind": [
+     "Welcome to the FINAL round",
+     "This time we're going to see what you know about how you get better from infections",
+     "Let's go!"
+    ],
+    "normal": [
+     "Now let's see what you have learned.",
+     "Remember, 10 points for a correct answer, but if you get it wrong, the other player gets the points.",
+     "So if you DON'T KNOW the answer, it's best to play it safe and say so!",
+     "Ready?",
+     "Let's go!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Antibiotics kill bacteria",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotics kill viruses",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": -1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotics will cure any illness",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": -1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotics can harm our useful bacteria as well as harmful bacteria",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotics help when you have a cough",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": -1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Most coughs and colds get better without antibiotics",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Agree",
+       "value": 1
+      },
+      {
+       "label": "Don't Know",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

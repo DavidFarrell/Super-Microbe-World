@@ -66,6 +66,7 @@ export class PlatformGame {
     this.phoneExit = false;        // ePhone shows exit_status once the portal opens
     this.whiteout = 0;             // antibiotic flash, 100 -> 0
     this.portalId = -1;
+    this.renderCamX = null;        // camera x of the last render pass (tile solidity)
     this.build();
   }
 
@@ -252,10 +253,12 @@ export class PlatformGame {
     const pp = player.particle;
     this.camera.update(pp.position.x, pp.position.x + pp.width, pp.position.x - pp.previousPosition.x);
 
-    // 7. Advance every on-screen entity in index order (the player is index 0).
+    // 7. Advance every on-screen entity in index order (the player is index 0). A thrown
+    // antibiotic also advances off screen, so its fuse always runs out (NOTES 11.9 #7; the
+    // original froze it off screen and the level could become unwinnable).
     for (let i = 0; i < this.entities.length; i++) {
       const e = this.entities[i];
-      if (e && e.isOnScreen === true) {
+      if (e && (e.isOnScreen === true || (e.advancesOffScreen && !e.removed))) {
         const out = e.advance();
         if (out && out.length) for (const x of out) if (x) this.events.push(x);
       }
@@ -268,7 +271,10 @@ export class PlatformGame {
       const out = this.dispatch(e);
       if (out && out.length) for (const x of out) if (x) this.events.push(x);
     }
-    // 9. Physics. Collisions queue COLLIDE events for the next step.
+    // 9. Physics. Collisions queue COLLIDE events for the next step. Tiles are solid only while
+    // they overlap the view of the last render pass; that is re-derived here from the camera x it
+    // used, which changes nothing in play and lets planners' copies share the tile bodies.
+    this.solidTiles(this.renderCamX);
     this.ps.timeStep();
     // 10. The dirty check's side effect: every entity's x snaps to 0.1 px (section 2.2).
     for (const e of this.entities) if (e && e.particle) e.particle.position.x = round1(e.particle.position.x);
@@ -286,7 +292,17 @@ export class PlatformGame {
           this.fx.push({ type: 'pickup', x: t.particle.position.x, y: t.particle.position.y, white: t.white });
           return out;
         }
-        // (The +3 "bullet hits bad microbe" branch tested type 5, which is never assigned: dead code.)
+        // "Bullet hits bad microbe: +3" (PlatformGame.as:658-665, doc:1234). The original tested
+        // type 5 (GAME_ENTITY_BAD_MICROBE), which no entity is given, so it never paid out; the
+        // port awards it (NOTES 11.9 #10). One contact can reach the microbe twice (the physics
+        // pair event and the bullet's re-notify), so it is paid once per bullet, and only when the
+        // hit lands: an on-screen bad microbe that is not ignoring collisions (the superinfection
+        // shrugs bullets off and pays nothing).
+        if (t.isBad && other && other.type === T.BULLET && t.type !== T.SUPERINFECTION && !other.bonusPaid &&
+            t.isOnScreen && !t.removed && !t.ignoresCollisions()) {
+          other.bonusPaid = true;
+          this.events.push(ev(E.MODIFY_POINTS, t, [POINTS.BULLET_HIT]));
+        }
         return t.act(e);
       }
       case E.CREATE_SOAP_BULLET:
@@ -367,10 +383,20 @@ export class PlatformGame {
         this.fx.push({ type: 'yogurt', x: e.target.particle.position.x, y: e.target.particle.position.y });
         return out;
       }
-      default:
-        if (e.type === E.BE_HURT && e.target === player) this.fx.push({ type: 'hurt', x: player.particle.position.x, y: player.particle.position.y });
-        else if (e.type === E.BAD_MICROBE_WASH_AWAY) this.fx.push({ type: 'wash', x: e.target.particle.position.x, y: e.target.particle.position.y, entity: e.target });
-        return e.target ? e.target.act(e) : [];
+      default: {
+        const t = e.target;
+        if (e.type === E.BE_HURT && t === player) this.fx.push({ type: 'hurt', x: player.particle.position.x, y: player.particle.position.y });
+        else if (e.type === E.BAD_MICROBE_WASH_AWAY) this.fx.push({ type: 'wash', x: t.particle.position.x, y: t.particle.position.y, entity: t });
+        const milkBefore = t && t.type === T.MILK ? t.state : null;
+        const out = t ? t.act(e) : [];
+        // Cosmetic notifications for the scene (sounds, particles); never read by the simulation.
+        if (e.type === E.BE_HURT && t && t.type === T.SUPERINFECTION) {
+          this.fx.push({ type: 'superHit', x: t.particle.position.x, y: t.particle.position.y, lives: t.lives, entity: t });
+        } else if (e.type === E.MILK_GLASS_HIT && milkBefore !== t.state) {
+          this.fx.push({ type: 'milkHit', x: t.particle.position.x, y: t.particle.position.y, entity: t });
+        }
+        return out;
+      }
     }
   }
 
@@ -381,7 +407,11 @@ export class PlatformGame {
     for (let i = 0; i < this.entities.length; i++) {
       const x = this.entities[i];
       if (!x || x.isOnScreen !== true) continue;
-      if (ANTIBIOTIC_VICTIMS.includes(x.type)) victims.push(x);
+      // A bacterium that is already dying (BE_KILLED, its be_killed animation still playing for
+      // about a second) is not killed again. The original re-killed it and charged -10 or paid
+      // +15 once more for every explosion in that second (no state test, PlatformGame.as:829-857);
+      // with bombs now exploding off screen (NOTES 11.9 #7) two blasts a second apart are common.
+      if (ANTIBIOTIC_VICTIMS.includes(x.type)) { if (x.state !== S.BE_KILLED && !x.removed) victims.push(x); }
       else if (x.type === T.SUPERINFECTION) superRef = i;
     }
     let points = 0;
@@ -398,7 +428,7 @@ export class PlatformGame {
     // The original pushed goalevents.pop() even when it was empty (an undefined event, bug 7).
     for (const g of this.goals) { const ge = g.updateGoal(e); if (ge.length) out.push(ge.pop()); }
     this.whiteout = 100;
-    this.fx.push({ type: 'explode', x: e.target.particle.position.x, y: e.target.particle.position.y, victims: victims.length });
+    this.fx.push({ type: 'explode', x: e.target.particle.position.x, y: e.target.particle.position.y, victims: victims.length, entities: victims, onScreen: e.target.isOnScreen === true });
     return out;
   }
 
@@ -484,12 +514,19 @@ export class PlatformGame {
   // physics; on-screen entities in DYNAMIC / FALL / JUMP_MID regain physics. Also records each
   // clip's rendered position and mirroring, which hitTest and spawns read.
   // ------------------------------------------------------------------------------------------
-  renderPass() {
-    const camX = this.camera.x;
+  // Tiles overlapping the view of camera x camX are solid; before the first render pass
+  // (camX null) none is, as LOAD_TILES created them all physics exempt.
+  solidTiles(camX) {
     for (const t of this.tileBodies) {
       const sx = t.position.x - camX;
-      t.physicsExcempt = !(sx <= STAGE_W && sx + t.width > 0);
+      t.physicsExcempt = camX == null || !(sx <= STAGE_W && sx + t.width > 0);
     }
+  }
+
+  renderPass() {
+    const camX = this.camera.x;
+    this.renderCamX = camX;
+    this.solidTiles(camX);
     for (const e of this.entities) {
       if (!e) continue;
       // Box positions at this and the previous render, for drawing interpolation only.
@@ -512,6 +549,43 @@ export class PlatformGame {
         if (e.state === S.DYNAMIC || e.state === S.FALL || e.state === S.JUMP_MID) e.particle.physicsExcempt = false;
       }
     }
+  }
+
+  // ------------------------------------------------------------------------------------------
+  // A deep copy of the whole simulation, for planners (the level bots look ahead on copies).
+  // Immutable data is shared: the level, the options and the Flash timeline definitions. The
+  // physics system's collision callback is re-bound to the copy's own event queue. Stepping the
+  // copy never touches the original (unit test: identical inputs give identical snapshots).
+  // ------------------------------------------------------------------------------------------
+  clone() {
+    // Tile bodies never change except their solidity, which step() re-derives from renderCamX.
+    const shared = new Set([this.level, this.options, this.tileBodies, ...this.tileBodies]);
+    const seen = new Map();
+    const rec = v => {
+      if (v === null || typeof v !== 'object') return v;
+      if (shared.has(v) || Object.isFrozen(v)) return v;
+      let out = seen.get(v);
+      if (out) return out;
+      if (Array.isArray(v)) {
+        out = new Array(v.length);
+        seen.set(v, out);
+        for (let i = 0; i < v.length; i++) out[i] = rec(v[i]);
+        return out;
+      }
+      if (v instanceof Map) { out = new Map(); seen.set(v, out); for (const [k, x] of v) out.set(k, rec(x)); return out; }
+      if (v instanceof Set) { out = new Set(); seen.set(v, out); for (const x of v) out.add(rec(x)); return out; }
+      out = Object.create(Object.getPrototypeOf(v));
+      seen.set(v, out);
+      for (const k of Object.keys(v)) {
+        const x = v[k];
+        // Timeline definitions and their label tables are shared, read-only data.
+        out[k] = (k === 'def' || k === '_labelFrames') ? x : rec(x);
+      }
+      return out;
+    };
+    const copy = rec(this);
+    copy.ps.emit = c => copy.events.push(ev(E.COLLIDE, c.target, [c.other, c.change]));
+    return copy;
   }
 
   // ------------------------------------------------------------------------------------------
@@ -552,12 +626,5 @@ export class PlatformGame {
 const round3 = v => Math.round(v * 1000) / 1000;
 const TYPE_NAMES = Object.fromEntries(Object.entries(T).map(([k, v]) => [v, k.toLowerCase()]));
 const typeName = t => TYPE_NAMES[t] || String(t);
-
-// Convenience for tests and tools: a game that has already left its intro.
-export function createGame(levelData, opts) {
-  const g = new PlatformGame(levelData, opts);
-  g.start();
-  return g;
-}
 
 export { PLAYER_STATE };

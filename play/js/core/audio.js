@@ -66,6 +66,11 @@ class Audio {
 
   register(name, buffer) { if (buffer) this.buffers.set(name, buffer); }
 
+  // Lets each game area add its own synthesised effects without editing this file:
+  // fn(audio, volume, rate) builds the sound from audio.tone() / audio.noise().
+  defineSynth(name, fn) { SYNTHS[name] = fn; }
+  hasSound(name) { return this.buffers.has(name) || name in SYNTHS; }
+
   // Plays a named sound: a loaded buffer if present, else a synthesised effect.
   play(name, { volume = 1, rate = 1, pan = 0 } = {}) {
     const ctx = this.ctx;
@@ -144,7 +149,6 @@ const SYNTHS = {
   pickup: (a, v) => { a.tone({ type: 'square', freq: 988, dur: 0.07, vol: 0.08 * v }); a.tone({ type: 'square', freq: 1319, dur: 0.12, vol: 0.08 * v, delay: 0.07 }); },
   hurt: (a, v) => { a.tone({ type: 'sawtooth', freq: 420, to: 110, dur: 0.35, vol: 0.12 * v }); a.noise({ dur: 0.2, vol: 0.1 * v, freq: 900 }); },
   goal: (a, v) => [659, 784, 1047].forEach((f, i) => a.tone({ type: 'triangle', freq: f, dur: 0.14, vol: 0.12 * v, delay: i * 0.08 })),
-  portal: (a, v) => { a.tone({ type: 'sine', freq: 200, to: 1200, dur: 0.6, vol: 0.1 * v }); a.tone({ type: 'triangle', freq: 300, to: 1500, dur: 0.6, vol: 0.06 * v, delay: 0.05 }); },
   levelComplete: (a, v) => [523, 659, 784, 1047, 784, 1047].forEach((f, i) => a.tone({ type: 'square', freq: f, dur: i === 5 ? 0.4 : 0.12, vol: 0.09 * v, delay: i * 0.1 })),
   gameOver: (a, v) => [392, 349, 311, 262].forEach((f, i) => a.tone({ type: 'triangle', freq: f, dur: 0.3, vol: 0.12 * v, delay: i * 0.22 })),
   right: (a, v) => { a.tone({ type: 'triangle', freq: 784, dur: 0.1, vol: 0.14 * v }); a.tone({ type: 'triangle', freq: 1175, dur: 0.25, vol: 0.14 * v, delay: 0.1 }); },

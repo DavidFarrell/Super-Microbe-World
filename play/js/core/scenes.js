@@ -12,6 +12,9 @@ export class SceneManager extends EventTarget {
     this.current = null;
     this.registry = new Map();
     this.transition = null; // { phase: 'out'|'in', age, ticks, style, next, params, color, focus }
+    // Called between the old scene's exit() and the new one's enter(), when nothing draws the
+    // old screen any more: the flow frees the art the next screen does not need (flow.js).
+    this.beforeEnter = null;
   }
 
   register(name, factory) { this.registry.set(name, factory); }
@@ -31,6 +34,9 @@ export class SceneManager extends EventTarget {
     if (this.current) {
       this.current.exit && this.current.exit();
       this.app.ui.replaceChildren();
+    }
+    if (this.beforeEnter) {
+      try { this.beforeEnter(name, params); } catch (e) { console.warn(e); }
     }
     this.current = factory(this.app);
     this.current.name = name;

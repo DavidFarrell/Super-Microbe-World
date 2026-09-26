@@ -83,6 +83,6 @@ export const END = Object.freeze({ TIME: 0, DIE: 1, COMPLETE: 2 });
 
 // Scoring (flash-platformer.md section 3.10)
 export const POINTS = Object.freeze({
-  PICKUP: 7, KILL_BAD: 5, KILL_GOOD: -10, PHOTO_GOOD: 5, PHOTO_BAD: 15, MILK_HIT: 10, YOGURT: 50,
+  PICKUP: 7, BULLET_HIT: 3, KILL_BAD: 5, KILL_GOOD: -10, PHOTO_GOOD: 5, PHOTO_BAD: 15, MILK_HIT: 10, YOGURT: 50,
   ANTIBIOTIC_GOOD: -10, ANTIBIOTIC_BAD: 15, ANTIBIOTIC_SUPER: 30,
 });

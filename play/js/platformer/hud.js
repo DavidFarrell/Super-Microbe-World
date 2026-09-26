@@ -52,6 +52,74 @@ function goalMode(goal) {
   return 'camera_icon';
 }
 
+// Goal pictures the original lacked (NOTES.md 11.9 #9): level 4 (photograph Patty) had no
+// branch in CREATE_GUI and showed an empty screen, and every KILL_ALL level showed Slurm, even
+// level 7, where Iggy is the only bad microbe (PlatformGame.as:337-358). Both are built here
+// from the microbe's own idle frame, in the style of the shipped pictures (microbes on black
+// with a soft white glow, 151 x 168.5 status units). Layout entries are [centre x, centre y,
+// scale, flip] in status units. Level select draws the same pictures (web/js/flow/levelSelect.js)
+// through composePortrait() with its own art source.
+export const PORTRAITS = {
+  patty: { symbol: 'patty_icon', layout: [[75.5, 86, 0.82, false]] },
+  iggy: { symbol: 'iggy_icon', layout: [[48, 56, 1.3, false], [104, 50, 1.2, true], [112, 108, 1.35, true], [40, 116, 1.25, false], [76, 86, 1.45, false]] },
+};
+// Portrait size in status units (the goal pictures' 151 x 168.5), drawn at 2x.
+export const PORTRAIT_SIZE = { w: 151, h: 168.5, scale: 2 };
+const portraitCache = new Map();
+
+// The portrait for a goal, or null to keep the original picture. badTypes: the type ids of
+// the level's bad microbes.
+export function goalPortrait(goal, badTypes = []) {
+  if (!goal) return null;
+  if (goal.goalType === G.PHOTOGRAPH_SPECIFIC && goal.microbeType === T.PATTY) return 'patty';
+  if (goal.goalType === G.KILL_ALL && badTypes.length && badTypes.every(t => t === T.IGGY)) return 'iggy';
+  return null;
+}
+
+// Composes portrait `name` (a PORTRAITS key) into a new 302 x 337 canvas. sym is the microbe's
+// atlas symbol (for its idle frame's bounds); drawIdle(ctx, x, y, scale, flip) draws that idle
+// frame with its registration point at (x, y) in status units, scaled about that point and
+// mirrored when flip is set. Any art source works: the HUD passes the shared sprites, Level select
+// a privately loaded sheet it frees at once.
+export function composePortrait(name, sym, drawIdle) {
+  const p = PORTRAITS[name];
+  if (!p || !sym) return null;
+  const K = PORTRAIT_SIZE.scale, W = Math.round(PORTRAIT_SIZE.w * K), H = Math.round(PORTRAIT_SIZE.h * K);
+  const make = () => (typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(W, H) : Object.assign(document.createElement('canvas'), { width: W, height: H }));
+  // The idle frame's bounds about the registration point (its label-start image).
+  const fr = (sym.frames || [])[(sym.labels && sym.labels.idle ? sym.labels.idle : 1) - 1];
+  const s0 = sym.scale || 1;
+  const b = fr ? { x: -fr[5] / s0, y: -fr[6] / s0, w: fr[3] / s0, h: fr[4] / s0 } : { x: 0, y: 0, w: 50, h: 50 };
+  const art = make(), ag = art.getContext('2d');
+  ag.setTransform(K, 0, 0, K, 0, 0);
+  for (const [cx, cy, sc, flip] of p.layout) {
+    const rx = cx - (flip ? -(b.x + b.w / 2) : b.x + b.w / 2) * sc, ry = cy - (b.y + b.h / 2) * sc;
+    drawIdle(ag, rx, ry, sc, flip);
+  }
+  const out = make(), g = out.getContext('2d');
+  g.fillStyle = '#000';
+  g.fillRect(0, 0, W, H);
+  g.shadowColor = 'rgba(255, 255, 255, 0.85)';
+  g.shadowBlur = 7;
+  g.drawImage(art, 0, 0);
+  g.shadowBlur = 0;
+  g.drawImage(art, 0, 0);
+  return out;
+}
+
+// The HUD's portrait from the shared sprites, composed once and cached; null until its art is
+// loaded.
+export function portraitCanvas(name) {
+  if (portraitCache.has(name)) return portraitCache.get(name);
+  const p = PORTRAITS[name];
+  const sym = p && sprites.symbol(p.symbol);
+  if (!sym || !sprites.hasSymbol('status_background')) return null;
+  const out = composePortrait(name, sym, (ctx, x, y, sc, flip) =>
+    sprites.drawSymbol(ctx, p.symbol, 'idle', 0, x, y, { flipX: flip, scaleX: sc, scaleY: sc, pivotX: x, pivotY: y }));
+  if (out) portraitCache.set(name, out);
+  return out;
+}
+
 // Goal as a sentence, e.g. "Photograph 3 Lucy".
 export function goalText(goal) {
   const n = goal.required;
@@ -60,7 +128,7 @@ export function goalText(goal) {
     case G.PHOTOGRAPH_GOOD: return t('goal.photoGood', { n });
     case G.PHOTOGRAPH_ANY: return t('goal.photoAny', { n });
     case G.KILL_ALL: return t('goal.killAll', { n });
-    case G.YOGURT: return t('goal.yogurt', { n });
+    case G.YOGURT: return n === 1 ? t('goal.yogurtOne') : t('goal.yogurt', { n });
     case G.ANTIBIOTIC: return t('goal.antibiotic', { n });
     default: return t('goal.other');
   }
@@ -85,6 +153,7 @@ export class Hud {
     app.ui.append(this.live, this.phoneBtn);
     this.touchMix = 0;          // 0 = keyboard layout, 1 = touch layout (eased)
     this.visible = true;
+    this.phoneAlpha = 1;        // eased by the scene: faded while the player or a target is under it
   }
 
   // Starts a level: counters jump to the game's values without animating.
@@ -97,6 +166,8 @@ export class Hud {
     this.lives = game.player.lives;
     this.heartAnim = [0, 0, 0];     // ticks since each heart was lost (0 = not lost)
     this.goal = game.goalsView[0] || null;
+    const bad = [...new Set(game.entities.filter(e => e && e.isBad && e.type !== T.SUPERINFECTION).map(e => e.type))];
+    this.portrait = goalPortrait(this.goal, bad);
     this.ticksShown = game.goalTicks;
     this.heldTicks = 0;             // ticks still flying towards the phone (sparkle trails)
     this.tickPop = [0, 0, 0, 0, 0, 0];
@@ -115,13 +186,21 @@ export class Hud {
     return [Math.floor(v / 1000) % 10, Math.floor(v / 100) % 10, Math.floor(v / 10) % 10, v % 10];
   }
 
+  // What the ePhone status screen shows (for the test probe): picture and mode icon.
+  goalPicture() {
+    return {
+      picture: this.portalOpen ? 'exit_status' : this.portrait ? `portrait:${this.portrait}` : goalImage(this.goal),
+      mode: goalMode(this.goal),
+    };
+  }
+
   // A photo's sparkle trail is on its way: its tick box fills when it lands (landTick()).
   holdTick() { this.heldTicks++; }
   landTick() {
     this.heldTicks = Math.max(0, this.heldTicks - 1);
   }
 
-  showBanner(text, ticks = 170) { this.banner = { text, age: 0, ticks }; }
+  showBanner(text, ticks = 170) { this.banner = { text, age: 0, ticks }; this.bannerY = null; }
 
   // Per engine tick while the game is paused: only the layout follows the input device.
   updateLayout(device) {
@@ -169,6 +248,9 @@ export class Hud {
     if (this.flip > 0 && this.flip < 1) this.flip = Math.min(1, this.flip + 0.045);
     if (this.ring > 0) this.ring = this.ring >= 60 ? 0 : this.ring + 1;
     if (this.banner && ++this.banner.age > this.banner.ticks) this.banner = null;
+    // The banner moves down out of the way while the player rides along the top of the screen.
+    const want = game.player.particle.position.y < 150 ? 250 : 78;
+    this.bannerY = this.bannerY == null ? want : this.bannerY + (want - this.bannerY) * 0.15;
 
     if (game.secondsLeft !== this.secs) { this.secs = game.secondsLeft; if (this.secs <= 20) this.timerPulse = 1; }
     this.timerPulse = Math.max(0, this.timerPulse - 0.04);
@@ -212,7 +294,7 @@ export class Hud {
     const phone = sprites.symbol('e_phone'), status = sprites.symbol('status');
     const [dx, dy] = this.phoneOffset();
     if (!phone || !status) { const r = this.phoneRect(); return { x: r.x + r.w / 2, y: r.y + r.h * 0.75 }; }
-    const s = phone.tracks.screen[1], b = status.tracks['button' + (i + 1)][0];
+    const s = phone.tracks.screen[1], b = status.tracks['button' + (clamp(i, 0, 5) + 1)][0];
     // box centre (9, 9) through button matrix, then screen matrix, then root + layout offset
     const bx = b[0] * 9 + b[2] * 9 + b[4], by = b[1] * 9 + b[3] * 9 + b[5];
     const sx = s[0] * bx + s[2] * by + s[4], sy = s[1] * bx + s[3] * by + s[5];
@@ -220,9 +302,13 @@ export class Hud {
   }
 
   // Draws the HUD. game: the PlatformGame; opts.phone = false hides the ePhone (while the intro
-  // animates it).
-  draw(ctx, game, { phone = true, reducedMotion = false } = {}) {
-    if (!this.visible) return;
+  // animates it). opts.whiteout (0..1): the antibiotic whiteout, which in the original (root
+  // depth 194, NOTES.md 3.24) covered the timer (125), held antibiotic (123), hearts (111-119)
+  // and score (89). The ePhone's depth after INIT_DIALOGUE's swapDepths
+  // (this.getNextHighestDepth() of the game clip, PlatformGame.as:542) cannot be read from the
+  // sources; the port keeps the phone and the banner above the white.
+  draw(ctx, game, { phone = true, reducedMotion = false, whiteout = 0 } = {}) {
+    if (!this.visible) { drawWhiteout(ctx, whiteout); return; }
     const have = sprites.hasSymbol('score');
     this.drawTimer(ctx, game, have);
     if (have) this.drawScore(ctx, reducedMotion); else this.drawFallbackScore(ctx);
@@ -234,7 +320,8 @@ export class Hud {
       sprites.drawSymbol(ctx, 'antibiotic_pickup', null, 0, 0, 0);
       ctx.restore();
     }
-    if (phone) this.drawPhone(ctx, game, reducedMotion);
+    drawWhiteout(ctx, whiteout);
+    if (phone) this.drawPhone(ctx, game, reducedMotion, { alpha: this.phoneAlpha });
     if (this.banner) this.drawBanner(ctx);
   }
 
@@ -360,16 +447,21 @@ export class Hud {
     const sx = f > 0 && f < 1 ? Math.abs(Math.cos(f * Math.PI)) : 1;
     ctx.translate(75.35, 0); ctx.scale(sx, 1); ctx.translate(-75.35, 0);
     const img = showExit ? 'exit_status' : goalImage(this.goal);
-    if (!sprites.drawFrame(ctx, img, 1)) sprites.drawFrame(ctx, 'status_background', 1);
+    const portrait = !showExit && this.portrait ? portraitCanvas(this.portrait) : null;
+    if (portrait) ctx.drawImage(portrait, 0, 0, portrait.width, portrait.height, 0, 0, portrait.width / 2, portrait.height / 2);
+    else if (!sprites.drawFrame(ctx, img, 1)) sprites.drawFrame(ctx, 'status_background', 1);
     if (showExit && f < 1) { ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = (1 - f) * 1.6; sprites.drawFrame(ctx, 'exit_status', 1); }
     ctx.restore();
     const mode = goalMode(this.goal);
     if (mode) { ctx.save(); mat(ctx, st.tracks.mode[0]); sprites.drawFrame(ctx, mode, 1); ctx.restore(); }
+    // Every counted goal event ticks the next box, with no bound (PlatformGame.as:918-925), so an
+    // overshoot (two kills in one step in levels 5 and 6, which place 4 bad microbes for 3) also
+    // ticks a grey box.
     const required = this.goal ? this.goal.required : 0;
     for (let b = 0; b < 6; b++) {
       ctx.save();
       mat(ctx, st.tracks['button' + (b + 1)][0]);
-      const state = b < this.ticksShown && b < required ? 'tick' : b < required ? 'empty' : 'grey';
+      const state = b < this.ticksShown ? 'tick' : b < required ? 'empty' : 'grey';
       const p = this.tickPop[b];
       if (p) { const s = 1 + 0.6 * Math.sin(p * Math.PI) * p; ctx.translate(9, 9); ctx.scale(s, s); ctx.translate(-9, -9); }
       sprites.drawFrame(ctx, 'tick_box_button', TICK_FRAME[state]);
@@ -384,7 +476,7 @@ export class Hud {
     roundRectPath(ctx, r.x, r.y, r.w, r.h, 12); ctx.fill(); ctx.stroke();
     const req = this.goal ? this.goal.required : 0;
     for (let b = 0; b < 6; b++) {
-      ctx.fillStyle = b < this.ticksShown && b < req ? '#3c3' : b < req ? '#fff' : '#555';
+      ctx.fillStyle = b < this.ticksShown ? '#3c3' : b < req ? '#fff' : '#555';
       ctx.fillRect(r.x + 10 + (b % 3) * 26, r.y + 110 + Math.floor(b / 3) * 26, 18, 18);
     }
     ctx.restore();
@@ -396,7 +488,7 @@ export class Hud {
     ctx.save();
     ctx.font = '800 24px Baloo, "Trebuchet MS", sans-serif';
     const w = ctx.measureText(b.text).width + 44;
-    ctx.translate(400, 78);
+    ctx.translate(400, this.bannerY ?? 78);
     ctx.scale(0.6 + 0.4 * k, 0.6 + 0.4 * k);
     ctx.globalAlpha = clamp(k, 0, 1);
     ctx.fillStyle = 'rgba(27, 22, 64, 0.86)';
@@ -410,6 +502,15 @@ export class Hud {
   setVisible(v) { this.visible = v; this.placePhoneButton(); }
 
   destroy() { this.live.remove(); this.phoneBtn.remove(); }
+}
+
+function drawWhiteout(ctx, k) {
+  if (!(k > 0)) return;
+  ctx.save();
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = `rgba(255,255,255,${Math.min(1, k)})`;
+  ctx.fillRect(0, 0, 800, 450);
+  ctx.restore();
 }
 
 export function roundRectPath(ctx, x, y, w, h, r) {
