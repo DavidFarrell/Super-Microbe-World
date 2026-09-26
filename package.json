@@ -8,6 +8,8 @@
     "test": "node web/tests/run.mjs"
   },
   "devDependencies": {
+    "@fontsource/atkinson-hyperlegible": "^5.3.0",
+    "@fontsource/baloo-2": "^5.3.0",
     "@playwright/test": "^1.56.1",
     "@ruffle-rs/ruffle": "^0.6.0",
     "swf-parser": "^0.14.1"
