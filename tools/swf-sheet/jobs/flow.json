@@ -40,6 +40,26 @@
       349
      ],
      "why": "e-Bug logo on the studio sign in the TV picture"
+    },
+    {
+     "shape": 38,
+     "rect": [
+      228,
+      280,
+      279,
+      352
+     ],
+     "why": "e-Bug smiley on the host podium in the TV picture"
+    },
+    {
+     "shape": 31,
+     "rect": [
+      94,
+      165,
+      151,
+      233
+     ],
+     "why": "e-Bug smiley on the sticker at the top left of the TV picture (under the mask)"
     }
    ]
   },
@@ -65,6 +85,18 @@
      489,
      489
     ]
+   ],
+   "erase": [
+    {
+     "shape": 54,
+     "rect": [
+      94,
+      165,
+      151,
+      233
+     ],
+     "why": "e-Bug smiley on the sticker on the TV glass; the translucent card stays"
+    }
    ]
   },
   {

@@ -7,74 +7,185 @@
    "swf": "movies/eBugGameShow.swf",
    "symbol": "gameshow_set",
    "name": "gs_set",
-   "hide": ["harry", "amy", "gsh", "podia"],
-   "track": ["harry", "amy", "gsh", "podia"],
-   "erase": [{ "shape": 336, "rect": [129, 112, 388, 349], "why": "e-Bug logo on the sign behind the host (wordmark, splash and ring); the translucent panel stays" }]
+   "hide": [
+    "harry",
+    "amy",
+    "gsh",
+    "podia"
+   ],
+   "track": [
+    "harry",
+    "amy",
+    "gsh",
+    "podia"
+   ],
+   "erase": [
+    {
+     "shape": 336,
+     "rect": [
+      129,
+      112,
+      388,
+      349
+     ],
+     "why": "e-Bug logo on the sign behind the host (wordmark, splash and ring); the translucent panel stays"
+    }
+   ]
   },
   {
    "swf": "movies/eBugGameShow.swf",
    "symbol": "gameshow_set/podia",
    "name": "gs_podia",
-   "hide": ["thousands", "hundreds", "tens", "units"],
-   "track": ["amy_score", "harry_score"]
+   "hide": [
+    "thousands",
+    "hundreds",
+    "tens",
+    "units"
+   ],
+   "track": [
+    "amy_score",
+    "harry_score"
+   ],
+   "erase": [
+    {
+     "shape": 895,
+     "rect": [
+      55,
+      36,
+      106,
+      108
+     ],
+     "why": "e-Bug smiley on the host podium"
+    }
+   ]
   },
   {
    "swf": "movies/eBugGameShow.swf",
    "symbol": "score",
    "name": "gs_score",
-   "hide": ["thousands", "hundreds", "tens", "units"],
-   "track": ["thousands", "hundreds", "tens", "units"]
+   "hide": [
+    "thousands",
+    "hundreds",
+    "tens",
+    "units"
+   ],
+   "track": [
+    "thousands",
+    "hundreds",
+    "tens",
+    "units"
+   ]
   },
-  { "swf": "movies/eBugGameShow.swf", "symbol": "digit", "name": "gs_digit" },
+  {
+   "swf": "movies/eBugGameShow.swf",
+   "symbol": "digit",
+   "name": "gs_digit"
+  },
   {
    "swf": "movies/eBugGameShow.swf",
    "symbol": "gameshow_set/gsh",
    "name": "gs_host",
    "rig": true,
-   "entryLabels": ["stop", "excited", "serious", "disappointed"]
+   "entryLabels": [
+    "stop",
+    "excited",
+    "serious",
+    "disappointed"
+   ]
   },
   {
    "swf": "movies/eBugGameShow.swf",
    "symbol": "gameshow_set/harry/upper",
    "name": "gs_harry",
    "rig": true,
-   "entryLabels": ["stop", "idle", "neutral", "cautious", "happy", "disappointed"]
+   "entryLabels": [
+    "stop",
+    "idle",
+    "neutral",
+    "cautious",
+    "happy",
+    "disappointed"
+   ]
   },
   {
    "swf": "movies/eBugGameShow.swf",
    "symbol": "gameshow_set/amy/upper",
    "name": "gs_amy",
    "rig": true,
-   "entryLabels": ["stop", "idle", "neutral", "cautious", "happy", "disappointed"]
+   "entryLabels": [
+    "stop",
+    "idle",
+    "neutral",
+    "cautious",
+    "happy",
+    "disappointed"
+   ]
   },
   {
    "swf": "movies/eBugGameShow.swf",
    "symbol": "talkie",
    "name": "gs_talkie",
    "omitText": true,
-   "hide": ["big_invisible_button"]
+   "hide": [
+    "big_invisible_button"
+   ]
   },
   {
    "swf": "movies/eBugGameShow.swf",
    "symbol": "question_board",
    "name": "gs_question_board",
    "omitText": true,
-   "hide": ["agree_button", "dont_know_button", "disagree_button"],
-   "track": ["agree_button", "dont_know_button", "disagree_button", "timer"]
+   "hide": [
+    "agree_button",
+    "dont_know_button",
+    "disagree_button"
+   ],
+   "track": [
+    "agree_button",
+    "dont_know_button",
+    "disagree_button",
+    "timer"
+   ]
   },
-  { "swf": "movies/eBugGameShow.swf", "symbol": 72, "name": "gs_button_agree", "omitText": true },
-  { "swf": "movies/eBugGameShow.swf", "symbol": 74, "name": "gs_button_dont_know", "omitText": true },
-  { "swf": "movies/eBugGameShow.swf", "symbol": 76, "name": "gs_button_disagree", "omitText": true },
-  { "swf": "movies/eBugGameShow.swf", "symbol": "shrinking_zone", "name": "gs_shrinking_zone" },
+  {
+   "swf": "movies/eBugGameShow.swf",
+   "symbol": 72,
+   "name": "gs_button_agree",
+   "omitText": true
+  },
+  {
+   "swf": "movies/eBugGameShow.swf",
+   "symbol": 74,
+   "name": "gs_button_dont_know",
+   "omitText": true
+  },
+  {
+   "swf": "movies/eBugGameShow.swf",
+   "symbol": 76,
+   "name": "gs_button_disagree",
+   "omitText": true
+  },
+  {
+   "swf": "movies/eBugGameShow.swf",
+   "symbol": "shrinking_zone",
+   "name": "gs_shrinking_zone"
+  },
   {
    "swf": "movies/cutscene_introduction.swf",
    "symbol": "root",
    "name": "cut_details_form",
    "frames": "30",
    "omitText": true,
-   "hide": ["submit_button"]
+   "hide": [
+    "submit_button"
+   ]
   },
-  { "swf": "movies/cutscene_introduction.swf", "symbol": 864, "name": "cut_submit_button", "omitText": true },
+  {
+   "swf": "movies/cutscene_introduction.swf",
+   "symbol": 864,
+   "name": "cut_submit_button",
+   "omitText": true
+  },
   {
    "swf": "movies/shrinking_harry.swf",
    "symbol": "root:avatar",

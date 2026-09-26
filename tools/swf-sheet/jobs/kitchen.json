@@ -19,6 +19,18 @@
     "sink_area",
     "tissues",
     "clingfilm"
+   ],
+   "erase": [
+    {
+     "shape": 637,
+     "rect": [
+      58,
+      31,
+      91,
+      64
+     ],
+     "why": "e-Bug smiley stamped on the shopping bag"
+    }
    ]
   },
   {
@@ -317,25 +329,117 @@
    "swf": "movies/kitchen_game_intro_level_0.swf",
    "symbol": "root:background",
    "name": "kitchen_intro0_bg",
-   "scale": 1
+   "scale": 1,
+   "recolour": [
+    {
+     "rect": [
+      63,
+      195,
+      97,
+      229
+     ],
+     "from": [
+      145,
+      106,
+      72
+     ],
+     "to": [
+      208,
+      154,
+      107
+     ],
+     "tolerance": 34,
+     "flatten": true,
+     "why": "e-Bug smiley stamped on the shopping bag in the JPEG picture"
+    }
+   ]
   },
   {
    "swf": "movies/kitchen_game_intro_level_1.swf",
    "symbol": "root:background",
    "name": "kitchen_intro1_bg",
-   "scale": 1
+   "scale": 1,
+   "recolour": [
+    {
+     "rect": [
+      63,
+      195,
+      97,
+      229
+     ],
+     "from": [
+      145,
+      106,
+      72
+     ],
+     "to": [
+      208,
+      154,
+      107
+     ],
+     "tolerance": 34,
+     "flatten": true,
+     "why": "e-Bug smiley stamped on the shopping bag in the JPEG picture"
+    }
+   ]
   },
   {
    "swf": "movies/kitchen_game_intro_level_2.swf",
    "symbol": "root:background",
    "name": "kitchen_intro2_bg",
-   "scale": 1
+   "scale": 1,
+   "recolour": [
+    {
+     "rect": [
+      63,
+      195,
+      97,
+      229
+     ],
+     "from": [
+      145,
+      106,
+      72
+     ],
+     "to": [
+      208,
+      154,
+      107
+     ],
+     "tolerance": 34,
+     "flatten": true,
+     "why": "e-Bug smiley stamped on the shopping bag in the JPEG picture"
+    }
+   ]
   },
   {
    "swf": "movies/kitchen_game_intro_level_3.swf",
    "symbol": "root:background",
    "name": "kitchen_intro3_bg",
-   "scale": 1
+   "scale": 1,
+   "recolour": [
+    {
+     "rect": [
+      63,
+      195,
+      97,
+      229
+     ],
+     "from": [
+      145,
+      106,
+      72
+     ],
+     "to": [
+      208,
+      154,
+      107
+     ],
+     "tolerance": 34,
+     "flatten": true,
+     "why": "e-Bug smiley stamped on the shopping bag in the JPEG picture"
+    }
+   ]
   },
   {
    "swf": "movies/kitchen_game_intro_level_0.swf",

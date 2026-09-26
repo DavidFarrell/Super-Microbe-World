@@ -412,7 +412,11 @@
   },
   {
    "swf": "movies/introductionToMicrobes_platformer.swf",
-   "symbol": "milk_image"
+   "symbol": "milk_image",
+   "pin": {
+    "glass": "yogurt"
+   },
+   "why": "milk_image frame 1 runs glass.gotoAndStop(\"yogurt\")"
   },
   {
    "swf": "movies/introductionToMicrobes_platformer.swf",

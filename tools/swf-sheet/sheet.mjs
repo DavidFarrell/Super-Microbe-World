@@ -123,7 +123,7 @@ export async function renderJob(job, capturer, { defaults = {}, force = false, l
   const { id, placement } = lib.resolve(job.symbol);
   const char = lib.chars.get(id);
   if (!char) throw new Error(`${job.swf}: character ${id} is not defined in this file`);
-  const snap = new Snapshotter(lib, { omitText: job.omitText ?? defaults.omitText, hide: job.hide || [], nested: job.nested ?? defaults.nested ?? 'age' });
+  const snap = new Snapshotter(lib, { omitText: job.omitText ?? defaults.omitText, hide: job.hide || [], nested: job.nested ?? defaults.nested ?? 'age', pin: job.pin || {} });
   const erased = eraseShapeRegions(lib, job.erase);
   // "depths": [[min, max], ...] draws only those depth ranges of the top-level timeline (to split
   // a scene such as the splash TV into layers); "excludeDepths": [d, ...] drops single depths.
@@ -131,7 +131,9 @@ export async function renderJob(job, capturer, { defaults = {}, force = false, l
     const ranges = job.depths || [[0, 65535]], ex = new Set(job.excludeDepths || []);
     snap.topDepths = { id, test: d => !ex.has(d) && ranges.some(([a, b]) => d >= a && d <= b) };
   }
-  const ticks = job.ticks || 0;
+  // "ticks": "auto" picks the loop period of the nested clips shown at atFrame (the least common
+  // multiple of their cycle lengths, capped at "maxTicks", default 100), so the ticks loop seamlessly.
+  const ticks = job.ticks === 'auto' ? loopPeriod(lib, id, job.atFrame || 1, job.maxTicks || 100) : (job.ticks || 0);
   // A button renders its up, over and down states as frames 1, 2 and 3.
   const frameCount = ticks || (char.kind === 'sprite' ? char.timeline.frameCount : char.kind === 'button' ? 3 : 1);
   const frames = parseFrames(job.frames, frameCount);
@@ -175,6 +177,7 @@ export async function renderJob(job, capturer, { defaults = {}, force = false, l
     const img = decodePng(png);
     for (const c of page.cells) {
       const cell = crop(img, c.x, c.y, c.w, c.h);
+      if (job.recolour?.length) recolourCell(cell, c, scale, job.recolour);
       // Anything touching the cell's outer ring means the bounds underestimated the art.
       if (touchesEdge(cell)) warnings.push(`frame ${c.first}: art reaches the cell edge (raise "margin")`);
       const t = alphaBounds(cell);
@@ -259,12 +262,37 @@ export async function renderJob(job, capturer, { defaults = {}, force = false, l
     meta.groupReference = job.groupTrack;
   }
   if (erased.report.length) meta.erased = erased.report;
+  if (job.recolour?.length) meta.recoloured = job.recolour.map(({ rect, from, to, tolerance = 30, flatten = false }) => ({ rect, from, to, tolerance, flatten }));
   if (warnings.length) meta.warnings = warnings;
   fs.writeFileSync(path.join(outDir, 'meta.json'), JSON.stringify(meta, null, 1));
   writePreview(outDir, meta);
   log(`  ${meta.name}: ${frames.length} frames, ${cellsById.size} distinct, ${pages.length} page(s), ${((Date.now() - t0) / 1000).toFixed(1)} s${warnings.length ? `, ${warnings.length} warning(s)` : ''}`);
   for (const w of warnings.slice(0, 5)) log(`    warning: ${w}`);
   return meta;
+}
+
+// Least common multiple of the cycle lengths of every sprite in the display tree of sprite id at
+// frame f (a clip stopped on a frame has cycle 1), capped at max.
+function loopPeriod(lib, id, f, max) {
+  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+  let period = 1;
+  const seen = new Set();
+  const visit = (sid, frame) => {
+    const c = lib.chars.get(sid);
+    if (!c || c.kind !== 'sprite') return;
+    for (const inst of displayListAt(c.timeline, frame).values()) {
+      const ch = lib.chars.get(inst.charId);
+      if (ch?.kind !== 'sprite' || seen.has(inst.charId)) continue;
+      seen.add(inst.charId);
+      lib.frameAfter(inst.charId, 0);
+      const { seq, loopStart } = ch.sequence;
+      const len = seq.length - loopStart;
+      period = Math.min(max, period * len / gcd(period, len));
+      for (let fr = 1; fr <= ch.timeline.frameCount; fr++) visit(inst.charId, fr);
+    }
+  };
+  visit(id, f);
+  return period;
 }
 
 // The transform g with child_k = g * child_ref for every depth present in both display lists, or
@@ -282,6 +310,34 @@ function groupTransform(ref, cur) {
     else if (Math.max(Math.abs(g.a - h.a), Math.abs(g.b - h.b), Math.abs(g.c - h.c), Math.abs(g.d - h.d)) > 0.01 || Math.max(Math.abs(g.tx - h.tx), Math.abs(g.ty - h.ty)) > 10) return null;
   }
   return g && [g.a, g.b, g.c, g.d, g.tx / 20, g.ty / 20].map(v => +v.toFixed(5));
+}
+
+// "recolour": [{ "rect": [x0, y0, x1, y1], "from": [r, g, b], "to": [r, g, b], "tolerance": 30,
+// "flatten": false }] takes a flat-coloured mark out of bitmap art, where "erase" cannot reach (a
+// logo painted into a JPEG). Inside the rectangle (Flash px, symbol space), each pixel's colour p
+// is split into a point on the line from "to" (the surrounding colour) to "from" (the mark's
+// colour) plus a residual; when the residual is within "tolerance" the mark component is removed,
+// p' = p - t (from - to) with t clamped to 0..1, so the surrounding noise and anti-aliasing stay.
+// "flatten": true sets those pixels to "to" exactly instead, which also clears JPEG ringing
+// around the mark (use it on a flat surface). Pixels of other colours (anything overlapping the
+// mark) are left alone.
+function recolourCell(cell, c, scale, entries) {
+  const { width: w, height: h, data } = cell;
+  for (const { rect, from, to, tolerance = 30, flatten = false } of entries) {
+    const d = [from[0] - to[0], from[1] - to[1], from[2] - to[2]], dd = d[0] * d[0] + d[1] * d[1] + d[2] * d[2];
+    const x0 = Math.max(0, Math.floor(c.ox + rect[0] * scale)), x1 = Math.min(w, Math.ceil(c.ox + rect[2] * scale));
+    const y0 = Math.max(0, Math.floor(c.oy + rect[1] * scale)), y1 = Math.min(h, Math.ceil(c.oy + rect[3] * scale));
+    for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) {
+      const o = (y * w + x) * 4;
+      if (!data[o + 3]) continue;
+      const p = [data[o] - to[0], data[o + 1] - to[1], data[o + 2] - to[2]];
+      const t = Math.min(1, Math.max(0, (p[0] * d[0] + p[1] * d[1] + p[2] * d[2]) / dd));
+      if (t <= 0 && !flatten) continue;
+      const r = [p[0] - t * d[0], p[1] - t * d[1], p[2] - t * d[2]];
+      if (Math.hypot(r[0], r[1], r[2]) > tolerance) continue;
+      for (let k = 0; k < 3; k++) data[o + k] = flatten ? to[k] : Math.max(0, Math.min(255, Math.round(to[k] + r[k])));
+    }
+  }
 }
 
 export function touchesEdge(img) {

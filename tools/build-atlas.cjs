@@ -375,8 +375,9 @@ async function main() {
   }
 }
 
-// index.json: { format, atlases: { name: { json, images, bytes, pixels, symbols } },
-//   symbols: { symbol: atlas name }, sets: { set name: [atlas names] }, totalBytes }
+// index.json: { format, atlases: { name: { json, images, bytes, jsonBytes, pixels, symbols } },
+//   symbols: { symbol: atlas name }, sets: { set name: [atlas names] }, totalBytes, totalJsonBytes }
+// bytes is the WebP pages, jsonBytes the atlas JSON.
 function writeIndex(cfg, built) {
   const file = path.join(ROOT, cfg.index);
   let index = { format: 'smw-atlas-index/1', atlases: {}, symbols: {}, sets: {} };
@@ -392,7 +393,14 @@ function writeIndex(cfg, built) {
   }
   Object.assign(index.sets, cfg.sets || {});
   for (const [set, names] of Object.entries(index.sets)) for (const a of names) if (!index.atlases[a]) console.warn(`  warning: set ${set} lists missing atlas ${a}`);
+  // bytes counts the WebP pages only; jsonBytes is the atlas JSON (rig poses make it large), so a
+  // loader's progress bar can use bytes + jsonBytes.
+  for (const a of Object.values(index.atlases)) {
+    const f = path.join(path.dirname(file), a.json);
+    if (fs.existsSync(f)) a.jsonBytes = fs.statSync(f).size;
+  }
   index.totalBytes = Object.values(index.atlases).reduce((n, a) => n + a.bytes, 0);
+  index.totalJsonBytes = Object.values(index.atlases).reduce((n, a) => n + (a.jsonBytes || 0), 0);
   // Written atomically (temp file in the same folder, then rename): the game reads it at boot.
   const tmp = file + '.tmp-' + process.pid;
   fs.writeFileSync(tmp, JSON.stringify(index, null, 1));

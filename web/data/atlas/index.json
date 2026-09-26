@@ -37,7 +37,8 @@
     "Unit_4_Tile",
     "Unit_5_Tile",
     "Unit_6_Tile"
-   ]
+   ],
+   "jsonBytes": 5455
   },
   "microbe-lucy": {
    "json": "microbe-lucy.json",
@@ -48,7 +49,8 @@
    "pixels": 4194304,
    "symbols": [
     "lucy_icon"
-   ]
+   ],
+   "jsonBytes": 5555
   },
   "entities": {
    "json": "entities.json",
@@ -65,7 +67,8 @@
     "soap_projectile",
     "wbc_projectile",
     "camera_flash"
-   ]
+   ],
+   "jsonBytes": 5204
   },
   "hud": {
    "json": "hud.json",
@@ -89,7 +92,8 @@
     "tick_box_button",
     "ephone_ingame",
     "level_background"
-   ]
+   ],
+   "jsonBytes": 27084
   },
   "player-harry": {
    "json": "player-harry.json",
@@ -101,7 +105,8 @@
    "symbols": [
     "harry_lower",
     "harry_upper"
-   ]
+   ],
+   "jsonBytes": 11131
   },
   "player-amy": {
    "json": "player-amy.json",
@@ -113,7 +118,8 @@
    "symbols": [
     "amy_lower",
     "amy_upper"
-   ]
+   ],
+   "jsonBytes": 11358
   },
   "intro-level1": {
    "json": "intro-level1.json",
@@ -124,14 +130,15 @@
    "pixels": 864864,
    "symbols": [
     "level_intros"
-   ]
+   ],
+   "jsonBytes": 4678
   },
   "gameshow-bg": {
    "json": "gameshow-bg.json",
    "images": [
     "gameshow-bg-0.webp"
    ],
-   "bytes": 109682,
+   "bytes": 107696,
    "pixels": 7323648,
    "symbols": [
     "gs_set",
@@ -143,7 +150,8 @@
     "gs_button_agree",
     "gs_button_dont_know",
     "gs_button_disagree"
-   ]
+   ],
+   "jsonBytes": 6391
   },
   "gameshow-cast": {
    "json": "gameshow-cast.json",
@@ -156,7 +164,8 @@
     "gs_host",
     "gs_harry",
     "gs_amy"
-   ]
+   ],
+   "jsonBytes": 1359204
   },
   "cutscene": {
    "json": "cutscene.json",
@@ -168,7 +177,8 @@
    "symbols": [
     "cut_details_form",
     "cut_submit_button"
-   ]
+   ],
+   "jsonBytes": 945
   },
   "shrink": {
    "json": "shrink.json",
@@ -181,14 +191,15 @@
     "gs_shrinking_zone",
     "shrink_harry",
     "shrink_amy"
-   ]
+   ],
+   "jsonBytes": 760608
   },
   "kitchen": {
    "json": "kitchen.json",
    "images": [
     "kitchen-0.webp"
    ],
-   "bytes": 439168,
+   "bytes": 438486,
    "pixels": 10485760,
    "symbols": [
     "kitchen_bg",
@@ -251,7 +262,8 @@
     "kitchen_intro0_screen",
     "kitchen_click_button",
     "kitchen_outro_bg"
-   ]
+   ],
+   "jsonBytes": 27131
   },
   "kitchen-harry": {
    "json": "kitchen-harry.json",
@@ -262,7 +274,8 @@
    "pixels": 2088960,
    "symbols": [
     "kitchen_harry"
-   ]
+   ],
+   "jsonBytes": 288313
   },
   "kitchen-amy": {
    "json": "kitchen-amy.json",
@@ -273,14 +286,15 @@
    "pixels": 2617344,
    "symbols": [
     "kitchen_amy"
-   ]
+   ],
+   "jsonBytes": 260546
   },
   "splash": {
    "json": "splash.json",
    "images": [
     "splash-0.webp"
    ],
-   "bytes": 333788,
+   "bytes": 329026,
    "pixels": 5240144,
    "symbols": [
     "splash_back",
@@ -292,7 +306,8 @@
     "splash_timeline",
     "splash_new_game",
     "splash_screen"
-   ]
+   ],
+   "jsonBytes": 32747
   },
   "summary": {
    "json": "summary.json",
@@ -304,7 +319,8 @@
    "symbols": [
     "summary_page_bg",
     "summary_click_button"
-   ]
+   ],
+   "jsonBytes": 7103
   },
   "tiles-skin": {
    "json": "tiles-skin.json",
@@ -335,7 +351,8 @@
     "hair_vert_obj",
     "skin_base_tile",
     "skin_surface_tile"
-   ]
+   ],
+   "jsonBytes": 4238
   },
   "tiles-body": {
    "json": "tiles-body.json",
@@ -377,7 +394,8 @@
     "vertical_b_r_tile",
     "villi_floor_obj",
     "villi_roof_obj"
-   ]
+   ],
+   "jsonBytes": 6411
   },
   "tiles-kitchen2": {
    "json": "tiles-kitchen2.json",
@@ -398,7 +416,8 @@
     "loaf_mid_mould3_obj",
     "toast_jam_obj",
     "toast_marm_obj"
-   ]
+   ],
+   "jsonBytes": 2217
   },
   "microbe-steve": {
    "json": "microbe-steve.json",
@@ -409,7 +428,8 @@
    "pixels": 1019904,
    "symbols": [
     "steve_icon"
-   ]
+   ],
+   "jsonBytes": 15663
   },
   "microbe-patty": {
    "json": "microbe-patty.json",
@@ -420,7 +440,8 @@
    "pixels": 1566720,
    "symbols": [
     "patty_icon"
-   ]
+   ],
+   "jsonBytes": 93357
   },
   "microbe-slurm": {
    "json": "microbe-slurm.json",
@@ -431,7 +452,8 @@
    "pixels": 1572864,
    "symbols": [
     "slurm_icon"
-   ]
+   ],
+   "jsonBytes": 23343
   },
   "microbe-slarg": {
    "json": "microbe-slarg.json",
@@ -442,7 +464,8 @@
    "pixels": 2097152,
    "symbols": [
     "slarg_icon"
-   ]
+   ],
+   "jsonBytes": 47090
   },
   "microbe-donna": {
    "json": "microbe-donna.json",
@@ -453,7 +476,8 @@
    "pixels": 3145728,
    "symbols": [
     "donna_icon"
-   ]
+   ],
+   "jsonBytes": 40803
   },
   "microbe-iggy": {
    "json": "microbe-iggy.json",
@@ -464,7 +488,8 @@
    "pixels": 1384448,
    "symbols": [
     "iggy_icon"
-   ]
+   ],
+   "jsonBytes": 46120
   },
   "microbe-superinfection": {
    "json": "microbe-superinfection.json",
@@ -475,7 +500,8 @@
    "pixels": 4104192,
    "symbols": [
     "superinfection_icon"
-   ]
+   ],
+   "jsonBytes": 202489
   },
   "microbe-extras": {
    "json": "microbe-extras.json",
@@ -488,7 +514,8 @@
     "sandy_icon",
     "super_colin_icon",
     "super_slurm_icon"
-   ]
+   ],
+   "jsonBytes": 100854
   },
   "entities2": {
    "json": "entities2.json",
@@ -500,14 +527,15 @@
    "symbols": [
     "milk_glass_icon",
     "antibiotic_pickup"
-   ]
+   ],
+   "jsonBytes": 2424
   },
   "hud2": {
    "json": "hud2.json",
    "images": [
     "hud2-0.webp"
    ],
-   "bytes": 57186,
+   "bytes": 57696,
    "pixels": 1028096,
    "symbols": [
     "steve_image",
@@ -519,7 +547,8 @@
     "kill_icon",
     "antibiotic_icon",
     "yog_icon"
-   ]
+   ],
+   "jsonBytes": 1933
   },
   "intro-r1": {
    "json": "intro-r1.json",
@@ -532,7 +561,8 @@
     "level_intros_level2",
     "level_intros_level3",
     "level_intros_level4"
-   ]
+   ],
+   "jsonBytes": 12800
   },
   "intro-r2": {
    "json": "intro-r2.json",
@@ -545,7 +575,8 @@
     "level_intros_level5",
     "level_intros_level6",
     "level_intros_level7"
-   ]
+   ],
+   "jsonBytes": 13733
   },
   "intro-r3": {
    "json": "intro-r3.json",
@@ -557,7 +588,8 @@
    "symbols": [
     "level_intros_level8",
     "level_intros_level9"
-   ]
+   ],
+   "jsonBytes": 8841
   },
   "intro-r5": {
    "json": "intro-r5.json",
@@ -568,7 +600,8 @@
    "pixels": 647920,
    "symbols": [
     "level_intros_level10"
-   ]
+   ],
+   "jsonBytes": 5441
   }
  },
  "symbols": {
@@ -981,5 +1014,6 @@
    "intro-r5"
   ]
  },
- "totalBytes": 9479304
+ "totalBytes": 9472384,
+ "totalJsonBytes": 3441210
 }

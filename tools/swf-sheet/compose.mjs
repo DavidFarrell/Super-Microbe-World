@@ -30,6 +30,7 @@ const ATLAS = path.join(REPO, 'web/data/atlas');
 // Symbol name -> sheet folder, from the atlas manifests (tools/atlas/*.json).
 const sheetOf = new Map();
 for (const f of fs.readdirSync(path.join(REPO, 'tools/atlas'))) {
+  if (!f.endsWith('.json')) continue; // coverage.mjs lives there too
   const cfg = JSON.parse(fs.readFileSync(path.join(REPO, 'tools/atlas', f), 'utf8'));
   for (const a of cfg.atlases || [cfg]) for (const s of a.symbols) if (s.sheet) sheetOf.set(s.name || path.basename(s.sheet), s.sheet);
 }

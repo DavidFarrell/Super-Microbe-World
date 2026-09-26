@@ -352,10 +352,13 @@ export class Snapshotter {
   // so clips inside stopped or one-frame parents keep animating as in Flash; 'frame' is the
   // original model (a child's frame follows its parent's frame number), which the level-1 sheets
   // were rendered with. The two agree whenever parents play straight through.
-  constructor(lib, { omitText = false, hide = [], nested = 'age' } = {}) {
+  // pin: { instanceName: frame number or label } shows those named children at a fixed frame,
+  // for parent scripts that drive a child (milk_image frame 1: glass.gotoAndStop("yogurt")).
+  constructor(lib, { omitText = false, hide = [], nested = 'age', pin = {} } = {}) {
     this.lib = lib;
     this.omitText = omitText;
     this.nested = nested;
+    this.pin = pin;
     this.hide = new Set(hide);
     this.nextId = lib.maxId + 1;
     this.memo = new Map();       // content key -> id
@@ -395,14 +398,25 @@ export class Snapshotter {
     for (const [depth, inst] of [...list].sort((a, b) => a[0] - b[0])) {
       if ((inst.name && this.hide.has(inst.name)) || (keepDepth && !keepDepth(depth))) { items.push({ depth, missing: true, clipDepth: inst.clipDepth }); continue; }
       const child = this.lib.chars.get(inst.charId);
-      let n;
-      if (child?.kind === 'sprite' && this.nested === 'age') n = this.aged(inst.charId, frame - inst.born + ageOffset);
+      let n = this.pinned(inst);
+      if (n !== undefined) { /* pinned */ }
+      else if (child?.kind === 'sprite' && this.nested === 'age') n = this.aged(inst.charId, frame - inst.born + ageOffset);
       else n = this.node(inst.charId, child?.kind === 'sprite' ? this.lib.frameAfter(inst.charId, frame - inst.born + ageOffset) : 1, inst.ratio);
       if (!n) { items.push({ depth, missing: true, clipDepth: inst.clipDepth }); continue; }
       items.push({ depth, inst, n });
     }
     this.stack.delete(key0);
     return this.emit(items);
+  }
+
+  // A pinned child's node, or undefined when the child is not pinned.
+  pinned(inst) {
+    if (!inst.name || !(inst.name in this.pin)) return undefined;
+    const c = this.lib.chars.get(inst.charId);
+    if (c?.kind !== 'sprite') return undefined;
+    const t = this.pin[inst.name], f = typeof t === 'number' ? t : c.timeline.labels[t];
+    if (!f) throw new Error(`pin: ${inst.name} has no label ${t}`);
+    return this.snapshot(inst.charId, f);
   }
 
   // Snapshot of a nested sprite instance that is `age` ticks old (see SwfLibrary.stateAt).
@@ -417,7 +431,8 @@ export class Snapshotter {
     for (const [depth, inst] of [...this.lib.dl(spriteId, frame)].sort((a, b) => a[0] - b[0])) {
       if (inst.name && this.hide.has(inst.name)) { items.push({ depth, missing: true, clipDepth: inst.clipDepth }); continue; }
       const child = this.lib.chars.get(inst.charId);
-      const n = child?.kind === 'sprite' ? this.aged(inst.charId, age - created.get(depth)) : this.node(inst.charId, 1, inst.ratio);
+      let n = this.pinned(inst);
+      if (n === undefined) n = child?.kind === 'sprite' ? this.aged(inst.charId, age - created.get(depth)) : this.node(inst.charId, 1, inst.ratio);
       if (!n) { items.push({ depth, missing: true, clipDepth: inst.clipDepth }); continue; }
       items.push({ depth, inst, n });
     }

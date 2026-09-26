@@ -17,7 +17,7 @@ original SWF ──► swf-io.mjs: decompress CWS, walk tags, keep definition ta
 
 1. **Reader and writer** (`swf-io.mjs`). Parses the header and tag stream (short and long headers). It also parses RECT, MATRIX, CXFORM(WITHALPHA), PlaceObject 1/2/3 (ratio, clip depth, name, filter lists copied verbatim, blend mode, bitmap caching), DefineSprite, DefineButton(2) records, and definition bounds. It writes PlaceObject2/3, DefineSprite and an uncompressed `FWS` movie. Root control tags are dropped: frames, placements, scripts, labels, sounds and imports. Every definition tag is kept untouched, so gradients, bitmap fills, JPEG tables, fonts and morph shapes reach Ruffle exactly as authored. This includes the DefineMorphShape tags that `swf-parser` cannot read. There is also a shape-record parser and rewriter. It round-trips all 2,023 shapes in the six main SWFs byte for byte, and can drop outlines inside a rectangle (see `erase`).
 2. **Timeline flattener** (`timeline.mjs`). To show frame k of sprite S, it replays S's PlaceObject and RemoveObject tags from frame 1 to k.
-   - **Nested sprites advance with their parent.** A child placed on parent frame b has been ticked k - b times at frame k. Its own constant frame scripts are honoured: `stop()`, `play()`, `gotoAndPlay`/`gotoAndStop` with a literal label or number, `nextFrame` and `prevFrame`. Anything conditional or computed is ignored.
+   - **Nested sprites play by their own age.** A child placed on parent frame b has been ticked k - b times at frame k, and every nested clip then advances by its own age since creation (`nested: "age"`, the default). An instance survives its parent's loops and gotos when the new frame holds the same character from the same PlaceObject, as in Flash and Ruffle, so a clip inside a stopped or one-frame parent keeps playing (the game show's 125-frame emotion clips sit in one-frame wrappers). Its own constant frame scripts are honoured: `stop()`, `play()`, `gotoAndPlay`/`gotoAndStop` with a literal label or number, `nextFrame` and `prevFrame`. Anything conditional or computed is ignored. `nested: "frame"` is the original model (a child's frame follows its parent's frame number), which level 1 was rendered with and which `jobs/level1.json` pins.
    - **The state is written as a snapshot sprite.** This is a synthetic one-frame DefineSprite with the same depths, matrices, colour transforms, morph ratios, clip depths, filters and blend modes as the original. Nested sprites become their own snapshots, and shapes, morphs and text stay as leaves.
    - **Nesting is kept rather than flattened.** Masks (clip depth) then apply at the level they were authored at, and filters and blend modes apply to whole groups, as in Flash.
    - **Snapshots are memoised by content,** so identical frames share one id and are rendered once.
@@ -64,9 +64,21 @@ Playwright's preinstalled Chromium is used (`import 'playwright'` resolves from 
 | `track` | Instance names whose per-frame matrix is recorded in `meta.tracks` |
 | `groupTrack` | Reference frame R; records `tracks.group`, the rigid transform taking frame R's layout to each frame (null when the children did not move together) |
 | `erase` | `[{ "shape": id, "rect": [x0, y0, x1, y1] }]`: removes every outline of that shape lying entirely inside the rectangle (Flash px, shape space), for this render only |
+| `recolour` | `[{ "rect": [x0, y0, x1, y1], "from": [r, g, b], "to": [r, g, b], "tolerance": 30, "flatten": false }]`: takes a flat-coloured mark out of bitmap art that `erase` cannot reach (a logo painted into a JPEG). Inside the rectangle (Flash px, symbol space) pixels on the colour line between `to` (the surroundings) and `from` (the mark) lose the mark's component; with `flatten` they become `to` exactly, which also clears JPEG ringing. Other colours are left alone |
 | `margin` | Extra cell padding in pixels (default 4) |
 | `pageMax` | Largest sheet side (default 4096; 2048 renders faster for heavy symbols such as `slurm_icon`) |
 | `keepSwf` | Also write the generated sheet SWFs, for debugging |
+| `nested` | `"age"` (default) or `"frame"`, see "Nested sprites" above |
+| `rig` | Render a cut-out rig instead of frames (`rig.mjs`, see below); takes `entryLabels`, `atomic` (sprite ids kept whole), `fullScale`. Rigs always use the `age` model (`nested` is ignored) |
+| `entryLabels` | For a rig: only frames reachable from these labels (the ones the game code plays) |
+| `depths` / `excludeDepths` | `[[min, max], ...]` / `[d, ...]`: draw only those top-level depths, to split a scene into layers (the splash TV) |
+| `trackDepths` | Top-level depths whose per-frame matrix goes to `meta.tracks["d<depth>"]` (unnamed instances) |
+| `alphaTrack` | Names or `"d<depth>"`: per-frame alpha multiplier of that child's colour transform, in `meta.alphas` |
+| `cxTrack` | Names or `"d<depth>"`: per-frame colour transform `[rm, gm, bm, am, ra, ga, ba, aa]` (multipliers as fractions, additions 0-255) in `meta.cxforms` |
+| `pin` | `{ "glass": "yogurt" }`: show a named child at a fixed frame or label, for parent scripts that drive a child (`milk_image`) |
+| `ticks: "auto"` | Loop period of the nested clips at `atFrame` (least common multiple of their cycles, capped at `maxTicks`, default 100) |
+
+Symbols can also be instance paths: `gameshow_set/gsh`, `root:harry/upper` or `root:#1` (the root instance at depth 1). The placements along the path are composed, so the render keeps the scene's origin; tracks of such a symbol are recorded in the same space. A button symbol renders its up, over and down states as frames 1, 2 and 3 (labels `up`, `over`, `down`).
 
 ### `meta.json`
 
@@ -125,7 +137,7 @@ Decisions and findings:
 - **Avatar.** `harry.swf` and `amy.swf` are two independently animated clips, `lower` and `upper`. Each is rendered with its root placement matrix, so both share the avatar's origin, which is the player box's top-left. Draw lower first, then upper. Checked: compositing the two halves reproduces Ruffle's render of the whole avatar (mean error 0.012/255). The upper body is reduced to `idle, move, accelerate_start, decelerate_start, take_photo_start, hurt, shoot_soap`, since the tractor beam and `throw_white_blood_cell` are unused (`reference/analysis/flash-platformer.md` §3.9). The lower body keeps every label.
 - **Level 1 is a body level** (no `body_level` attribute), so its projectile is `white_projectile`. Soap is included for later levels.
 - **The ePhone moves rigidly.** Every frame of `e_phone` is one rigid transform of frame 30 (the large landscape layout), with a per-depth spread of 0.000. The atlas therefore holds only frame 30 (large) and frame 2 (small, resting). `tracks.group[f - 1]` is the transform to apply to frame 30's art for any frame f, and `tracks.screen`/`tracks.bigScreen` place the status screen and the intro pages (both hidden in the render). `status` is rendered with its children hidden. Its `background`, `mode` and `button1`..`button6` positions are tracks.
-- **Branding.** The phone's "e-Bug" wordmark is 9 outlines inside shape 248 (under the earpiece). It is erased with `erase` and nothing else in that shape changes. No other level-1 symbol carries a logo.
+- **Branding.** The phone's "e-Bug" wordmark is 9 outlines inside shape 248 (under the earpiece). It is erased with `erase` and nothing else in that shape changes. No other level-1 symbol carries a logo. The marks removed from the other screens (the e-Bug logo and the e-Bug smiley on the podium, the TV sticker and the shopping bag) are listed in `web/NOTES-art-decisions.md` section 6.
 - **Background.** Shape 1495 is a flat orange (#ff9900) 800 x 450 rectangle with a 1 px outline, confirmed against Ruffle running the platformer. It is stored at 0.5x, and the engine may simply fill the colour.
 - **Portal.** `portal_exit_icon` (and `movies/new portal.swf`) is a solid blue ellipse whose alpha pulses over 30 ticks through a colour transform. The Unity remake's glowing ring is a later redesign, so the Flash ellipse is used.
 - **Tiles.** Tile bitmaps are native 50 x 50 with unsmoothed fills, so 2x is pixel-doubled, exactly as Flash would scale them. Lossy WebP changed tile edges by up to 37 levels, which showed as faint seams, so the tile atlas is lossless: every tile pixel now matches the SWF exactly. Seams were checked at 2.5x with a fractional camera, with and without device-pixel snapping.
@@ -133,9 +145,31 @@ Decisions and findings:
 - **Camera flash.** The red corner marks are painted into bitmap 1042, so they are authored art, not a rendering artefact.
 - **ePhone check.** `verify-atlas.mjs` draws frame 30 through `tracks.group[1]` and compares it with frame 2: the mean difference is 1.93/255, which is resampling only.
 
+## Cut-out rigs (`rig.mjs`)
+
+Characters built as Flash cut-out animation (the game show host and contestants, the kitchen and shrinking avatars, the level 2 to 11 microbes) are stored as rigs: each distinct part is rendered once, at 2x its largest on-screen scale, and each frame is a list of `[part, a, b, c, d, tx, ty]`. A sprite whose own display list holds a mask, a blend mode or a filtered child is kept whole as one part; other sprites are opened and their matrices and colour transforms composed (colour transforms are baked into the part). Poses are deduplicated. The sheet folder holds `pNNN.png` parts and the rig in `meta.json`, and `<name>__full/` holds whole-character frames at the label starts, which become the symbol's ordinary `frames` (a fallback for engines that cannot draw rigs). `verify-rig.mjs` composes poses with Canvas 2D and diffs them against Ruffle's whole-character render; `atlas-draw.js` is the reference drawing code.
+
+## All screens and levels 2 to 11
+
+```sh
+node tools/swf-sheet/sheet.mjs tools/swf-sheet/jobs/gameshow.json   # game show, cutscene form, shrinking zone (about 2.5 min)
+node tools/swf-sheet/sheet.mjs tools/swf-sheet/jobs/kitchen.json    # kitchen scene, food, avatars, intro and outro screens
+node tools/swf-sheet/sheet.mjs tools/swf-sheet/jobs/flow.json       # splash TV layers, summary page
+node tools/swf-sheet/sheet.mjs tools/swf-sheet/jobs/levels.json     # tiles, microbes, goal pictures, intro pages (about 5 min)
+node tools/build-atlas.cjs tools/atlas/gameshow.json tools/atlas/kitchen.json tools/atlas/flow.json tools/atlas/levels.json
+node tools/swf-sheet/compose.mjs --source both                      # full screens from sheets and from atlases, with diffs
+node tools/swf-sheet/compose.mjs --source sheets --out-dir web/screenshots/reference
+node tools/atlas/coverage.mjs                                       # coverage, index and budget check (exit 1 on a gap)
+```
+
+`tools/atlas/coverage.mjs` checks that every tile, entity, spawned symbol, HUD picture and intro page of levels 1 to 11 draws from that level's load set (plus `hud`, `entities` and a player set, as `sprites.js` loads them), including every frame label the platformer plays; that the game show, cutscene, shrinking zone, kitchen, splash and summary sets hold what `reference/analysis/flash-flow.md` says those screens show; that `index.json`, the atlas JSON and the WebP pages agree; and it prints the budget per set. Run it after every atlas build.
+
+The resulting sets, sizes, symbol names, placements and decisions are in `web/NOTES-art-decisions.md`. Each manifest merges its atlases and sets into `web/data/atlas/index.json`, which is written atomically; a symbol name that would end up in two atlases stops the build.
+
 ## Limitations
 
-- Only constant frame scripts are followed inside nested clips. Clips driven by ActionScript at runtime show their timeline state, and anything the game attaches at runtime is absent. That includes the ePhone status screen and the avatar inside the platformer's `avatar` holder.
+- Only constant frame scripts are followed inside nested clips. Clips driven by ActionScript at runtime show their timeline state (use `pin` where a parent script drives a child), and anything the game attaches at runtime is absent. That includes the ePhone status screen and the avatar inside the platformer's `avatar` holder.
+- When a top-level clip stops on a frame, Flash keeps its nested clips playing. A frame render shows one moment of that; `ticks` renders the motion (the talkie arrow and the intro pages' insets are documented in `web/NOTES-art-decisions.md` instead).
 - A top-level symbol's frame k is rendered as if it played from frame 1. A clip reached by `gotoAndPlay` from elsewhere would, in Flash, keep children that persisted across the jump, so they could be at another phase of their own loops.
 - Device-font text (Arial, Myriad Pro) is substituted by Ruffle's fallback font. Use `omitText` and draw text in the engine (it also has to be translated).
 - Rendering fidelity is Ruffle's (wgpu-webgl on SwiftShader, MSAA). Filters, gradients, masks and morphs looked right in every level-1 symbol checked, but the result is not Flash Player.
