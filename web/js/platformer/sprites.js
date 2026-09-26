@@ -27,7 +27,9 @@
 //                                  scale, frameCount, labels: { label: frame },
 //                                  frames: [ [image, x, y, w, h, originX, originY] | null, ... ] } } }
 //   frames[i] is Flash frame i + 1; originX/Y is the registration point from the rectangle's
-//   top-left in atlas pixels; scale is atlas pixels per stage pixel. A null frame falls back to
+//   top-left in atlas pixels; scale is atlas pixels per stage pixel. Rig symbols ("mode": "rig",
+//   the level 2-11 microbes) store parts once and a pose per frame in rig.frames; a frame with a
+//   pose draws the pose, others fall back to the image frames (label starts). A null frame falls back to
 //   the nearest earlier drawn frame of the same label; with none, nothing is drawn. Symbols the
 //   index does not list fall back to the debug shapes below, never to an error.
 import { CLIPS } from './data/clips.js';
@@ -150,8 +152,13 @@ class Sprites {
   drawSymbol(ctx, symbol, label, frameIndex, x, y, opts = {}) {
     const e = this.symbols.get(symbol);
     if (e) {
-      const f = this._frame(e.sym, label, Math.max(0, frameIndex | 0));
-      if (f) this._drawFrame(ctx, f, e.images, e.sym.scale || 1, x, y, opts);
+      const n = this._frameNumber(e.sym, label, Math.max(0, frameIndex | 0));
+      const pose = n && e.sym.rig ? e.sym.rig.frames[n - 1] : null;
+      if (pose != null) this._drawPose(ctx, e, pose, x, y, opts);
+      else {
+        const f = this._frame(e.sym, label, Math.max(0, frameIndex | 0));
+        if (f) this._drawFrame(ctx, f, e.images, e.sym.scale || 1, x, y, opts);
+      }
       return 'atlas';
     }
     drawDebugSymbol(ctx, symbol, label, frameIndex, x, y, opts, this.boundsOf(symbol));
@@ -160,14 +167,102 @@ class Sprites {
 
   // Draws Flash frame `frame` (1-based) of a symbol with its registration point at the current
   // transform's origin. For HUD parts placed through track matrices. Returns false when the frame
-  // has no art.
+  // has no art. Rig symbols draw their pose for the frame.
   drawFrame(ctx, symbol, frame = 1, opts = {}) {
     const e = this.symbols.get(symbol);
     if (!e) return false;
+    const pose = e.sym.rig ? e.sym.rig.frames[frame - 1] : null;
+    if (pose != null) { this._drawPose(ctx, e, pose, 0, 0, opts); return true; }
     const fr = (e.sym.frames || [])[frame - 1];
     if (!fr) return false;
     this._drawFrame(ctx, fr, e.images, e.sym.scale || 1, 0, 0, opts);
     return true;
+  }
+
+  // The 1-based frame a label plus an offset resolves to (the same rule as _frame), or null.
+  _frameNumber(sym, label, frameIndex) {
+    const n = sym.frameCount || (sym.frames || []).length;
+    if (!n) return null;
+    const start = label != null && sym.labels && sym.labels[label] != null ? sym.labels[label] : null;
+    return start != null ? Math.min(n, start + frameIndex) : (frameIndex % n) + 1;
+  }
+
+  // Cut-out rigs (web/NOTES-art-decisions.md section 2; tools/swf-sheet/atlas-draw.js): a pose
+  // is a list of [part, a, b, c, d, tx, ty] and each part is an atlas rectangle
+  // [image, x, y, w, h, originX, originY, partScale]. Flip, scale and pivot apply to the whole
+  // pose, as for a frame. With alpha below 1 or a tint the pose is first composed on a scratch
+  // canvas, so overlapping parts fade and tint as one picture (a microbe washing away does not
+  // turn see-through part by part).
+  _drawPose(ctx, e, p, x, y, { flipX = false, alpha = 1, scaleX = 1, scaleY = 1, pivotX = x, pivotY = y, tint = null, tintAmount = 1 } = {}) {
+    const rig = e.sym.rig, pose = rig.poses[p];
+    if (!pose || alpha <= 0) return;
+    ctx.save();
+    if (scaleX !== 1 || scaleY !== 1) {
+      ctx.translate(pivotX, pivotY);
+      ctx.scale(scaleX, scaleY);
+      ctx.translate(-pivotX, -pivotY);
+    }
+    ctx.translate(x, y);
+    if (flipX) ctx.scale(-1, 1);
+    const composite = alpha < 1 || (tint && tintAmount > 0);
+    if (!composite) {
+      drawPoseParts(ctx, rig, pose, e.images);
+    } else {
+      const b = this._poseBounds(e.sym, p);
+      const k = 2;   // scratch pixels per stage pixel (the atlases are drawn at 2x)
+      const w = Math.max(1, Math.ceil(b.w * k)), h = Math.max(1, Math.ceil(b.h * k));
+      const c = this._poseCanvas(w, h);
+      const g = c.getContext('2d');
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      g.globalCompositeOperation = 'source-over';
+      g.globalAlpha = 1;
+      g.clearRect(0, 0, w, h);
+      g.setTransform(k, 0, 0, k, -b.x * k, -b.y * k);
+      drawPoseParts(g, rig, pose, e.images);
+      if (tint && tintAmount > 0) {
+        g.setTransform(1, 0, 0, 1, 0, 0);
+        g.globalCompositeOperation = 'source-atop';
+        g.globalAlpha = Math.min(1, tintAmount);
+        g.fillStyle = tint;
+        g.fillRect(0, 0, w, h);
+        g.globalCompositeOperation = 'source-over';
+        g.globalAlpha = 1;
+      }
+      ctx.globalAlpha *= alpha;
+      ctx.drawImage(c, 0, 0, w, h, b.x, b.y, w / k, h / k);
+    }
+    ctx.restore();
+  }
+
+  // Bounds of a pose in the symbol's own units (cached per symbol and pose).
+  _poseBounds(sym, p) {
+    let cache = this._boundsCache || (this._boundsCache = new WeakMap());
+    let m = cache.get(sym);
+    if (!m) { m = new Map(); cache.set(sym, m); }
+    let b = m.get(p);
+    if (b) return b;
+    const rig = sym.rig, pose = rig.poses[p];
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (let i = 0; i < pose.length; i += 7) {
+      const [, , , w, h, ox, oy, s] = rig.parts[pose[i]];
+      const k = 1 / s;
+      const rx = -ox * k, ry = -oy * k, rw = w * k, rh = h * k;
+      const [a, bb, c, d, tx, ty] = [pose[i + 1], pose[i + 2], pose[i + 3], pose[i + 4], pose[i + 5], pose[i + 6]];
+      for (const [px, py] of [[rx, ry], [rx + rw, ry], [rx, ry + rh], [rx + rw, ry + rh]]) {
+        const X = a * px + c * py + tx, Y = bb * px + d * py + ty;
+        if (X < x0) x0 = X; if (X > x1) x1 = X; if (Y < y0) y0 = Y; if (Y > y1) y1 = Y;
+      }
+    }
+    b = isFinite(x0) ? { x: Math.floor(x0) - 1, y: Math.floor(y0) - 1, w: Math.ceil(x1 - x0) + 3, h: Math.ceil(y1 - y0) + 3 } : { x: 0, y: 0, w: 1, h: 1 };
+    m.set(p, b);
+    return b;
+  }
+
+  _poseCanvas(w, h) {
+    let c = this._poseScratch;
+    if (!c) c = this._poseScratch = typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(w, h) : Object.assign(document.createElement('canvas'), { width: w, height: h });
+    if (c.width < w || c.height < h) { c.width = Math.max(c.width, w); c.height = Math.max(c.height, h); }
+    return c;
   }
 
   boundsOf(symbol) {
@@ -230,6 +325,20 @@ class Sprites {
     g.globalAlpha = 1;
     g.globalCompositeOperation = 'source-over';
     return c;
+  }
+}
+
+// Draws every part of a rig pose at the current origin (the symbol's registration point).
+function drawPoseParts(ctx, rig, pose, images) {
+  for (let i = 0; i < pose.length; i += 7) {
+    const [img, x, y, w, h, ox, oy, s] = rig.parts[pose[i]];
+    const page = images[img];
+    if (!page) continue;
+    const k = 1 / s;
+    ctx.save();
+    ctx.transform(pose[i + 1], pose[i + 2], pose[i + 3], pose[i + 4], pose[i + 5], pose[i + 6]);
+    ctx.drawImage(page, x, y, w, h, -ox * k, -oy * k, w * k, h * k);
+    ctx.restore();
   }
 }
 

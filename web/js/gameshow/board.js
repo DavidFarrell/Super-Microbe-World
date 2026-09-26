@@ -231,9 +231,12 @@ export class Board {
     const locked = this.locked >= 0;
     const isLocked = this.locked === i;
     const active = !locked && (this.hover === i || this.selected === i);
+    // Art frames: 1 up, 2 over (orange rim), 3 down (green rim). The green 'down' frame shows only
+    // while a finger or the mouse is held on it, as in Flash; a locked answer keeps the orange
+    // rim so that green never hints at a verdict before the host gives it.
     let frame = 1;
-    if (isLocked || this.pressed === i) frame = 3;
-    else if (active) frame = 2;
+    if (this.pressed === i && !locked) frame = 3;
+    else if (isLocked || active) frame = 2;
     if (isLocked && !reducedMotion) s *= 1 + 0.07 * Math.sin(Math.min(1, this.lockAge / 12) * Math.PI);
     else if (active && !reducedMotion) s *= 1.03;
     ctx.save();

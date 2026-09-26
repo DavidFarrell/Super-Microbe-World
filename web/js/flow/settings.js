@@ -362,6 +362,9 @@ export function openSettings(app, { onClose } = {}) {
   if (app.flow) app.flow.overlayOpen = true;
   const inertBefore = [...app.ui.children].map(n => [n, n.inert]);
   for (const [n] of inertBefore) n.inert = true;
+  // The game's own input (keys, touch controls, gamepad) is off while the overlay is open.
+  const inputWas = input.enabled;
+  input.enabled = false;
   let popNav = null;
   const close = () => {
     panel.destroy();
@@ -371,6 +374,7 @@ export function openSettings(app, { onClose } = {}) {
     for (const [n, was] of inertBefore) if (n.isConnected) n.inert = was;
     if (app.flow) app.flow.overlayOpen = false;
     input.clearAll();
+    input.enabled = inputWas;
     window.__test && window.__test.unregister('settings');
     if (typeof onClose === 'function') onClose();
   };

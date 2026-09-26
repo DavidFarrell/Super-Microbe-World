@@ -49,8 +49,9 @@ import { loadAtlases, atlasSet, drawStill, hasArt, frameOfTick } from './art.js'
 import { wrap, fitLine, ARIAL, roundRect } from './text.js';
 
 const SYMBOL = 'gs_talkie';
-// The box's nested arrow clip blinks on its own 10-frame cycle; frame 21 is drawn with the arrow
-// showing (atlas y 1810) and frame 10 ('start') without it (atlas y 2101).
+// The box's nested arrow clip blinks on a 10-frame cycle, 4 frames on and 6 off (Flash loops
+// frames 11-20 while it holds wait_for_click; web/NOTES-art-decisions.md). Frame 21 is drawn with
+// the arrow showing (atlas y 1810) and frame 10 ('start') without it (atlas y 2101).
 const FRAME_ARROW = 21;
 const FRAME_PLAIN = 10;
 // Talkie-local geometry, measured from the art (clip registration at its top-left corner).
@@ -85,6 +86,7 @@ export function createTalkie(app, opts = {}) {
   let tapQueued = false;
   let fontSize = 20;
   let lastBlip = -1;
+  let completeAt = -1;       // tick when the page finished typing (the arrow's blink starts there)
   let destroyed = false;
 
   // DOM tap zone (the original's big_invisible_button): transparent, under the scene's own UI.
@@ -155,6 +157,7 @@ export function createTalkie(app, opts = {}) {
     pageAge = 0;
     skipped = false;
     lastBlip = -1;
+    completeAt = -1;
     const p = pages[i];
     if (p && p.text && app.announce) app.announce(p.text.replace(/\n/g, ' '));
   }
@@ -203,8 +206,9 @@ export function createTalkie(app, opts = {}) {
       if (!active) { tapQueued = false; return; }
       const press = input.pressed('confirm') || input.pressed('jump') || tapQueued;
       tapQueued = false;
-      if (press) { advance(); return; }
+      if (press) { advance(); if (active && completeAt < 0 && shownChars() >= pageLength()) completeAt = tick; return; }
       pageAge++;
+      if (completeAt < 0 && shownChars() >= pageLength()) completeAt = tick;
       // Typewriter blips, throttled to every other visible character.
       const n = shownChars();
       if (sound && n > lastBlip && n < pageLength()) {
@@ -223,8 +227,11 @@ export function createTalkie(app, opts = {}) {
       ctx.save();
       ctx.globalAlpha *= e;
       ctx.translate(x, y + (1 - e) * 18);
+      // The arrow blinks on the clip's 10-frame cycle, 4 frames on and 6 off (loop frames 11-20),
+      // starting on when the page completes; steady with reduced motion.
       const complete = active && shownChars() >= pageLength();
-      const blinkOn = complete && (frameOfTick(tick) % 10) < 6;
+      const since = completeAt < 0 ? 0 : tick - completeAt;
+      const blinkOn = complete && (reduce || (frameOfTick(since) % 10) < 4);
       const drawn = drawStill(ctx, SYMBOL, blinkOn && hasArt(SYMBOL) ? FRAME_ARROW : FRAME_PLAIN);
       if (!drawn) drawFallbackBox(ctx, blinkOn);
       // Speaker name (Arial 20, white, in the blue box).

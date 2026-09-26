@@ -26,12 +26,14 @@ import { AVATAR_TIMELINE, SINK_TIMELINE } from './timeline.js';
 import { LOC, LOC_NAMES, TYPE, LEVELS, SNEEZE_CHANCE_START, drawLevelFood, makeItem, sneezeRoll, judge, hygieneNotes, scoreLevel, reportOf, correctLocations } from './rules.js';
 import { TARGET, TARGETS, TAB_ORDER, DEST_ORDER, SLOTS_BY_LOC, REST_POINTS, FOOD_BOX, CLOCK, AVATAR_POS, fitInBox, targetAt, neighbour, centre, inside } from './layout.js';
 import { KitchenControls } from './controls.js';
+import * as flowSettings from '../flow/settings.js';
 import { drawFood, drawBackground, drawCounter, drawSink, drawMark, drawGerms, drawHand, drawBubble, drawGlow, foodSize, roundRect } from './draw.js';
 import './sounds.js';
 
 const FPS = 25;                  // frames per game second (1 s = 25 frames exactly, NOTES 12.1)
 const SNEEZE_WINDOW = 50;        // frames: setInterval(makeSneeze, 2000) (KitchenGame.as:548)
-const BIN_FADE = 5;              // alpha per frame: removeBinItem, _alpha -= 5 every 40 ms (:621-629)
+const BIN_FADE = 5;
+const BANNER_MIN = 40;           // ticks the end-of-level banner shows at least              // alpha per frame: removeBinItem, _alpha -= 5 every 40 ms (:621-629)
 const TOUCH_PAUSE = ['pause'];
 const BAG = { x: 52, y: 186 };   // mouth of the shopping bag on the counter (items hop out of it)
 const AVATAR_ANIM = { [LOC.CUPBOARD]: 'cupboard', [LOC.BOWL]: 'bowl', [LOC.BIN]: 'bin' };
@@ -394,7 +396,9 @@ export function kitchenScene(app) {
   }
 
   function onSecond() {
-    if (gstate === 'end') { finishLevel(); return; }
+    // The outro follows at the next second tick (KitchenGame.as:168-177), but no sooner than 40
+    // ticks (0.6 s) after the end so the "All put away!" banner can be read.
+    if (gstate === 'end') { if (!banner || banner.age >= BANNER_MIN) finishLevel(); return; }
     timeLeft--;
     if (timeLeft < 0) {
       // The original showed "99" for this last second (KitchenGame.as:148-151); the port shows 0.
@@ -705,6 +709,7 @@ export function kitchenScene(app) {
   function finishLevel() {
     summary = scoreLevel(placements);
     report = reportOf(placements);
+    particles.clear(); popups.clear(); flights = []; marks = [];
     mode = 'outro';
     held = false; dragging = false; focusId = null;
     if (controls) { controls.hide(); controls.enabledKeys = false; }
@@ -836,8 +841,15 @@ export function kitchenScene(app) {
         button(t('pause.resume'), () => resume(), { class: 'primary', id: 'kz-resume' }),
         button(t('pause.restart'), () => restart(), { id: 'kz-restart' }),
         button(t('pause.quit'), () => quit(), { id: 'kz-quit' })),
-      el('div', { class: 'row' }, toggle));
+      el('div', { class: 'row' }, toggle, settingsButton()));
     showOverlay(card);
+  }
+
+  // The flow's settings overlay (web/js/flow/contract.md), when that module provides it.
+  function settingsButton() {
+    const open = flowSettings && typeof flowSettings.openSettings === 'function' ? flowSettings.openSettings : null;
+    if (!open) return null;
+    return button(t('kitchen.pause.settings'), () => open(app, { onClose: () => { if (overlay) focusFirst(overlay); } }), { id: 'kz-settings', class: 'kz-toggle' });
   }
 
   function resume() {
@@ -900,6 +912,7 @@ export function kitchenScene(app) {
       const dev = device();
       if (dev !== lastDevice) { lastDevice = dev; onDeviceChange(); }
       if (mode === 'paused') {
+        if (app.flow && app.flow.overlayOpen) return;   // the settings overlay has the input
         if (input.pressed('pause') || input.pressed('back')) resume();
         return;   // the picture freezes under the pause card
       }

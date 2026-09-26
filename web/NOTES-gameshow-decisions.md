@@ -12,7 +12,7 @@ the port applies them, with sources. Source paths are relative to `reference/Jun
 | `js/gameshow/talkie.js` | `createTalkie()`, the host's dialogue box (port of `general/Talkie.as`), shared with the flow area's cutscene and ending |
 | `js/gameshow/studio.js` | `Studio`: set, host, Harry, Amy, podia, LCD scoreboards with eased counters, name tags, podium plaque (also used by the cutscene and ending) |
 | `js/gameshow/board.js` | `Board`: the question board, canvas art and text plus transparent DOM answer buttons |
-| `js/gameshow/art.js` | Atlas access, rig drawing (as `tools/swf-sheet/atlas-draw.js`), `Clip` timeline player |
+| `js/gameshow/art.js` | Atlas access, rig drawing (following `tools/swf-sheet/atlas-draw.js`; the flow's cutscene imports it too), `Clip` timeline player, pre-scaled copies of the large static frames |
 | `js/gameshow/rules.js` | Pure scoring rules, CPU choice, reactions, blind intro filter, button labels (no browser dependencies; the spec imports it in Node) |
 | `js/gameshow/sound.js` | Synthesised effects (`gs*`) and the `gameshow` music track |
 | `js/gameshow/text.js`, `style.js` | Canvas text wrapping and fitting; the scene's CSS (`gs-` classes) |
@@ -41,7 +41,8 @@ the port applies them, with sources. Source paths are relative to `reference/Jun
    (`eBugGameShow.swf` sprites 479 and 732) and is kept; NOTES 6.1 describes only Harry's.
 6. **Talkie** (`general/Talkie.as`): one character per 40 ms (`speed = 1` per 25 fps frame,
    `:26,62-77`), converted to ticks (`floor(age * 15 / 40)`); the first press completes the line,
-   the second advances (`buttonClick`, `:85-99`); Arial 20 white at talkie-local (17, 50), speaker
+   the second advances (`buttonClick`, `:85-99`); the arrow blinks 4 frames on, 6 off (the nested
+   clip's cycle while Flash holds `wait_for_click`); Arial 20 white at talkie-local (17, 50), speaker
    "Gameshow Host" (`GameShow.as:150`), talkie at (20, 308) (`:65-67`).
 7. **Board**: "Question N", the question text, "10 Points" (`:185-187`), buttons Agree / Don't
    Know / Disagree in that order (`:189-191`), placed from the `question_board` tracks. No time
@@ -86,8 +87,9 @@ the port applies them, with sources. Source paths are relative to `reference/Jun
    in the blind half), podium name tags (the player's gold), a pause button and menu (Resume,
    Settings, Quit to title), key badges and an input hint on the board, and a results card when
    the scene is opened without a callback. None of these existed in Flash.
-7. **Podium logo**: the host's podium still shows the e-Bug smiley in the rendered art; a gold
-   "?" plaque covers it (NOTES 11.2), pending `web/requests/gameshow.md` #2.
+7. **Podium emblem**: the e-Bug smiley on the host's podium is erased in the art (NOTES 11.2,
+   `web/NOTES-art-decisions.md` 6). A gold "?" medallion of the same size keeps a bright emblem
+   where the original had one (`Studio.drawPodiumBadge()`, also used by the cutscene and ending).
 8. **Step right this way**: said at the end of the blind half (as in build A) and, when the flow
    passes `stepRight: true`, at the end of the sighted half (a shrink follows). Otherwise the
    sighted half ends on the last CPU line and a short pause (build B: "the last CPU line leads

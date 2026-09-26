@@ -34,6 +34,13 @@ const PAGE_FONT = 'Arial, "Helvetica Neue", Helvetica, sans-serif';
 // whole clip -90 degrees, so the text reads horizontally on the landscape phone.
 const BODY = { rect: [-2, -2, 102, 97.65], m: [0, 1.5961, -1.5961, 0, 167.8, 119.2] };
 const TITLE = { rect: [-2, -2, 148, 50.9], m: [0, 1, -1, 0, 56.9, 139.95] };
+// Body text box of a page: rect width and the field's position (DefineEditText placements in
+// sprite 1479, read from the SWF; every one is Arial 10 white, turned by the 1.5961 matrix).
+const box = (x1, tx, ty) => ({ rect: [-2, -2, x1, 97.65], m: [0, 1.5961, -1.5961, 0, tx, ty] });
+const WIDE = box(137.7, 168.45, 76);
+// Page frames are absolute frame numbers in level_intros (the stop() frames of each block);
+// levels 2-10 draw them from their own level_intros_<name> symbol (web/NOTES-art-decisions.md
+// section 5), level 1 from level_intros.
 export const INTRO_PAGES = {
   // level1 stops at frames 1, 3, 6, 9, 14, 20 and 30 (39 only sets finished = true).
   level1: [
@@ -45,7 +52,20 @@ export const INTRO_PAGES = {
     { frame: 20, title: TITLE, titleKey: 'intro.level1.5', body: { rect: [-2, -2, 118.55, 97.65], m: [0, 1.5961, -1.5961, 0, 175.45, 13.8] } },
     { frame: 30, body: { rect: [-2, -2, 92.6, 99.15], m: [0, 1.5961, -1.5961, 0, 165.85, 15.15] } },
   ],
+  level2: [{ frame: 40, body: BODY }, { frame: 45, body: BODY }],
+  level3: [{ frame: 50, body: box(102, 168.45, 54.1) }, { frame: 60, body: box(102, 168.45, 54.1) }],
+  level4: [{ frame: 70, body: box(102, 168.45, 54.1) }, { frame: 80, body: box(124.5, 176.45, 13.2) }],
+  level5: [{ frame: 90, body: box(124.5, 168.45, 18.2) }, { frame: 100, body: box(124.5, 168.45, 18.2) }],
+  level6: [{ frame: 110, body: box(100.8, 163.9, 116.05) }, { frame: 120, body: box(100.8, 170.9, 100.6) }, { frame: 130, body: box(137.7, 173.85, 72) }],
+  level7: [{ frame: 140, body: WIDE }, { frame: 150, body: WIDE }, { frame: 160, body: WIDE }, { frame: 170, body: WIDE }],
+  level8: [{ frame: 190, body: WIDE }, { frame: 200, body: WIDE }, { frame: 210, body: WIDE }],
+  level9: [{ frame: 221, body: WIDE }, { frame: 230, body: WIDE }],
+  level10: [241, 250, 260, 270, 280, 290].map(frame => ({ frame, body: WIDE })),
 };
+// Frames that hold a small looping inset animation while their page waits (the timeline stops
+// on the page frame but its nested clips keep playing; the frames up to the next stop show that
+// motion). [first, last] per page frame, from the level_intros scripts.
+const PAGE_LOOPS = { 80: [80, 89], 110: [110, 119], 120: [120, 129], 130: [130, 139], 140: [140, 149], 150: [150, 159], 160: [160, 169], 170: [170, 179] };
 // A text box for levels without page art: most of the big screen.
 const GENERIC_BODY = { rect: [0, 0, 164, 94], m: [0, 1.5961, -1.5961, 0, 168, 16] };
 
@@ -78,7 +98,9 @@ export class IntroPhone {
     const keys = introKeys(title);
     const layout = INTRO_PAGES[title];
     this.pages = (keys.length ? keys : ['goal']).map((key, i) => ({ key, ...(layout && layout[i] ? layout[i] : { frame: 0, body: GENERIC_BODY }) }));
-    this.labelFrame = sprites.symbol('level_intros')?.labels?.[title] || 0;
+    // Levels 2-10 have their own page symbol; level 1 (and anything else) uses level_intros.
+    this.symbol = sprites.hasSymbol(`level_intros_${title}`) ? `level_intros_${title}` : 'level_intros';
+    this.labelFrame = sprites.symbol(this.symbol)?.labels?.[title] || 0;
     this.phase = 'grow';
     this.age = 0;            // ticks in the current phase
     this.page = 0;
@@ -142,9 +164,19 @@ export class IntroPhone {
     audio.play('phoneShrink');
   }
 
+  // The level_intros frame shown for page i (absolute frame numbers; 0 = no page art).
   imageFrame(i) {
     const p = this.pages[i];
-    return p && p.frame ? this.labelFrame - 1 + p.frame : 0;
+    return p && p.frame && this.labelFrame ? p.frame : 0;
+  }
+
+  // The frame drawn now: a page with an inset animation loops through it while it waits.
+  liveFrame(i) {
+    const f = this.imageFrame(i);
+    const loop = PAGE_LOOPS[f];
+    if (!loop || this.reducedMotion) return f;
+    const n = Math.floor(this.pageAge * TICK_MS / FRAME_MS);
+    return loop[0] + (n % (loop[1] - loop[0] + 1));
   }
 
   update() {
@@ -216,9 +248,9 @@ export class IntroPhone {
     ctx.save();
     ctx.beginPath(); ctx.rect(0, 0, 180, 293); ctx.clip();
     ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 180, 293);
-    const frame = this.imageFrame(this.page);
-    if (this.prevImage && this.fade < 1) sprites.drawFrame(ctx, 'level_intros', this.prevImage, { alpha: 1 - this.fade });
-    if (frame) sprites.drawFrame(ctx, 'level_intros', frame, { alpha: this.prevImage ? this.fade : 1 });
+    const frame = this.phase === 'page' ? this.liveFrame(this.page) : this.imageFrame(this.page);
+    if (this.prevImage && this.fade < 1) sprites.drawFrame(ctx, this.symbol, this.prevImage, { alpha: 1 - this.fade });
+    if (frame) sprites.drawFrame(ctx, this.symbol, frame, { alpha: this.prevImage ? this.fade : 1 });
     const p = this.pages[this.page];
     const textAlpha = this.phase === 'page' ? Math.min(1, this.pageAge / 6) : this.phase === 'grow' ? clamp((k - 0.7) / 0.3, 0, 1) : clamp(k * 2 - 1, 0, 1);
     ctx.globalAlpha *= textAlpha;

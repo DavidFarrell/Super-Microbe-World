@@ -10,11 +10,11 @@ Scenes never decide what comes next on their own when a callback is given; witho
 |---|---|---|---|
 | `splash` | `web/js/scenes/splash.js` (flow) | `{}` (`?lang=<code>` applies a language and skips the first-run chooser) | `app.flow.newGame()` / `continueGame()` / level select / settings |
 | `cutscene` | `web/js/flow/` | `{ onComplete }` | `onComplete({ avatar: 'harry'\|'amy', nickname, age })` (`age` is a number or `null`) |
-| `shrink` | `web/js/flow/` | `{ avatar, round, onComplete }` | `onComplete()` |
+| `shrink` | `web/js/flow/` | `{ avatar, round, onComplete }` | `onComplete({ focus: { x, y } })` (stage point of the shrunk child; the flow centres the iris into the level on it) |
 | `platform` | `web/js/platformer/` | `{ level, avatar, score, intro, seed, onComplete(result), onGameOver(result), onQuit() }` | `result = { level, score, next, reason }`; `score` in is the running hoverboard total, `result.score` the new total |
 | `kitchen` | `web/js/kitchen/` | `{ level: 0..3, avatar, score, seed, onComplete(result), onQuit() }` | `result = { level, score, report: [{ item, ok, reason }] }`; `score` in is the running kitchen total, `result.score` the new total |
 | `gameshow` | `web/js/gameshow/` | `{ round: 1..5, avatar, nickname, cpuName, playerScore, cpuScore, blind, stepRight, seed, onComplete(result), onQuit() }` | `result = { playerScore, cpuScore, answers: [{ q, value }] }` |
-| `summary` | `web/js/flow/` | `{ kind: 'died'\|'time'\|'complete'\|'kitchen', result, lines?, backdrop?, buttons?, onComplete(choice) }` | `onComplete('retry' \| 'next' \| 'levelSelect' \| 'menu' \| 'continue')` |
+| `summary` | `web/js/flow/` | `{ kind: 'died'\|'time'\|'complete'\|'kitchen', result, lines?, title?, backdrop?, buttons?, onComplete(choice) }`; `backdrop` is a canvas (the flow copies `app.view.canvas` when the level ends, so the card sits over the frozen, dimmed level) | `onComplete('retry' \| 'next' \| 'levelSelect' \| 'menu' \| 'continue')` |
 | `ending` | `web/js/flow/` | `{ playerScore, cpuScore, hoverScore, kitchenScore, avatar, nickname }` | Play again / Level select / Main menu |
 | `levelSelect` | `web/js/flow/` | `{}` | starts a single level (platform or kitchen sub-level) standalone |
 | `settings` | `web/js/flow/` | `{ back, backParams }` | returns to `back` (default `splash`) |

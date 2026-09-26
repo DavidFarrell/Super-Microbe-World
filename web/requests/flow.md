@@ -59,3 +59,18 @@ running total (as the platform scene does with hoverboard points). The flow also
 - **Reason**: NOTES 11.2 (no e-Bug marks in the hosted build).
 - **Workaround**: the splash covers the podium smiley with the same "?" medallion the game
   show studio uses; the grey face is left as it is until the art audit decides.
+
+## 7. `web/tests/level1.spec.mjs`: the "splash: New Game starts level 1" test asserts the placeholder splash
+
+- **Change**: that test opens `index.html` with no parameters, clicks `#btn-new-game` at once and
+  expects level 1's briefing within 20 s. That was the placeholder splash's shortcut ("for now New
+  Game goes straight to level 1"). With the real flow (NOTES 2.1, 2.3) the menu appears at frame
+  150 of the tuning (6 s, or at once after a tap / Enter), a first-run language chooser comes
+  first unless `?lang=` is given, and New Game leads to the cutscene and the shrinking zone before
+  level 1. Suggested replacement: open `index.html?lang=en`, skip the tuning (tap or Enter), then
+  either play New Game through the cutscene (as `web/tests/flow.spec.mjs` does with the keyboard
+  and with touch) or go through Level select (`#btn-level-select`, then `#level-alpha_level1`),
+  which opens level 1 with its briefing.
+- **Reason**: the journey itself is the brief; keeping the shortcut would skip the cutscene.
+- **Workaround**: none from the flow side; `web/tests/flow.spec.mjs` covers splash to level 1 with
+  the keyboard and with touch.

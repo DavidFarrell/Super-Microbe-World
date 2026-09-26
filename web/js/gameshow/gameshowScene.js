@@ -299,10 +299,9 @@ export function gameshowScene(app) {
   // ------------------------------------------------------------------------------------------
   // Juice
   // ------------------------------------------------------------------------------------------
-  function podiumTop(who) { const c = studio.scoreCentre(who); return { x: c.x, y: c.y - 30 }; }
-
   function burstConfetti(who, count = 46) {
-    const p = podiumTop(who);
+    const k = studio.kidAnchor(who);
+    const p = { x: k.x, y: k.y + 25 };
     particles.emit(p.x, p.y, { count, colors: CONFETTI, shape: 'square', speed: 6.5, spread: 1.5, angle: -Math.PI / 2, gravity: 0.16, drag: 0.975, life: 80, size: 7 });
     particles.emit(p.x, p.y - 20, { count: Math.round(count / 3), colors: ['#fff6b0', '#ffffff'], shape: 'star', speed: 3.5, gravity: 0.02, life: 50, size: 7 });
   }

@@ -158,5 +158,6 @@
   "kitchen.legend.washKey": "H",
   "kitchen.legend.wash": "wash hands",
   "kitchen.legend.pauseKey": "Esc",
-  "kitchen.legend.pause": "pause"
+  "kitchen.legend.pause": "pause",
+  "kitchen.pause.settings": "Settings"
 }

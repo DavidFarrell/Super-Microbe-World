@@ -8,8 +8,9 @@ const CSS = `
   position: absolute; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer;
   border-radius: 18px; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
 }
-.gs-answer:focus { outline: none; }
-.gs-answer:focus-visible { outline: 4px solid #ffd84a; outline-offset: 3px; }
+/* The canvas draws the focused answer (the art's orange 'over' rim and a glow), so the DOM
+   button, which is transparent, draws no outline of its own. */
+.gs-answer:focus, .gs-answer:focus-visible { outline: none; }
 .gs-answer[disabled] { cursor: default; }
 .gs-pause {
   position: absolute; left: 8px; top: 8px; z-index: 5; padding: 0; width: 48px; height: 48px;

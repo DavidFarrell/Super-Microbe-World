@@ -173,29 +173,30 @@ export class Studio {
     ctx.restore();
   }
 
-  // The host's podium carries the e-Bug smiley in the art; the hosted build must not show it
-  // (NOTES 11.2), so a quiz-show "?" medallion covers it until the art is re-rendered.
+  // The original host podium carried the e-Bug smiley (a round emblem about 50 px across). The
+  // art now has it erased (NOTES 11.2, web/NOTES-art-decisions.md 6); a quiz-show "?" medallion
+  // of the same size keeps a bright emblem in that spot. Also drawn by the flow's cutscene and
+  // ending (Studio is shared).
   drawPodiumBadge(ctx) {
-    // The logo spans about x 228-279, y 281-350 on the stage; an oval plaque covers it.
-    const x = 253.5, y = 315.5, rx = 29, ry = 38;
+    const x = 254, y = 314, r = 23;
     ctx.save();
-    ctx.fillStyle = 'rgba(60, 10, 70, 0.25)';
-    ctx.beginPath(); ctx.ellipse(x + 2, y + 3, rx, ry, 0, 0, Math.PI * 2); ctx.fill();
-    const g = ctx.createRadialGradient(x - 9, y - 14, 3, x, y, ry);
+    ctx.fillStyle = 'rgba(60, 10, 70, 0.28)';
+    ctx.beginPath(); ctx.arc(x + 2, y + 3, r, 0, Math.PI * 2); ctx.fill();
+    const g = ctx.createRadialGradient(x - 7, y - 9, 2, x, y, r);
     g.addColorStop(0, '#fff3a6');
     g.addColorStop(1, '#ffc93a');
     ctx.fillStyle = g;
     ctx.strokeStyle = '#7a2f99';
-    ctx.lineWidth = 3.5;
-    ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.65)';
     ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.ellipse(x, y, rx - 5, ry - 5, 0, Math.PI * 1.1, Math.PI * 1.45); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x, y, r - 5, Math.PI * 1.1, Math.PI * 1.45); ctx.stroke();
     ctx.fillStyle = '#7a2f99';
-    ctx.font = `800 44px ${BALOO}`;
+    ctx.font = `800 32px ${BALOO}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('?', x, y + 4);
+    ctx.fillText('?', x, y + 3);
     ctx.restore();
   }
 
