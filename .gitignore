@@ -28,3 +28,8 @@
 *.unityproj
 *.sln
 *.userprefs
+# Remake tooling
+node_modules/
+test-results/
+playwright-report/
+reference/other/

@@ -1,0 +1,15 @@
+{
+  "name": "super-microbe-world",
+  "private": true,
+  "description": "Browser-native remake of Super Microbe World (e-Bug Junior Game). The game in web/ has no runtime dependencies; these are dev-only tools.",
+  "type": "module",
+  "scripts": {
+    "serve": "npx --yes serve web",
+    "test": "node web/tests/run.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@ruffle-rs/ruffle": "^0.6.0",
+    "swf-parser": "^0.14.1"
+  }
+}
