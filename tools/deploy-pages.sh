@@ -8,15 +8,18 @@ REPO_ROOT=$(pwd)
 WT=$(mktemp -d)
 MSG=${1:-"Deploy Super Microbe World remake to /play/"}
 
-node tools/build-precache.mjs
+# Deploy exactly what is committed at HEAD (never half-edited working-tree files).
+SNAP=$(mktemp -d)
+git archive HEAD web | tar -x -C "$SNAP"
+node tools/build-precache.mjs "$SNAP/web"
 git fetch -q origin gh-pages
 git worktree add -q "$WT" origin/gh-pages
-trap 'git -C "$REPO_ROOT" worktree remove --force "$WT" >/dev/null 2>&1 || true' EXIT
+trap 'git -C "$REPO_ROOT" worktree remove --force "$WT" >/dev/null 2>&1 || true; rm -rf "$SNAP"' EXIT
 
 rm -rf "$WT/play"
 mkdir -p "$WT/play"
 # Copy runtime files only (no tests, notes or screenshots).
-(cd web && find . -type f \
+(cd "$SNAP/web" && find . -type f \
   ! -path './tests/*' ! -path './screenshots/*' ! -name '*.md' ! -name '*.map' \
   -print0 | xargs -0 -I{} cp --parents {} "$WT/play/")
 

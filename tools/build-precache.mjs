@@ -12,7 +12,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 
-const WEB = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../web');
+// Optional argument: the web folder to process (default: this repo's web/).
+const WEB = path.resolve(process.argv[2] || path.join(path.dirname(new URL(import.meta.url).pathname), '../web'));
 // Not part of the game: tests, screenshots, notes, source maps, dotfiles, loose PNGs, and the
 // 512 px icons (the browser fetches manifest icons itself when installing).
 const SKIP = [/^tests\//, /^screenshots\//, /^precache\.json$/, /^NOTES.*\.md$/, /^PROGRESS\.md$/, /^README\.md$/, /\.map$/, /(^|\/)\./, /^artifact\//, /\.png$/, /-512\.png$/];
