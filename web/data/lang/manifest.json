@@ -1,0 +1,5 @@
+{
+  "_comment": "Languages offered in game and the per-area string files loaded for each (data/lang/<code>/<namespace>.json). Codes follow the original XML prefixes: en = en_en.",
+  "languages": ["en"],
+  "namespaces": ["platform", "levels", "gameshow", "kitchen", "flow"]
+}
