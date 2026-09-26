@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Good and Bad Bugs</name>
+	<round_id>1</round_id>
+	<next_round>gameshow_round3.xml</next_round>
+	<intro_text>
+		<blind>
+			<statement>Welcome to the SECOND ROUND!</statement>
+			<statement>This time, we're going to see what you know about how you get better from infections.</statement>
+			<statement>Remember, this is a BLIND QUESITON ROUND so you'll get a bonus later if you get these right.</statement>
+			<statment>Lets go!</statment>
+		</blind>
+		<normal>
+			<statement>Not bad.  Not bad at all...</statement>
+			<statement>Let's see how you do on those questions again...</statement>
+			<statement>Remember, 10 points for a correct answer, but if you get it wrong, the other player gets the points.</statement>
+			<statement>So if you DON'T KNOW the answer, it's best to play it safe and say so!</statement>
+			<statement>Ready?</statement>
+			<statement>Let's go!</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotics kill bacteria</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<lable>Don't Know</lable>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="1">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotics kill viruses</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="2">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotics will cure any illness</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="3">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotics kill our good bacteria</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="4">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotics help when you have a cough</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="5">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Most coughs and colds get better without antibiotics</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="6">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Vaccines help protect people against some microbes</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+		<question id="7">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>It is OK to use my friend's medicines</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>-1</value>
+				</answer>
+				<answer>
+					<label>Don't Know</label>
+					<value>0</value>
+				</answer>
+				<answer>
+					<label>Disagree</label>
+					<value>1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

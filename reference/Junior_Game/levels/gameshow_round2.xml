@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<round id="0">
+	<name>Treatment of infection</name>
+	<round_id>1</round_id>
+	<next_round>exit</next_round>
+	<intro_text>
+		<blind>
+			<statement>Welcome to the SECOND ROUND!</statement>
+		</blind>
+		<normal>
+			<statement>Not bad.  Not bad at all...</statement>
+		</normal>
+	</intro_text>
+	<questions>
+		<question id="0">
+			<type>0</type>
+			<score>10</score>
+			<value>1</value>
+			<text>Antibiotics kill bacteria</text>
+			<answers>
+				<answer>
+					<label>Agree</label>
+					<value>1</value>
+				</answer>
+				<answer>
+					<lable>Don't Know</lable>
+					<value>0</value>
+				</answer>
+				<answer>
+					<lable>Disagree</lable>
+					<value>-1</value>
+				</answer>
+			</answers>
+		</question>
+	</questions>
+</round>

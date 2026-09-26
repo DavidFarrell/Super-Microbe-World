@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<questions>
+	<question id="0">
+		<type>0</type>
+		<score>10</score>
+		<value>1</value>
+		<text>If you cannot see a microbe it is not there</text>
+		<answers>
+			<answer>
+				<label>Agree</label>
+				<value>-1</value>
+			</answer>
+			<answer>
+				<lable>Don't Know</lable>
+				<value>0</value>
+			</answer>
+			<answer>
+				<lable>Disagree</lable>
+				<value>1</value>
+			</answer>
+		</answers>
+	</question>
+	<question id="1">
+		<type>0</type>
+		<score>10</score>
+		<value>1</value>
+		<text>All bacteria are harmful</text>
+		<answers>
+			<answer>
+				<label>Agree</label>
+				<value>-1</value>
+			</answer>
+			<answer>
+				<label>Don't Know</label>
+				<value>0</value>
+			</answer>
+			<answer>
+				<label>Disagree</label>
+				<value>1</value>
+			</answer>
+		</answers>
+	</question>
+	<question id="2">
+		<type>0</type>
+		<score>10</score>
+		<value>1</value>
+		<text>Bacteria and Viruses are the same</text>
+		<answers>
+			<answer>
+				<label>Agree</label>
+				<value>-1</value>
+			</answer>
+			<answer>
+				<label>Don't Know</label>
+				<value>0</value>
+			</answer>
+			<answer>
+				<label>Disagree</label>
+				<value>1</value>
+			</answer>
+		</answers>
+	</question>
+	<question id="3">
+		<type>0</type>
+		<score>10</score>
+		<value>1</value>
+		<text>Fungi are microbes</text>
+		<answers>
+			<answer>
+				<label>Agree</label>
+				<value>1</value>
+			</answer>
+			<answer>
+				<label>Don't Know</label>
+				<value>0</value>
+			</answer>
+			<answer>
+				<label>Disagree</label>
+				<value>-1</value>
+			</answer>
+		</answers>
+	</question>
+	<question id="4">
+		<type>0</type>
+		<score>10</score>
+		<value>1</value>
+		<text>Microbes are found on our hands</text>
+		<answers>
+			<answer>
+				<label>Agree</label>
+				<value>1</value>
+			</answer>
+			<answer>
+				<label>Don't Know</label>
+				<value>0</value>
+			</answer>
+			<answer>
+				<label>Disagree</label>
+				<value>-1</value>
+			</answer>
+		</answers>
+	</question>
+</questions>

@@ -1,0 +1,20 @@
+Alpha Levels
+
+Questions on General Microbes
+Level 1: 	Photo 3 lucy 		Kitchen			alpha_level1.xml
+Level 2:	Photo 3 lucy		Skin			alpha_level2.xml
+Level 3:	Photo 3 Staph		Skin			alpha_level3.xml
+Level 4:	Photo 3 Patty		Kitchen			alpha_level4.xml
+
+Questions on Good and Bad
+Level 5:	Kill 3 Slurm		?			alpha_level5.xml
+Level 6: 	Kill all bad (dl)	skin			alpha_level6.xml
+Level 7:	Kill all bad (iggy)	body			alpha_level7.xml
+
+Questions on Usefulness
+Level 8:	Make 1 Yogurt		Kitchen
+Level 9:	Make 2 Yogurt		Kitchen
+
+Questions on Antibiotics
+
+Level 10:	Kill Superbug		Body

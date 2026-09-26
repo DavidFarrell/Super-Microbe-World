@@ -1,0 +1,801 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tile_definitions>
+	<tile>
+		<label>Crinkle Chip Left</label>
+		<data></data>
+		<type>tile</type>
+		<icon>C_Chip_L_Tile</icon>
+		<movie>C_Chip_L_Tile</movie>
+	</tile>
+	<tile>
+		<label>Crinkle Chip Mid</label>
+		<data></data>
+		<type>tile</type>
+		<icon>C_Chip_Mid_Tile</icon>
+		<movie>C_Chip_Mid_Tile</movie>
+	</tile>
+	<tile>
+		<label>Crinkle Chip Right</label>
+		<data></data>
+		<type>tile</type>
+		<icon>C_Chip_R_Tile</icon>
+		<movie>C_Chip_R_Tile</movie>
+	</tile>
+	<tile>
+		<label>Cheese Left</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Cheese_L_Tile</icon>
+		<movie>Cheese_L_Tile</movie>
+	</tile>
+	<tile>
+		<label>Cheese Mid</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Cheese_Mid_Tile</icon>
+		<movie>Cheese_Mid_Tile</movie>
+	</tile>
+	<tile>
+		<label>Cheese Right</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Cheese_R_Tile</icon>
+		<movie>Cheese_R_Tile</movie>
+	</tile>
+	<tile>
+		<label>Chip Left</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Chip_L_Tile</icon>
+		<movie>Chip_L_Tile</movie>
+	</tile>
+	<tile>
+		<label>Chip Mid</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Chip_Mid_Tile</icon>
+		<movie>Chip_Mid_Tile</movie>
+	</tile>
+	<tile>
+		<label>Chip Right</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Chip_R_Tile</icon>
+		<movie>Chip_R_Tile</movie>
+	</tile>
+	<tile>
+		<label>Chopping Board Left</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Chop_L_Tile</icon>
+		<movie>Chop_L_Tile</movie>
+	</tile>
+	<tile>
+		<label>Chopping Board M1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Chop_Mid1_Tile</icon>
+		<movie>Chop_Mid1_Tile</movie>
+	</tile>
+	<tile>
+		<label>Chopping Board M2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Chop_Mid2_Tile</icon>
+		<movie>Chop_Mid2_Tile</movie>
+	</tile>
+	<tile>
+		<label>Chopping Board M3</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Chop_Mid3_Tile</icon>
+		<movie>Chop_Mid3_Tile</movie>
+	</tile>
+	<tile>
+		<label>Chopping Board Right</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Chop_R_Tile</icon>
+		<movie>Chop_R_Tile</movie>
+	</tile>
+	<tile>
+		<label>Bread Left</label>
+		<data></data>
+		<type>tile</type>
+		<icon>loaf_end_L_obj</icon>
+		<movie>loaf_end_L_obj</movie>
+	</tile>
+	<tile>
+		<label>Bread Middle</label>
+		<data></data>
+		<type>tile</type>
+		<icon>loaf_mid_obj</icon>
+		<movie>loaf_mid_obj</movie>
+	</tile>
+	<tile>
+		<label>Bread Mould 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>loaf_mid_mould_obj</icon>
+		<movie>loaf_mid_mould_obj</movie>
+	</tile>
+	<tile>
+		<label>Bread Mould 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>loaf_mid_mould2_obj</icon>
+		<movie>loaf_mid_mould2_obj</movie>
+	</tile>
+	<tile>
+		<label>Bread Mould 3</label>
+		<data></data>
+		<type>tile</type>
+		<icon>loaf_mid_mould3_obj</icon>
+		<movie>loaf_mid_mould3_obj</movie>
+	</tile>
+	<tile>
+		<label>Bread Right</label>
+		<data></data>
+		<type>tile</type>
+		<icon>loaf_end_R_obj</icon>
+		<movie>loaf_end_R_obj</movie>
+	</tile>
+	<tile>
+		<label>Pepper Whole</label>
+		<data></data>
+		<type>tile</type>
+		<icon>pepper_obj</icon>
+		<movie>pepper_obj</movie>
+	</tile>
+	<tile>
+		<label>Salt Whole</label>
+		<data></data>
+		<type>tile</type>
+		<icon>salt_obj</icon>
+		<movie>salt_obj</movie>
+	</tile>
+	<tile>
+		<label>Sausage Left</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Sausage_L_Tile</icon>
+		<movie>Sausage_L_Tile</movie>
+	</tile>
+	<tile>
+		<label>Sausage Mid</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Sausage_Mid_Tile</icon>
+		<movie>Sausage_Mid_Tile</movie>
+	</tile>
+	<tile>
+		<label>Sausage Right</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Sausage_R_Tile</icon>
+		<movie>Sausage_R_Tile</movie>
+	</tile>
+	<tile>
+		<label>Sugar</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Sugar_Tile</icon>
+		<movie>Sugar_Tile</movie>
+	</tile>
+	<tile>
+		<label>Jammy Toast</label>
+		<data></data>
+		<type>tile</type>
+		<icon>toast_jam_obj</icon>
+		<movie>toast_jam_obj</movie>
+	</tile>
+	<tile>
+		<label>Butter Toast</label>
+		<data></data>
+		<type>tile</type>
+		<icon>toast_marm_obj</icon>
+		<movie>toast_marm_obj</movie>
+	</tile>
+	<tile>
+		<label>Unit Left 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Unit_1_Tile</icon>
+		<movie>Unit_1_Tile</movie>
+	</tile>
+	<tile>
+		<label>Unit Left 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Unit_4_Tile</icon>
+		<movie>Unit_4_Tile</movie>
+	</tile>
+	<tile>
+		<label>Unit Mid 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Unit_2_Tile</icon>
+		<movie>Unit_2_Tile</movie>
+	</tile>
+	<tile>
+		<label>Unit Mid 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Unit_5_Tile</icon>
+		<movie>Unit_5_Tile</movie>
+	</tile>
+	<tile>
+		<label>Unit Right 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Unit_3_Tile</icon>
+		<movie>Unit_3_Tile</movie>
+	</tile>
+	<tile>
+		<label>Unit Right 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Unit_6_Tile</icon>
+		<movie>Unit_6_Tile</movie>
+	</tile>
+	<tile>
+		<label>Yogurt Left</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Yog_L_Tile</icon>
+		<movie>Yog_L_Tile</movie>
+	</tile>
+	<tile>
+		<label>Yogurt Mid</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Yog_Mid_Tile</icon>
+		<movie>Yog_Mid_Tile</movie>
+	</tile>
+	<tile>
+		<label>Yogurt Right</label>
+		<data></data>
+		<type>tile</type>
+		<icon>Yog_R_Tile</icon>
+		<movie>Yog_R_Tile</movie>
+	</tile>
+	<tile>
+		<label>Yogurt Lid</label>
+		<data></data>
+		<type>tile</type>
+		<icon>yoghurt_lid_obj</icon>
+		<movie>yoghurt_lid_obj</movie>
+	</tile>
+	<tile>
+		<label>Yogurt Carton</label>
+		<data></data>
+		<type>tile</type>
+		<icon>yoghurt_obj</icon>
+		<movie>yoghurt_obj</movie>
+	</tile>
+	<tile>
+		<label>Acid Pit Left</label>
+		<data></data>
+		<type>tile</type>
+		<icon>acid_pit_start_obj</icon>
+		<movie>acid_pit_start_obj</movie>
+	</tile>
+	<tile>
+		<label>Acid Pit Mid</label>
+		<data></data>
+		<type>tile</type>
+		<icon>acid_pit_mid_obj</icon>
+		<movie>acid_pit_mid_obj</movie>
+	</tile>
+	<tile>
+		<label>Acid Pit Right</label>
+		<data></data>
+		<type>tile</type>
+		<icon>acid_pit_end_obj</icon>
+		<movie>acid_pit_end_obj</movie>
+	</tile>
+	<tile>
+		<label>Bone Left</label>
+		<data></data>
+		<type>tile</type>
+		<icon>bone_start_obj</icon>
+		<movie>bone_start_obj</movie>
+	</tile>
+	<tile>
+		<label>Bone Mid</label>
+		<data></data>
+		<type>tile</type>
+		<icon>bone_mid_obj</icon>
+		<movie>bone_mid_obj</movie>
+	</tile>
+	<tile>
+		<label>Bone Right</label>
+		<data></data>
+		<type>tile</type>
+		<icon>bone_end_obj</icon>
+		<movie>bone_end_obj</movie>
+	</tile>
+	<tile>
+		<label>Bubble</label>
+		<data></data>
+		<type>tile</type>
+		<icon>bubble_obj</icon>
+		<movie>bubble_obj</movie>
+	</tile>
+	<tile>
+		<label>Red Cell Front</label>
+		<data></data>
+		<type>tile</type>
+		<icon>cell_front_obj</icon>
+		<movie>cell_front_obj</movie>
+	</tile>
+	<tile>
+		<label>Red Cell Side</label>
+		<data></data>
+		<type>tile</type>
+		<icon>cell_side_obj</icon>
+		<movie>cell_side_obj</movie>
+	</tile>
+	<tile>
+		<label>Red Left</label>
+		<data></data>
+		<type>tile</type>
+		<icon>corner_l_tile</icon>
+		<movie>corner_l_tile</movie>
+	</tile>
+	<tile>
+		<label>Gristle Mid 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>flesh_gristle_1_tile</icon>
+		<movie>flesh_gristle_1_tile</movie>
+	</tile>
+	<tile>
+		<label>Gristle Mid 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>flesh_gristle_2_tile</icon>
+		<movie>flesh_gristle_2_tile</movie>
+	</tile>
+	<tile>
+		<label>Gristle Mid 3</label>
+		<data></data>
+		<type>tile</type>
+		<icon>flesh_gristle_3_tile</icon>
+		<movie>flesh_gristle_3_tile</movie>
+	</tile>
+	<tile>
+		<label>Gristle Mid 4</label>
+		<data></data>
+		<type>tile</type>
+		<icon>flesh_gristle_4_tile</icon>
+		<movie>flesh_gristle_4_tile</movie>
+	</tile>
+	<tile>
+		<label>Gristle Mid 5</label>
+		<data></data>
+		<type>tile</type>
+		<icon>flesh_gristle_5_tile</icon>
+		<movie>flesh_gristle_5_tile</movie>
+	</tile>
+	<tile>
+		<label>Gristle Mid 6</label>
+		<data></data>
+		<type>tile</type>
+		<icon>flesh_gristle_6_tile</icon>
+		<movie>flesh_gristle_6_tile</movie>
+	</tile>
+	<tile>
+		<label>Red Right</label>
+		<data></data>
+		<type>tile</type>
+		<icon>corner_r_tile</icon>
+		<movie>corner_r_tile</movie>
+	</tile>
+	<tile>
+		<label>Fleshy Tile 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>flesh_tile</icon>
+		<movie>flesh_tile</movie>
+	</tile>
+	<tile>
+		<label>Fleshy Tile 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>floor_a_tile</icon>
+		<movie>floor_a_tile</movie>
+	</tile>
+	<tile>
+		<label>Fleshy Tile 3</label>
+		<data></data>
+		<type>tile</type>
+		<icon>floor_b_tile</icon>
+		<movie>floor_b_tile</movie>
+	</tile>
+	<tile>
+		<label>Fleshy Platform Left</label>
+		<data></data>
+		<type>tile</type>
+		<icon>platform_start_obj</icon>
+		<movie>platform_start_obj</movie>
+	</tile>
+	<tile>
+		<label>Fleshy Platform Middle</label>
+		<data></data>
+		<type>tile</type>
+		<icon>platform_mid_obj</icon>
+		<movie>platform_mid_obj</movie>
+	</tile>
+	<tile>
+		<label>Fleshy Platform Bridge</label>
+		<data></data>
+		<type>tile</type>
+		<icon>platform_bridge_obj</icon>
+		<movie>platform_bridge_obj</movie>
+	</tile>
+	<tile>
+		<label>Fleshy Platform Right</label>
+		<data></data>
+		<type>tile</type>
+		<icon>platform_end_obj</icon>
+		<movie>platform_end_obj</movie>
+	</tile>
+	<tile>
+		<label>Roof 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>roof_a_tile</icon>
+		<movie>roof_a_tile</movie>
+	</tile>
+	<tile>
+		<label>Roof 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>roof_b_tile</icon>
+		<movie>roof_b_tile</movie>
+	</tile>
+	<tile>
+		<label>Wall Left 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>vertical_b_r_tile</icon>
+		<movie>vertical_b_r_tile</movie>
+	</tile>
+	<tile>
+		<label>Wall Right 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>vertical_b_l_tile</icon>
+		<movie>vertical_b_l_tile</movie>
+	</tile>
+	<tile>
+		<label>Wall Left 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>vertical_a_r_tile</icon>
+		<movie>vertical_a_r_tile</movie>
+	</tile>
+	<tile>
+		<label>Wall Right 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>vertical_a_l_tile</icon>
+		<movie>vertical_a_l_tile</movie>
+	</tile>
+	<tile>
+		<label></label>
+		<data></data>
+		<type>tile</type>
+		<icon></icon>
+		<movie></movie>
+	</tile>
+	<tile>
+		<label>Villi Floor</label>
+		<data></data>
+		<type>tile</type>
+		<icon>villi_floor_obj</icon>
+		<movie>villi_floor_obj</movie>
+	</tile>
+	<tile>
+		<label>Villi Roof</label>
+		<data></data>
+		<type>tile</type>
+		<icon>villi_roof_obj</icon>
+		<movie>villi_roof_obj</movie>
+	</tile>
+	<tile>
+		<label>Hair Base</label>
+		<data></data>
+		<type>tile</type>
+		<icon>hair_base_obj</icon>
+		<movie>hair_base_obj</movie>
+	</tile>
+	<tile>
+		<label>Hair Vertical</label>
+		<data></data>
+		<type>tile</type>
+		<icon>hair_vert_obj</icon>
+		<movie>hair_vert_obj</movie>
+	</tile>
+	<tile>
+		<label>Hair Slope Start</label>
+		<data></data>
+		<type>tile</type>
+		<icon>hair_slope_start_obj</icon>
+		<movie>hair_slope_start_obj</movie>
+	</tile>
+	<tile>
+		<label>Hair Slope Mid 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>hair_slope_obj</icon>
+		<movie>hair_slope_obj</movie>
+	</tile>
+	<tile>
+		<label>Hair Slope Mid 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>hair_slope_end_obj</icon>
+		<movie>hair_slope_end_obj</movie>
+	</tile>
+	<tile>
+		<label>Hair Horizontal</label>
+		<data></data>
+		<type>tile</type>
+		<icon>hair_horiz_obj</icon>
+		<movie>hair_horiz_obj</movie>
+	</tile>
+	<tile>
+		<label>Hair Horizontal End</label>
+		<data></data>
+		<type>tile</type>
+		<icon>hair_horiz_end_obj</icon>
+		<movie>hair_horiz_end_obj</movie>
+	</tile>
+	<tile>
+		<label>Lint Ball</label>
+		<data></data>
+		<type>tile</type>
+		<icon>lint_ball_obj</icon>
+		<movie>lint_ball_obj</movie>
+	</tile>
+	<tile>
+		<label>Plaster Whole</label>
+		<data></data>
+		<type>tile</type>
+		<icon>plaster_singular_obj</icon>
+		<movie>plaster_singular_obj</movie>
+	</tile>
+	<tile>
+		<label>Plaster Multi Start</label>
+		<data></data>
+		<type>tile</type>
+		<icon>plaster_multi_start_obj</icon>
+		<movie>plaster_multi_start_obj</movie>
+	</tile>
+	<tile>
+		<label>Plaster Multi Mid 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>plaster_multi_mid_obj</icon>
+		<movie>plaster_multi_mid_obj</movie>
+	</tile>
+	<tile>
+		<label>Plaster Multi Mid 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>plaster_multi_bridge_obj</icon>
+		<movie>plaster_multi_bridge_obj</movie>
+	</tile>
+	<tile>
+		<label>Plaster Multi End</label>
+		<data></data>
+		<type>tile</type>
+		<icon>plaster_multi_end_obj</icon>
+		<movie>plaster_multi_end_obj</movie>
+	</tile>
+	<tile>
+		<label>Scab</label>
+		<data></data>
+		<type>tile</type>
+		<icon>scab_obj</icon>
+		<movie>scab_obj</movie>
+	</tile>
+	<tile>
+		<label>Skin 1</label>
+		<data></data>
+		<type>tile</type>
+		<icon>skin_base_tile</icon>
+		<movie>skin_base_tile</movie>
+	</tile>
+	<tile>
+		<label>Skin 2</label>
+		<data></data>
+		<type>tile</type>
+		<icon>skin_surface_tile</icon>
+		<movie>skin_surface_tile</movie>
+	</tile>
+	<tile>
+		<label>Splinter</label>
+		<data></data>
+		<type>tile</type>
+		<icon>splinter_obj</icon>
+		<movie>splinter_obj</movie>
+	</tile>
+	<tile>
+		<label>Large Spot</label>
+		<data></data>
+		<type>tile</type>
+		<icon>spot_large_obj</icon>
+		<movie>spot_large_obj</movie>
+	</tile>
+	<tile>
+		<label>Oozy Spot</label>
+		<data></data>
+		<type>tile</type>
+		<icon>spot_ooze_obj</icon>
+		<movie>spot_ooze_obj</movie>
+	</tile>
+	<tile>
+		<label>Small Spot</label>
+		<data></data>
+		<type>tile</type>
+		<icon>spot_small_obj</icon>
+		<movie>spot_small_obj</movie>
+	</tile>
+	<tile>
+		<label>Wart</label>
+		<data></data>
+		<type>tile</type>
+		<icon>wart_obj</icon>
+		<movie>wart_obj</movie>
+	</tile>
+	<tile>
+		<label>Lucy Lactobacillus</label>
+		<data></data>
+		<type>lucy</type>
+		<icon>lucy_icon</icon>
+		<movie>lucy</movie>
+	</tile>
+	<tile>
+		<label>Steve Staphylococcus</label>
+		<data></data>
+		<type>steve</type>
+		<icon>steve_icon</icon>
+		<movie>steve</movie>
+	</tile>
+	<tile>
+		<label>Colin Campylobacter</label>
+		<data></data>
+		<type>colin</type>
+		<icon>colin_icon</icon>
+		<movie>colin</movie>
+	</tile>
+	<tile>
+		<label>Donna Dermatophyte</label>
+		<data></data>
+		<type>donna</type>
+		<icon>donna_icon</icon>
+		<movie>donna</movie>
+	</tile>
+	<tile>
+		<label>Iggy Influenza</label>
+		<data></data>
+		<type>iggy</type>
+		<icon>iggy_icon</icon>
+		<movie>iggy</movie>
+	</tile>
+	<tile>
+		<label>Patty Pennicillium</label>
+		<data></data>
+		<type>patty</type>
+		<icon>patty_icon</icon>
+		<movie>patty</movie>
+	</tile>
+	<tile>
+		<label>Sandy Streptococcus</label>
+		<data></data>
+		<type>sandy</type>
+		<icon>sandy_icon</icon>
+		<movie>sandy</movie>
+	</tile>
+	<tile>
+		<label>Slurm Staphyloccocus</label>
+		<data></data>
+		<type>slurm</type>
+		<icon>slurm_icon</icon>
+		<movie>slurm</movie>
+	</tile>
+	<tile>
+		<label>Slarg Staphyloccus</label>
+		<data></data>
+		<type>slarg</type>
+		<icon>slarg_icon</icon>
+		<movie>slarg</movie>
+	</tile>
+	<tile>
+		<label>Superinfection</label>
+		<data></data>
+		<type>superinfection</type>
+		<icon>superinfection_icon</icon>
+		<movie>superinfection</movie>
+	</tile>
+	<tile>
+		<label>Super Campy</label>
+		<data></data>
+		<type>super_colin</type>
+		<icon>super_colin_icon</icon>
+		<movie>super_colin</movie>
+	</tile>
+	<tile>
+		<label>Super Slarg</label>
+		<data></data>
+		<type>super_slarg</type>
+		<icon>super_slarg_icon</icon>
+		<movie>super_slarg</movie>
+	</tile>
+	<tile>
+		<label>Super Slurm</label>
+		<data></data>
+		<type>super_slurm</type>
+		<icon>super_slurm_icon</icon>
+		<movie>super_slurm</movie>
+	</tile>
+	<tile>
+		<label>Milk Glass</label>
+		<data></data>
+		<type>milk_glass</type>
+		<icon>milk_glass_icon</icon>
+		<movie>milk_glass</movie>
+	</tile>
+	<tile>
+		<label>Portal 1</label>
+		<data></data>
+		<type>portal</type>
+		<icon>portal_exit_icon</icon>
+		<movie>portal_exit</movie>
+	</tile>
+	<tile>
+		<label>Portal 2</label>
+		<data></data>
+		<type>entrance_portal</type>
+		<icon></icon>
+		<movie></movie>
+	</tile>
+	<tile>
+		<label>Soap</label>
+		<data></data>
+		<type>soap_pickup</type>
+		<icon>soap_pickup</icon>
+		<movie>soap_pickup</movie>
+	</tile>
+	<tile>
+		<label>White Blood Cell</label>
+		<data></data>
+		<type>white_pickup</type>
+		<icon>white_pickup</icon>
+		<movie>white_pickup</movie>
+	</tile>
+	<tile>
+		<label>Player</label>
+		<data></data>
+		<type>player_start</type>
+		<icon>player_start</icon>
+		<movie>player_start</movie>
+	</tile>
+	<tile>
+		<label>Antibiotic Pickup</label>
+		<data></data>
+		<type>antibiotic_pickup</type>
+		<icon>antibiotic_pickup</icon>
+		<movie>antibiotic_pickup</movie>
+	</tile>
+	<tile>
+		<label>Eraser</label>
+		<data></data>
+		<type>eraser</type>
+		<icon>eraser</icon>
+		<movie>eraser</movie>
+	</tile>
+</tile_definitions>

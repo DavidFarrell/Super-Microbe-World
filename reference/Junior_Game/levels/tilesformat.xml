@@ -1,0 +1,41 @@
+	<tiles>
+		<tile id="0">
+			<movie>red_box</movie>
+			<sides>
+				<left>1</left>
+				<top>0</top>
+				<right>1</right>
+				<bottom>0</bottom>
+			</sides>
+			<rows>1</rows>
+			<cols>1</cols>
+			<entity>1</entity>			
+			<script></script>
+		</tile>
+		<tile id="1">
+			<movie>blue_box</movie>
+			<sides>
+				<left>0</left>
+				<top>0</top>
+				<right>0</right>
+				<bottom>0</bottom>
+			</sides>
+			<rows>1</rows>
+			<cols>1</cols>
+			<entity>0</entity>			
+			<script></script>
+		</tile>
+		<tile id="2">
+			<movie>green_box</movie>
+			<sides>
+				<left>0</left>
+				<top>0</top>
+				<right>0</right>
+				<bottom>0</bottom>
+			</sides>
+			<rows>1</rows>
+			<cols>1</cols>
+			<entity>0</entity>			
+			<script></script>
+		</tile>
+	</tiles>

@@ -1,0 +1,14 @@
+1	kitchen		3 lucys
+
+2 	skin		3 lucys
+
+3 	any		3 steve
+
+4	kitchen		3 pattys
+
+5	any		1 slurm photo
+
+6	skin		kill all bad
+
+7	body		kill all iggy
+

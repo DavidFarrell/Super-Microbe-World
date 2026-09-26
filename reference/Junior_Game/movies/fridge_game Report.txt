@@ -1,0 +1,118 @@
+fridge_game.swf Movie Report
+-----------------------------
+
+Frame #    Frame Bytes    Total Bytes    Scene
+-------    -----------    -----------    ----------------
+      1         295458         295458    Scene 1 (AS 2.0 Classes Export Frame)
+      2          48429         343887    
+      3           5404         349291    
+      4              1         349292    
+      5              1         349293    
+      6              1         349294    
+      7              1         349295    
+      8              1         349296    
+      9              1         349297    
+     10          19686         368983    
+     11             24         369007    
+     12              1         369008    
+     13              1         369009    
+     14              1         369010    
+     15              1         369011    
+     16              1         369012    
+     17              1         369013    
+     18              1         369014    
+     19              1         369015    
+     20          47877         416892    
+     21           2044         418936    
+     22              1         418937    
+     23              1         418938    
+     24              1         418939    
+     25              1         418940    
+     26              1         418941    
+     27              1         418942    
+     28              1         418943    
+     29              1         418944    
+     30            708         419652    
+     31             67         419719    
+     32              1         419720    
+     33              1         419721    
+     34              1         419722    
+     35              1         419723    
+     36              1         419724    
+     37              1         419725    
+     38              1         419726    
+     39              1         419727    
+     40            490         420217    
+     41             21         420238    
+     42              1         420239    
+     43              1         420240    
+     44              1         420241    
+     45              1         420242    
+     46              1         420243    
+     47              1         420244    
+     48              1         420245    
+     49              1         420246    
+     50              1         420247    
+
+Scene                        Shape Bytes    Text Bytes    ActionScript Bytes
+-------------------------    -----------    ----------    ------------------
+Scene 1                             2091          2020                  6013
+
+Symbol                       Shape Bytes    Text Bytes    ActionScript Bytes
+-------------------------    -----------    ----------    ------------------
+round_text_clip                        0           121                     0
+cupboard1                             41             0                     0
+bin                                 3938             0                     0
+shelf4                                41             0                     0
+game class                             0             0                     0
+fridge                             32523             0                     0
+chicken                             2344             0                     0
+sausages                            6359             0                     0
+cheese                               802             0                     0
+lettuce                             4531             0                     0
+springonion                         4011             0                     0
+cucumber                            7237             0                     0
+table                              10560             0                     0
+girl                               19122             0                     0
+bag                                 5663             0                     0
+tick                                  63             0                     0
+cross                                 88             0                     0
+bin                                 3938             0                     0
+cat                                18848             0                     0
+ball                               11361             0                     0
+bird                               17777             0                     0
+backdrop                           18100             0                     0
+paper                               1435             0                     0
+rubbish                                0             0                     0
+room                               46861             0                     0
+soup                                4539             0                     0
+cupboard                            8188             0                     0
+sad_girl                           19197             0                     0
+
+Font Name                 Bytes        Characters    
+----------------------    ---------    --------------
+Arial  32 pts                 27517     !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿˆ˜–—‘’‚“”„†‡•…‰‹›€™
+Arial Bold  32 pts            27069     !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿˆ˜–—‘’‚“”„†‡•…‰‹›€™
+Arial                          9587     .0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+Myriad Pro Bold               28347     :LSTcefimort
+
+ActionScript Bytes    Location
+------------------    --------
+                 0    Scene 1:script:1
+                 0    game class:Layer 1:1
+                 7    Scene 1:buttons:2:drawer2(shelf4)
+              5388    Scene 1:script:3
+               152    Scene 1:script:10
+               132    
+               128    Scene 1:script:20
+               134    
+               178    Scene 1:script:21
+               132    
+                80    Scene 1:script:30
+               136    
+                80    Scene 1:script:40
+             68500    ActionScript 2.0 Classes
+
+
+
+
