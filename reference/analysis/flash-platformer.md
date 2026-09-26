@@ -27,6 +27,7 @@ The main engine is `ebug.ParticleSystem`, a Jakobsen-style Verlet particle syste
 | Constraint iterations | 1 | `PlatformGame.as:153`, `ParticleSystem.as:154` |
 | Gravity | (0, 3000) per second², which is 2.7 px added per step | `PlatformGame.as:150` |
 | Drag (velocity multiplier per step) | 0.95 | `PlatformGame.as:151`, `ParticleSystem.as:324` |
+| Residual horizontal velocity | Never reaches 0 on its own. Positions are rounded to 3 dp and x is then snapped to 0.1 px every UPDATE, so coasting settles at **+1.0 px/step (right) or −0.9 px/step (left)** after about 61 steps and creeps forever (about 33 px/s). Any x velocity from −0.9 to +1.0 on the 0.1 grid is a fixed point. | §2.2, `Vector3.as:24-41,61`, `PlatformGame.as:1017` |
 | Horizontal force friction | ×0.9 if abs(force.x) > 10, else ×0.8 | `ParticleSystem.as:371-375` |
 | Speed clamp (`maxChange`) | per axis, the smallest half-size of any non-exempt box: 25 px/step y; 25, 23.98 or 21.16 px/step x per level (table §2.6) | `ParticleSystem.as:221-233,338-347` |
 | Tile size | 50 px (`Constants.TILE_WIDTH`) | `Constants.as:22` |
@@ -196,6 +197,10 @@ So the event queue at step 8 is ordered like this: COLLIDEs from the last physic
   - **Position**: `clip._x = particle.position.x - screenTopLeft.xPos + mirroredImageOffset` and `clip._y = particle.position.y`. There is no vertical camera.
   - **Off-screen** (`_x > 800 || _x + _width <= 0`): `isOnScreen = false` and `particle.physicsExcempt = true`.
   - **On-screen**: `isOnScreen = true`, and `physicsExcempt = false` **only if** `state` is `GAME_ENTITY_STATE_DYNAMIC` (4), `FALL` (8) or `JUMP_MID` (13). Entities with bespoke states (milk 100-102, player 101/102, bullets 100-102) that ever go off-screen stay physics-exempt when they come back.
+- **Spawned entities start off-screen.** Bullets, the camera flash and the antibiotic bomb are created in the event loop (`PlatformGame.as:670-821`), and those handlers never set `isOnScreen`. The `GameEntity` constructor sets it to false (`GameEntity.as:103`).
+  - They are skipped by the advance loop (621) until a RENDER has positioned them and marked them on screen.
+  - They also do not act as the "current" body in collisions until then (`ParticleSystem.as:409`).
+  - So a flash's first `takeShot` always uses its rendered (screen) position. **A port must not advance spawned entities on their creation tick.**
 
 ### 1.7 Events
 
@@ -276,7 +281,24 @@ Dispatcher (`PlatformGame.as:646-1000`):
 - `add(v)` returns the sum **rounded to 3 decimal places** per component. `round(precision-1)` is called with `precision` undefined, which gives NaN and so falls back to 3 (`Vector3.as:24-41`).
 - `subtract` and `multiply` do **not** round (43-49, 164-170).
 - `equals(v, p=1)` first **mutates `this.x`** to `p` decimals (`x = round(x*10)/10`, line 61). It then compares x, y and z **exactly** (65).
-- `PlatformGame.as:1017` calls `particle.position.equals(particle.previousPosition, 1)` for every entity every UPDATE. So every entity's `position.x` is snapped to 0.1 px after each physics step. This is a real (small) physics effect: it quantises horizontal velocity.
+- `PlatformGame.as:1017` calls `particle.position.equals(particle.previousPosition, 1)` for every entity every UPDATE. So every entity's `position.x` is snapped to 0.1 px after each physics step.
+
+The snap quantises horizontal velocity, and it **stops drag from ever bringing a body to rest**. After the snap, `position` and `previousPosition` both sit on the 0.1 grid. For a coasting body (force.x = 0) one step is:
+
+```
+v' = round1(x + round3(0.95 * v)) - x          // round1/round3: Math.round(v*10^n)/10^n, half rounds up
+```
+
+- If 0 < v ≤ 1.0: 0.95v differs from v by at most 0.05, and a half rounds up, so v' = v.
+- If −0.9 ≤ v < 0: v' = v. At v = −1.0, x − 0.95 rounds up to x − 0.9.
+- Above about 2 px/step, v shrinks by ×0.95 per step. Between 2 and 1 it drops by 0.1 per step.
+- Simulated from ±25 over 2000 starting positions, every case settles at **+1.0** (moving right) or **−0.9** (moving left) after 61 steps and never changes again.
+
+What follows from this:
+- **Player**: once moved, the player creeps at 1.0 px/step right or 0.9 px/step left (about 30-33 px/s) until a wall, the level bound, or an opposite key press. Braking seldom lands exactly on 0. For example 3.6 − 3.645 gives −0.2, which then creeps left for ever.
+- **Floating bodies**: the milk glass and the superinfection are pushable, gravity-exempt and have physics on. After a push they creep the same way until a tile stops them.
+- **Rendering**: the screen is dirty permanently once the player has moved (§1.4).
+- **y is not affected**: y is not snapped, and gravity dominates vertical motion anyway.
 
 ### 2.3 Bodies
 
@@ -380,6 +402,9 @@ satisfyConstraints():                                  // 392-657, numIterations
   // world bounds, last so they have the highest priority:
   for e in dyn (non-null, !e.physicsExcempt):
     e.position = min(max(e.position, worldMin), worldMax - e.bottomRightOffset)   // component-wise
+
+// Afterwards, back in PlatformGame (1015-1020), for EVERY entity (static ones too):
+//   position.x = Math.round(position.x * 10) / 10        (the side effect of Vector3.equals)
 ```
 
 Static collisions never emit events. Pickups, portals and the flash detect overlap themselves with `hitTest` (§4).
@@ -398,7 +423,9 @@ Static collisions never emit events. Pickups, portals and the flash detect overl
 - a held arrow key adds force 4500, which friction reduces to 4050, giving **3.645 px/step²**;
 - terminal speeds before clamping are 2.7/0.05 = 54 px/step (falling) and 3.645/0.05 = 72.9 px/step (running). **Both are always clamped by `maxChange`.**
 
-Per-level `maxChange` follows the exact rule at `ParticleSystem.as:221-233`. It takes the minimum over the tile clips, the microbe clips and the player's 49x100. Pickups, milk, the superinfection, bullets, the flash and the bomb are exempt. The table computes this from art bounds.
+Per-level `maxChange` follows the exact rule at `ParticleSystem.as:221-233`. It takes the minimum over the tile clips, the microbe clips and the player's 49x100.
+- Pickups, milk, the superinfection, bullets, the flash and the bomb are created with `maxChangeExcempt`. They do not *lower* `maxChange`, but the clamp still applies to them.
+- The table computes this from art bounds.
 
 | Level | maxChange.x (run cap, px/step) | maxChange.y (fall/jump cap) | Smallest body | Bullet travel after 16 UPDATEs |
 |---|---|---|---|---|
@@ -410,8 +437,8 @@ Sequences with rounding (simulated):
 
 | Motion | Per-step values |
 |---|---|
-| Run from rest, vx | 3.645, 7.108, 10.398, 13.523, 16.492, 19.312, 21.991, 24.536, then cap (25). Top speed is reached after about 8 steps. |
-| Coasting (keys released) | v ×0.95 per step. It takes 55 steps (about 1.65 s) to fall from 25 to below 1.5. The board glides; there is no ground friction. |
+| Run from rest, vx after the 0.1 snap | 3.6, 7.1, 10.4, 13.5, 16.5, 19.3, 22.0, 24.5, then cap (25). In Lucy levels the cap is 21.2 from step 7. Top speed is reached after about 8 steps. |
+| Coasting (keys released) | ×0.95 per step down to about 2 px/step, then −0.1 per step, and it **settles at +1.0 (right) or −0.9 (left) px/step after 61 steps (about 1.8 s) and creeps for ever** (§2.2). There is no ground friction. |
 | Jump from rest, cumulative y | −25, −46.05, −63.35, −77.08, −87.42, −94.55, −98.62, **−99.79** (apex, step 8), −98.20, −93.99, −87.29, ... back to 0 after about 17 steps (about 0.5 s). |
 
 The first jump step is clamped from 0.95v − 62.1 to −25. A jump therefore always sets vertical velocity to −25 px/step, whatever it was, and a double jump simply resets it to −25.
@@ -527,7 +554,8 @@ Effects:
 - Pressing the opposite way while still moving brakes at 3.645 px/step².
 - On the tick the board stops or reverses, ACCELERATE and DECELERATE cancel, giving zero force.
 - After that the player accelerates the new way.
-- There is no automatic slowing except drag 0.95 per step.
+- The only automatic slowing is drag (0.95 per step).
+- With the 0.1 px snap, drag never brings the player to rest. The player keeps creeping at +1.0 or −0.9 px/step until blocked or braked (§2.2).
 
 The animation calls in `accelerate`/`decelerate` are cosmetic (§3.9).
 
@@ -682,7 +710,7 @@ The victim list is the lesson: antibiotics kill bacteria, good ones included, bu
 - **Contact** (`PlayerEntity.as:233-243`): on a `COLLIDE` with `params[0] instanceof BadMicrobe`, and `state != PLAYER_STATE_BE_HURT`, and `microbe.lives > 0`, emit `BE_HURT(1)` and set `jumpsLeft = maxJumps`.
   - `SuperInfection` is a `BadMicrobe`, and touching it hurts as long as its lives are above 0.
   - The player is dynamic index 0, so the player's `COLLIDE` is queued before the microbe's. The microbe is still alive when the player's event is handled.
-  - **Every bad-microbe touch costs one life and also kills that microbe** (§4.6).
+  - **Every bad-microbe touch costs one life.** It kills the microbe only if the microbe is IDLE or WALKing (§4.6).
 - **BE_HURT** (244-260):
   - `lives -= 1`; upper and lower play `hurt`; `canTakePhotograph = true`;
   - if `lives <= 0`, emit `BE_KILLED`, otherwise `state = PLAYER_STATE_BE_HURT`.
@@ -830,13 +858,17 @@ advance(): thinkTime--; think = thinkTime < 0
   IDLE:   think ? idleThink() : []
   FALL:   think ? fallThink() : fall()
   SLIDE:  slideTimer--; think ? slideThink() : slide()
-  BE_PHOTOGRAPHED / BE_HIT: think ? (if !clip.midAnimation: snapToGrid(); emit FALL) : []
+  BE_PHOTOGRAPHED / BE_HIT: think ? (if !clip.midAnimation: snapAfterAnim(); emit FALL) : []
   BE_KILLED: think ? (if !clip.midAnimation: emit REMOVE; remove()) : []
   BE_WASHED_AWAY (bad only): think ? beWashedThink() : beWashed()
   DIVE (Lucy only): think ? diveThink() : dive()
 
-snapToGrid(): direction = (x > prevX) ? RIGHT : (x < prevX ? LEFT : direction)
-              col = floor(x/50); row = floor(y/50); physicsExcempt = true; previousPosition = position
+// Two snap variants; they differ only in the direction rule:
+snapAfterFallOrSlide(): direction = (x > prevX) ? RIGHT : LEFT       // equal -> LEFT (GameEntity.as:312-316,
+                                                                      //   GoodMicrobe.as:232-236, BadMicrobe.as:264-268)
+snapAfterAnim():        direction = (x > prevX) ? RIGHT : (x < prevX ? LEFT : direction)   // equal -> unchanged
+                                                                      //   (bePhotographedThink / beHitThink)
+both:  col = floor(x/50); row = floor(y/50); physicsExcempt = true; previousPosition = position
 
 walk() (GameEntity.as:222-242): teleport(x + speed*direction); if crossed the column edge: col = nextCol
 
@@ -874,14 +906,15 @@ onSolidGround() (472-501):
         return true
 
 fallThink() (305-331): if !onSolidGround(): physicsExcempt = false; thinkTime = 10
-                       else: snapToGrid(); counterCeiling = 3; emit IDLE(5)
+                       else: snapAfterFallOrSlide(); counterCeiling = 3; emit IDLE(5)
 slideThink(): if slideTimer > 0 and !onSolidGround(): physicsExcempt = false; thinkTime = 10
-              else: snapToGrid(); counterCeiling = 3; emit IDLE(1)
+              else: snapAfterFallOrSlide(); counterCeiling = 3; emit IDLE(1)
 slide()/fall(): if dy < 1.5: counter-- else counter = counterCeiling
 ```
 
 Behaviour in plain terms:
 - **Spawn**: microbes start in FALL. The first think often finds "no ground", because tall microbes check their own lower cell. Physics is then switched on and they drop onto the floor. After landing (2+ still UPDATEs) they snap and go IDLE for 5 UPDATEs.
+- **First patrol direction is LEFT**. A microbe that fell straight down has x == prevX, and the fall snap turns "equal" into LEFT. So every microbe's first patrol leg is leftwards, even though the constructor default is RIGHT.
 - **Patrol**: they walk at 10 px per UPDATE. They turn at walls and at edges (no floor anchor in the next column), pausing an IDLE of 5 UPDATEs at each turn. They never jump, although some art has `jump_*` labels. They never chase the player.
 - **Wide tiles**: microbes only see **anchor cells**, so they treat the non-anchor parts of wide tiles as void or no-wall. For example, a 250 px `toast_jam_obj` looks like a 1-cell platform. They may also walk into the art of big tiles, where the physics pushes them out.
 - **Ground check precision**: the grid ground test uses `floor((y + clip._height)/50)`. It relies on `y + h` landing exactly on a multiple of 50 (twip-quantised sizes, 3 dp positions). **A port should use an epsilon.**
@@ -947,8 +980,8 @@ Colin in its normal form cannot be spawned (`colin_icon` missing). No played lev
 
 | A touches B | Outcome |
 |---|---|
-| Player + bad microbe (lives > 0), player not hurt | The player loses 1 life and gets 480 ms of no control and no damage. The microbe gets BE_HURT, is **killed** (not washed), scores +5 and counts for KILL_ALL. |
-| Player (already hurting) + bad microbe | The microbe is still killed (+5). The player is unharmed. |
+| Player + bad microbe (lives > 0), player not hurt | The player loses 1 life and gets 480 ms of no control and no damage. **If the microbe is IDLE or WALK**, it gets BE_HURT, is **killed** (not washed), scores +5 and counts for KILL_ALL. If it is FALL, SLIDE, BE_PHOTOGRAPHED, BE_HIT, BE_KILLED or BE_WASHED_AWAY, it ignores the contact and survives. It then hurts the player again every time the 480 ms hurt state ends while they are still touching. |
+| Player (already hurting) + bad microbe in IDLE/WALK | The microbe is still killed (+5). The player is unharmed. |
 | Player + superinfection | The player is hurt each time the hurt state ends while still touching. The superinfection is unaffected. |
 | Player + good microbe | The microbe SLIDEs and is pushed with physics. This is the "push Lucy" mechanic. |
 | Player + milk / superinfection | Pushed physically. Both float (gravity exempt). |
@@ -964,7 +997,8 @@ The event order is always `COLLIDE(lower index)` then `COLLIDE(higher index)`. T
 
 ### 4.7 Milk glass and yoghurt (`MilkGlassEntity.as`, `LucyLactobacillus.as`)
 
-- **Body**: milk (20) is a dynamic 150x200 box with gravity exempt, `maxChangeExcempt`, physics on and `state = WHITE_STATUS (100)`. Its clip is stopped. `counterCeiling = 1` and `counter = 0`, so **one Lucy contact is enough** (`MilkGlassEntity.as:22-33`). It floats and can be pushed. Once it has been off-screen it stays physics-exempt (§1.6).
+- **Body**: milk (20) is a dynamic 150x200 box with gravity exempt, `maxChangeExcempt`, physics on and `state = WHITE_STATUS (100)`. Its clip is stopped. `counterCeiling = 1` and `counter = 0`, so **one Lucy contact is enough** (`MilkGlassEntity.as:22-33`).
+- **Movement**: it floats and can be pushed. After a push it keeps creeping at about 1 px/step until a tile stops it (§2.2). Once it has been off-screen it stays physics-exempt (§1.6).
 - **Milk `COLLIDE` with type LUCY** whose state is not DIVE: emit `MILK_GLASS_EVENT_HIT` (64-72). When that is handled in WHITE_STATUS:
   - clip `tickle`; `counter++`;
   - if `counter == counterCeiling`, emit `MILK_GLASS_EVENT_TURN_TO_YOGURT` (goal +1, +50 points);
@@ -1326,7 +1360,7 @@ Code bugs and quirks. "Port" gives the recommendation: F means keep faithful, X 
 | 7 | `EXPLODE_ANTIBIOTIC` pushes `goalevents.pop()` even when it is empty, which puts `undefined` in the queue (`PlatformGame.as:874-879`). | X: guard |
 | 8 | The superinfection never thinks, so it is never removed (`SuperInfection.as:43-47`). Photographing it is infinitely repeatable for +15 (it is a Microbe whose act ignores the photo; `CameraFlashEntity.as:79-88`, `PlatformGame.as:971`). | X: at least stop the point farming |
 | 9 | A flash targets the first overlapping microbe even if it has already been photographed, which wastes the shot (`CameraFlashEntity.as:79-88`). | F |
-| 10 | Flash and bullet clips are placed at WORLD x until the next render (`ParticleSystem.as:204-205`). Harmless because a render nearly always happens before the first `takeShot`. | F with render-then-test |
+| 10 | Flash, bullet and bomb clips are placed at WORLD x until the next render (`ParticleSystem.as:204-205`). This is harmless because spawned entities start with `isOnScreen = false` and do not advance until a render has positioned them (`GameEntity.as:103`, `PlatformGame.as:621`). | F: render, then test |
 | 11 | Lucy/milk result depends on dynamic index order (§4.7). | F, but make sure pushed Lucys work |
 | 12 | Camera: no edge clamp, and it pans towards the margin even when the player moves away from it (`PlatformGame.as:1033-1047`). | F (clamp optional) |
 | 13 | `bodyLevel` defaults to true when the attribute is missing (`MapBuilder.as:49`), so levels 1-4 throw white blood cells in the kitchen and on the hand. | F |
@@ -1347,6 +1381,9 @@ Code bugs and quirks. "Port" gives the recommendation: F means keep faithful, X 
 | 28 | A second `player_start` nulls `levelDataGeometry[old]` (`MapBuilder.as:107`), wrongly, because the start is in the entity grid. | n/a |
 | 29 | Colliding `SLIDE`-state microbes ignore contacts, so a pushed bad microbe cannot hurt the player or good microbes while sliding. | F |
 | 30 | `Home` and `Alt` skip the level (debug cheat) (`PlatformGame.as:1287-1290`). | Keep behind a debug flag |
+| 31 | **Perpetual horizontal creep.** `Vector3.equals` snaps x to 0.1 px (`Vector3.as:61`, called at `PlatformGame.as:1017`), and `add` rounds to 3 dp. Together they make every x velocity from −0.9 to +1.0 px/step a fixed point of the drag. Coasting bodies (the player, and the pushed milk or superinfection) settle at +1.0 or −0.9 px/step and never stop until something blocks them (§2.2). | F by default, since it is part of the original hoverboard feel. A clearly flagged fix would zero abs(vx) < 1.05 when no key is held. |
+| 32 | The first patrol leg of every microbe is leftwards. After falling straight down, the fall snap maps "no x movement" to LEFT (`GameEntity.as:312-316`). | F |
+| 33 | A bad microbe in FALL, SLIDE, BE_PHOTOGRAPHED or BE_HIT ignores contact, but still hurts the player, so it can hurt repeatedly without dying (`BadMicrobe.as:170-172`, `PlayerEntity.as:233-243`). | F |
 
 Dead code and TODOs:
 - `JUMP_COUNT` and its TODO (`PlatformGame.as:51-53`).
@@ -1394,7 +1431,7 @@ From `reference/analysis/unity-logic.md`:
 | Topic | Unity remake | Source |
 |---|---|---|
 | Level timer and game over | None; losing restarts the level | `unity-logic.md:88,121` |
-| Keys | Ctrl = photo or antibiotic; Space = throw; jump on Up only | `unity-logic.md:143-147` |
+| Keys | Ctrl = photo or antibiotic; Space = throw; jump on Up only | `unity-logic.md:143-146` |
 | Double jump | None | `unity-logic.md:172` |
 | Invulnerability | 2 s | `unity-logic.md:125` |
 | Pickups | Respawn after 5 s | `unity-logic.md:127` |

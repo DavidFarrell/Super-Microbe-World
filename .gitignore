@@ -34,3 +34,4 @@ test-results/
 playwright-report/
 reference/other/
 tools/.scratch/
+tools/.cache/

@@ -7,7 +7,8 @@
 // the stray top-level and src/ ones) and writes:
 //   reference/analysis/swf-inventory.json      the machine-readable inventory
 //   reference/analysis/bitmaps/<key>/<id>.*    every embedded bitmap (PNG or JPEG)
-//   reference/analysis/sounds/<key>/<id>_*.*   every embedded sound (MP3 or WAV)
+//   reference/analysis/sounds/<key>/<id>_*.*   every embedded sound (MP3 or WAV); none exist in this project
+//   reference/analysis/swf-scripts/<key>.txt   decompiled AVM1 timeline scripts (frame, button, onClipEvent)
 //
 // <key> is the SWF path relative to reference/Junior_Game with the leading
 // "movies/" dropped, "/" turned into "__", other unsafe characters into "_",
@@ -209,12 +210,13 @@ function disassembleAvm1(bytes) {
   const buf = Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   const ops = []; let pool = []; let p = 0;
   while (p < buf.length) {
+    const offset = p;
     const code = buf[p++];
     if (code === 0) break;
     let len = 0;
     if (code >= 0x80) { len = buf.readUInt16LE(p); p += 2; }
     const body = buf.subarray(p, p + len); p += len;
-    const op = { code, name: AVM1_OPS[code] || `op0x${code.toString(16)}` };
+    const op = { code, name: AVM1_OPS[code] || `op0x${code.toString(16)}`, offset, end: p };
     try {
       if (code === 0x88) {
         const n = body.readUInt16LE(0); let q = 2; pool = [];
@@ -240,51 +242,131 @@ function disassembleAvm1(bytes) {
       } else if (code === 0x81) op.frame = body.readUInt16LE(0) + 1;
       else if (code === 0x8C) op.label = readCString(body, 0)[0];
       else if (code === 0x9F) op.play = !!(body[0] & 1);
+      else if (code === 0x87) op.register = body[0];
+      else if (code === 0x99 || code === 0x9D) op.branch = body.readInt16LE(0);
       else if (code === 0x83) { const [u, q] = readCString(body, 0); op.url = u; op.target = readCString(body, q)[0]; }
-      else if (code === 0x9B || code === 0x8E) op.fn = readCString(body, 0)[0] || '(anonymous)';
+      else if (code === 0x8B) op.target = readCString(body, 0)[0];
+      else if (code === 0x9B) { // DefineFunction: name, UI16 numParams, params, UI16 codeSize
+        let [name, q] = readCString(body, 0); const n = body.readUInt16LE(q); q += 2; const params = [];
+        for (let i = 0; i < n; i++) { const [pn, nq] = readCString(body, q); params.push(pn); q = nq; }
+        op.fn = name; op.params = params; op.bodyEnd = p + body.readUInt16LE(q);
+      } else if (code === 0x8E) { // DefineFunction2: name, UI16 numParams, UI8 regCount, UI16 flags, (UI8 reg, name)*, UI16 codeSize
+        let [name, q] = readCString(body, 0); const n = body.readUInt16LE(q); q += 2;
+        q += 1; // register count
+        const f1 = body[q]; const f2 = body[q + 1]; q += 2;
+        // Preloaded registers are assigned from r1 in this order when their flag is set.
+        const preload = []; if (f1 & 0x01) preload.push('this'); if (f1 & 0x04) preload.push('arguments'); if (f1 & 0x10) preload.push('super');
+        if (f1 & 0x40) preload.push('_root'); if (f1 & 0x80) preload.push('_parent'); if (f2 & 0x01) preload.push('_global');
+        const regNames = {}; preload.forEach((nm, k) => { regNames[`r${k + 1}`] = nm; });
+        const params = [];
+        for (let i = 0; i < n; i++) { const reg = body[q]; q += 1; const [pn, nq] = readCString(body, q); params.push(pn); if (reg) regNames[`r${reg}`] = pn; q = nq; }
+        op.fn = name; op.params = params; op.regNames = regNames; op.bodyEnd = p + body.readUInt16LE(q);
+      }
     } catch { /* truncated body: keep op name only */ }
     ops.push(op);
   }
   return { ops, pool };
 }
 
-// Turn a script into a one-line summary. Short scripts are rendered as
-// pseudo-code; long ones as "N actions" plus their constant-pool strings.
-function summariseScript(bytes) {
+// A small stack-based AVM1 decompiler for frame scripts. It follows the
+// operand stack through straight-line code and prints statements such as
+// `_parent.state = "idle"`, `gotoAndPlay("walk")`, `if (!x) { ... }` is shown as
+// `if (!x) skip N bytes`. Good enough to read timeline scripts; not a full
+// decompiler (loops and nested branches are flattened).
+const PROPS = ['_x', '_y', '_xscale', '_yscale', '_currentframe', '_totalframes', '_alpha', '_visible', '_width', '_height', '_rotation', '_target', '_framesloaded', '_name', '_droptarget', '_url', '_highquality', '_focusrect', '_soundbuftime', '_quality', '_xmouse', '_ymouse'];
+const BINOPS = { 0x0A: '+', 0x47: '+', 0x21: '+', 0x0B: '-', 0x0C: '*', 0x0D: '/', 0x3F: '%', 0x0E: '==', 0x49: '==', 0x13: '==', 0x66: '===', 0x0F: '<', 0x48: '<', 0x29: '<', 0x67: '>', 0x68: '>', 0x10: '&&', 0x11: '||', 0x60: '&', 0x61: '|', 0x62: '^', 0x63: '<<', 0x64: '>>', 0x65: '>>>', 0x54: 'instanceof' };
+function decompileAvm1(bytes) {
   const { ops, pool } = disassembleAvm1(bytes);
-  const parts = []; let pending = null;
+  const out = []; let fnCount = 0;
+  // One scope per function body: its own operand stack and register names.
+  const scopes = [{ st: [], regs: {}, end: Infinity, anon: null }];
+  const cur = () => scopes[scopes.length - 1];
+  const unq = (v) => (typeof v === 'string' && /^".*"$/.test(v) ? JSON.parse(v) : v);
+  const isLit = (v) => typeof v === 'string' && /^".*"$/.test(v);
+  const member = (o, m) => (isLit(m) ? (/^\d+$/.test(unq(m)) ? `${o}[${unq(m)}]` : `${o}.${unq(m)}`) : `${o}[${m}]`);
+  const push = (...v) => cur().st.push(...v);
+  const pop = () => (cur().st.length ? cur().st.pop() : '?');
+  const popArgs = () => { const n = Number(pop()); const a = []; for (let i = 0; i < (Number.isFinite(n) ? n : 0); i++) a.push(pop()); return a; };
+  const indent = () => '  '.repeat(scopes.length - 1);
+  const emit = (x) => out.push(indent() + x);
+  const isCall = (v) => /^[A-Za-z_$][\w$.\[\]"?]*\(.*\)$/s.test(String(v)) || /^new /.test(String(v));
   for (let i = 0; i < ops.length; i++) {
-    const op = ops[i];
-    const next = ops[i + 1];
-    if (op.code === 0x96) { pending = op.values; continue; }
-    if (op.code === 0x07) parts.push('stop()');
-    else if (op.code === 0x06) parts.push('play()');
-    else if (op.code === 0x04) parts.push('nextFrame()');
-    else if (op.code === 0x05) parts.push('prevFrame()');
-    else if (op.code === 0x81) {
-      if (next && next.code === 0x06) { parts.push(`gotoAndPlay(${op.frame})`); i++; } else parts.push(`gotoAndStop(${op.frame})`);
-    } else if (op.code === 0x8C) {
-      if (next && next.code === 0x06) { parts.push(`gotoAndPlay(${JSON.stringify(op.label)})`); i++; } else parts.push(`gotoAndStop(${JSON.stringify(op.label)})`);
-    } else if (op.code === 0x9F) {
-      const tgt = pending ? pending[pending.length - 1] : '?';
-      parts.push(`${op.play ? 'gotoAndPlay' : 'gotoAndStop'}(${tgt})`);
-    } else if (op.code === 0x88) { /* pool: reported separately */ }
-    else if (op.code === 0x52 || op.code === 0x3D) {
-      // callMethod pops name, object, argc, args; callFunction pops name, argc, args.
-      const v = pending || [];
-      const name = v[v.length - 1] || '?';
-      if (op.code === 0x52) parts.push(`${v.length >= 2 ? v[v.length - 2].replace(/^"|"$/g, '') + '.' : ''}${String(name).replace(/^"|"$/g, '')}()`);
-      else parts.push(`${String(name).replace(/^"|"$/g, '')}()`);
-    } else if (op.code === 0x9B || op.code === 0x8E) parts.push(`function ${op.fn}`);
-    else if (op.code === 0x83) parts.push(`getURL(${JSON.stringify(op.url)}, ${JSON.stringify(op.target)})`);
-    else parts.push(op.name);
-    pending = null;
+    const op = ops[i]; const next = ops[i + 1];
+    while (scopes.length > 1 && op.offset >= cur().end) { const sc = scopes.pop(); emit('}'); if (sc.anon) push(sc.anon); }
+    switch (op.code) {
+      case 0x88: break;
+      case 0x96: for (const v of op.values) push(/^r\d+$/.test(v) ? (cur().regs[v] ?? v) : v); break;
+      case 0x1C: { const n = pop(); push(isLit(n) ? String(unq(n)) : `eval(${n})`); break; }
+      case 0x4E: { const m = pop(); const o = pop(); push(member(o, m)); break; }
+      case 0x1D: { const v = pop(); const n = pop(); emit(`${isLit(n) ? unq(n) : `set(${n})`} = ${v}`); break; }
+      case 0x4F: { const v = pop(); const m = pop(); const o = pop(); emit(`${member(o, m)} = ${v}`); break; }
+      case 0x3C: { const v = pop(); emit(`var ${unq(pop())} = ${v}`); break; }
+      case 0x41: emit(`var ${unq(pop())}`); break;
+      case 0x3D: { const n = pop(); const a = popArgs(); push(`${isLit(n) ? unq(n) : n}(${a.join(', ')})`); break; }
+      case 0x52: { const m = pop(); const o = pop(); const a = popArgs(); push(`${unq(m) === 'undefined' || unq(m) === '' ? o : member(o, m)}(${a.join(', ')})`); break; }
+      case 0x40: { const n = unq(pop()); const a = popArgs(); push(`new ${n}(${a.join(', ')})`); break; }
+      case 0x53: { const m = pop(); const o = pop(); const a = popArgs(); push(`new ${member(o, m)}(${a.join(', ')})`); break; }
+      case 0x17: { const v = pop(); if (isCall(v)) emit(String(v)); break; }
+      case 0x07: emit('stop()'); break;
+      case 0x06: emit('play()'); break;
+      case 0x04: emit('nextFrame()'); break;
+      case 0x05: emit('prevFrame()'); break;
+      case 0x09: emit('stopAllSounds()'); break;
+      case 0x81: if (next && next.code === 0x06) { emit(`gotoAndPlay(${op.frame})`); i++; } else emit(`gotoAndStop(${op.frame})`); break;
+      case 0x8C: if (next && next.code === 0x06) { emit(`gotoAndPlay(${JSON.stringify(op.label)})`); i++; } else emit(`gotoAndStop(${JSON.stringify(op.label)})`); break;
+      case 0x9F: emit(`${op.play ? 'gotoAndPlay' : 'gotoAndStop'}(${pop()})`); break;
+      case 0x12: push(`!${pop()}`); break;
+      case 0x50: push(`${pop()} + 1`); break;
+      case 0x51: push(`${pop()} - 1`); break;
+      case 0x4C: { const v = pop(); push(v, v); break; }
+      case 0x4D: { const a = pop(); const b = pop(); push(a, b); break; }
+      case 0x87: { const st = cur().st; const v = st.length ? st[st.length - 1] : '?'; const r = `r${op.register}`; if (!(r in cur().regs) || cur().regs[r] === '?' || /^local:/.test(cur().regs[r])) cur().regs[r] = String(v).length > 60 ? `r${op.register}` : v; break; }
+      case 0x9D: emit(`if (${pop()}) jump ${op.branch} bytes`); break;
+      case 0x99: emit(`jump ${op.branch} bytes`); break;
+      case 0x9B: case 0x8E: {
+        const anon = op.fn ? null : `function#${++fnCount}`;
+        emit(`${op.fn ? 'function ' + op.fn : anon} (${(op.params || []).join(', ')}) {`);
+        if (op.bodyEnd && op.bodyEnd > op.end) scopes.push({ st: [], regs: { ...(op.regNames || {}) }, end: op.bodyEnd, anon });
+        else { emit('}'); if (anon) push(anon); }
+        break;
+      }
+      case 0x3E: emit(`return ${pop()}`); break;
+      case 0x26: emit(`trace(${pop()})`); break;
+      case 0x44: push(`typeof ${pop()}`); break;
+      case 0x42: { const n = Number(pop()); const a = []; for (let k = 0; k < (Number.isFinite(n) ? n : 0); k++) a.push(pop()); push(`[${a.join(', ')}]`); break; }
+      case 0x43: { const n = Number(pop()); const a = []; for (let k = 0; k < (Number.isFinite(n) ? n : 0); k++) { const v = pop(); a.push(`${unq(pop())}: ${v}`); } push(`{${a.reverse().join(', ')}}`); break; }
+      case 0x22: { const idx = Number(unq(pop())); const t = pop(); push(`${t === '""' ? 'this' : unq(t)}.${PROPS[idx] ?? 'prop' + idx}`); break; }
+      case 0x23: { const v = pop(); const idx = Number(unq(pop())); const t = pop(); emit(`${t === '""' ? 'this' : unq(t)}.${PROPS[idx] ?? 'prop' + idx} = ${v}`); break; }
+      case 0x20: emit(`tellTarget(${pop()})`); break;
+      case 0x8B: emit(`tellTarget(${JSON.stringify(op.target)})`); break;
+      case 0x83: emit(`getURL(${JSON.stringify(op.url)}, ${JSON.stringify(op.target)})`); break;
+      case 0x9A: { const t = pop(); const u = pop(); emit(`getURL(${u}, ${t})`); break; }
+      case 0x25: emit(`removeMovieClip(${pop()})`); break;
+      case 0x3A: { const m = pop(); const o = pop(); emit(`delete ${member(o, m)}`); break; }
+      case 0x3B: emit(`delete ${unq(pop())}`); break;
+      case 0x34: push('getTimer()'); break;
+      case 0x30: push(`random(${pop()})`); break;
+      case 0x18: push(`int(${pop()})`); break;
+      case 0x4A: push(`Number(${pop()})`); break;
+      case 0x4B: push(`String(${pop()})`); break;
+      case 0x45: push(`targetPath(${pop()})`); break;
+      case 0x46: case 0x55: emit(`for (var k in ${pop()}) ...`); push('null'); break;
+      case 0x69: { const sup = pop(); const sub = pop(); emit(`${sub} extends ${sup}`); break; }
+      default:
+        if (BINOPS[op.code]) { const b = pop(); const a = pop(); push(`(${a} ${BINOPS[op.code]} ${b})`); }
+        else emit(`/* ${op.name} */`);
+    }
   }
-  const simple = ops.every((o) => [0x07, 0x06, 0x04, 0x05, 0x81, 0x8C, 0x9F, 0x96, 0x17].includes(o.code));
-  let summary;
-  if (simple || ops.length <= 12) summary = parts.join('; ');
-  else summary = `${ops.length} actions: ${parts.filter((p) => /\(|function/.test(p)).slice(0, 12).join('; ')}${parts.length > 12 ? '; ...' : ''}`;
-  return { summary, actionCount: ops.length, strings: pool.slice(0, 40) };
+  while (scopes.length > 1) { scopes.pop(); out.push('  '.repeat(scopes.length) + '}'); }
+  return { lines: out, actionCount: ops.length, pool };
+}
+
+// Summarise a script: the decompiled statements joined on one line (capped),
+// the full statement list (capped at 80 lines) and the constant pool.
+function summariseScript(bytes) {
+  const { lines, actionCount, pool } = decompileAvm1(bytes);
+  const flat = lines.map((l) => l.trim()).join('; ').replace(/\{; /g, '{ ').replace(/; \}/g, ' }');
+  return { summary: flat.length > 400 ? flat.slice(0, 397) + '...' : flat, code: lines.slice(0, 80), actionCount, strings: pool.slice(0, 40) };
 }
 
 // ---------------------------------------------------------------------------
@@ -568,7 +650,7 @@ function analyseSwf(file) {
         case TagType.RemoveObject: dl.delete(t.depth); break;
         case TagType.ShowFrame: frames.push(snapshot()); break;
         case TagType.FrameLabel: labels.push({ frame: frames.length + 1, name: t.name, ...(t.isAnchor ? { anchor: true } : {}) }); break;
-        case TagType.DoAction: { const s = summariseScript(t.actions); scripts.push({ frame: frames.length + 1, summary: s.summary, actions: s.actionCount }); break; }
+        case TagType.DoAction: { const s = summariseScript(t.actions); scripts.push({ frame: frames.length + 1, summary: s.summary, actions: s.actionCount, ...(s.code.length > 1 || s.summary.length > 120 ? { code: s.code } : {}) }); break; }
         case TagType.SoundStreamHead: streamHeads.push({ frame: frames.length + 1, format: SOUND_FORMATS[t.streamFormat] ?? t.streamFormat, rate: REAL_RATE[t.streamSoundRate] || t.streamSoundRate, stereo: t.streamSoundType === 1, samplesPerBlock: t.streamSampleCount, latencySeek: t.latencySeek }); break;
         case TagType.SoundStreamBlock: streamBlocks++; break;
         case TagType.StartSound: startSounds.push({ frame: frames.length + 1, soundId: t.soundId, stop: !!t.soundInfo?.syncStop, loops: t.soundInfo?.loopCount }); break;
@@ -684,7 +766,6 @@ function analyseSwf(file) {
     if (c && c.kind === 'sprite') {
       const tl = spriteTimeline(e.id); const uses = charUses(e.id);
       const init = initActions.get(e.id);
-      const regClass = init ? init.strings.filter((s) => !['Object', 'registerClass', e.name, '_global'].includes(s)) : null;
       exportedSprites.push({
         id: e.id, name: e.name,
         ...(e.name !== e.name.trim() ? { nameWarning: 'leading/trailing whitespace in linkage name' } : {}),
@@ -698,7 +779,7 @@ function analyseSwf(file) {
         shapeCount: uses.shapes, morphShapeCount: uses.morphs, textCount: uses.texts, nestedSpriteCount: uses.sprites.size,
         instances: describeTimeline(tl).instances,
         scripts: tl.scripts,
-        ...(init ? { initAction: { actions: init.actionCount, strings: regClass } } : {}),
+        ...(init ? { initAction: { actions: init.actionCount, summary: init.summary } } : {}),
       });
     } else {
       otherExports.push({ id: e.id, name: e.name, kind: c ? c.kind : 'unknown', ...(c && c.kind !== 'sound' ? { bounds: rectPx(charBounds(e.id, 'first')) } : {}) });
@@ -734,6 +815,38 @@ function analyseSwf(file) {
   const bitmapUsers = new Map();
   for (const s of exportedSprites) for (const b of s.bitmapIds) { if (!bitmapUsers.has(b)) bitmapUsers.set(b, []); bitmapUsers.get(b).push(s.name); }
 
+  // Full decompiled dump of every timeline script in this SWF (frame scripts,
+  // #initclip blocks of non-class symbols, button handlers, onClipEvent handlers).
+  // Compiled AS2 classes (__Packages.*) are skipped: their source is in src/.
+  const dumpLines = [];
+  const dumpScript = (title, bytes) => {
+    const d = decompileAvm1(bytes);
+    if (!d.lines.length) return;
+    dumpLines.push(`// ---- ${title} (${d.actionCount} actions)`, ...d.lines, '');
+  };
+  const eventNames = (ev) => Object.entries(ev || {}).filter(([, v]) => v === true).map(([k]) => k).join(',');
+  const dumpTimeline = (label, tags) => {
+    let frame = 1;
+    for (const t of tags) {
+      if (t.type === TagType.ShowFrame) frame++;
+      else if (t.type === TagType.DoAction) dumpScript(`${label}, frame ${frame}`, t.actions);
+      else if (t.type === TagType.PlaceObject && t.clipActions) for (const ca of t.clipActions) dumpScript(`${label}, frame ${frame}, instance ${t.name || '(depth ' + t.depth + ')'} of char ${t.characterId ?? '?'} onClipEvent(${eventNames(ca.events)})`, ca.actions);
+    }
+  };
+  dumpTimeline('root timeline', movie.tags);
+  for (const [id, c] of chars) {
+    const nm = nameOf(id);
+    if (nm && nm.startsWith('__Packages.')) continue;
+    const label = `sprite ${id}${nm ? ' "' + nm + '"' : ''}`;
+    if (c.kind === 'sprite') dumpTimeline(label, c.tag.tags);
+    if (c.kind === 'button') for (const a of c.tag.actions || []) dumpScript(`button ${id}${nm ? ' "' + nm + '"' : ''} on(${eventNames(a.conditions)})`, a.actions);
+  }
+  for (const t of movie.tags) if (t.type === TagType.DoInitAction) {
+    const nm = nameOf(t.spriteId);
+    if (nm && nm.startsWith('__Packages.')) continue;
+    dumpScript(`#initclip for sprite ${t.spriteId}${nm ? ' "' + nm + '"' : ''}`, t.actions);
+  }
+
   const hasAbc = raw.some((t) => t.code === 82 || t.code === 72);
   const hasAvm1 = raw.some((t) => t.code === 12 || t.code === 59);
   const counts = {
@@ -767,7 +880,7 @@ function analyseSwf(file) {
     fonts: fonts.map((f) => ({ id: f.id, code: TAG_NAMES[rawCodeById.get(f.id)], name: f.fontName || fontNames.get(f.id) || null, glyphs: f.glyphs ? f.glyphs.length : undefined, bold: f.isBold, italic: f.isItalic })),
     sounds: soundInfo, soundStreams: streams, startSounds,
     // internal, stripped before JSON output
-    _bitmaps: bitmaps, _jpegTables: jpegTables, _rawCodeById: rawCodeById, _bitmapUsers: bitmapUsers, _sounds: sounds, _nameOf: nameOf,
+    _scriptDump: dumpLines, _bitmaps: bitmaps, _jpegTables: jpegTables, _rawCodeById: rawCodeById, _bitmapUsers: bitmapUsers, _sounds: sounds, _nameOf: nameOf,
   };
 }
 
@@ -992,6 +1105,15 @@ async function main() {
   const ok = results.filter((r) => !r.error);
   const duplicates = await extractAssets(ok);
   const xref = crossReference(ok);
+  const scriptDir = path.join(OUT_DIR, 'swf-scripts');
+  fs.rmSync(scriptDir, { recursive: true, force: true });
+  fs.mkdirSync(scriptDir, { recursive: true });
+  for (const r of ok) {
+    if (!r._scriptDump.length) { r.scriptDump = null; continue; }
+    const header = [`// Decompiled AVM1 timeline scripts from ${r.path}`, '// Generated by tools/analyse-swfs.mjs. Straight-line code is reconstructed from the operand', '// stack; branches appear as "if (cond) jump N bytes" (N is a byte offset, not a line count).', ''];
+    fs.writeFileSync(path.join(scriptDir, `${r.key}.txt`), header.concat(r._scriptDump).join('\n'));
+    r.scriptDump = `swf-scripts/${r.key}.txt`;
+  }
   for (const r of ok) for (const k of Object.keys(r)) if (k.startsWith('_')) delete r[k];
   for (const r of ok) {
     const hit = RUNTIME_SWFS.find((x) => r.relToJuniorGame === `movies/${x.swf}`);
