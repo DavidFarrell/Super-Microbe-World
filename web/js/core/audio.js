@@ -66,6 +66,11 @@ class Audio {
 
   register(name, buffer) { if (buffer) this.buffers.set(name, buffer); }
 
+  // Lets each game area add its own synthesised effects without editing this file:
+  // fn(audio, volume, rate) builds the sound from audio.tone() / audio.noise().
+  defineSynth(name, fn) { SYNTHS[name] = fn; }
+  hasSound(name) { return this.buffers.has(name) || name in SYNTHS; }
+
   // Plays a named sound: a loaded buffer if present, else a synthesised effect.
   play(name, { volume = 1, rate = 1, pan = 0 } = {}) {
     const ctx = this.ctx;
