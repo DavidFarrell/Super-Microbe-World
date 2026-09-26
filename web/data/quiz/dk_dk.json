@@ -1,0 +1,518 @@
+{
+ "code": "dk_dk",
+ "source": "dk_dk_gameshow_round1-5.xml + dk_dk_introductions.xml (live 2009 build)",
+ "name": "Dansk",
+ "intro": [
+  "Hej, og velkommen til Super Microbe World spillet",
+  "Inden længe vil du finde dig selv i mikroorganismernes forunderlige verden",
+  "Men først, hvilken spiller vil du være?",
+  "",
+  "Fortæl lidt om dig selv:",
+  "Kælenavn",
+  "Alder",
+  "email",
+  "Du behøver ikke give os disse informationer – men hvis du gør det, kan du deltage i konkurrencer og høre om nye versioner af spillet her på Super Microbe World",
+  "Lad os se, hvad du ved om mikroorganismer."
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "name": "All About Microbes",
+   "intro": {
+    "blind": [
+     "Velkommen til den første runde af spørgsmål",
+     "Jeg vil nu stille dig nogle spørgsmål, men du får ikke at vide, om du svarede rigtigt.",
+     "Hvis du svarer rigtigt, får du en bonus senere - så gør dig umage!",
+     "Lad os komme i gang!"
+    ],
+    "normal": [
+     "Godt klaret! Du er et hoverboard-talent",
+     "Lad os så se hvad du har lært.",
+     "Du får 10 point for at svare rigtigt - men hvis du svarer forkert - får den anden spiller point.",
+     "så hvis du IKKE ved svaret, er det en god idé at indrømme det!",
+     "Klar?",
+     "Lad os komme i gang!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Hvis du ikke kan se en mikroorganisme, er den der ikke",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": -1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Bakterier og virus er det samme",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": -1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Svampe er mikroorganismer",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Mikroorganismer findes på vores hænder",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "name": "Good and Bad Bugs",
+   "intro": {
+    "blind": [
+     "Velkommen til anden runde",
+     "Hvis du svarer rigtigt, får du en bonus senere - så gør dig umage!",
+     "Lad os komme i gang!"
+    ],
+    "normal": [
+     "Lad os så se hvad du har lært.",
+     "Du får 10 point for at svare rigtigt - men hvis du svarer forkert - får den anden spiller point.",
+     "så hvis du IKKE ved svaret, er det en god idé at indrømme det!",
+     "Klar?",
+     "Lad os komme i gang!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Alle bakterier er skadelige",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": -1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Sæbe kan bruges til at vaske skadelige mikroorganismer væk",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Oftest kurerer man hoste og forkølelse bedst uden medicin",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Vores krop har naturlige forsvarsmekanismer, der beskytter os mod infektion",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 3,
+   "name": "Good Microbes",
+   "intro": {
+    "blind": [
+     "Velkommen til tredje runde",
+     "Hvad ved du om gavnlige mikroorganismer?",
+     "Lad os komme i gang!"
+    ],
+    "normal": [
+     "Lad os så se hvad du har lært.",
+     "Husk, 10 point for hvert rigtige svar, men har du svaret forkert, får din modstander point",
+     "så hvis du IKKE ved svaret, er det en god idé at indrømme det!",
+     "Klar?",
+     "Lad os komme i gang!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Vi bruger mikroorganismer til at lave f.eks brød og yoghurt",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Alle mikroorganismer er skadelige for os",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": -1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 4,
+   "name": "Food Hygiene",
+   "intro": {
+    "blind": [
+     "Velkommen til fjerde runde"
+    ],
+    "normal": [
+     "Lad os så se hvad du har lært.",
+     "Husk, 10 point for hvert rigtige svar, men har du svaret forkert, får din modstander point",
+     "så hvis du IKKE ved svaret, er det en god idé at indrømme det!",
+     "Klar?",
+     "Lad os komme i gang"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Råt kød skal have en hylde for sig selv for at forhindre, at skadelige mikroorganismer spreder sig til andre fødevarer.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Flydende madvarer, som mælk, yoghurt og juice skal stå i køleskabsdøren.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Man må gerne sætte åbne dåser med rester af mad i ind i køleskabet.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": -1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Frugt skal lægges i en frugtskål.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Hvis du nyser, skal du vaske hænder, før du rører ved madvarer.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 5,
+   "name": "Treatment of infection",
+   "intro": {
+    "blind": [
+     "Velkommen til sidste runde",
+     "Denne gang skal vi se, hvad du ved om, hvordan man slipper af med infektioner",
+     "Lad os komme i gang"
+    ],
+    "normal": [
+     "Lad os så se hvad du har lært.",
+     "Husk, 10 point for hvert rigtige svar, men har du svaret forkert, får din modstander point",
+     "så hvis du IKKE ved svaret, er det en god idé at indrømme det!",
+     "Klar?",
+     "Lad os komme i gang"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Antibiotika dræber bakterier",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotika dræber virus",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": -1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotika kan kurere alle sygdomme",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": -1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotika kan skade både gavnlige og skadelige bakterier",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotika hjælper, hvis du har hoste",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": -1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Oftest kurerer man hoste og forkølelse bedst uden antibiotika",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Enig",
+       "value": 1
+      },
+      {
+       "label": "Ved ikke",
+       "value": 0
+      },
+      {
+       "label": "Uenig",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

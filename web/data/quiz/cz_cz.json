@@ -1,0 +1,518 @@
+{
+ "code": "cz_cz",
+ "source": "cz_cz_gameshow_round1-5.xml + cz_cz_introductions.xml (live 2009 build)",
+ "name": "Čeština",
+ "intro": [
+  "Ahoj, vítej v Super Microbe World hře!",
+  "Za chvíli navštívíš tajemný svět mikrobů.",
+  "Ale nejprve si vyber, zda budeš soutěžit jako holka nebo kluk.",
+  "",
+  "Řekni mi něco o sobě:",
+  "Jméno",
+  "Věk",
+  "e-mailová adresa",
+  "Tyto informace nám nemusíš sdělit, ale pokud se tak rozhodneš, bude to pro tebe výhoda. Budeš moci soutěžit a také se jako první dozvíš o nových Super Microbe World hrách.",
+  "Pojďme se podívat, co víš o mikrobech."
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "name": "All About Microbes",
+   "intro": {
+    "blind": [
+     "Vítej v prvním kolem otázek!",
+     "Zeptám se tě na pár otázek, ale neprozradím ti, zda jsi na ně odpověděl/a správně.",
+     "Jestliže na ně odpovíš správně, získáš později skvělý bonus, proto se snaž co nejvíc!",
+     "Pojďme na to!"
+    ],
+    "normal": [
+     "Výborně!",
+     "A nyní se podíváme, kolik jsi se toho naučil/a.",
+     "Za každou správnou odpověď dostaneš 10 bodů. Když odpovíš špatně, dostane tyto body tvůj soupeř.",
+     "takže jestli NEZNÁŠ správnou odpověď, raději to přiznej",
+     "Připraven/a?",
+     "Pojďme na to!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Když mikroba nevidíme, není tam.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": -1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Mezi bakteriemi a viry není žádný rozdíl, jsou úplně stejní.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": -1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Plísně patří mezi mikroby.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Mikroby můžeme najít na svých rukách.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "name": "Good and Bad Bugs",
+   "intro": {
+    "blind": [
+     "Vítej ve DRUHÉM kole",
+     "Jestliže na ně odpovíš správně, získáš později skvělý bonus, proto se snaž co nejvíc!",
+     "Pojďme na to!"
+    ],
+    "normal": [
+     "A nyní se podíváme, kolik jsi se toho naučil/a.",
+     "Za každou správnou odpověď dostaneš 10 bodů. Když odpovíš špatně, dostane tyto body tvůj soupeř.",
+     "takže jestli NEZNÁŠ správnou odpověď, raději to přiznej",
+     "Připraven/a?",
+     "Pojďme na to!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Všechny bakterie jsou nebezpečné",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": -1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Mýdlo odstraní nebezpečné bakterie",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Kašel, rýmu a většinu nachlazení je možné vyléčit bez léků",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Naše tělo má přirozenou ochranu (imunitní systém), která nás chrání před vznikem infekcí.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 3,
+   "name": "Good Microbes",
+   "intro": {
+    "blind": [
+     "Vítej ve TŘETÍM kole",
+     "Co víš o UŽITEČNÝCH mikrobech?",
+     "Pojďme na to!"
+    ],
+    "normal": [
+     "A nyní se podíváme, kolik jsi se toho naučil/a.",
+     "Pamatuj, za každou správnou odpověď získáš 10 bodů, ale když odpovíš špatně, dostane body tvůj soupeř,",
+     "takže jestli NEZNÁŠ správnou odpověď, raději to přiznej",
+     "Připraven/a?",
+     "Pojďme na to!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Užitečné mikroby využíváme k výrobě jogurtů, chleba, atd.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Všichni mikrobi jsou pro nás nebezpeční",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": -1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 4,
+   "name": "Food Hygiene",
+   "intro": {
+    "blind": [
+     "Vítej ve ČTVRTÉM kole"
+    ],
+    "normal": [
+     "A nyní se podíváme, kolik jsi se toho naučil/a.",
+     "Pamatuj, za každou správnou odpověď získáš 10 bodů, ale když odpovíš špatně, dostane body tvůj soupeř,",
+     "takže jestli NEZNÁŠ správnou odpověď, raději to přiznej!",
+     "Připraven/a?",
+     "Pojďme na to!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Syrové maso musí být uchováváno odděleně od všech ostatních potravin v nepropustném obalu. Pouze tak zabráníte šíření nebezpečných mikrobů.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Nápoje jako mléko a džus, ale i jogurty dejte do dveří lednice.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Otevřené plechovky můžeme skladovat v ledničce bez obav.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": -1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Ovoce by mělo být uchováváno v ledničce v boxu pro ovoce.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Po každém kýchnutí si musíš umýt ruce, zvlášť, když se chystáš sahat na potraviny.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 5,
+   "name": "Treatment of infection",
+   "intro": {
+    "blind": [
+     "Vítej ve FINÁLOVÉM kole",
+     "Teď uvidíme jestli víš něco o tom, jak se poprat s infekcí.",
+     "Pojďme na to!"
+    ],
+    "normal": [
+     "A nyní se podíváme, kolik jsi se toho naučil/a.",
+     "Pamatuj, za každou správnou odpověď získáš 10 bodů, ale když odpovíš špatně, dostane body tvůj soupeř,",
+     "takže jestli NEZNÁŠ správnou odpověď, raději to přiznej!",
+     "Připraven/a?",
+     "Pojďme na to!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Antibiotika ničí bakterie",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotika ničí viry",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": -1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotiky je možno vyléčit všechny nemoci",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": -1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotika mohou poškodit naše hodné bakterie stejně, jako ty zlé",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotika ti pomohou, když máš kašel a rýmu",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": -1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Kašel, rýma a nachlazení se většinou snadno vyléčí i bez antibiotik. Stačí zůstat v posteli, dostatečně pít a jíst dostatek vitamínů.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Souhlasím",
+       "value": 1
+      },
+      {
+       "label": "Nevím",
+       "value": 0
+      },
+      {
+       "label": "Nesouhlasím",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

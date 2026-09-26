@@ -1,0 +1,518 @@
+{
+ "code": "fr_fr",
+ "source": "fr_fr_gameshow_round1-5.xml + fr_fr_introductions.xml (live 2009 build)",
+ "name": "Français",
+ "intro": [
+  "Bonjour, et bienvenue sur le jeu Super Microbe World !",
+  "Bientôt tu vas visiter le monde étrange des microbes",
+  "Mais tout d'abord, quel rôle veux-tu jouer ?",
+  "",
+  "Parle-moi un peu de toi",
+  "Pseudo",
+  "Age",
+  "adresse e-mail",
+  "Tu n’as pas besoin de nous donner ces informations, mais cela te donnera la possibilité de participer à des compétitions et d'être informé des nouvelles versions du jeu.",
+  "Voyons ce que tu sais au sujet des microbes"
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "name": "All About Microbes",
+   "intro": {
+    "blind": [
+     "Bienvenue pour la PREMIERE SERIE DE QUESTIONS !",
+     "Je vais te poser des questions mais je NE te dirai PAS si ta réponse est juste",
+     "Si tes réponses sont justes, tu auras un gros bonus plus tard, alors fais de ton mieux",
+     "Allons-y !"
+    ],
+    "normal": [
+     "Bravo! Tu es un chef !",
+     "Voyons maintenant ce que tu as appris.",
+     "Tu gagnes 10 points si ta réponse est juste, mais si tu as faux, c'est l'autre joueur qui gagne les points.",
+     "Alors si tu NE SAIS PAS la réponse, mieux vaut le dire",
+     "Prêt ?",
+     "Allons-y !"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Si on ne peut pas voir de microbe, c'est qu'il n'y en a pas",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": -1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Les bactéries et les virus, c'est pareil",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": -1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Les champignons sont des microbes",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "On trouve des microbes sur nos mains",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "name": "Good and Bad Bugs",
+   "intro": {
+    "blind": [
+     "Bienvenue au DEUXIEME tour",
+     "Si tes réponses sont justes, tu auras un gros bonus plus tard, alors fais de ton mieux",
+     "Allons-y !"
+    ],
+    "normal": [
+     "Voyons maintenant ce que tu as appris.",
+     "Tu gagnes 10 points si ta réponse est juste, mais si tu as faux, c'est l'autre joueur qui gagne les points.",
+     "Alors si tu NE SAIS PAS la réponse, mieux vaut le dire",
+     "Prêt ?",
+     "Allons-y !"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Toutes les bactéries sont pathogènes",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": -1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "On peut se débarrasser des bactéries pathogènes en se lavant avec du savon",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "La plupart des rhumes et des toux guérissent sans médicaments",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Notre corps possède des défenses naturelles qui nous portègent contre les infections",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 3,
+   "name": "Good Microbes",
+   "intro": {
+    "blind": [
+     "Bienvenue au TROISIEME tour",
+     "Que sais-tu des microbes UTILES",
+     "Allons-y !"
+    ],
+    "normal": [
+     "Voyons maintenant ce que tu as appris.",
+     "Rappelle-toi, 10 points par réponse juste, mais si tu te trompes, c'est l'autre joueur qui gagne les points",
+     "Alors si tu NE SAIS PAS la réponse, mieux vaut le dire",
+     "Prêt ?",
+     "Allons-y !"
+    ]
+   },
+   "questions": [
+    {
+     "text": "On se sert de microbes utiles pour fabriquer du pain et du yaourt",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Tous les microbes sont pathogènes",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": -1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 4,
+   "name": "Food Hygiene",
+   "intro": {
+    "blind": [
+     "Bienvenue au QUATRIEME tour"
+    ],
+    "normal": [
+     "Voyons maintenant ce que tu as appris.",
+     "Rappelle-toi, 10 points par réponse juste, mais si tu te trompes, c'est l'autre joueur qui gagne les points",
+     "Alors si tu NE SAIS PAS la réponse, mieux vaut le dire",
+     "Prêt ?",
+     "On y va !"
+    ]
+   },
+   "questions": [
+    {
+     "text": "La viande crue doit être placée à part pour empêcher les microbes pathogènes d'être transmis à d'autres aliments",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Les liquides comme le lait, les yaourts ou les jus de fruits vont dans la porte du réfrigérateur.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "C’est sans risques de conserver des boîtes de conserve ouvertes au frigo.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": -1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Les fruits doivent être placés dans la corbeille à fruits",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Si tu éternues, tu dois te laver les mains avant de toucher la nourriture.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 5,
+   "name": "Treatment of infection",
+   "intro": {
+    "blind": [
+     "Bienvenue au tour FINAL",
+     "Cette fois nous allons voir ce que tu sais sur la façon dont on guérit d'une infection",
+     "On y va !"
+    ],
+    "normal": [
+     "Voyons maintenant ce que tu as appris.",
+     "Rappelle-toi, 10 points par réponse juste, mais si tu te trompes, c'est l'autre joueur qui gagne les points",
+     "Alors si tu NE SAIS PAS la réponse, mieux vaut le dire",
+     "Prêt ?",
+     "On y va !"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Les antibiotiques tuent les bactéries",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Les antibiotiques tuent les virus",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": -1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Les antiibotiques guérissent toutes les maladies",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": -1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Les antibiotiques peuvent détruire les bactéries utiles aussi bien que les bactéries pathogènes",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Les antibiotiques sont utiles quand on tousse",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": -1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "La plupart des toux et des rhumes guérissent sans antibiotiques",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accord",
+       "value": 1
+      },
+      {
+       "label": "Je ne sais pas",
+       "value": 0
+      },
+      {
+       "label": "Pas d'accord",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

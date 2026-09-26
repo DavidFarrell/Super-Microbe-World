@@ -1,0 +1,518 @@
+{
+ "code": "pl_pl",
+ "source": "pl_pl_gameshow_round1-5.xml + pl_pl_introductions.xml (live 2009 build)",
+ "name": "Polski",
+ "intro": [
+  "Witamy w Teleturnieju Super Microbe World!",
+  "Za chwilę odwiedzisz zaskakujący świat drobnoustrojów.",
+  "Na początku wybierz - kim chcesz być w trakcie gry?",
+  "",
+  "Powiedz coś o sobie:",
+  "Nick (\"ksywa\")",
+  "wiek",
+  "adres mailowy",
+  "Podanie tych informacji nie jest konieczne, ale jeśli je uzupełnisz, będziesz mógł brać udział w konkursach i otrzymasz informacje nt. nowych wersji gry.",
+  "Sprawdźmy, co wiesz o mikrobach."
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "name": "All About Microbes",
+   "intro": {
+    "blind": [
+     "Zapraszamy do pierwszej rundy ŚLEPYCH PYTAŃ!",
+     "Odpowiesz na kilka pytań. Na razie nie poznasz prawidłowych odpowiedzi.",
+     "Jeśli odpowiesz na pytania prawidłowo, na końcu otrzymasz specjalny bonus, więc skup się!",
+     "Zaczynamy!"
+    ],
+    "normal": [
+     "Dobra robota!",
+     "A teraz sprawdźmy, co zapamiętałaś/eś",
+     "Za prawidłową odpowiedź otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik.",
+     "Jeśli nie znasz odpowiedzi - lepiej zagrać bezpiecznie i przyznać się, że nie wiesz!",
+     "Gotowi?",
+     "Zaczynamy!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Jeśli nie widać drobnoustrojów, to znaczy, że ich nie ma",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": -1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Bakterie i wirusy są takie same",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": -1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Grzyby są drobnoustrojami",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Drobnoustroje można znaleźć na naszych dłoniach.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "name": "Good and Bad Bugs",
+   "intro": {
+    "blind": [
+     "Witamy w rundzie DRUGIEJ!",
+     "Jeśli odpowiesz na pytania prawidłowo, na końcu otrzymasz specjalny bonus, więc skup się!",
+     "Zaczynamy!"
+    ],
+    "normal": [
+     "A teraz sprawdźmy, co zapamiętałaś/eś",
+     "Za prawidłową odpowiedź otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik.",
+     "Jeśli nie znasz odpowiedzi - lepiej zagrać bezpiecznie i przyznać się, że nie wiesz!",
+     "Gotowi?",
+     "Zaczynamy!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Wszystkie bakterie są chorobotwórcze",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": -1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Za pomocą mydła można pozbyć się złych mikrobów z dłoni",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Przeziębienia i katar najczęściej przechodzą same, bez podania leków",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Nasze organizmy posiadają naturalne siły obronne, które chronią nas przed zakażeniami.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 3,
+   "name": "Good Microbes",
+   "intro": {
+    "blind": [
+     "Witamy w rundzie TRZECIEJ!",
+     "Co wiesz nt. DOBRYCH mikrobów?",
+     "Zaczynamy!"
+    ],
+    "normal": [
+     "A teraz sprawdźmy, co zapamiętałaś/eś",
+     "Pamiętaj: 10 punktów za dobrą odpowiedź, ale jeśli się pomylisz, punkty trafiają do przeciwnika!",
+     "Jeśli nie znasz odpowiedzi - lepiej zagrać bezpiecznie i przyznać się, że nie wiesz!",
+     "Gotowi?",
+     "Zaczynamy!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Dobre mikroby wykorzystujemy w produkcji chleba i jogurtu",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Wszystkie drobnoustroje są niebezpieczne dla człowieka",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": -1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 4,
+   "name": "Food Hygiene",
+   "intro": {
+    "blind": [
+     "Witamy w rundzie CZWARTEJ!"
+    ],
+    "normal": [
+     "A teraz sprawdźmy, co zapamiętałaś/eś",
+     "Pamiętaj: 10 punktów za dobrą odpowiedź, ale jeśli się pomylisz, punkty trafiają do przeciwnika!",
+     "Jeśli więc nie znasz odpowiedzi, zagraj bezpiecznie i wybierz odpowiedź NIE WIEM!",
+     "Gotowi?",
+     "Zaczynamy!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Surowe mięso powinno leżeć na solidnej półce, najlepiej na dolnej półce nad szufladami.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Produkty płynne takie jak mleko, jogurty, czy soki postaw na półkach w drzwiach lodówki.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Bezpiecznie jest trzymać otwarte puszki w lodówce.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": -1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Owoce wkładamy do szuflady na owoce.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Po kichnięciu, powinniśmy umyć ręce zanim zaczniemy dotykać jedzenie.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 5,
+   "name": "Treatment of infection",
+   "intro": {
+    "blind": [
+     "Witamy w rundzie FINAŁOWEJ!",
+     "Teraz sprawdzimy, co wiesz na temat leczenia zakażeń",
+     "Zaczynamy!"
+    ],
+    "normal": [
+     "A teraz sprawdźmy, co zapamiętałaś/eś",
+     "Pamiętaj: 10 punktów za dobrą odpowiedź, ale jeśli się pomylisz, punkty trafiają do przeciwnika!",
+     "Jeśli więc nie znasz odpowiedzi, zagraj bezpiecznie i wybierz odpowiedź NIE WIEM!",
+     "Gotowi?",
+     "Zaczynamy!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Antybiotyki zabijają bakterie",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Antybiotyki zabijają wirusy",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": -1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Antybiotyki leczą wszystkie choroby",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": -1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Antybiotyki mogą być szkodliwe zarówno dla pożytecznych, jak i chorobotwórczych bakterii",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Antybiotyki pomagają zwalczyć kaszel",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": -1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Przeziębienia i katar ustępują, bez podawania antybiotyków",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Zgadzam się",
+       "value": 1
+      },
+      {
+       "label": "Nie wiem",
+       "value": 0
+      },
+      {
+       "label": "Nie zgadzam się",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

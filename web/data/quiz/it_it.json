@@ -1,0 +1,518 @@
+{
+ "code": "it_it",
+ "source": "it_it_gameshow_round1-5.xml + it_it_introductions.xml (live 2009 build)",
+ "name": "Italiano",
+ "intro": [
+  "Buongiorno e benvenuti alla rassegna dei giochi di Super Microbe World!",
+  "Tra poco entrerete nel misterioso mondo dei microbi.",
+  "Ma prima, quale sarà il personaggio che giocherà per voi?",
+  "",
+  "Raccontami qualcosa di te:",
+  "Soprannome",
+  "Età",
+  "Indirizzo email",
+  "Non è necessario che tu ci dia questa informazione, ma se lo farai potrai partecipare alle competizioni e sapere le novità riguardo alle nuove versioni dei giochi.",
+  "Vediamo cosa sai a proposito dei microbi"
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "name": "All About Microbes",
+   "intro": {
+    "blind": [
+     "Benvenuti al primo ROUND delle DOMANDE IGNOTE!",
+     "Adesso vi farò delle domande senza dirvi se avete risposto correttamente",
+     "Se rispondete correttamente, otterrete un bonus molto alto sul punteggio, quindi: fate del vostro meglio!",
+     "Cominciamo!"
+    ],
+    "normal": [
+     "Complimenti, sei proprio un professionista dello skateboard!",
+     "Ed ora vediamo che cosa hai imparato.",
+     "Vinci 10 punti per ogni risposta corretta, ma se sbagli, i punti verranno assegnati al tuo avversario.",
+     "Quindi se NON CONOSCETE la risposta, sarà meglio giocare senza rischi e scegliere NON SO!",
+     "Sei pronto?",
+     "Cominciamo!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Se un microbo non è visibile, allora non si trova lì",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": -1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Virus e batteri sono la stessa cosa",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": -1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "I funghi sono microbi",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "I microbi si trovano sulle nostre mani",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "name": "Good and Bad Bugs",
+   "intro": {
+    "blind": [
+     "Benvenuto nel SECONDO round",
+     "Se rispondete correttamente, otterrete un bonus molto alto sul punteggio, quindi: fate del vostro meglio!",
+     "Cominciamo!"
+    ],
+    "normal": [
+     "Ed ora vediamo che cosa hai imparato.",
+     "Vinci 10 punti per ogni risposta corretta, ma se sbagli, i punti verranno assegnati al tuo avversario.",
+     "Quindi se NON CONOSCETE la risposta, sarà meglio giocare senza rischi e scegliere NON SO!",
+     "Sei pronto?",
+     "Cominciamo!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Tutti i batteri sono dannosi",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": -1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Il sapone può essere usato per lavare via i microbi dannosi",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "La maggior parte delle tossi e raffreddori migliorano senza bisogno di medicine",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Il nostro organismo possiede delle difese naurali che ci proteggono dalle infezioni",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 3,
+   "name": "Good Microbes",
+   "intro": {
+    "blind": [
+     "Benvenuto nel TERZO round",
+     "Cosa sai a proposito dei microbi UTILI?",
+     "Cominciamo!"
+    ],
+    "normal": [
+     "Ed ora vediamo che cosa hai imparato.",
+     "Ricordate: riceverete 10 punti per ogni risposta corretta, ma se sbagliate i punti verranno assegnati all'altro concorrente",
+     "Quindi se NON CONOSCETE la risposta, sarà meglio giocare senza rischi e scegliere NON SO!",
+     "Pronti?",
+     "Cominciamo!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Noi usiamo i microbi utili per fare cose come il pane e lo yogurt",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Tutti i microbi sono dannosi per l'uomo",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": -1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 4,
+   "name": "Food Hygiene",
+   "intro": {
+    "blind": [
+     "Benvenuto nel QUARTO round"
+    ],
+    "normal": [
+     "Ed ora vediamo che cosa hai imparato.",
+     "Ricordate: riceverete 10 punti per ogni risposta corretta, ma se sbagliate i punti verranno assegnati all'altro concorrente",
+     "Quindi se NON CONOSCETE la risposta, sarà meglio giocare senza rischi e scegliere NON SO!",
+     "Pronti?",
+     "Cominciamo!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "La carne cruda dovrebbe essere riposta in un contenitore apposito e chiuso, per prevenire la diffusione dei microbi agli altri alimenti.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Liquidi come il latte, lo yogurt, i succhi di frutta, vanno riposti nella porta del frigorifero.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Non è pericoloso riporre contenitori aperti nel frigo",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": -1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "La frutta dovrebbe essere riposta nel contenitore portafrutta.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Se starnutite, dovreste lavarvi le mani prima di maneggiare degli alimenti.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 5,
+   "name": "Treatment of infection",
+   "intro": {
+    "blind": [
+     "Benvenuto nel round FINALE",
+     "Ora vedremo cosa sai a proposito di come ci si cura in caso d'infezione",
+     "Cominciamo!"
+    ],
+    "normal": [
+     "Ed ora vediamo che cosa hai imparato.",
+     "Ricordate: riceverete 10 punti per ogni risposta corretta, ma se sbagliate i punti verranno assegnati all'altro concorrente",
+     "Quindi se NON CONOSCETE la risposta, sarà meglio giocare senza rischi e scegliere NON SO!",
+     "Pronti?",
+     "Cominciamo!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Gli antibiotici uccidono i batteri",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Gli antibiotici uccidono i virus",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": -1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Gli antibiotici curano ogni malattia",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": -1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Gli antibiotici possono danneggiare la nostra flora batterica normale tanto quanto i batteri dannosi",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Gli antibiotici ci aiutano quando abbiamo la tosse",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": -1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "La maggior parte di tossi e raffreddori migliorano senza assumere antibiotici",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "D'accordo",
+       "value": 1
+      },
+      {
+       "label": "Non lo so",
+       "value": 0
+      },
+      {
+       "label": "Non d'accordo",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

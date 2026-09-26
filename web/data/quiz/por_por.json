@@ -1,0 +1,518 @@
+{
+ "code": "por_por",
+ "source": "por_por_gameshow_round1-5.xml + por_por_introductions.xml (live 2009 build)",
+ "name": "Português",
+ "intro": [
+  "Olá! Bem-vindo aos Jogos do Super Microbe World!",
+  "Em breve irás visitar o estranho Mundo dos Micróbios",
+  "Mas em primeiro lugar, diz-me com que nome queres jogar?",
+  "",
+  "Diz-me algumas coisas sobre ti próprio.",
+  "O teu nome",
+  "A tua idade",
+  "O teu e-mail",
+  "Não precisas de dar esta informação, mas se o fizeres poderás participar em competições e receber actualizações deste jogo.",
+  "Queremos perceber o que sabes sobre micróbios."
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "name": "All About Microbes",
+   "intro": {
+    "blind": [
+     "Bem-vindo ao PRIMEIRO LOTE DE PERGUNTAS",
+     "Vou fazer-te algumas perguntas, mas NÃO te vou dizer se acertaste!",
+     "Se as respostas estiverem certas, terás um bónus no final. Tenta fazer o melhor.",
+     "Aqui vão."
+    ],
+    "normal": [
+     "Muito bem, és um surfista nato!",
+     "Agora, vamos ver o que aprendeste.",
+     "Za prawidłową odpowiedź otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik.",
+     "Por isso, se NÃO SOUBERES a resposta, é melhor responderes que não sabes!",
+     "Estás pronto?",
+     "Aqui vão."
+    ]
+   },
+   "questions": [
+    {
+     "text": "Se não conseguires ver um micróbio é porque ele não está lá.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": -1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "As Bactérias e os Vírus são iguais.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": -1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Os Fungos são micróbios",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Os micróbios podem encontrar-se nas nossas mãos",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "name": "Good and Bad Bugs",
+   "intro": {
+    "blind": [
+     "Bem-vindo à segunda etapa.",
+     "Se as respostas estiverem certas, terás um bónus no final. Tenta fazer o melhor.",
+     "Aqui vão."
+    ],
+    "normal": [
+     "Agora, vamos ver o que aprendeste.",
+     "Za prawidłową odpowiedź otrzymasz 10 punktów, ale jeśli odpowiesz źle, wtedy punkty otrzymuje przeciwnik.",
+     "Por isso, se NÃO SOUBERES a resposta, é melhor responderes que não sabes!",
+     "Estás pronto?",
+     "Aqui vão."
+    ]
+   },
+   "questions": [
+    {
+     "text": "Todas as bactérias são nocivas.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": -1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "O sabão pode ser usado para remover micróbios nocivos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "A maioria das tosses e constipações melhora sem medicamentos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "O nosso corpo tem defesas naturais que nos protejem das infecções.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 3,
+   "name": "Good Microbes",
+   "intro": {
+    "blind": [
+     "Bem-vindo à terceira etapa.",
+     "O que sabes sobre micróbios INOFENSIVOS ?",
+     "Aqui vão."
+    ],
+    "normal": [
+     "Agora, vamos ver o que aprendeste.",
+     "Lembra-te que ganhas 10 pontos por cada resposta certa. Se estiver errada o outro jogador é que ganha.",
+     "Por isso, se NÃO SOUBERES a resposta, é melhor responderes que não sabes!",
+     "Estás pronto?",
+     "Aqui vão."
+    ]
+   },
+   "questions": [
+    {
+     "text": "Usamos os micróbios inofensivos para fazer pão e iogurte.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Todos os micróbios são nocivos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": -1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 4,
+   "name": "Food Hygiene",
+   "intro": {
+    "blind": [
+     "Bem-vindo à quarta etapa."
+    ],
+    "normal": [
+     "Agora, vamos ver o que aprendeste.",
+     "Lembra-te que ganhas 10 pontos por cada resposta certa. Se estiver errada o outro jogador é que ganha.",
+     "Por isso, se NÂO SOUBERES a resposta, é melhor responderes que não sabes!",
+     "Estás pronto?",
+     "Vamos começar."
+    ]
+   },
+   "questions": [
+    {
+     "text": "A carne crua deve ser armazenada numa prateleira estanque, para evitar a contaminação dos outros alimentos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Líquidos como o leite, o iogurte ou os sumos podem ir para a porta do frigorífico.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Como é uma pergunta cega, só saberás o resultado no final.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": -1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "A fruta deve ser colocada na fruteira.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Se espirrares, deves lavar as mãos antes de mexer nos alimentos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 5,
+   "name": "Treatment of infection",
+   "intro": {
+    "blind": [
+     "Bem-vindo à etapa FINAL.",
+     "Primeiro queremos perceber o que sabes sobre o tratamento das infecções",
+     "Vamos começar."
+    ],
+    "normal": [
+     "Agora, vamos ver o que aprendeste.",
+     "Lembra-te que ganhas 10 pontos por cada resposta certa. Se estiver errada o outro jogador é que ganha.",
+     "Por isso, se NÂO SOUBERES a resposta, é melhor responderes que não sabes!",
+     "Estás pronto?",
+     "Vamos começar."
+    ]
+   },
+   "questions": [
+    {
+     "text": "Os antibióticos matam as bactérias.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Os antibióticos matam os vírus.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": -1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Os antibióticos curam todas as doenças.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": -1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Os antibióticos matam tanto as bactérias nocivas como as inofensivas.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Os antibióticos ajudam a curar constipações.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": -1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "A maioria das tosses e constipações melhora sem antibióticos.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Concordas",
+       "value": 1
+      },
+      {
+       "label": "Não sabes",
+       "value": 0
+      },
+      {
+       "label": "Não concordas",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

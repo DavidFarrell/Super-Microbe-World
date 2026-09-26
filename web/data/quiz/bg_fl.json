@@ -1,0 +1,518 @@
+{
+ "code": "bg_fl",
+ "source": "bg_fl_gameshow_round1-5.xml + bg_fl_introductions.xml (live 2009 build)",
+ "name": "Nederlands (België)",
+ "intro": [
+  "Hallo! Welkom bij de Super Microbe World Spelshow,",
+  "Zodadelijk maak je kennis met de wondere wereld van de microben.",
+  "Maar, voor we beginnen: ben je een meisje of een jongen?",
+  "",
+  "Vertel me een beetje meer over jezelf:",
+  "Naam",
+  "Leeftijd",
+  "E-mail adres",
+  "Door vrijblijvend je e-mailadres op te geven kan je je eigen score vergelijken met die van andere deelnemers en blijf je op de hoogte van nieuwe versies.",
+  "Wat weet je over microben?"
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "name": "All About Microbes",
+   "intro": {
+    "blind": [
+     "De eerste vragenronde!",
+     "Ik zal je enkele vragen stellen maar ga er nog NIET bij vertellen of je antwoorden juist zijn.",
+     "Als je de vragen juist beantwoord hebt, krijg je later een bonus...doe dus je best!",
+     "Hier gaan we!"
+    ],
+    "normal": [
+     "Goed gedaan, je bent een natuurtalent!",
+     "En wat hebben we vandaag geleerd?",
+     "Je krijgt 10 punten voor een juist antwoord, maar bij een fout antwoord krijgt je tegenspeler de punten.",
+     "Dus als je het antwoord NIET WEET, speel je beter zeker en zeg je dat je het niet weet!",
+     "Klaar?",
+     "Hier gaan we!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Als je geen microbe ziet, dan is er ook geen microbe.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": -1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Bacteriën en virussen zijn hetzelfde.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": -1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Schimmels zijn microben.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Microben zitten op je handen.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "name": "Good and Bad Bugs",
+   "intro": {
+    "blind": [
+     "Welkom in de TWEEDE ronde",
+     "Als je de vragen juist beantwoord hebt, krijg je later een bonus...doe dus je best!",
+     "Hier gaan we!"
+    ],
+    "normal": [
+     "En wat hebben we vandaag geleerd?",
+     "Je krijgt 10 punten voor een juist antwoord, maar bij een fout antwoord krijgt je tegenspeler de punten.",
+     "Dus als je het antwoord NIET WEET, speel je beter zeker en zeg je dat je het niet weet!",
+     "Klaar?",
+     "Hier gaan we!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Alle bacteriën zijn schadelijk.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": -1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "We kunnen zeep gebruiken om schadelijke microben weg te wassen.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Hoestjes en verkoudheden genezen vaak zonder medicijnen.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Ons lichaam heeft een natuurlijk afweersysteem dat ons beschermt tegen een infectie.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 3,
+   "name": "Good Microbes",
+   "intro": {
+    "blind": [
+     "Welkom in de DERDE ronde",
+     "Wat weet je over NUTTIGE microben?",
+     "Hier gaan we!"
+    ],
+    "normal": [
+     "En wat hebben we vandaag geleerd?",
+     "Je krijgt nog steeds 10 punten voor een juist antwoord. Bij een fout antwoord krijgt je tegenspeler de punten.",
+     "Dus als je het antwoord NIET WEET, speel je beter zeker en zeg je dat je het niet weet!",
+     "Klaar?",
+     "Hier gaan we!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "We gebruiken nuttige microben om brood en yoghurt te maken.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Alle microben zijn schadelijk voor ons.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": -1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 4,
+   "name": "Food Hygiene",
+   "intro": {
+    "blind": [
+     "Welkom in de VIERDE ronde"
+    ],
+    "normal": [
+     "En wat hebben we vandaag geleerd?",
+     "Je krijgt nog steeds 10 punten voor een juist antwoord. Bij een fout antwoord krijgt je tegenspeler de punten.",
+     "Dus als je het antwoord NIET WEET, speel je beter zeker en zeg je dat je het niet weet!",
+     "Klaar?",
+     "Hier gaan we!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Rauw vlees leg je best apart in de koelkast om te voorkomen dat de schadelijke microben overgaan op ander voedsel.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Dranken zoals melk, yoghurt en fruitsap horen in de koelkastdeur.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Geopende blikjes kan je zonder risico in de koelkast bewaren.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": -1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Fruit hoort thuis in een fruitmand.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Als je in je handen niest, moet je je handen eerst wassen vooraleer je voedsel aanraakt.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "round": 5,
+   "name": "Treatment of infection",
+   "intro": {
+    "blind": [
+     "Welkom in de LAATSTE ronde",
+     "Weet je hoe je kan genezen van een infectie?",
+     "Hier gaan we!"
+    ],
+    "normal": [
+     "En wat hebben we vandaag geleerd?",
+     "Je krijgt nog steeds 10 punten voor een juist antwoord. Bij een fout antwoord krijgt je tegenspeler de punten.",
+     "Dus als je het antwoord NIET WEET, speel je beter zeker en zeg je dat je het niet weet!",
+     "Klaar?",
+     "Hier gaan we!"
+    ]
+   },
+   "questions": [
+    {
+     "text": "Antibiotica doden bacteriën.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Disagree",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotica doden virussen.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": -1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotica genezen elke ziekte.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": -1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotica kunnen zowel nuttige als schadelijke bacteriën schaden.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": -1
+      }
+     ]
+    },
+    {
+     "text": "Antibiotica helpen tegen hoest.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": -1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "text": "Hoesten en verkoudheden genezen vaak zonder antibiotica.",
+     "score": 10,
+     "value": 1,
+     "answers": [
+      {
+       "label": "Akkoord!",
+       "value": 1
+      },
+      {
+       "label": "Ik weet het niet!",
+       "value": 0
+      },
+      {
+       "label": "Niet akkoord!",
+       "value": -1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
