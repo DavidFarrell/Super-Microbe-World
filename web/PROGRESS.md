@@ -12,11 +12,12 @@ Living checklist for the remake (see `../GOAL_PROMPT.md` for the full brief and 
 ## Deploy probe
 - [x] Probe artifact published with a results channel: https://claude.ai/artifact/NVGD8ms58Z8bdEF9dY3iFT
 - [ ] David opens it on a phone and sends results
-- [ ] Decide hosting: artifact (framed, no offline) and/or GitHub Pages `/play/` on gh-pages (needs David's OK)
+- [x] Hosting decided by David (2026-09-26): GitHub Pages under `/play/` on gh-pages (approved) plus the artifact; artifact wording may say "Super Microbe World Game Show" instead of e-Bug branding
+- [x] Pages deploy script `tools/deploy-pages.sh`; bring-up build live at https://gameologist.com/Super-Microbe-World/play/
 
 ## Survey
 - [x] Unity remake: asset catalogue (`reference/analysis/unity-assets.md`)
-- [ ] Unity remake: logic (`reference/analysis/unity-logic.md`)
+- [x] Unity remake: logic (`reference/analysis/unity-logic.md`)
 - [ ] Flash: platformer engine, flow/quiz/kitchen, levels, SWF assets and sounds, Ruffle captures
 - [ ] `web/NOTES.md` synthesised and verified by a completeness critic
 

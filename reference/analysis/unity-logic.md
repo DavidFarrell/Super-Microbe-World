@@ -680,15 +680,20 @@ The introductions schema is `<conversation><statement>…</statement>×10</conve
 - `Goals.Awake`'s inner loop tests and increments `i` instead of `j` (`Goals.js:49`), so the initialization is a no-op. This is harmless because int arrays start at 0.
 - `NameToNumber` checks `actNumber == -1` twice instead of also checking `micNumber` (`:233`).
 - There is no feedback when the portal is touched with goals unfinished (`GameLogic.js:193-196`).
-- Microbes killed by good/bad contact never count toward goals. In levels with exactly the target number of microbes (kitchen1, skin1, skin2, kitchen2, body11), losing one makes the level impossible until the player dies and restarts. The same happens if a kitchen1 Lucy is pushed into the milk glass next to her at x≈36: she dives and is destroyed, and "thrown to yoghurt" is not a kitchen1 goal.
+- Microbes killed by good/bad contact never count toward goals. A contact kill needs both an Enemy and a NonEnemy in the level. Among levels with exactly the target number of goal microbes, that applies only to **skin1** (3 lucy plus super_slurm and super_colin) and **skin2** (3 steve plus slarg). kitchen1, kitchen2 and body11 contain only one side. In skin1 or skin2, losing a goal microbe before it is photographed makes the level impossible until the player dies and restarts.
+- A separate kitchen1 hazard: a Lucy pushed into the milk glass next to her at x≈36 dives and is destroyed, and "thrown to yoghurt" is not a kitchen1 goal, so the photo goal becomes impossible.
 
 ### Antibiotics
 - Antibiotics hit every `Enemy`- and `NonEnemy`-tagged object in the scene, whether or not it is on screen. **Steve is `affectedByAntibiotics` with life 5**, so in skin2 (goal: photograph 3 steve) the antibiotic pickup at x≈4 can wipe out the goal.
 - Holding an antibiotic also replaces the photo action on Fire1.
 - **Likely bug (static-reference analysis, not runtime-verified):** `CameraShake` keeps `myGameObject` in a static field set in `Start`. Only the game-show cameras and the superinfection camera have the component. In skin2, kitchen2 and body11, `AntibioticShake()` would therefore call `iTween.ShakePosition` on the destroyed camera from the previous scene and throw inside `useAntibiotics` after the count was decremented but before `receiveAntibiotics` is sent (`playerController.js:390-405`). The antibiotic would be consumed with no effect.
+- **How the two antibiotic points combine:**
+  - In **superinfection**, the camera has `CameraShake`, so antibiotics definitely work there and also kill that level's steve and slurm.
+  - In **skin2, kitchen2 and body11**, if the exception above fires, the antibiotic is wasted and steve survives. If it does not fire, steve dies and skin2's photo goal can become impossible. Only a runtime test can settle which.
 
 ### Milk and yoghurt
 - `Milk.js:32` and `Yoghurt.js:30` set `toppingActive = false` where they mean `true`, so the guard never trips.
+- Separately, nothing in `MicrobeLucy` limits one Lucy per container. A single milk glass therefore accepts repeated dives, and kitchen32's "turn THREE glasses into yogurt" goal (3 × "thrown to yoghurt") can be met using one glass.
 - `DrawYoghurt(delay: int)` is sent `1.9`, a float, through `SendMessageUpwards` (`MicrobeLucy.js:83`). The parameter type mismatch may make Unity reject the call. **Unverified.**
 
 ### Quiz XML
